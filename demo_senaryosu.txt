@@ -1,0 +1,129 @@
+═══════════════════════════════════════════════════════
+MEDIQUEUE — DEMO SENARYOSU
+Sinem + Furkan'a iletilecek | Faz 2 çıktısı
+═══════════════════════════════════════════════════════
+
+SENARYO KİŞİSİ
+──────────────
+İsim    : Klaus Müller
+Yaş     : 58
+Ülke    : Almanya
+Dil     : Almanca
+Şikayet : Kalp çarpıntısı ve göğüs sıkışması
+Bütçe   : 300–400 EUR
+Durum   : Almanya'da 3 ay bekleme listesi var, Türkiye'yi araştırıyor
+
+═══════════════════════════════════════════════════════
+DEMO AKIŞI — JÜRİ ÖNÜNDE ADIM ADIM
+═══════════════════════════════════════════════════════
+
+ADIM 1 — HASTA GİRİŞİ  (Azra anlatır, ~20 sn)
+──────────────────────────────────────────────
+Furkan Figma prototipini açık tutar.
+Azra şunu söyler:
+  "Klaus Müller Almanya'dan. Kalp çarpıntısı var,
+   Almanca konuşuyor, bütçesi 400 Euro.
+   Şimdi platforma giriyor..."
+
+Yapılacaklar (Figma'da):
+  1. Semptom kutusuna yaz: "kalp çarpıntısı"
+  2. Dil seç: Almanca
+  3. Bütçe gir: 300-400 EUR
+  4. "Doktor Bul" butonuna bas
+
+───────────────────────────────────────────────
+
+ADIM 2 — AI ÇALIŞIYOR  (Azra anlatır, ~15 sn)
+──────────────────────────────────────────────
+Ekranda yükleniyor animasyonu gösterilir.
+[SİNEM: mock API'ye 1.5 sn gecikme ekle]
+[FURKAN: yükleniyor ekranı — dönen ikon veya progress bar]
+
+Azra şunu söyler:
+  "Sistem şu an 6 adımı arka planda çalıştırıyor —
+   semptom normalize edildi, Kardiyoloji kategorisine
+   eşlendi, JCI akrediteli hastaneler filtrelendi,
+   10 doktor skorlandı..."
+
+───────────────────────────────────────────────
+
+ADIM 3 — SONUÇ EKRANI  (Furkan gösterir, ~30 sn)
+─────────────────────────────────────────────────
+[FURKAN: doktor listesi ekranını göster]
+
+Furkan şunu söyler:
+  "Karşınızda sistem en uygun doktoru buldu:
+   Prof. Dr. Mehmet Yılmaz, Memorial İstanbul,
+   eşleşme skoru 95.
+   Almanca konuşuyor, 22 yıl deneyimi var,
+   3 gün içinde randevu alabiliyor."
+
+Yapılacaklar (Figma'da):
+  1. Doktor kartını göster (skor + eşleşme nedenleri)
+  2. "Neden bu skor?" tıkla → breakdown ekranı açılır
+  3. 3 doktor karşılaştırma ekranını göster
+  4. "Randevu Al" butonuna bas
+
+───────────────────────────────────────────────
+
+ADIM 4 — SONRASI  (Sinem anlatır, ~20 sn)
+──────────────────────────────────────────
+Sinem şunu söyler:
+  "Hasta randevuyu aldı.
+   Sistem otomatik olarak vize belgesi şablonunu,
+   transfer bilgilerini ve tercüman atamasını yapıyor.
+   Hasta döndükten sonra video konsültasyon ve
+   ilaç takibi de platform üzerinden devam ediyor."
+
+═══════════════════════════════════════════════════════
+SÜRE TABLOSU
+═══════════════════════════════════════════════════════
+Adım 1 — Hasta girişi     : ~20 sn  (Azra)
+Adım 2 — AI çalışıyor     : ~15 sn  (Azra)
+Adım 3 — Sonuç ekranı     : ~30 sn  (Furkan)
+Adım 4 — Sonrası          : ~20 sn  (Sinem)
+──────────────────────────────────────────
+TOPLAM                     : ~85 sn
+
+═══════════════════════════════════════════════════════
+SİNEM İÇİN TEKNİK NOTLAR
+═══════════════════════════════════════════════════════
+- Mock API input:
+    { "symptom": "kalp çarpıntısı", "language": "Almanca", "budget_max": 400 }
+
+- Mock API response (ilk sonuç):
+    { "name": "Prof. Dr. Mehmet Yılmaz",
+      "clinic": "Memorial İstanbul",
+      "score": 95.78,
+      "match_reason": "Uzmanlık eşleşmesi + Almanca konuşuyor + Bütçe uygun + 22 yıl deneyim",
+      "waiting_days": 3 }
+
+- API'ye 1.5 sn gecikme ekle (yükleniyor animasyonu için)
+- Demo sırasında çökmemesi için önceden test et
+
+═══════════════════════════════════════════════════════
+FURKAN İÇİN FIGMA NOTLARI
+═══════════════════════════════════════════════════════
+Prototype akışı:
+  Karşılama ekranı
+  → Semptom giriş ekranı
+  → Yükleniyor ekranı (1.5 sn)
+  → Doktor listesi (3 kart)
+  → Doktor detay / skor breakdown
+  → Randevu onay ekranı
+
+Doktor kartında olması gerekenler:
+  - İsim + unvan
+  - Uzmanlık + hastane
+  - Skor (progress bar, büyük punto)
+  - Eşleşme nedenleri (yeşil tik ile)
+  - Fiyat aralığı
+  - Randevu süresi
+  - "Randevu Al" butonu
+
+Yükleniyor ekranı:
+  - Dönen ikon veya animasyonlu progress bar
+  - Alt metin: "Sizin için en uygun doktor aranıyor..."
+
+İlk kart "Önerilen" rozeti taşısın (yeşil etiket).
+═══════════════════════════════════════════════════════

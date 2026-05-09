@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>MEDIQUEUE Test</title>
+</head>
+<body>
+  <h2>API Test</h2>
+  <div id="result"></div>
+
+  <script>
+    fetch("http://127.0.0.1:5000/api/symptom", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        symptom: "implant",
+        language: "Almanca",
+        budget_max: 800
+      })
+    })
+    .then(res => res.json())
+    .then(data => {
+      document.getElementById("result").innerHTML = 
+        "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+    });
+  </script>
+</body>
+</html>

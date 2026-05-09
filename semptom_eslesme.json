@@ -1,0 +1,52 @@
+{
+  "semptom_eslesme": {
+    "İmplant": [
+      "implant",
+      "implant yaptırmak istiyorum",
+      "diş implantı",
+      "eksik diş",
+      "diş eksik",
+      "dental implant",
+      "tooth implant",
+      "missing tooth",
+      "zahnimplantat",
+      "fehlender zahn"
+    ],
+    "Zirkonyum Kaplama": [
+      "zirkonyum",
+      "kaplama",
+      "diş kaplama",
+      "veneer",
+      "zirconia",
+      "zahnkrone",
+      "zirkonkrone"
+    ],
+    "Diş Beyazlatma": [
+      "beyazlatma",
+      "diş beyazlatma",
+      "sarı diş",
+      "beyaz diş",
+      "whitening",
+      "teeth whitening",
+      "zahnaufhellung",
+      "bleaching"
+    ],
+    "Dolgu": [
+      "dolgu",
+      "çürük",
+      "diş ağrısı",
+      "diş çürüğü",
+      "filling",
+      "cavity",
+      "tooth decay",
+      "zahnfüllung",
+      "karies"
+    ]
+  },
+  "belirsiz_semptomlar": {
+    "diş eti": ["İmplant", "Dolgu"],
+    "diş kırığı": ["Dolgu", "Zirkonyum Kaplama"],
+    "broken tooth": ["Dolgu", "Zirkonyum Kaplama"],
+    "zahnschmerzen": ["Dolgu", "İmplant"]
+  }
+}
