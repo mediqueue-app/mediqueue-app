@@ -1,0 +1,60 @@
+# Python (ai/)
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+.venv/
+**/.venv/
+**/__pycache__/
+.pytest_cache/
+.coverage
+htmlcov/
+*.egg-info/
+dist/
+build/
+
+# Environment & secrets
+.env
+.env.*
+!.env.example
+
+# .NET (backend/)
+**/bin/
+**/obj/
+.vs/
+*.user
+*.suo
+appsettings.Development.json
+appsettings.*.json
+!**/appsettings.json
+
+# Node (web/)
+node_modules/
+.npm
+dist/
+.next/
+.nuxt/
+.vite/
+
+# Flutter (mobile/)
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+build/
+
+# IDE
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+logs/

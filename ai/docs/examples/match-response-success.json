@@ -1,0 +1,26 @@
+{
+  "matches": [
+    {
+      "id": 1,
+      "name": "Dr. Ayşe Yılmaz",
+      "specialty": "Cardiology",
+      "city": "İstanbul",
+      "languages": ["Turkish", "English"],
+      "price": 2800,
+      "rating": 4.9,
+      "experience": 18,
+      "score": 94
+    },
+    {
+      "id": 2,
+      "name": "Dr. Mehmet Kaya",
+      "specialty": "Cardiology",
+      "city": "Ankara",
+      "languages": ["Turkish", "English", "German"],
+      "price": 2200,
+      "rating": 4.7,
+      "experience": 14,
+      "score": 81
+    }
+  ]
+}

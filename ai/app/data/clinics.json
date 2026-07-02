@@ -1,0 +1,122 @@
+[
+  {
+    "id": 1,
+    "name": "Mediqueue Sağlık Merkezi",
+    "city": "İstanbul",
+    "address": "Nişantaşı, Teşvikiye Cad. No:42, Şişli",
+    "specialties": ["Cardiology", "Neurology", "Dermatology", "Plastic Surgery"],
+    "phone": "+90 212 555 0101",
+    "rating": 4.8,
+    "doctor_count": 12
+  },
+  {
+    "id": 2,
+    "name": "Anadolu Tıp Kliniği",
+    "city": "Ankara",
+    "address": "Çankaya, Atatürk Bulvarı No:128, Kavaklıdere",
+    "specialties": ["Cardiology", "Orthopedics", "Gynecology", "Pediatrics"],
+    "phone": "+90 312 555 0202",
+    "rating": 4.7,
+    "doctor_count": 9
+  },
+  {
+    "id": 3,
+    "name": "Ege Sağlık Polikliniği",
+    "city": "İzmir",
+    "address": "Alsancak, Kordon Boyu No:76, Konak",
+    "specialties": ["Dermatology", "Psychiatry", "Neurology", "Dentistry"],
+    "phone": "+90 232 555 0303",
+    "rating": 4.6,
+    "doctor_count": 8
+  },
+  {
+    "id": 4,
+    "name": "Akdeniz Medikal Center",
+    "city": "Antalya",
+    "address": "Lara, Fener Mah. Lara Cad. No:215, Muratpaşa",
+    "specialties": ["Plastic Surgery", "Dermatology", "Dentistry", "Orthopedics"],
+    "phone": "+90 242 555 0404",
+    "rating": 4.9,
+    "doctor_count": 11
+  },
+  {
+    "id": 5,
+    "name": "Uludağ Sağlık Kliniği",
+    "city": "Bursa",
+    "address": "Nilüfer, İstanbul Yolu Cad. No:89, Görükle",
+    "specialties": ["Orthopedics", "Pediatrics", "Gynecology", "Dentistry"],
+    "phone": "+90 224 555 0505",
+    "rating": 4.5,
+    "doctor_count": 7
+  },
+  {
+    "id": 6,
+    "name": "Boğaziçi Kardiyoloji Merkezi",
+    "city": "İstanbul",
+    "address": "Bebek, Cevdet Paşa Cad. No:33, Beşiktaş",
+    "specialties": ["Cardiology"],
+    "phone": "+90 212 555 0606",
+    "rating": 4.9,
+    "doctor_count": 5
+  },
+  {
+    "id": 7,
+    "name": "Başkent Nöroloji Kliniği",
+    "city": "Ankara",
+    "address": "Yenimahalle, Eskişehir Yolu No:54, Batıkent",
+    "specialties": ["Neurology", "Psychiatry"],
+    "phone": "+90 312 555 0707",
+    "rating": 4.7,
+    "doctor_count": 6
+  },
+  {
+    "id": 8,
+    "name": "İzmir Çocuk Sağlığı Merkezi",
+    "city": "İzmir",
+    "address": "Bornova, Erzene Mah. Kazım Dirik Bulvarı No:12",
+    "specialties": ["Pediatrics", "Dentistry"],
+    "phone": "+90 232 555 0808",
+    "rating": 4.8,
+    "doctor_count": 4
+  },
+  {
+    "id": 9,
+    "name": "Mediterra Estetik Kliniği",
+    "city": "Antalya",
+    "address": "Konyaaltı, Liman Mah. Atatürk Bulvarı No:98",
+    "specialties": ["Plastic Surgery", "Dermatology"],
+    "phone": "+90 242 555 0909",
+    "rating": 4.8,
+    "doctor_count": 6
+  },
+  {
+    "id": 10,
+    "name": "Bursa Ortopedi ve Spor Hekimliği",
+    "city": "Bursa",
+    "address": "Osmangazi, Altıparmak Cad. No:47, Heykel",
+    "specialties": ["Orthopedics"],
+    "phone": "+90 224 555 1010",
+    "rating": 4.6,
+    "doctor_count": 4
+  },
+  {
+    "id": 11,
+    "name": "Kadıköy Kadın Sağlığı Merkezi",
+    "city": "İstanbul",
+    "address": "Kadıköy, Bağdat Cad. No:312, Suadiye",
+    "specialties": ["Gynecology", "Pediatrics", "Psychiatry"],
+    "phone": "+90 216 555 1111",
+    "rating": 4.7,
+    "doctor_count": 8
+  },
+  {
+    "id": 12,
+    "name": "Çankaya Ağız ve Diş Sağlığı",
+    "city": "Ankara",
+    "address": "Çankaya, Tunalı Hilmi Cad. No:67, Kavaklıdere",
+    "specialties": ["Dentistry"],
+    "phone": "+90 312 555 1212",
+    "rating": 4.5,
+    "doctor_count": 5
+  }
+]

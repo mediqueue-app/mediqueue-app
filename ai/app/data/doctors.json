@@ -1,0 +1,302 @@
+[
+  {
+    "id": 1,
+    "name": "Dr. Ayşe Yılmaz",
+    "specialty": "Cardiology",
+    "city": "İstanbul",
+    "languages": ["Turkish", "English"],
+    "price": 2800,
+    "rating": 4.9,
+    "experience": 18
+  },
+  {
+    "id": 2,
+    "name": "Dr. Mehmet Kaya",
+    "specialty": "Cardiology",
+    "city": "Ankara",
+    "languages": ["Turkish", "English", "German"],
+    "price": 2200,
+    "rating": 4.7,
+    "experience": 14
+  },
+  {
+    "id": 3,
+    "name": "Dr. Zeynep Arslan",
+    "specialty": "Cardiology",
+    "city": "İzmir",
+    "languages": ["Turkish", "English"],
+    "price": 1900,
+    "rating": 4.6,
+    "experience": 11
+  },
+  {
+    "id": 4,
+    "name": "Dr. Can Öztürk",
+    "specialty": "Dermatology",
+    "city": "İstanbul",
+    "languages": ["Turkish", "English", "Arabic"],
+    "price": 1500,
+    "rating": 4.8,
+    "experience": 9
+  },
+  {
+    "id": 5,
+    "name": "Dr. Elif Demir",
+    "specialty": "Dermatology",
+    "city": "Antalya",
+    "languages": ["Turkish", "English", "Russian"],
+    "price": 1200,
+    "rating": 4.5,
+    "experience": 7
+  },
+  {
+    "id": 6,
+    "name": "Dr. Burak Şahin",
+    "specialty": "Dermatology",
+    "city": "Bursa",
+    "languages": ["Turkish"],
+    "price": 950,
+    "rating": 4.4,
+    "experience": 6
+  },
+  {
+    "id": 7,
+    "name": "Dr. Hakan Yıldız",
+    "specialty": "Orthopedics",
+    "city": "İstanbul",
+    "languages": ["Turkish", "English"],
+    "price": 2400,
+    "rating": 4.8,
+    "experience": 16
+  },
+  {
+    "id": 8,
+    "name": "Dr. Selin Aydın",
+    "specialty": "Orthopedics",
+    "city": "Ankara",
+    "languages": ["Turkish", "English", "German"],
+    "price": 2100,
+    "rating": 4.6,
+    "experience": 12
+  },
+  {
+    "id": 9,
+    "name": "Dr. Emre Çelik",
+    "specialty": "Orthopedics",
+    "city": "İzmir",
+    "languages": ["Turkish", "English"],
+    "price": 1800,
+    "rating": 4.5,
+    "experience": 10
+  },
+  {
+    "id": 10,
+    "name": "Dr. Fatma Koç",
+    "specialty": "Neurology",
+    "city": "İstanbul",
+    "languages": ["Turkish", "English", "Arabic"],
+    "price": 3200,
+    "rating": 4.9,
+    "experience": 20
+  },
+  {
+    "id": 11,
+    "name": "Dr. Ali Vural",
+    "specialty": "Neurology",
+    "city": "Ankara",
+    "languages": ["Turkish", "English"],
+    "price": 2900,
+    "rating": 4.7,
+    "experience": 15
+  },
+  {
+    "id": 12,
+    "name": "Dr. Deniz Korkmaz",
+    "specialty": "Neurology",
+    "city": "Bursa",
+    "languages": ["Turkish", "German"],
+    "price": 2500,
+    "rating": 4.6,
+    "experience": 13
+  },
+  {
+    "id": 13,
+    "name": "Dr. Gizem Polat",
+    "specialty": "Psychiatry",
+    "city": "İstanbul",
+    "languages": ["Turkish", "English"],
+    "price": 1800,
+    "rating": 4.8,
+    "experience": 11
+  },
+  {
+    "id": 14,
+    "name": "Dr. Serkan Güneş",
+    "specialty": "Psychiatry",
+    "city": "İzmir",
+    "languages": ["Turkish", "English", "German"],
+    "price": 1600,
+    "rating": 4.5,
+    "experience": 9
+  },
+  {
+    "id": 15,
+    "name": "Dr. Merve Aksoy",
+    "specialty": "Psychiatry",
+    "city": "Antalya",
+    "languages": ["Turkish", "English", "Russian"],
+    "price": 1400,
+    "rating": 4.4,
+    "experience": 8
+  },
+  {
+    "id": 16,
+    "name": "Dr. Oğuz Tan",
+    "specialty": "Pediatrics",
+    "city": "İstanbul",
+    "languages": ["Turkish", "English", "Arabic"],
+    "price": 1300,
+    "rating": 4.9,
+    "experience": 14
+  },
+  {
+    "id": 17,
+    "name": "Dr. Sibel Erdoğan",
+    "specialty": "Pediatrics",
+    "city": "Ankara",
+    "languages": ["Turkish", "English"],
+    "price": 1100,
+    "rating": 4.7,
+    "experience": 12
+  },
+  {
+    "id": 18,
+    "name": "Dr. Kerem Yavuz",
+    "specialty": "Pediatrics",
+    "city": "Bursa",
+    "languages": ["Turkish"],
+    "price": 900,
+    "rating": 4.6,
+    "experience": 7
+  },
+  {
+    "id": 19,
+    "name": "Dr. Pınar Acar",
+    "specialty": "Gynecology",
+    "city": "İstanbul",
+    "languages": ["Turkish", "English", "Arabic"],
+    "price": 1700,
+    "rating": 4.8,
+    "experience": 13
+  },
+  {
+    "id": 20,
+    "name": "Dr. Leyla Özkan",
+    "specialty": "Gynecology",
+    "city": "İzmir",
+    "languages": ["Turkish", "English"],
+    "price": 1500,
+    "rating": 4.7,
+    "experience": 11
+  },
+  {
+    "id": 21,
+    "name": "Dr. Barış Tekin",
+    "specialty": "Gynecology",
+    "city": "Antalya",
+    "languages": ["Turkish", "English", "Russian"],
+    "price": 1300,
+    "rating": 4.5,
+    "experience": 9
+  },
+  {
+    "id": 22,
+    "name": "Dr. Cem Aktaş",
+    "specialty": "Dentistry",
+    "city": "İstanbul",
+    "languages": ["Turkish", "English"],
+    "price": 1100,
+    "rating": 4.6,
+    "experience": 10
+  },
+  {
+    "id": 23,
+    "name": "Dr. Derya Uçar",
+    "specialty": "Dentistry",
+    "city": "Ankara",
+    "languages": ["Turkish", "English", "German"],
+    "price": 850,
+    "rating": 4.5,
+    "experience": 8
+  },
+  {
+    "id": 24,
+    "name": "Dr. Tolga Sarı",
+    "specialty": "Dentistry",
+    "city": "Bursa",
+    "languages": ["Turkish"],
+    "price": 700,
+    "rating": 4.3,
+    "experience": 5
+  },
+  {
+    "id": 25,
+    "name": "Dr. Aslı Karaca",
+    "specialty": "Plastic Surgery",
+    "city": "İstanbul",
+    "languages": ["Turkish", "English", "Arabic", "Russian"],
+    "price": 5500,
+    "rating": 4.9,
+    "experience": 17
+  },
+  {
+    "id": 26,
+    "name": "Dr. Murat Eren",
+    "specialty": "Plastic Surgery",
+    "city": "Antalya",
+    "languages": ["Turkish", "English", "Russian", "German"],
+    "price": 4800,
+    "rating": 4.8,
+    "experience": 14
+  },
+  {
+    "id": 27,
+    "name": "Dr. Ece Bulut",
+    "specialty": "Plastic Surgery",
+    "city": "İzmir",
+    "languages": ["Turkish", "English"],
+    "price": 4200,
+    "rating": 4.7,
+    "experience": 12
+  },
+  {
+    "id": 28,
+    "name": "Dr. Volkan İpek",
+    "specialty": "Cardiology",
+    "city": "Antalya",
+    "languages": ["Turkish", "English", "Russian"],
+    "price": 2000,
+    "rating": 4.5,
+    "experience": 10
+  },
+  {
+    "id": 29,
+    "name": "Dr. Nazlı Horoz",
+    "specialty": "Neurology",
+    "city": "İzmir",
+    "languages": ["Turkish", "English"],
+    "price": 2700,
+    "rating": 4.6,
+    "experience": 11
+  },
+  {
+    "id": 30,
+    "name": "Dr. Onur Başaran",
+    "specialty": "Orthopedics",
+    "city": "Antalya",
+    "languages": ["Turkish", "English", "Russian"],
+    "price": 1950,
+    "rating": 4.4,
+    "experience": 9
+  }
+]
