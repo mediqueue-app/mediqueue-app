@@ -1,13 +1,24 @@
 import logging
-from typing import Any
+from contextlib import asynccontextmanager
+from typing import Any, AsyncIterator
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api.routes import router
-from config import APP_NAME, APP_VERSION, DEBUG, HOST, PORT
+from app.services.matcher import matcher_service
+from app.core.config import (
+    APP_NAME,
+    APP_VERSION,
+    CORS_ORIGINS,
+    DEBUG,
+    DOCTORS_JSON_PATH,
+    HOST,
+    PORT,
+)
 
 logging.basicConfig(
     level=logging.DEBUG if DEBUG else logging.INFO,
@@ -36,6 +47,19 @@ Türkçe karşılıkları da kabul edilir (ör. `Kardiyoloji`).
 `Turkish`, `English`, `Arabic`, `Russian`, `German` veya kısa kodlar (`tr`, `en`, `ar`, `ru`, `de`).
 """.strip()
 
+
+@asynccontextmanager
+async def lifespan(app: FastAPI) -> AsyncIterator[None]:
+    doctor_count = len(matcher_service.load_doctors())
+    logger.info(
+        "Startup complete — loaded %d doctors from %s",
+        doctor_count,
+        DOCTORS_JSON_PATH,
+    )
+    yield
+    logger.info("Shutdown — %s stopping", APP_NAME)
+
+
 app = FastAPI(
     title=APP_NAME,
     version=APP_VERSION,
@@ -43,6 +67,7 @@ app = FastAPI(
     docs_url="/docs",
     redoc_url="/redoc",
     openapi_url="/openapi.json",
+    lifespan=lifespan,
     contact={
         "name": "MediQueue AI Team",
         "email": "ai-team@mediqueue.com",
@@ -50,6 +75,14 @@ app = FastAPI(
     license_info={
         "name": "Proprietary",
     },
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=CORS_ORIGINS,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(router)

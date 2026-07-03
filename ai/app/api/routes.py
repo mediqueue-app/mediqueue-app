@@ -38,7 +38,14 @@ MATCH_SUCCESS_EXAMPLE = {
     ]
 }
 
-MATCH_EMPTY_EXAMPLE = {"matches": []}
+MATCH_EMPTY_EXAMPLE = {
+    "matches": [],
+    "message": "Kriterlerinize uygun doktor bulunamadı, filtreleri genişletmeyi deneyin.",
+}
+
+NO_MATCH_MESSAGE = (
+    "Kriterlerinize uygun doktor bulunamadı, filtreleri genişletmeyi deneyin."
+)
 
 BAD_REQUEST_EXAMPLE = {"detail": "Invalid JSON payload"}
 
@@ -61,7 +68,7 @@ INTERNAL_ERROR_EXAMPLE = {"detail": "Internal server error"}
     response_model=HealthResponse,
     summary="Health check",
     description="Servisin ayakta olup olmadığını kontrol eder. Load balancer ve backend startup kontrollerinde kullanılır.",
-    tags=["Health"],
+    tags=["health"],
     responses={
         200: {
             "description": "Service is healthy",
@@ -79,10 +86,18 @@ async def health_check() -> HealthResponse:
     status_code=status.HTTP_200_OK,
     summary="Match doctors for a patient",
     description=(
-        "Hasta tercihlerine göre doktorları filtreler, skorlar ve skora göre sıralı liste döner. "
-        "Eşleşme bulunamazsa `matches` boş dizi olarak döner."
+        "Hasta tercihlerine göre uygun doktorları filtreler, skorlar ve skora göre sıralı liste döner.\n\n"
+        "**Zorunlu alanlar:** `specialty`, `language`, `budget`\n"
+        "**Opsiyonel alan:** `city` (aynı şehirdeki doktorlara bonus puan verilir)\n\n"
+        "| Alan | Tip | Açıklama |\n"
+        "|------|-----|----------|\n"
+        "| `specialty` | string | Uzmanlık alanı. Örnek: `Cardiology`, `Kardiyoloji`, `Saç Ekimi`, `FUE`, `Dentistry` |\n"
+        "| `language` | string | Tercih edilen dil. Örnek: `Turkish`, `English`, `tr`, `en`, `Arabic` |\n"
+        "| `budget` | integer | Maksimum bütçe, **TL cinsinden tam sayı**. Örnek: `3000` |\n"
+        "| `city` | string | Tercih edilen şehir. Örnek: `Istanbul`, `Ankara`, `İzmir` |\n\n"
+        "Eşleşme bulunamazsa HTTP `200` döner; `matches` boş liste olur ve bilgilendirme `message` alanında yer alır."
     ),
-    tags=["Matching"],
+    tags=["matching"],
     responses={
         200: {
             "description": "Matching completed successfully",
@@ -119,4 +134,7 @@ async def health_check() -> HealthResponse:
     },
 )
 def match_patient(patient: PatientRequest) -> MatchResponse:
-    return matcher_service.match(patient)
+    result = matcher_service.match(patient)
+    if not result.matches:
+        return result.model_copy(update={"message": NO_MATCH_MESSAGE})
+    return result

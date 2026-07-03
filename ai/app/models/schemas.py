@@ -4,14 +4,35 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class HealthResponse(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={"examples": [{"status": "ok"}]},
+    )
+
     status: str = Field(default="ok", examples=["ok"])
 
 
 class ErrorResponse(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={"examples": [{"detail": "Invalid JSON payload"}]},
+    )
+
     detail: str = Field(..., examples=["Invalid JSON payload"])
 
 
 class ValidationErrorItem(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [
+                {
+                    "type": "string_too_short",
+                    "loc": ["body", "specialty"],
+                    "msg": "String should have at least 1 character",
+                    "input": "",
+                }
+            ]
+        },
+    )
+
     type: str
     loc: list[str | int]
     msg: str
@@ -19,6 +40,23 @@ class ValidationErrorItem(BaseModel):
 
 
 class ValidationErrorResponse(BaseModel):
+    model_config = ConfigDict(
+        json_schema_extra={
+            "examples": [
+                {
+                    "detail": [
+                        {
+                            "type": "string_too_short",
+                            "loc": ["body", "specialty"],
+                            "msg": "String should have at least 1 character",
+                            "input": "",
+                        }
+                    ]
+                }
+            ]
+        },
+    )
+
     detail: list[ValidationErrorItem] | str
 
 
@@ -55,8 +93,8 @@ class PatientRequest(BaseModel):
     )
     budget: int = Field(
         ...,
-        ge=0,
-        description="Maximum budget in TRY",
+        gt=0,
+        description="Maximum budget in TRY (must be a positive integer)",
         examples=[3000, 1500],
     )
     city: Optional[str] = Field(
@@ -146,7 +184,11 @@ class MatchResponse(BaseModel):
                             "score": 81,
                         },
                     ]
-                }
+                },
+                {
+                    "matches": [],
+                    "message": "Kriterlerinize uygun doktor bulunamadı, filtreleri genişletmeyi deneyin.",
+                },
             ]
         }
     )
@@ -154,4 +196,9 @@ class MatchResponse(BaseModel):
     matches: list[DoctorResponse] = Field(
         ...,
         description="Ranked list of matched doctors",
+    )
+    message: Optional[str] = Field(
+        default=None,
+        description="Informational message when no doctors match the criteria",
+        examples=["Kriterlerinize uygun doktor bulunamadı, filtreleri genişletmeyi deneyin."],
     )

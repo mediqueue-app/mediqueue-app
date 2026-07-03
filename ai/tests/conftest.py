@@ -1,3 +1,5 @@
+"""Shared pytest fixtures for the MediQueue AI test suite."""
+
 import json
 from collections.abc import Generator
 from pathlib import Path

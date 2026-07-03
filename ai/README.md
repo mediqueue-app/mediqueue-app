@@ -13,21 +13,32 @@ Backend servisinden bağımsız çalışan FastAPI tabanlı AI microservice.
 ## Proje Yapısı
 
 ```
-app/
-├── main.py
-├── api/
-│   └── routes.py
-├── services/
-│   └── matcher.py
-├── models/
-│   └── schemas.py
-├── data/
-│   ├── doctors.json
-│   └── clinics.json
-└── utils/
-config.py
-requirements.txt
-README.md
+ai/
+├── app/
+│   ├── main.py              # FastAPI uygulaması, CORS, lifespan
+│   ├── api/
+│   │   └── routes.py        # HTTP endpoint'leri
+│   ├── core/
+│   │   └── config.py        # Ortam değişkenleri ve sabitler
+│   ├── data/
+│   │   ├── doctors.json
+│   │   └── clinics.json
+│   ├── models/
+│   │   └── schemas.py       # Pydantic request/response modelleri
+│   └── services/
+│       └── matcher.py       # Rule-based eşleştirme motoru
+├── docs/
+│   ├── API.md
+│   └── examples/            # JSON örnek dosyaları
+├── tests/
+│   ├── conftest.py
+│   ├── test_api.py
+│   └── test_matcher.py
+├── .env.example
+├── .gitignore
+├── pytest.ini
+├── requirements.txt
+└── requirements-dev.txt
 ```
 
 ## Kurulum
@@ -46,7 +57,11 @@ pip install -r requirements.txt
 
 ## Çalıştırma
 
-```bash
+**Önce `ai/` klasörüne girin** (monorepo kökünden değil):
+
+```powershell
+cd ai
+.venv\Scripts\activate
 uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
 ```
 
@@ -67,6 +82,7 @@ Servis varsayılan olarak **8001** portunda ayağa kalkar.
 | `HOST`        | 0.0.0.0                 | Bind adresi           |
 | `PORT`        | 8001                    | Dinleme portu         |
 | `DEBUG`       | false                   | Debug / reload modu   |
+| `CORS_ORIGINS`| *                       | İzin verilen origin'ler (virgülle ayrılmış) |
 
 ## API Dokümantasyonu
 
@@ -108,7 +124,7 @@ Detaylı request/response örnekleri ve hata kodları için [`docs/API.md`](docs
 
 ```bash
 pip install -r requirements-dev.txt
-pytest --cov=app --cov=config --cov-report=term-missing
+pytest --cov=app --cov-report=term-missing
 ```
 
 ## Geliştirme Notları

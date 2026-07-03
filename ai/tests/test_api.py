@@ -1,3 +1,5 @@
+"""Integration tests for FastAPI HTTP endpoints (routes.py and main.py)."""
+
 from fastapi.testclient import TestClient
 
 
@@ -38,7 +40,10 @@ class TestMatchEndpoint:
         )
 
         assert response.status_code == 200
-        assert response.json() == {"matches": []}
+        assert response.json() == {
+            "matches": [],
+            "message": "Kriterlerinize uygun doktor bulunamadı, filtreleri genişletmeyi deneyin.",
+        }
 
     def test_match_rejects_invalid_request(self, client: TestClient) -> None:
         response = client.post(

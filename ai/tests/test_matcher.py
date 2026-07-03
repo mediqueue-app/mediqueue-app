@@ -1,3 +1,5 @@
+"""Unit tests for the rule-based doctor matching engine (matcher.py)."""
+
 import json
 from pathlib import Path
 
@@ -219,7 +221,7 @@ class TestEmptyResults:
         self,
         sample_doctors: list[dict],
     ) -> None:
-        patient = PatientRequest(
+        patient = PatientRequest.model_construct(
             specialty="Cardiology",
             language="Turkish",
             budget=0,
@@ -257,10 +259,8 @@ class TestMatcherService:
         assert result.matches[0].specialty == "Dermatology"
 
     def test_load_doctors_raises_for_missing_file(self, tmp_path: Path) -> None:
-        service = MatcherService(doctors_path=tmp_path / "missing.json")
-
         with pytest.raises(FileNotFoundError):
-            service.load_doctors()
+            MatcherService(doctors_path=tmp_path / "missing.json")
 
 
 class TestPatientRequestValidation:

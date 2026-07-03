@@ -1,24 +1,33 @@
 """Rule-based doctor matching engine."""
 
 import json
+from functools import lru_cache
 from pathlib import Path
 from typing import TypedDict
 
 from app.models.schemas import DoctorResponse, MatchResponse, PatientRequest
-from config import DOCTORS_JSON_PATH
+from app.core.config import (
+    BASE_SCORE,
+    CITY_MATCH_BONUS,
+    DOCTORS_JSON_PATH,
+    MAX_EXPERIENCE_BONUS,
+    MAX_EXPERIENCE_YEARS,
+    MAX_RATING,
+    MAX_RATING_BONUS,
+)
 
-# --- Scoring weights ---
-BASE_SCORE: float = 60.0
-CITY_MATCH_BONUS: float = 15.0
-MAX_RATING_BONUS: float = 15.0
-MAX_EXPERIENCE_BONUS: float = 10.0
+# Re-export scoring constants for tests and external callers.
+__all__ = [
+    "BASE_SCORE",
+    "CITY_MATCH_BONUS",
+    "DoctorRecord",
+    "MatcherService",
+    "match_doctors",
+    "matcher_service",
+]
 
-# --- Normalization limits ---
-MAX_RATING: float = 5.0
-MAX_EXPERIENCE_YEARS: int = 20
-
-# --- Specialty aliases (normalized key -> canonical value) ---
-SPECIALTY_ALIASES: dict[str, str] = {
+# --- Raw specialty aliases (normalized at module load) ---
+_RAW_SPECIALTY_ALIASES: dict[str, str] = {
     "cardiology": "cardiology",
     "kardiyoloji": "cardiology",
     "dermatology": "dermatology",
@@ -39,10 +48,28 @@ SPECIALTY_ALIASES: dict[str, str] = {
     "diş hekimliği": "dentistry",
     "plastic surgery": "plastic surgery",
     "plastik cerrahi": "plastic surgery",
+    "hair transplant": "hair transplant",
+    "sac ekimi": "hair transplant",
+    "saç ekimi": "hair transplant",
+    "fue": "hair transplant",
+    "aesthetic": "aesthetic surgery",
+    "aesthetic surgery": "aesthetic surgery",
+    "estetik": "aesthetic surgery",
+    "eye surgery": "eye surgery",
+    "goz ameliyati": "eye surgery",
+    "göz ameliyatı": "eye surgery",
+    "lasik": "eye surgery",
+    "dental": "dentistry",
+    "dis": "dentistry",
+    "diş": "dentistry",
+    "obesity": "obesity surgery",
+    "obesity surgery": "obesity surgery",
+    "obezite": "obesity surgery",
+    "bariatric": "obesity surgery",
 }
 
-# --- Language aliases (normalized key -> canonical value) ---
-LANGUAGE_ALIASES: dict[str, str] = {
+# --- Raw language aliases (normalized at module load) ---
+_RAW_LANGUAGE_ALIASES: dict[str, str] = {
     "tr": "turkish",
     "turkish": "turkish",
     "turkce": "turkish",
@@ -63,8 +90,8 @@ LANGUAGE_ALIASES: dict[str, str] = {
     "almanca": "german",
 }
 
-# --- City aliases (normalized key -> canonical value) ---
-CITY_ALIASES: dict[str, str] = {
+# --- Raw city aliases (normalized at module load) ---
+_RAW_CITY_ALIASES: dict[str, str] = {
     "istanbul": "istanbul",
     "ankara": "ankara",
     "izmir": "izmir",
@@ -72,16 +99,17 @@ CITY_ALIASES: dict[str, str] = {
     "bursa": "bursa",
 }
 
-TURKISH_CHAR_MAP: dict[str, str] = {
-    "ı": "i",
-    "ş": "s",
-    "ç": "c",
-    "ğ": "g",
-    "ö": "o",
-    "ü": "u",
-}
-
 COMBINING_DOT_ABOVE: str = "\u0307"
+_TURKISH_TRANSLATION_TABLE = str.maketrans(
+    {
+        "ı": "i",
+        "ş": "s",
+        "ç": "c",
+        "ğ": "g",
+        "ö": "o",
+        "ü": "u",
+    }
+)
 
 
 class DoctorRecord(TypedDict):
@@ -96,32 +124,55 @@ class DoctorRecord(TypedDict):
 
 
 def _normalize_text(value: str) -> str:
-    normalized = value.strip().casefold().replace(COMBINING_DOT_ABOVE, "")
-    for turkish_char, latin_char in TURKISH_CHAR_MAP.items():
-        normalized = normalized.replace(turkish_char, latin_char)
-    return normalized
+    return (
+        value.strip()
+        .casefold()
+        .replace(COMBINING_DOT_ABOVE, "")
+        .translate(_TURKISH_TRANSLATION_TABLE)
+    )
 
 
-def _resolve_alias(value: str, aliases: dict[str, str]) -> str:
-    return aliases.get(_normalize_text(value), _normalize_text(value))
+def _build_normalized_alias_map(raw_aliases: dict[str, str]) -> dict[str, str]:
+    return {_normalize_text(key): canonical for key, canonical in raw_aliases.items()}
+
+
+SPECIALTY_ALIASES: dict[str, str] = _build_normalized_alias_map(_RAW_SPECIALTY_ALIASES)
+LANGUAGE_ALIASES: dict[str, str] = _build_normalized_alias_map(_RAW_LANGUAGE_ALIASES)
+CITY_ALIASES: dict[str, str] = _build_normalized_alias_map(_RAW_CITY_ALIASES)
+
+
+@lru_cache(maxsize=512)
+def _resolve_specialty_alias(value: str) -> str:
+    normalized = _normalize_text(value)
+    return SPECIALTY_ALIASES.get(normalized, normalized)
+
+
+@lru_cache(maxsize=512)
+def _resolve_language_alias(value: str) -> str:
+    normalized = _normalize_text(value)
+    return LANGUAGE_ALIASES.get(normalized, normalized)
+
+
+@lru_cache(maxsize=512)
+def _resolve_city_alias(value: str) -> str:
+    normalized = _normalize_text(value)
+    return CITY_ALIASES.get(normalized, normalized)
 
 
 def _specialties_match(patient_specialty: str, doctor_specialty: str) -> bool:
-    return _resolve_alias(patient_specialty, SPECIALTY_ALIASES) == _resolve_alias(
-        doctor_specialty, SPECIALTY_ALIASES
+    return _resolve_specialty_alias(patient_specialty) == _resolve_specialty_alias(
+        doctor_specialty
     )
 
 
 def _language_matches(patient_language: str, doctor_languages: list[str]) -> bool:
-    patient_lang = _resolve_alias(patient_language, LANGUAGE_ALIASES)
-    doctor_langs = {_resolve_alias(lang, LANGUAGE_ALIASES) for lang in doctor_languages}
+    patient_lang = _resolve_language_alias(patient_language)
+    doctor_langs = {_resolve_language_alias(lang) for lang in doctor_languages}
     return patient_lang in doctor_langs
 
 
 def _cities_match(patient_city: str, doctor_city: str) -> bool:
-    return _resolve_alias(patient_city, CITY_ALIASES) == _resolve_alias(
-        doctor_city, CITY_ALIASES
-    )
+    return _resolve_city_alias(patient_city) == _resolve_city_alias(doctor_city)
 
 
 def _is_within_budget(doctor_price: int, patient_budget: int) -> bool:
@@ -209,13 +260,13 @@ class MatcherService:
 
     def __init__(self, doctors_path: Path | None = None) -> None:
         self._doctors_path = doctors_path or DOCTORS_JSON_PATH
+        self._doctors: list[DoctorRecord] = _load_doctors(self._doctors_path)
 
     def load_doctors(self) -> list[DoctorRecord]:
-        return _load_doctors(self._doctors_path)
+        return self._doctors
 
     def match(self, patient: PatientRequest) -> MatchResponse:
-        doctors = self.load_doctors()
-        return match_doctors(patient, doctors)
+        return match_doctors(patient, self._doctors)
 
 
 matcher_service = MatcherService()
