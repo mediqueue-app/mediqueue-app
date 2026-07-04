@@ -1,12 +1,14 @@
 """Unit tests for the rule-based doctor matching engine (matcher.py)."""
 
-import json
-from pathlib import Path
+from collections.abc import Callable
+from datetime import datetime, timezone
 
 import pytest
 from pydantic import ValidationError
+from sqlalchemy.orm import Session
 
 from app.core.config import BASE_SCORE, CITY_MATCH_BONUS
+from app.models.doctor_db import DoctorDB
 from app.models.schemas import PatientRequest
 from app.services.matcher import (
     MatcherService,
@@ -232,7 +234,7 @@ class TestEmptyResults:
 
 
 class TestMatcherService:
-    def test_load_doctors_reads_json_file(
+    def test_load_doctors_reads_from_database(
         self,
         matcher_service: MatcherService,
         sample_doctors: list[dict],
@@ -254,12 +256,38 @@ class TestMatcherService:
 
         result = matcher_service.match(patient)
 
-        assert len(result.matches) == 1
-        assert result.matches[0].specialty == "Dermatology"
+        assert len(result.doctors) == 1
+        assert result.doctors[0].specialty == "Dermatology"
+        assert len(result.clinics) == 1
+        assert result.clinics[0].name == "Skin Care Istanbul"
 
-    def test_load_doctors_raises_for_missing_file(self, tmp_path: Path) -> None:
-        with pytest.raises(FileNotFoundError):
-            MatcherService(doctors_path=tmp_path / "missing.json")
+    def test_load_doctors_skips_inactive_rows(
+        self,
+        session_factory: Callable[[], Session],
+    ) -> None:
+        session = session_factory()
+        try:
+            inactive = DoctorDB(
+                id=99,
+                full_name="Dr. Inactive",
+                specialty="Cardiology",
+                city="İstanbul",
+                languages=["Turkish"],
+                price=1000,
+                rating=4.0,
+                experience=5,
+                is_active=False,
+                created_at=datetime.now(timezone.utc),
+            )
+            session.add(inactive)
+            session.commit()
+        finally:
+            session.close()
+
+        service = MatcherService(session_factory=session_factory)
+        doctors = service.load_doctors()
+
+        assert all(doctor["id"] != 99 for doctor in doctors)
 
 
 class TestPatientRequestValidation:

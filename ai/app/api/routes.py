@@ -13,7 +13,7 @@ from app.services.matcher import MatcherService
 router = APIRouter()
 
 MATCH_SUCCESS_EXAMPLE = {
-    "matches": [
+    "doctors": [
         {
             "id": 1,
             "name": "Dr. Ayşe Yılmaz",
@@ -36,16 +36,27 @@ MATCH_SUCCESS_EXAMPLE = {
             "experience": 14,
             "score": 81,
         },
-    ]
+    ],
+    "clinics": [
+        {
+            "id": 1,
+            "name": "MediQueue Heart Center",
+            "description": "Cardiology clinic",
+            "address": "Nişantaşı, İstanbul",
+            "phone": "+90 212 555 0101",
+            "score": 88,
+        }
+    ],
 }
 
 MATCH_EMPTY_EXAMPLE = {
-    "matches": [],
-    "message": "Kriterlerinize uygun doktor bulunamadı, filtreleri genişletmeyi deneyin.",
+    "doctors": [],
+    "clinics": [],
+    "message": "Kriterlerinize uygun doktor veya klinik bulunamadı, filtreleri genişletmeyi deneyin.",
 }
 
 NO_MATCH_MESSAGE = (
-    "Kriterlerinize uygun doktor bulunamadı, filtreleri genişletmeyi deneyin."
+    "Kriterlerinize uygun doktor veya klinik bulunamadı, filtreleri genişletmeyi deneyin."
 )
 
 BAD_REQUEST_EXAMPLE = {"detail": "Invalid JSON payload"}
@@ -85,19 +96,19 @@ async def health_check() -> HealthResponse:
     "/match",
     response_model=MatchResponse,
     status_code=status.HTTP_200_OK,
-    summary="Match doctors for a patient",
+    summary="Match doctors and clinics for a patient",
     description=(
-        "Hasta tercihlerine göre uygun doktorları **kural tabanlı filtreleme ve skorlama** ile "
-        "filtreler, skorlar ve skora göre sıralı liste döner. Makine öğrenmesi veya LLM kullanılmaz.\n\n"
+        "Hasta tercihlerine göre uygun **doktorları ve klinikleri** kural tabanlı filtreleme ve skorlama ile "
+        "filtreler, skorlar ve skora göre sıralı listeler döner. Makine öğrenmesi veya LLM kullanılmaz.\n\n"
         "**Zorunlu alanlar:** `specialty`, `language`, `budget`\n"
-        "**Opsiyonel alan:** `city` (aynı şehirdeki doktorlara bonus puan verilir)\n\n"
+        "**Opsiyonel alan:** `city` (aynı şehirdeki adaylara bonus puan verilir)\n\n"
         "| Alan | Tip | Açıklama |\n"
         "|------|-----|----------|\n"
         "| `specialty` | string | Uzmanlık alanı. Örnek: `Cardiology`, `Kardiyoloji`, `Saç Ekimi`, `FUE`, `Dentistry` |\n"
         "| `language` | string | Tercih edilen dil. Örnek: `Turkish`, `English`, `tr`, `en`, `Arabic` |\n"
-        "| `budget` | integer | Maksimum bütçe, **TL cinsinden tam sayı**. Örnek: `3000` |\n"
+        "| `budget` | integer | Maksimum bütçe, **TL cinsinden tam sayı**. Doktor eşleşmesinde uygulanır. Örnek: `3000` |\n"
         "| `city` | string | Tercih edilen şehir. Örnek: `Istanbul`, `Ankara`, `İzmir` |\n\n"
-        "Eşleşme bulunamazsa HTTP `200` döner; `matches` boş liste olur ve bilgilendirme `message` alanında yer alır."
+        "Eşleşme bulunamazsa HTTP `200` döner; `doctors` ve `clinics` boş liste olur, bilgilendirme `message` alanında yer alır."
     ),
     tags=["matching"],
     responses={
@@ -107,11 +118,11 @@ async def health_check() -> HealthResponse:
                 "application/json": {
                     "examples": {
                         "with_matches": {
-                            "summary": "Matched doctors found",
+                            "summary": "Matched doctors and clinics found",
                             "value": MATCH_SUCCESS_EXAMPLE,
                         },
                         "empty_matches": {
-                            "summary": "No doctors matched filters",
+                            "summary": "No doctors or clinics matched filters",
                             "value": MATCH_EMPTY_EXAMPLE,
                         },
                     }
@@ -140,6 +151,6 @@ def match_patient(
     matcher: MatcherService = Depends(get_matcher_service),
 ) -> MatchResponse:
     result = matcher.match(patient)
-    if not result.matches:
+    if not result.doctors and not result.clinics:
         return result.model_copy(update={"message": NO_MATCH_MESSAGE})
     return result

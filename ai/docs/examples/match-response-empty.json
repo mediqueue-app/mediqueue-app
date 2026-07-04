@@ -1,3 +1,5 @@
 {
-  "matches": []
+  "doctors": [],
+  "clinics": [],
+  "message": "Kriterlerinize uygun doktor veya klinik bulunamadı, filtreleri genişletmeyi deneyin."
 }

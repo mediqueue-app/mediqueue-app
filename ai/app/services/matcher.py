@@ -1,21 +1,23 @@
 """Rule-based doctor matching engine."""
 
-import json
+from collections.abc import Callable
 from functools import lru_cache
-from pathlib import Path
 from typing import TypedDict
 
-from app.models.schemas import ClinicRecord, DoctorResponse, MatchResponse, PatientRequest
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
 from app.core.config import (
     BASE_SCORE,
     CITY_MATCH_BONUS,
-    CLINICS_JSON_PATH,
-    DOCTORS_JSON_PATH,
     MAX_EXPERIENCE_BONUS,
     MAX_EXPERIENCE_YEARS,
     MAX_RATING,
     MAX_RATING_BONUS,
 )
+from app.core.database import get_session_factory
+from app.models.doctor_db import DoctorDB
+from app.models.schemas import DoctorMatchResult, DoctorResponse, MatchResponse, PatientRequest
 
 # Re-export scoring constants for tests and external callers.
 __all__ = [
@@ -233,7 +235,7 @@ def _to_doctor_response(doctor: DoctorRecord, score: float) -> DoctorResponse:
 def match_doctors(
     patient: PatientRequest,
     doctors: list[DoctorRecord],
-) -> MatchResponse:
+) -> DoctorMatchResult:
     """Filter doctors by hard rules, score survivors, and return ranked matches."""
     scored_doctors: list[tuple[DoctorRecord, float]] = []
 
@@ -247,36 +249,83 @@ def match_doctors(
     scored_doctors.sort(key=lambda item: item[1], reverse=True)
 
     matches = [_to_doctor_response(doctor, score) for doctor, score in scored_doctors]
-    return MatchResponse(matches=matches)
+    return DoctorMatchResult(matches=matches)
 
 
-def _load_doctors(doctors_path: Path) -> list[DoctorRecord]:
-    with doctors_path.open(encoding="utf-8") as file:
-        return json.load(file)
+def _load_doctors(session: Session) -> list[DoctorRecord]:
+    rows = session.scalars(
+        select(DoctorDB).where(DoctorDB.is_active.is_(True)).order_by(DoctorDB.id)
+    ).all()
+    records: list[DoctorRecord] = []
+    for row in rows:
+        record = _doctor_db_to_record(row)
+        if record is not None:
+            records.append(record)
+    return records
 
 
-def _load_clinics(clinics_path: Path) -> list[ClinicRecord]:
-    with clinics_path.open(encoding="utf-8") as file:
-        return json.load(file)
+def _doctor_db_to_record(row: DoctorDB) -> DoctorRecord | None:
+    if (
+        not row.full_name
+        or not row.specialty
+        or not row.city
+        or not row.languages
+        or row.price is None
+        or row.rating is None
+        or row.experience is None
+    ):
+        return None
+
+    return DoctorRecord(
+        id=row.id,
+        name=row.full_name,
+        specialty=row.specialty,
+        city=row.city,
+        languages=list(row.languages),
+        price=row.price,
+        rating=row.rating,
+        experience=row.experience,
+    )
 
 
 class MatcherService:
-    """Orchestrates doctor data loading and rule-based matching."""
+    """Orchestrates doctor and clinic data loading and rule-based matching."""
 
     def __init__(
         self,
-        doctors_path: Path | None = None,
-        clinics_path: Path | None = None,
+        session_factory: Callable[[], Session] | None = None,
     ) -> None:
-        self._doctors_path = doctors_path or DOCTORS_JSON_PATH
-        self._doctors: list[DoctorRecord] = _load_doctors(self._doctors_path)
-        self._clinics_path = clinics_path or CLINICS_JSON_PATH
+        self._session_factory = session_factory or get_session_factory()
 
     def load_doctors(self) -> list[DoctorRecord]:
-        return self._doctors
+        session = self._session_factory()
+        try:
+            return _load_doctors(session)
+        finally:
+            session.close()
 
-    def load_clinics(self) -> list[ClinicRecord]:
-        return _load_clinics(self._clinics_path)
+    def load_clinics(self):
+        from app.services.clinic_matcher import _load_clinics
+
+        session = self._session_factory()
+        try:
+            return _load_clinics(session)
+        finally:
+            session.close()
 
     def match(self, patient: PatientRequest) -> MatchResponse:
-        return match_doctors(patient, self._doctors)
+        from app.services.clinic_matcher import _load_clinics, match_clinics
+
+        session = self._session_factory()
+        try:
+            doctors = _load_doctors(session)
+            clinics = _load_clinics(session)
+        finally:
+            session.close()
+
+        doctor_result = match_doctors(patient, doctors)
+        clinic_matches = match_clinics(patient, clinics)
+        return MatchResponse(
+            doctors=doctor_result.matches,
+            clinics=clinic_matches,
+        )

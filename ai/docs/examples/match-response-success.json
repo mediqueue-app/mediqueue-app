@@ -1,5 +1,5 @@
 {
-  "matches": [
+  "doctors": [
     {
       "id": 1,
       "name": "Dr. Ayşe Yılmaz",
@@ -22,5 +22,16 @@
       "experience": 14,
       "score": 81
     }
-  ]
+  ],
+  "clinics": [
+    {
+      "id": 1,
+      "name": "MediQueue Heart Center",
+      "description": "Cardiology and internal medicine",
+      "address": "Nişantaşı, İstanbul",
+      "phone": "+90 212 555 0101",
+      "score": 88
+    }
+  ],
+  "message": null
 }

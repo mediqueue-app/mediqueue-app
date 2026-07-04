@@ -1,0 +1,14 @@
+{
+  "doctors": [],
+  "clinics": [
+    {
+      "id": 2,
+      "name": "Ankara Medical Group",
+      "description": "Multi-specialty clinic",
+      "address": "Çankaya, Ankara",
+      "phone": "+90 312 555 0202",
+      "score": 82
+    }
+  ],
+  "message": null
+}

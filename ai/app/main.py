@@ -8,6 +8,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
+from app.api.feedback import router as feedback_router
 from app.api.routes import router
 from app.core.dependencies import get_matcher_service
 from app.core.config import (
@@ -15,7 +16,6 @@ from app.core.config import (
     APP_VERSION,
     ALLOWED_ORIGINS,
     DEBUG,
-    DOCTORS_JSON_PATH,
     HOST,
     PORT,
 )
@@ -35,7 +35,7 @@ MediQueue AI Service, hasta tercihlerine göre doktor eşleştirmesi yapan bağ�
 
 1. Önce `GET /health` ile servisin ayakta olduğunu doğrulayın.
 2. `POST /match` endpoint'ine hasta tercihlerini JSON olarak gönderin.
-3. Dönen `matches` listesini skor sırasına göre kullanın.
+3. Dönen `doctors` ve `clinics` listelerini skor sırasına göre kullanın.
 
 ## Desteklenen Uzmanlıklar
 
@@ -52,12 +52,17 @@ Türkçe karşılıkları da kabul edilir (ör. `Kardiyoloji`).
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    doctor_count = len(get_matcher_service().load_doctors())
-    logger.info(
-        "Startup complete — loaded %d doctors from %s",
-        doctor_count,
-        DOCTORS_JSON_PATH,
-    )
+    try:
+        doctor_count = len(get_matcher_service().load_doctors())
+        logger.info(
+            "Startup complete — loaded %d active doctors from PostgreSQL",
+            doctor_count,
+        )
+    except Exception:
+        logger.warning(
+            "Startup — could not preload doctors from PostgreSQL",
+            exc_info=True,
+        )
     yield
     logger.info("Shutdown — %s stopping", APP_NAME)
 
@@ -88,6 +93,7 @@ app.add_middleware(
 )
 
 app.include_router(router)
+app.include_router(feedback_router)
 
 
 def _is_invalid_json_error(errors: list[dict[str, Any]]) -> bool:

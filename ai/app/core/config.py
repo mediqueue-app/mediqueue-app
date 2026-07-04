@@ -6,12 +6,14 @@ from dotenv import load_dotenv
 
 APP_DIR: Final[Path] = Path(__file__).resolve().parent.parent
 AI_ROOT: Final[Path] = APP_DIR.parent
-DATA_DIR: Final[Path] = APP_DIR / "data"
 
 load_dotenv(AI_ROOT / ".env")
 
-DOCTORS_JSON_PATH: Final[Path] = DATA_DIR / "doctors.json"
-CLINICS_JSON_PATH: Final[Path] = DATA_DIR / "clinics.json"
+# --- Database (shared with backend) ---
+DATABASE_URL: Final[str] = os.getenv(
+    "DATABASE_URL",
+    "postgresql+psycopg2://postgres:postgres@localhost:5432/mediqueue",
+)
 
 # --- Application ---
 APP_NAME: Final[str] = os.getenv("APP_NAME", "MediQueue AI Service")

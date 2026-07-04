@@ -1,15 +1,17 @@
 # MediQueue AI Service
 
-Backend servisinden bağımsız çalışan FastAPI tabanlı AI microservice.
+Backend servisinden bağımsız çalışan FastAPI tabanlı AI microservice. Hasta tercihlerine göre **doktor ve klinik** eşleştirmesi yapar; veri kaynağı backend ile paylaşılan PostgreSQL veritabanıdır.
 
 Şu anki sürüm kural tabanlı (rule-based) filtreleme ve skorlama kullanır. Makine öğrenmesi modeli Faz 2'de eklenecektir.
 
 ## Teknolojiler
 
-- Python 3.12
+- Python 3.12+
 - FastAPI
 - Uvicorn
 - Pydantic v2
+- SQLAlchemy 2.x
+- PostgreSQL (backend ile ortak)
 - python-dotenv
 
 ## Proje Yapısı
@@ -17,28 +19,36 @@ Backend servisinden bağımsız çalışan FastAPI tabanlı AI microservice.
 ```
 ai/
 ├── app/
-│   ├── main.py              # FastAPI uygulaması, CORS, lifespan
+│   ├── main.py                    # FastAPI uygulaması, CORS, lifespan
 │   ├── api/
-│   │   └── routes.py        # HTTP endpoint'leri
+│   │   ├── routes.py              # POST /match, GET /health
+│   │   └── feedback.py            # POST /feedback (draft)
 │   ├── core/
-│   │   └── config.py        # Ortam değişkenleri ve sabitler
-│   ├── data/
+│   │   ├── config.py              # Ortam değişkenleri
+│   │   ├── database.py            # SQLAlchemy engine / session
+│   │   └── dependencies.py
+│   ├── data/                      # Backend seed referans JSON (matching'de kullanılmaz)
 │   │   ├── doctors.json
 │   │   └── clinics.json
 │   ├── models/
-│   │   └── schemas.py       # Pydantic request/response modelleri
+│   │   ├── schemas.py             # Pydantic request/response modelleri
+│   │   ├── doctor_db.py           # doctors tablosu (read-only)
+│   │   ├── clinic_db.py           # clinics tablosu (read-only)
+│   │   └── doctor_clinic_db.py    # doctor_clinics join (read-only)
 │   └── services/
-│       └── matcher.py       # Rule-based eşleştirme motoru
+│       ├── matcher.py             # Doktor eşleştirme motoru
+│       └── clinic_matcher.py      # Klinik eşleştirme motoru
 ├── docs/
 │   ├── API.md
-│   └── examples/            # JSON örnek dosyaları
+│   └── examples/
 ├── tests/
 │   ├── conftest.py
 │   ├── test_api.py
-│   └── test_matcher.py
+│   ├── test_matcher.py
+│   ├── test_clinic_matcher.py
+│   ├── test_clinic_loading.py
+│   └── test_feedback.py
 ├── .env.example
-├── .gitignore
-├── pytest.ini
 ├── requirements.txt
 └── requirements-dev.txt
 ```
@@ -57,6 +67,29 @@ source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
+`.env` dosyasını oluşturun:
+
+```bash
+cp .env.example .env
+```
+
+## Veritabanı
+
+AI servisi backend ile **aynı PostgreSQL** veritabanını kullanır. `.env` içinde:
+
+```env
+DATABASE_URL=postgresql+psycopg2://postgres:postgres@localhost:5432/mediqueue
+```
+
+**Gereksinimler:**
+
+1. PostgreSQL çalışır durumda olmalı
+2. Backend Alembic migration'ları uygulanmış olmalı (`backend/` → `alembic upgrade head`)
+3. `doctors` tablosu dolu olmalı (`backend/scripts/seed_doctors_from_ai_json.py`)
+4. Klinik eşleştirmesi için `clinics` ve `doctor_clinics` tabloları da dolu olmalı — seed yoksa `clinics` boş liste döner
+
+> `app/data/doctors.json` ve `clinics.json` dosyaları AI matching tarafından **okunmaz**; backend seed script'i için referans olarak durur.
+
 ## Çalıştırma
 
 **Önce `ai/` klasörüne girin** (monorepo kökünden değil):
@@ -67,70 +100,64 @@ cd ai
 uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
 ```
 
-Alternatif:
-
-```bash
-python -m app.main
-```
-
 Servis varsayılan olarak **8001** portunda ayağa kalkar.
 
-## Ortam Değişkenleri
+## API Özeti
 
-| Değişken      | Varsayılan              | Açıklama              |
-|---------------|-------------------------|-----------------------|
-| `APP_NAME`    | MediQueue AI Service    | Uygulama adı          |
-| `APP_VERSION` | 1.0.0                   | Sürüm                 |
-| `HOST`        | 0.0.0.0                 | Bind adresi           |
-| `PORT`        | 8001                    | Dinleme portu         |
-| `DEBUG`       | false                   | Debug / reload modu   |
-| `CORS_ORIGINS`| *                       | İzin verilen origin'ler (virgülle ayrılmış) |
+| Endpoint | Method | Açıklama |
+|----------|--------|----------|
+| `/health` | GET | Health check |
+| `/match` | POST | Doktor + klinik eşleştirmesi |
+| `/feedback` | POST | Match geri bildirimi (draft, DB'ye yazılmaz) |
 
-## API Dokümantasyonu
-
-Backend entegrasyonu için tam API dokümantasyonu:
-
-- **[API Dokümantasyonu](docs/API.md)** — endpoint'ler, request/response örnekleri, status kodları, cURL ve entegrasyon rehberi
-- **[JSON Örnekleri](docs/examples/)** — kopyalanabilir request/response dosyaları
-
-### Swagger
-
-- Swagger UI: [http://localhost:8001/docs](http://localhost:8001/docs)
-- ReDoc: [http://localhost:8001/redoc](http://localhost:8001/redoc)
-- OpenAPI JSON: [http://localhost:8001/openapi.json](http://localhost:8001/openapi.json)
-
-### Health Check
-
-```http
-GET /health
-```
-
-**Response**
+### POST /match — Response
 
 ```json
 {
-  "status": "ok"
+  "doctors": [...],
+  "clinics": [...],
+  "message": null
 }
 ```
 
-### Doctor Matching
+`message` yalnızca `doctors` ve `clinics` **ikisi de boş** olduğunda dolar.
 
-```http
-POST /match
-Content-Type: application/json
-```
+Detaylı dokümantasyon: [`docs/API.md`](docs/API.md)
 
-Detaylı request/response örnekleri ve hata kodları için [`docs/API.md`](docs/API.md) dosyasına bakın.
+## Ortam Değişkenleri
+
+| Değişken | Varsayılan | Açıklama |
+|----------|------------|----------|
+| `DATABASE_URL` | `postgresql+psycopg2://postgres:postgres@localhost:5432/mediqueue` | PostgreSQL bağlantısı |
+| `APP_NAME` | MediQueue AI Service | Uygulama adı |
+| `APP_VERSION` | 1.0.0 | Sürüm |
+| `HOST` | 0.0.0.0 | Bind adresi |
+| `PORT` | 8001 | Dinleme portu |
+| `DEBUG` | false | Debug / reload modu |
+| `ALLOWED_ORIGINS` | localhost:3000,8080 | CORS origin'leri |
 
 ## Test
+
+```bash
+cd ai
+python -m pytest -q
+```
+
+Coverage ile:
 
 ```bash
 pip install -r requirements-dev.txt
 pytest --cov=app --cov-report=term-missing
 ```
 
+## Swagger
+
+- Swagger UI: http://localhost:8001/docs
+- ReDoc: http://localhost:8001/redoc
+
 ## Geliştirme Notları
 
-- Global exception handler tüm beklenmeyen hataları yakalar ve `500` döner.
-- `app/services/matcher.py` kural tabanlı (rule-based) filtreleme ve skorlama motorudur; Faz 2'de ML entegrasyonu planlanmaktadır.
-- `app/data/` altındaki JSON dosyaları doktor ve klinik verilerini tutar.
+- `matcher.py` — doktor eşleştirme (uzmanlık, dil, bütçe hard filter + skorlama)
+- `clinic_matcher.py` — klinik eşleştirme (uzmanlık, dil hard filter; bütçe uygulanmaz; city/rating bonus)
+- Klinik eşleştirme alanları bağlı doktorlardan türetilir (`doctor_clinics` join)
+- Backend proxy (`POST /v1/match`) aynı `{ doctors, clinics, message }` formatını döndürmeli — backend güncellemesi ayrı task

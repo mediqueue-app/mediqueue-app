@@ -12,7 +12,7 @@ class TestHealthEndpoint:
 
 
 class TestMatchEndpoint:
-    def test_match_returns_ranked_doctors(self, client: TestClient) -> None:
+    def test_match_returns_ranked_doctors_and_clinics(self, client: TestClient) -> None:
         response = client.post(
             "/match",
             json={
@@ -25,9 +25,12 @@ class TestMatchEndpoint:
 
         assert response.status_code == 200
         body = response.json()
-        assert "matches" in body
-        assert len(body["matches"]) == 3
-        assert body["matches"][0]["score"] >= body["matches"][1]["score"]
+        assert "doctors" in body
+        assert "clinics" in body
+        assert len(body["doctors"]) == 3
+        assert len(body["clinics"]) == 2
+        assert body["doctors"][0]["score"] >= body["doctors"][1]["score"]
+        assert body["clinics"][0]["score"] >= body["clinics"][-1]["score"]
 
     def test_match_returns_empty_list_for_no_results(self, client: TestClient) -> None:
         response = client.post(
@@ -41,8 +44,9 @@ class TestMatchEndpoint:
 
         assert response.status_code == 200
         assert response.json() == {
-            "matches": [],
-            "message": "Kriterlerinize uygun doktor bulunamadı, filtreleri genişletmeyi deneyin.",
+            "doctors": [],
+            "clinics": [],
+            "message": "Kriterlerinize uygun doktor veya klinik bulunamadı, filtreleri genişletmeyi deneyin.",
         }
 
     def test_match_rejects_invalid_request(self, client: TestClient) -> None:
@@ -90,7 +94,9 @@ class TestMatchEndpoint:
         )
 
         assert response.status_code == 200
-        doctor = response.json()["matches"][0]
+        body = response.json()
+        doctor = body["doctors"][0]
+        clinic = body["clinics"][0]
         assert {
             "id",
             "name",
@@ -102,6 +108,14 @@ class TestMatchEndpoint:
             "experience",
             "score",
         } <= doctor.keys()
+        assert {
+            "id",
+            "name",
+            "description",
+            "address",
+            "phone",
+            "score",
+        } <= clinic.keys()
 
 
 class TestRootEndpoint:

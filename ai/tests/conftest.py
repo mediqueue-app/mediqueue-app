@@ -1,15 +1,80 @@
 """Shared pytest fixtures for the MediQueue AI test suite."""
 
-import json
-from collections.abc import Generator
-from pathlib import Path
+from collections.abc import Callable, Generator
+from datetime import datetime, timezone
+from unittest.mock import patch
 
 import pytest
 from fastapi.testclient import TestClient
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, sessionmaker
+from sqlalchemy.pool import StaticPool
 
 from app.core.dependencies import get_matcher_service
 from app.main import app
+from app.models.clinic_db import ClinicDB
+from app.models.doctor_clinic_db import DoctorClinicDB
+from app.models.doctor_db import Base, DoctorDB
 from app.services.matcher import DoctorRecord, MatcherService
+
+
+def _record_to_doctor_db(record: DoctorRecord) -> DoctorDB:
+    return DoctorDB(
+        id=record["id"],
+        full_name=record["name"],
+        specialty=record["specialty"],
+        city=record["city"],
+        languages=record["languages"],
+        price=record["price"],
+        rating=record["rating"],
+        experience=record["experience"],
+        is_active=True,
+        created_at=datetime.now(timezone.utc),
+    )
+
+
+def _seed_clinics(session: Session) -> None:
+    now = datetime.now(timezone.utc)
+    clinics = [
+        ClinicDB(
+            id=1,
+            name="Istanbul Heart Center",
+            description="Cardiology and internal medicine",
+            address="Nişantaşı, İstanbul",
+            phone="+90 212 555 0101",
+            is_active=True,
+            created_at=now,
+            updated_at=now,
+        ),
+        ClinicDB(
+            id=2,
+            name="Ankara Medical Group",
+            description="Multi-specialty clinic",
+            address="Çankaya, Ankara",
+            phone="+90 312 555 0202",
+            is_active=True,
+            created_at=now,
+            updated_at=now,
+        ),
+        ClinicDB(
+            id=3,
+            name="Skin Care Istanbul",
+            description="Dermatology clinic",
+            address="Kadıköy, İstanbul",
+            phone="+90 216 555 0303",
+            is_active=True,
+            created_at=now,
+            updated_at=now,
+        ),
+    ]
+    links = [
+        DoctorClinicDB(id=1, doctor_id=1, clinic_id=1, is_active=True, created_at=now),
+        DoctorClinicDB(id=2, doctor_id=5, clinic_id=1, is_active=True, created_at=now),
+        DoctorClinicDB(id=3, doctor_id=2, clinic_id=2, is_active=True, created_at=now),
+        DoctorClinicDB(id=4, doctor_id=3, clinic_id=3, is_active=True, created_at=now),
+    ]
+    session.add_all(clinics)
+    session.add_all(links)
 
 
 @pytest.fixture
@@ -69,20 +134,37 @@ def sample_doctors() -> list[DoctorRecord]:
 
 
 @pytest.fixture
-def doctors_file(tmp_path: Path, sample_doctors: list[DoctorRecord]) -> Path:
-    file_path = tmp_path / "doctors.json"
-    file_path.write_text(json.dumps(sample_doctors, ensure_ascii=False), encoding="utf-8")
-    return file_path
+def session_factory(sample_doctors: list[DoctorRecord]) -> Callable[[], Session]:
+    engine = create_engine(
+        "sqlite:///:memory:",
+        connect_args={"check_same_thread": False},
+        poolclass=StaticPool,
+    )
+    Base.metadata.create_all(engine)
+    factory = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+    seed_session = factory()
+    try:
+        seed_session.add_all(_record_to_doctor_db(record) for record in sample_doctors)
+        _seed_clinics(seed_session)
+        seed_session.commit()
+    finally:
+        seed_session.close()
+
+    return factory
 
 
 @pytest.fixture
-def matcher_service(doctors_file: Path) -> MatcherService:
-    return MatcherService(doctors_path=doctors_file)
+def matcher_service(session_factory: Callable[[], Session]) -> MatcherService:
+    return MatcherService(session_factory=session_factory)
 
 
 @pytest.fixture
 def client(matcher_service: MatcherService) -> Generator[TestClient, None, None]:
     app.dependency_overrides[get_matcher_service] = lambda: matcher_service
-    with TestClient(app) as test_client:
-        yield test_client
+    get_matcher_service.cache_clear()
+    with patch("app.main.get_matcher_service", return_value=matcher_service):
+        with TestClient(app) as test_client:
+            yield test_client
     app.dependency_overrides.pop(get_matcher_service, None)
+    get_matcher_service.cache_clear()
