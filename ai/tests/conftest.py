@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 from fastapi.testclient import TestClient
 
+from app.core.dependencies import get_matcher_service
 from app.main import app
 from app.services.matcher import DoctorRecord, MatcherService
 
@@ -80,7 +81,8 @@ def matcher_service(doctors_file: Path) -> MatcherService:
 
 
 @pytest.fixture
-def client(matcher_service: MatcherService, monkeypatch: pytest.MonkeyPatch) -> Generator[TestClient, None, None]:
-    monkeypatch.setattr("app.api.routes.matcher_service", matcher_service)
+def client(matcher_service: MatcherService) -> Generator[TestClient, None, None]:
+    app.dependency_overrides[get_matcher_service] = lambda: matcher_service
     with TestClient(app) as test_client:
         yield test_client
+    app.dependency_overrides.pop(get_matcher_service, None)

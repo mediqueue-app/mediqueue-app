@@ -5,10 +5,11 @@ from functools import lru_cache
 from pathlib import Path
 from typing import TypedDict
 
-from app.models.schemas import DoctorResponse, MatchResponse, PatientRequest
+from app.models.schemas import ClinicRecord, DoctorResponse, MatchResponse, PatientRequest
 from app.core.config import (
     BASE_SCORE,
     CITY_MATCH_BONUS,
+    CLINICS_JSON_PATH,
     DOCTORS_JSON_PATH,
     MAX_EXPERIENCE_BONUS,
     MAX_EXPERIENCE_YEARS,
@@ -23,7 +24,6 @@ __all__ = [
     "DoctorRecord",
     "MatcherService",
     "match_doctors",
-    "matcher_service",
 ]
 
 # --- Raw specialty aliases (normalized at module load) ---
@@ -255,18 +255,28 @@ def _load_doctors(doctors_path: Path) -> list[DoctorRecord]:
         return json.load(file)
 
 
+def _load_clinics(clinics_path: Path) -> list[ClinicRecord]:
+    with clinics_path.open(encoding="utf-8") as file:
+        return json.load(file)
+
+
 class MatcherService:
     """Orchestrates doctor data loading and rule-based matching."""
 
-    def __init__(self, doctors_path: Path | None = None) -> None:
+    def __init__(
+        self,
+        doctors_path: Path | None = None,
+        clinics_path: Path | None = None,
+    ) -> None:
         self._doctors_path = doctors_path or DOCTORS_JSON_PATH
         self._doctors: list[DoctorRecord] = _load_doctors(self._doctors_path)
+        self._clinics_path = clinics_path or CLINICS_JSON_PATH
 
     def load_doctors(self) -> list[DoctorRecord]:
         return self._doctors
 
+    def load_clinics(self) -> list[ClinicRecord]:
+        return _load_clinics(self._clinics_path)
+
     def match(self, patient: PatientRequest) -> MatchResponse:
         return match_doctors(patient, self._doctors)
-
-
-matcher_service = MatcherService()

@@ -6,10 +6,9 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
+from app.core.config import BASE_SCORE, CITY_MATCH_BONUS
 from app.models.schemas import PatientRequest
 from app.services.matcher import (
-    BASE_SCORE,
-    CITY_MATCH_BONUS,
     MatcherService,
     match_doctors,
 )

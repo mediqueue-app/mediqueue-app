@@ -1,6 +1,18 @@
-from typing import Optional
+from typing import Optional, TypedDict
 
 from pydantic import BaseModel, ConfigDict, Field
+
+
+class ClinicRecord(TypedDict):
+    id: int
+    name: str
+    specialty: list[str]
+    city: str
+    languages: list[str]
+    min_price: int
+    max_price: int
+    rating: float
+    doctor_count: int
 
 
 class HealthResponse(BaseModel):

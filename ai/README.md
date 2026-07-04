@@ -2,6 +2,8 @@
 
 Backend servisinden bağımsız çalışan FastAPI tabanlı AI microservice.
 
+Şu anki sürüm kural tabanlı (rule-based) filtreleme ve skorlama kullanır. Makine öğrenmesi modeli Faz 2'de eklenecektir.
+
 ## Teknolojiler
 
 - Python 3.12
@@ -130,5 +132,5 @@ pytest --cov=app --cov-report=term-missing
 ## Geliştirme Notları
 
 - Global exception handler tüm beklenmeyen hataları yakalar ve `500` döner.
-- `app/services/matcher.py` filtreleme mantığı eklendikçe genişletilecektir.
+- `app/services/matcher.py` kural tabanlı (rule-based) filtreleme ve skorlama motorudur; Faz 2'de ML entegrasyonu planlanmaktadır.
 - `app/data/` altındaki JSON dosyaları doktor ve klinik verilerini tutar.

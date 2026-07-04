@@ -9,11 +9,11 @@ from fastapi.responses import JSONResponse
 from starlette.exceptions import HTTPException as StarletteHTTPException
 
 from app.api.routes import router
-from app.services.matcher import matcher_service
+from app.core.dependencies import get_matcher_service
 from app.core.config import (
     APP_NAME,
     APP_VERSION,
-    CORS_ORIGINS,
+    ALLOWED_ORIGINS,
     DEBUG,
     DOCTORS_JSON_PATH,
     HOST,
@@ -28,6 +28,8 @@ logger = logging.getLogger(__name__)
 
 OPENAPI_DESCRIPTION = """
 MediQueue AI Service, hasta tercihlerine göre doktor eşleştirmesi yapan bağımsız bir microservice'tir.
+
+Şu anki sürüm **kural tabanlı (rule-based) filtreleme ve skorlama** kullanır. Makine öğrenmesi, LLM veya NLP kullanılmaz; makine öğrenmesi modeli Faz 2'de eklenecektir.
 
 ## Entegrasyon Özeti
 
@@ -50,7 +52,7 @@ Türkçe karşılıkları da kabul edilir (ör. `Kardiyoloji`).
 
 @asynccontextmanager
 async def lifespan(app: FastAPI) -> AsyncIterator[None]:
-    doctor_count = len(matcher_service.load_doctors())
+    doctor_count = len(get_matcher_service().load_doctors())
     logger.info(
         "Startup complete — loaded %d doctors from %s",
         doctor_count,
@@ -79,7 +81,7 @@ app = FastAPI(
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=CORS_ORIGINS,
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

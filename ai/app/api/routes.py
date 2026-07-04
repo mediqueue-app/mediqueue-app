@@ -1,5 +1,6 @@
-from fastapi import APIRouter, status
+from fastapi import APIRouter, Depends, status
 
+from app.core.dependencies import get_matcher_service
 from app.models.schemas import (
     ErrorResponse,
     HealthResponse,
@@ -7,7 +8,7 @@ from app.models.schemas import (
     PatientRequest,
     ValidationErrorResponse,
 )
-from app.services.matcher import matcher_service
+from app.services.matcher import MatcherService
 
 router = APIRouter()
 
@@ -86,7 +87,8 @@ async def health_check() -> HealthResponse:
     status_code=status.HTTP_200_OK,
     summary="Match doctors for a patient",
     description=(
-        "Hasta tercihlerine göre uygun doktorları filtreler, skorlar ve skora göre sıralı liste döner.\n\n"
+        "Hasta tercihlerine göre uygun doktorları **kural tabanlı filtreleme ve skorlama** ile "
+        "filtreler, skorlar ve skora göre sıralı liste döner. Makine öğrenmesi veya LLM kullanılmaz.\n\n"
         "**Zorunlu alanlar:** `specialty`, `language`, `budget`\n"
         "**Opsiyonel alan:** `city` (aynı şehirdeki doktorlara bonus puan verilir)\n\n"
         "| Alan | Tip | Açıklama |\n"
@@ -133,8 +135,11 @@ async def health_check() -> HealthResponse:
         },
     },
 )
-def match_patient(patient: PatientRequest) -> MatchResponse:
-    result = matcher_service.match(patient)
+def match_patient(
+    patient: PatientRequest,
+    matcher: MatcherService = Depends(get_matcher_service),
+) -> MatchResponse:
+    result = matcher.match(patient)
     if not result.matches:
         return result.model_copy(update={"message": NO_MATCH_MESSAGE})
     return result
