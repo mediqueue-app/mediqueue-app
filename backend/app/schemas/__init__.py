@@ -1,6 +1,17 @@
 from app.schemas.clinic import ClinicRead
-from app.schemas.doctor import DoctorRead
+from app.schemas.doctor import DoctorCreate, DoctorRead
+from app.schemas.match import MatchDoctor, MatchRequest, MatchResponse
 from app.schemas.token import Token
 from app.schemas.user import UserCreate, UserRead
 
-__all__ = ["ClinicRead", "DoctorRead", "Token", "UserCreate", "UserRead"]
+__all__ = [
+    "ClinicRead",
+    "DoctorCreate",
+    "DoctorRead",
+    "MatchDoctor",
+    "MatchRequest",
+    "MatchResponse",
+    "Token",
+    "UserCreate",
+    "UserRead",
+]
