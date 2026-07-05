@@ -160,4 +160,4 @@ pytest --cov=app --cov-report=term-missing
 - `matcher.py` — doktor eşleştirme (uzmanlık, dil, bütçe hard filter + skorlama)
 - `clinic_matcher.py` — klinik eşleştirme (uzmanlık, dil hard filter; bütçe uygulanmaz; city/rating bonus)
 - Klinik eşleştirme alanları bağlı doktorlardan türetilir (`doctor_clinics` join)
-- Backend proxy (`POST /v1/match`) aynı `{ doctors, clinics, message }` formatını döndürmeli — backend güncellemesi ayrı task
+- Backend proxy (`POST /v1/match`) aynı `{ doctors, clinics, message }` formatını döndürür — entegrasyon tamamlanmıştır (Temmuz 2026)

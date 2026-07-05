@@ -36,4 +36,9 @@ def submit_feedback(feedback: FeedbackRequest) -> FeedbackResponse:
         feedback.selected_clinic_id,
         feedback.rating,
     )
+    # TODO: Bu geri bildirim şu an sadece loglanıyor, kalıcı olarak saklanmıyor.
+    # Backend'de "reviews" tablosu ve API'si hazır olduğunda (bkz. backend/app/models/review.py),
+    # bu feedback verisi review sistemi ile entegre edilip PostgreSQL'e kalıcı olarak yazılmalı.
+    # Şu anki davranış: sadece log dosyasına düşer, uygulama yeniden başladığında kaybolur.
+    # İlgili: backend reviews API tamamlanınca bu TODO'ya dönülmeli.
     return FeedbackResponse(status="received")

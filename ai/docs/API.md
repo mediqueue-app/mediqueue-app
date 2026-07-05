@@ -246,7 +246,7 @@ Backend `POST /v1/match` proxy'si AI servisinden gelen yanıtı **olduğu gibi**
 }
 ```
 
-> **Not:** Backend şeması henüz güncellenmemiş olabilir (eski `matches` alanı). Backend tarafında `MatchResponse` güncellemesi ayrı yapılacaktır.
+> **Not:** Backend entegrasyonu tamamlanmıştır (Temmuz 2026). `backend/app/schemas/match.py` içindeki `MatchResponse` modeli bu servisin döndürdüğü `{ doctors, clinics, message }` formatıyla uyumludur. `POST /v1/match` proxy'si yanıtı doğrulayıp client'a iletir.
 
 ### Adımlar
 
