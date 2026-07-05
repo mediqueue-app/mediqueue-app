@@ -20,6 +20,16 @@ class MatchDoctor(BaseModel):
     score: float = Field(ge=0.0, le=100.0)
 
 
+class MatchClinic(BaseModel):
+    id: int
+    name: str
+    description: str | None = None
+    address: str | None = None
+    phone: str | None = None
+    score: float = Field(ge=0.0, le=100.0)
+
+
 class MatchResponse(BaseModel):
-    matches: list[MatchDoctor]
+    doctors: list[MatchDoctor]
+    clinics: list[MatchClinic]
     message: str | None = None

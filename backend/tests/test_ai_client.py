@@ -8,19 +8,30 @@ from app.services.ai_client import AIServiceError, call_match
 
 
 SAMPLE_MATCH_RESPONSE = {
-    "matches": [
+    "doctors": [
         {
             "id": 1,
-            "name": "Dr. Ayşe Yılmaz",
+            "name": "Dr. Ali Yılmaz",
             "specialty": "Cardiology",
-            "city": "İstanbul",
+            "city": "Istanbul",
             "languages": ["Turkish", "English"],
-            "price": 2800,
-            "rating": 4.9,
-            "experience": 18,
-            "score": 94,
+            "price": 1500,
+            "rating": 4.8,
+            "experience": 12,
+            "score": 92.0,
         }
-    ]
+    ],
+    "clinics": [
+        {
+            "id": 1,
+            "name": "MediQueue Clinic",
+            "description": "International patient clinic",
+            "address": "Istanbul",
+            "phone": "+90 555 000 00 00",
+            "score": 88.0,
+        }
+    ],
+    "message": None,
 }
 
 
@@ -45,8 +56,11 @@ class TestAIClient:
         )
 
         assert isinstance(result, MatchResponse)
-        assert len(result.matches) == 1
-        assert result.matches[0].name == "Dr. Ayşe Yılmaz"
+        assert len(result.doctors) == 1
+        assert result.doctors[0].name == "Dr. Ali Yılmaz"
+        assert len(result.clinics) == 1
+        assert result.clinics[0].name == "MediQueue Clinic"
+        assert result.message is None
 
     @patch("app.services.ai_client.httpx.Client")
     def test_call_match_timeout(self, mock_client_cls: MagicMock) -> None:

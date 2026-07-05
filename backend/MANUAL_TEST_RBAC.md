@@ -1,6 +1,6 @@
 # Manual RBAC Verification
 
-This project does not currently have a first-party test suite. Use these steps after running Alembic migrations and starting the API.
+Automated RBAC coverage lives in `tests/test_admin_api.py`. Use this guide for manual verification after running Alembic migrations and starting the API.
 
 ## 1. Apply the migration
 
@@ -51,15 +51,26 @@ Expected result: a successful response for an existing clinic, or `404 Clinic no
 
 ## 5. Verify role-restricted behavior
 
-The current API has no create/update/delete endpoints to make admin-only, so no existing route should reject a valid `patient`, `doctor`, `clinic`, or `admin` user by role.
+The admin-only endpoint is:
 
-When an admin-only endpoint is added with `Depends(require_roles([UserRole.ADMIN]))`, verify:
+```http
+GET /v1/admin/summary
+```
+
+It requires the `admin` role.
+
+Set the test user to `patient`:
 
 ```sql
 UPDATE users SET role = 'patient' WHERE email = 'patient@example.com';
 ```
 
-Then call that endpoint with the user's token.
+Then call the endpoint with the user's token:
+
+```bash
+curl -i http://localhost:8000/v1/admin/summary \
+  -H "Authorization: Bearer <access_token>"
+```
 
 Expected result: `403 Forbidden`.
 
@@ -69,8 +80,28 @@ Update the same user to admin and retry:
 UPDATE users SET role = 'admin' WHERE email = 'patient@example.com';
 ```
 
-Expected result: the request succeeds if the token is otherwise valid.
+Expected result: `200 OK` with aggregate counts:
+
+```json
+{
+  "users": 1,
+  "clinics": 16,
+  "doctors": 44
+}
+```
+
+Patient flows such as `POST /v1/match`, `GET /v1/clinics`, and auth endpoints remain available to non-admin users.
 
 ## 6. Swagger
 
-Open `http://localhost:8000/docs`, use the Authorize button with the Bearer token, and call `GET /v1/clinics/{clinic_id}/doctors`.
+Open `http://localhost:8000/docs`, use the Authorize button with the Bearer token, and call:
+
+- `GET /v1/clinics/{clinic_id}/doctors`
+- `GET /v1/admin/summary` (admin token only)
+
+## 7. Automated tests
+
+```powershell
+cd backend
+pytest tests/test_admin_api.py -v
+```

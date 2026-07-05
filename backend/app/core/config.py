@@ -1,13 +1,18 @@
-from pydantic import Field
+from pydantic import Field, model_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 # Local development only — override via SECRET_KEY in .env before any real deployment.
 UNSAFE_DEV_SECRET_KEY = "UNSAFE-LOCAL-DEV-ONLY-do-not-use-in-production"
+PROTECTED_ENVIRONMENTS = frozenset({"production", "staging"})
 
 
 class Settings(BaseSettings):
     PROJECT_NAME: str = "MediQueue API"
     API_V1_PREFIX: str = "/v1"
+    APP_ENV: str = Field(
+        default="development",
+        description="Runtime environment: development, staging, or production.",
+    )
 
     DATABASE_URL: str = "postgresql+psycopg2://postgres:postgres@localhost:5432/mediqueue"
 
@@ -31,6 +36,20 @@ class Settings(BaseSettings):
         case_sensitive=True,
     )
 
+    @model_validator(mode="after")
+    def validate_secret_key_for_environment(self) -> "Settings":
+        env = self.APP_ENV.strip().lower()
+        secret = self.SECRET_KEY.strip()
+
+        if env in PROTECTED_ENVIRONMENTS and (
+            not secret or secret == UNSAFE_DEV_SECRET_KEY
+        ):
+            raise ValueError(
+                "SECRET_KEY must be set to a secure, non-default value when "
+                f"APP_ENV is '{env}'. Set SECRET_KEY in the environment or .env file."
+            )
+
+        return self
 
     @property
     def cors_origins(self) -> list[str]:

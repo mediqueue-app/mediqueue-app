@@ -27,8 +27,29 @@ def active_user() -> User:
 
 
 @pytest.fixture
+def admin_user() -> User:
+    return User(
+        id=2,
+        email="admin@example.com",
+        hashed_password="hashed",
+        full_name="Test Admin",
+        role="admin",
+        is_active=True,
+        created_at=datetime.now(timezone.utc),
+    )
+
+
+@pytest.fixture
 def authenticated_client(active_user: User) -> Generator[TestClient, None, None]:
     app.dependency_overrides[get_current_user] = lambda: active_user
+    with TestClient(app) as client:
+        yield client
+    app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def admin_client(admin_user: User) -> Generator[TestClient, None, None]:
+    app.dependency_overrides[get_current_user] = lambda: admin_user
     with TestClient(app) as client:
         yield client
     app.dependency_overrides.clear()

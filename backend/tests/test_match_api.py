@@ -2,7 +2,7 @@ from unittest.mock import patch
 
 from fastapi.testclient import TestClient
 
-from app.schemas.match import MatchDoctor, MatchResponse
+from app.schemas.match import MatchClinic, MatchDoctor, MatchResponse
 
 
 MATCH_PAYLOAD = {
@@ -13,7 +13,7 @@ MATCH_PAYLOAD = {
 }
 
 MATCH_RESULT = MatchResponse(
-    matches=[
+    doctors=[
         MatchDoctor(
             id=1,
             name="Dr. Ayşe Yılmaz",
@@ -25,7 +25,18 @@ MATCH_RESULT = MatchResponse(
             experience=18,
             score=94,
         )
-    ]
+    ],
+    clinics=[
+        MatchClinic(
+            id=1,
+            name="MediQueue Clinic",
+            description="International patient clinic",
+            address="Istanbul",
+            phone="+90 555 000 00 00",
+            score=88.0,
+        )
+    ],
+    message=None,
 )
 
 
@@ -50,9 +61,13 @@ class TestMatchRoute:
 
         assert response.status_code == 200
         body = response.json()
-        assert len(body["matches"]) == 1
-        assert body["matches"][0]["name"] == "Dr. Ayşe Yılmaz"
-        assert body["matches"][0]["score"] == 94
+        assert len(body["doctors"]) == 1
+        assert body["doctors"][0]["name"] == "Dr. Ayşe Yılmaz"
+        assert body["doctors"][0]["score"] == 94
+        assert len(body["clinics"]) == 1
+        assert body["clinics"][0]["name"] == "MediQueue Clinic"
+        assert body["clinics"][0]["score"] == 88.0
+        assert body["message"] is None
 
     @patch("app.api.v1.match.call_match")
     def test_match_returns_service_error(
