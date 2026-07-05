@@ -3,12 +3,14 @@ from sqlalchemy.orm import Session
 
 from app.api.deps import require_roles
 from app.crud.clinics import get_active_doctors_by_clinic, get_clinic, get_clinics
+from app.crud.reviews import get_reviews_by_clinic
 from app.db.session import get_db
 from app.models.clinic import Clinic
 from app.models.doctor import Doctor
 from app.models.user import User, UserRole
 from app.schemas.clinic import ClinicRead
 from app.schemas.doctor import DoctorRead
+from app.schemas.review import ReviewRead
 
 
 router = APIRouter(prefix="/clinics", tags=["clinics"])
@@ -58,3 +60,20 @@ def list_clinic_doctors(
         )
 
     return get_active_doctors_by_clinic(db, clinic_id=clinic_id)
+
+
+@router.get("/{clinic_id}/reviews", response_model=list[ReviewRead])
+def list_clinic_reviews(
+    clinic_id: int,
+    skip: int = Query(default=0, ge=0),
+    limit: int = Query(default=100, ge=1, le=100),
+    db: Session = Depends(get_db),
+) -> list[ReviewRead]:
+    clinic = get_clinic(db, clinic_id=clinic_id)
+    if clinic is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Clinic not found",
+        )
+
+    return get_reviews_by_clinic(db, clinic_id=clinic_id, skip=skip, limit=limit)

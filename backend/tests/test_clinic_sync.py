@@ -10,10 +10,12 @@ from app.services.clinic_sync import (
     clinic_needs_update,
     parse_ai_clinic,
     parse_ai_clinics,
+    specialties_match,
     sync_clinics_from_json_file,
     sync_clinics_from_records,
     sync_doctor_clinic_relations,
 )
+from app.services.specialty_aliases import specialties_match as alias_specialties_match
 
 
 SAMPLE_RECORD = AiClinicRecord(
@@ -71,6 +73,28 @@ class TestParseAiClinics:
         assert len(records) == 1
         assert len(errors) == 1
         assert "Duplicate clinic id 1" in errors[0]
+
+
+class TestSpecialtyMatching:
+    def test_sac_ekimi_matches_hair_transplant(self) -> None:
+        assert alias_specialties_match("Saç Ekimi", "Hair Transplant")
+
+    def test_hair_transplant_matches_sac_ekimi(self) -> None:
+        assert alias_specialties_match("Hair Transplant", "Saç Ekimi")
+
+    def test_estetik_cerrahi_matches_aesthetic_surgery(self) -> None:
+        assert alias_specialties_match("Estetik Cerrahi", "Aesthetic Surgery")
+
+    def test_goz_cerrahisi_matches_eye_surgery(self) -> None:
+        assert alias_specialties_match("Göz Cerrahisi", "Eye Surgery")
+
+    def test_exact_match_still_works(self) -> None:
+        assert alias_specialties_match("Cardiology", "Cardiology")
+        assert specialties_match("Cardiology", ["Cardiology"])
+
+    def test_unrelated_specialties_do_not_match(self) -> None:
+        assert not alias_specialties_match("Cardiology", "Dermatology")
+        assert not specialties_match("Cardiology", ["Dermatology"])
 
 
 class TestClinicNeedsUpdate:

@@ -47,6 +47,15 @@ class TestParseAiDoctor:
         assert error is None
         assert record == SAMPLE_RECORD
 
+    def test_ai_name_field_maps_to_full_name(self) -> None:
+        record, error = parse_ai_doctor(SAMPLE_RAW)
+
+        assert error is None
+        assert record is not None
+        assert record.full_name == SAMPLE_RAW["name"]
+        assert "name" not in map_ai_record_to_doctor_fields(record)
+        assert map_ai_record_to_doctor_fields(record)["full_name"] == SAMPLE_RAW["name"]
+
     def test_rejects_invalid_rating(self) -> None:
         invalid = {**SAMPLE_RAW, "rating": 6.0}
         record, error = parse_ai_doctor(invalid)

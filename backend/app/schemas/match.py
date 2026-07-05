@@ -9,6 +9,8 @@ class MatchRequest(BaseModel):
 
 
 class MatchDoctor(BaseModel):
+    """AI match result doctor — uses ``name`` to mirror the AI service contract."""
+
     id: int
     name: str
     specialty: str

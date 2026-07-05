@@ -108,6 +108,8 @@ class TestClinicDoctors:
         body = response.json()
         assert len(body) == 1
         assert body[0]["full_name"] == "Dr. Ayşe Yılmaz"
+        assert "name" not in body[0]
+        assert "fullName" not in body[0]
 
     def test_list_clinic_doctors_returns_401_without_jwt(
         self,

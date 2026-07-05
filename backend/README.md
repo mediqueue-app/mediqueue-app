@@ -81,6 +81,34 @@ uvicorn app.main:app --port 8000 --reload
 }
 ```
 
+### Doctor name fields
+
+| Context | JSON field | Notes |
+|---------|------------|-------|
+| Backend DB / doctor APIs (`DoctorRead`, clinic doctors list) | `full_name` | Canonical backend entity field |
+| AI `doctors.json` (seed input) | `name` | Mapped to `full_name` by `seed_doctors_from_ai_json` |
+| Match API (`POST /v1/match` response) | `name` | Mirrors AI contract; not renamed to `full_name` |
+
+Frontend code should use `full_name` for backend doctor resources and `name` inside match results.
+
+## Reviews API
+
+- `POST /v1/reviews` — patient role required; create a clinic **or** doctor review (not both)
+- `GET /v1/clinics/{clinic_id}/reviews` — public listing with `skip` / `limit`
+- `GET /v1/doctors/{doctor_id}/reviews` — public listing with `skip` / `limit`
+
+Example create body:
+
+```json
+{
+  "clinic_id": 1,
+  "rating": 5,
+  "comment": "Excellent experience"
+}
+```
+
+`comment` is required (non-empty) to satisfy the database constraint.
+
 ## Tests
 
 ```powershell
@@ -88,7 +116,7 @@ cd backend
 pytest
 ```
 
-Automated coverage includes auth, clinics, match, clinic seed sync, admin RBAC, and config security checks.
+Automated coverage includes auth, clinics, doctors, reviews, match, clinic seed sync, admin RBAC, and config security checks.
 
 ## Troubleshooting Alembic
 

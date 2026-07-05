@@ -4,6 +4,8 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class DoctorBase(BaseModel):
+    """Backend doctor entity — uses ``full_name`` (AI ``doctors.json`` ``name`` maps here on sync)."""
+
     full_name: str = Field(max_length=255)
     specialty: str | None = Field(default=None, max_length=255)
     bio: str | None = None

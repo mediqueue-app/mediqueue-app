@@ -14,6 +14,7 @@ from sqlalchemy.orm import Session
 from app.models.clinic import Clinic
 from app.models.doctor import Doctor
 from app.models.doctor_clinic import DoctorClinic
+from app.services.specialty_aliases import doctor_matches_clinic_specialties
 
 
 @dataclass(frozen=True)
@@ -69,10 +70,8 @@ def cities_match(left: str | None, right: str | None) -> bool:
 
 
 def specialties_match(doctor_specialty: str | None, clinic_specialties: list[str]) -> bool:
-    if not doctor_specialty:
-        return False
-    doctor_value = _normalize_text(doctor_specialty)
-    return any(_normalize_text(specialty) == doctor_value for specialty in clinic_specialties)
+    """Match doctor specialty to clinic specialties using alias-aware normalization."""
+    return doctor_matches_clinic_specialties(doctor_specialty, clinic_specialties)
 
 
 def load_clinics_json(path: Path) -> list[Any]:

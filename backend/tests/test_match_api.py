@@ -68,6 +68,9 @@ class TestMatchRoute:
         assert body["clinics"][0]["name"] == "MediQueue Clinic"
         assert body["clinics"][0]["score"] == 88.0
         assert body["message"] is None
+        assert "full_name" not in body["doctors"][0]
+        assert "fullName" not in body["doctors"][0]
+        assert "name" in body["doctors"][0]
 
     @patch("app.api.v1.match.call_match")
     def test_match_returns_service_error(
