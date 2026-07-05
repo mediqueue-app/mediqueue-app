@@ -88,7 +88,7 @@ DATABASE_URL=postgresql+psycopg2://postgres:postgres@localhost:5432/mediqueue
 3. `doctors` tablosu dolu olmalı (`backend/scripts/seed_doctors_from_ai_json.py`)
 4. Klinik eşleştirmesi için `clinics` ve `doctor_clinics` tabloları da dolu olmalı — seed yoksa `clinics` boş liste döner
 
-> `app/data/doctors.json` ve `clinics.json` dosyaları AI matching tarafından **okunmaz**; backend seed script'i için referans olarak durur.
+> `app/data/doctors.json` ve `clinics.json` dosyaları AI matching tarafından **okunmaz**; backend seed script'i için referans olarak durur. `clinics.json` içindeki `min_price`, `max_price`, `rating`, `doctor_count` alanları runtime'da kullanılmaz — ayrıntı: [`app/data/clinics.json.README.md`](app/data/clinics.json.README.md).
 
 ## Çalıştırma
 

@@ -78,6 +78,8 @@ Content-Type: application/json
 | `language` | `string` | Evet | Tercih edilen dil (tam ad veya kod) |
 | `budget` | `integer` | Evet | Maksimum bütçe (TRY). **Sadece doktor eşleştirmede** uygulanır |
 | `city` | `string` | Hayır | Tercih edilen şehir. Aynı şehir bonus puanı verir |
+| `max_doctors` | `integer` | Hayır | Skor sırasına göre dönecek maksimum doktor sayısı (1–100). Verilmezse tüm eşleşmeler döner |
+| `max_clinics` | `integer` | Hayır | Skor sırasına göre dönecek maksimum klinik sayısı (1–100). Verilmezse tüm eşleşmeler döner |
 
 #### Response Body
 
@@ -149,7 +151,9 @@ Dosya: [`docs/examples/match-request-with-city.json`](examples/match-request-wit
   "specialty": "Cardiology",
   "language": "Turkish",
   "budget": 3000,
-  "city": "Istanbul"
+  "city": "Istanbul",
+  "max_doctors": 5,
+  "max_clinics": 3
 }
 ```
 
@@ -338,6 +342,8 @@ Rule-based (ML yok).
 ### Klinik eşleştirme
 
 Klinik tablosunda uzmanlık/dil/şehir kolonları yok — değerler **bağlı aktif doktorlardan** türetilir (`doctor_clinics` join).
+
+> **Önemli — `clinics.json` ile karıştırmayın:** `app/data/clinics.json` dosyasındaki `min_price`, `max_price`, `rating`, `doctor_count` alanları PostgreSQL'e migrate edilmemiştir ve runtime'da **kullanılmaz**. Bu dosya yalnızca backend seed script'i için referanstır. Klinik eşleştirmesinde fiyat filtresi yoktur; rating bağlı doktorların ortalamasından türetilir. Ayrıntı: [`app/data/clinics.json.README.md`](../app/data/clinics.json.README.md).
 
 **Hard filter:** uzmanlık (bağlı doktorlardan), dil (birleşim). **Bütçe filtresi uygulanmaz.**
 

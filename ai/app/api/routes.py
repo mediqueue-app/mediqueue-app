@@ -101,13 +101,15 @@ async def health_check() -> HealthResponse:
         "Hasta tercihlerine göre uygun **doktorları ve klinikleri** kural tabanlı filtreleme ve skorlama ile "
         "filtreler, skorlar ve skora göre sıralı listeler döner. Makine öğrenmesi veya LLM kullanılmaz.\n\n"
         "**Zorunlu alanlar:** `specialty`, `language`, `budget`\n"
-        "**Opsiyonel alan:** `city` (aynı şehirdeki adaylara bonus puan verilir)\n\n"
+        "**Opsiyonel alanlar:** `city`, `max_doctors`, `max_clinics`\n\n"
         "| Alan | Tip | Açıklama |\n"
         "|------|-----|----------|\n"
         "| `specialty` | string | Uzmanlık alanı. Örnek: `Cardiology`, `Kardiyoloji`, `Saç Ekimi`, `FUE`, `Dentistry` |\n"
         "| `language` | string | Tercih edilen dil. Örnek: `Turkish`, `English`, `tr`, `en`, `Arabic` |\n"
         "| `budget` | integer | Maksimum bütçe, **TL cinsinden tam sayı**. Doktor eşleşmesinde uygulanır. Örnek: `3000` |\n"
-        "| `city` | string | Tercih edilen şehir. Örnek: `Istanbul`, `Ankara`, `İzmir` |\n\n"
+        "| `city` | string | Tercih edilen şehir. Örnek: `Istanbul`, `Ankara`, `İzmir` |\n"
+        "| `max_doctors` | integer | Opsiyonel. Skor sırasına göre dönecek maksimum doktor sayısı (1–100). Verilmezse tüm eşleşmeler döner. |\n"
+        "| `max_clinics` | integer | Opsiyonel. Skor sırasına göre dönecek maksimum klinik sayısı (1–100). Verilmezse tüm eşleşmeler döner. |\n\n"
         "Eşleşme bulunamazsa HTTP `200` döner; `doctors` ve `clinics` boş liste olur, bilgilendirme `message` alanında yer alır."
     ),
     tags=["matching"],

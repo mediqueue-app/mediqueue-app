@@ -170,3 +170,100 @@ class TestClinicEmptyResults:
             session.close()
 
         assert all(clinic["id"] != 99 for clinic in clinics)
+
+
+class TestClinicResultLimits:
+    def test_max_clinics_returns_top_scored_matches(
+        self,
+        session_factory: Callable[[], Session],
+    ) -> None:
+        session = session_factory()
+        try:
+            clinics = _load_clinics(session)
+        finally:
+            session.close()
+
+        patient = PatientRequest(
+            specialty="Cardiology",
+            language="Turkish",
+            budget=5000,
+            max_clinics=1,
+        )
+
+        result = match_clinics(patient, clinics)
+
+        assert len(result) == 1
+        scores = [clinic.score for clinic in result]
+        assert scores == sorted(scores, reverse=True)
+
+        unlimited = match_clinics(
+            PatientRequest(
+                specialty="Cardiology",
+                language="Turkish",
+                budget=5000,
+            ),
+            clinics,
+        )
+        assert len(unlimited) == 2
+        assert {clinic.id for clinic in result}.issubset({clinic.id for clinic in unlimited})
+        assert result[0].id == unlimited[0].id
+
+    def test_omitted_max_clinics_returns_all_matches(
+        self,
+        session_factory: Callable[[], Session],
+    ) -> None:
+        session = session_factory()
+        try:
+            clinics = _load_clinics(session)
+        finally:
+            session.close()
+
+        patient = PatientRequest(
+            specialty="Cardiology",
+            language="Turkish",
+            budget=5000,
+        )
+
+        result = match_clinics(patient, clinics)
+
+        assert len(result) == 2
+
+
+class TestClinicLoadingWarnings:
+    def test_load_clinics_logs_warning_for_unlinked_clinic(
+        self,
+        session_factory: Callable[[], Session],
+        caplog: pytest.LogCaptureFixture,
+    ) -> None:
+        import logging
+
+        from app.models.clinic_db import ClinicDB
+
+        session = session_factory()
+        try:
+            now = datetime.now(timezone.utc)
+            session.add(
+                ClinicDB(
+                    id=50,
+                    name="Orphan Clinic",
+                    description="No linked doctors",
+                    address=None,
+                    phone=None,
+                    is_active=True,
+                    created_at=now,
+                    updated_at=now,
+                )
+            )
+            session.commit()
+
+            with caplog.at_level(logging.WARNING, logger="app.services.clinic_matcher"):
+                clinics = _load_clinics(session)
+        finally:
+            session.close()
+
+        assert all(clinic["id"] != 50 for clinic in clinics)
+        assert any(
+            record.message
+            == "Clinic id=50 excluded from matching: no active linked doctors"
+            for record in caplog.records
+        )

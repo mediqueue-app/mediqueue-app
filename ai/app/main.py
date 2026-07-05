@@ -40,9 +40,10 @@ MediQueue AI Service, hasta tercihlerine göre doktor eşleştirmesi yapan bağ�
 ## Desteklenen Uzmanlıklar
 
 `Cardiology`, `Dermatology`, `Orthopedics`, `Neurology`, `Psychiatry`,
-`Pediatrics`, `Gynecology`, `Dentistry`, `Plastic Surgery`
+`Pediatrics`, `Gynecology`, `Dentistry`, `Plastic Surgery`,
+`Hair Transplant`, `Aesthetic Surgery`, `Eye Surgery`, `Obesity Surgery`
 
-Türkçe karşılıkları da kabul edilir (ör. `Kardiyoloji`).
+Türkçe karşılıkları da kabul edilir (ör. `Kardiyoloji`, `Saç Ekimi`, `Estetik`, `Bariatrik`).
 
 ## Desteklenen Diller
 

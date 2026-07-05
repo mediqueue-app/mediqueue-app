@@ -1,7 +1,13 @@
-"""Rule-based clinic matching engine."""
+"""Rule-based clinic matching engine.
+
+Klinik verisi (uzmanlık, dil, şehir, rating) bağlı doktorlardan türetilir;
+``app/data/clinics.json`` içindeki ``min_price`` / ``max_price`` / ``rating`` /
+``doctor_count`` alanları burada kullanılmaz (yalnızca backend seed referansı).
+"""
 
 from __future__ import annotations
 
+import logging
 from collections import defaultdict
 from typing import TypedDict
 
@@ -20,6 +26,8 @@ from app.services.matcher import (
     _load_doctors,
     _specialties_match,
 )
+
+logger = logging.getLogger(__name__)
 
 __all__ = [
     "ClinicRecord",
@@ -89,6 +97,10 @@ def _clinic_db_to_record(
     linked_doctors: list[DoctorRecord],
 ) -> ClinicRecord | None:
     if not linked_doctors:
+        logger.warning(
+            "Clinic id=%s excluded from matching: no active linked doctors",
+            clinic.id,
+        )
         return None
 
     specialties = sorted({doctor["specialty"] for doctor in linked_doctors})
@@ -110,14 +122,18 @@ def _clinic_db_to_record(
     )
 
 
-def _load_clinics(session: Session) -> list[ClinicRecord]:
+def _load_clinics(
+    session: Session,
+    doctors: list[DoctorRecord] | None = None,
+) -> list[ClinicRecord]:
     clinic_rows = session.scalars(
         select(ClinicDB).where(ClinicDB.is_active.is_(True)).order_by(ClinicDB.id)
     ).all()
     link_rows = session.scalars(
         select(DoctorClinicDB).where(DoctorClinicDB.is_active.is_(True))
     ).all()
-    doctors_by_id = {doctor["id"]: doctor for doctor in _load_doctors(session)}
+    doctor_records = doctors if doctors is not None else _load_doctors(session)
+    doctors_by_id = {doctor["id"]: doctor for doctor in doctor_records}
 
     doctors_by_clinic: dict[int, list[DoctorRecord]] = defaultdict(list)
     for link in link_rows:
@@ -148,4 +164,7 @@ def match_clinics(
         scored_clinics.append((clinic, score))
 
     scored_clinics.sort(key=lambda item: item[1], reverse=True)
-    return [_to_clinic_response(clinic, score) for clinic, score in scored_clinics]
+    matches = [_to_clinic_response(clinic, score) for clinic, score in scored_clinics]
+    if patient.max_clinics is not None:
+        matches = matches[: patient.max_clinics]
+    return matches

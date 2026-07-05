@@ -102,6 +102,26 @@ class PatientRequest(BaseModel):
         description="Preferred city (optional). Same-city doctors receive a score bonus.",
         examples=["Istanbul", "Ankara", "İstanbul"],
     )
+    max_doctors: Optional[int] = Field(
+        default=None,
+        gt=0,
+        le=100,
+        description=(
+            "Optional cap on the number of doctors returned after score sorting. "
+            "Omit for unlimited results (default)."
+        ),
+        examples=[10, 3],
+    )
+    max_clinics: Optional[int] = Field(
+        default=None,
+        gt=0,
+        le=100,
+        description=(
+            "Optional cap on the number of clinics returned after score sorting. "
+            "Omit for unlimited results (default)."
+        ),
+        examples=[5, 2],
+    )
 
 
 class DoctorResponse(BaseModel):

@@ -1,5 +1,6 @@
 """Rule-based doctor matching engine."""
 
+import logging
 from collections.abc import Callable
 from functools import lru_cache
 from typing import TypedDict
@@ -18,6 +19,8 @@ from app.core.config import (
 from app.core.database import get_session_factory
 from app.models.doctor_db import DoctorDB
 from app.models.schemas import DoctorMatchResult, DoctorResponse, MatchResponse, PatientRequest
+
+logger = logging.getLogger(__name__)
 
 # Re-export scoring constants for tests and external callers.
 __all__ = [
@@ -68,6 +71,8 @@ _RAW_SPECIALTY_ALIASES: dict[str, str] = {
     "obesity surgery": "obesity surgery",
     "obezite": "obesity surgery",
     "bariatric": "obesity surgery",
+    "bariatrik": "obesity surgery",
+    "bariatrik cerrahi": "obesity surgery",
 }
 
 # --- Raw language aliases (normalized at module load) ---
@@ -249,6 +254,8 @@ def match_doctors(
     scored_doctors.sort(key=lambda item: item[1], reverse=True)
 
     matches = [_to_doctor_response(doctor, score) for doctor, score in scored_doctors]
+    if patient.max_doctors is not None:
+        matches = matches[: patient.max_doctors]
     return DoctorMatchResult(matches=matches)
 
 
@@ -265,15 +272,34 @@ def _load_doctors(session: Session) -> list[DoctorRecord]:
 
 
 def _doctor_db_to_record(row: DoctorDB) -> DoctorRecord | None:
-    if (
-        not row.full_name
-        or not row.specialty
-        or not row.city
-        or not row.languages
-        or row.price is None
-        or row.rating is None
-        or row.experience is None
-    ):
+    if not row.full_name or not row.specialty:
+        return None
+
+    missing_fields: list[str] = []
+    if not row.city:
+        missing_fields.append("city")
+    if not row.languages:
+        missing_fields.append("languages")
+    if row.price is None:
+        missing_fields.append("price")
+    if row.rating is None:
+        missing_fields.append("rating")
+    if row.experience is None:
+        missing_fields.append("experience")
+
+    if missing_fields:
+        if len(missing_fields) == 1:
+            logger.warning(
+                "Doctor id=%s excluded from matching: missing field '%s'",
+                row.id,
+                missing_fields[0],
+            )
+        else:
+            logger.warning(
+                "Doctor id=%s excluded from matching: missing fields %s",
+                row.id,
+                ", ".join(f"'{field}'" for field in missing_fields),
+            )
         return None
 
     return DoctorRecord(
@@ -309,7 +335,8 @@ class MatcherService:
 
         session = self._session_factory()
         try:
-            return _load_clinics(session)
+            doctors = _load_doctors(session)
+            return _load_clinics(session, doctors=doctors)
         finally:
             session.close()
 
@@ -319,7 +346,7 @@ class MatcherService:
         session = self._session_factory()
         try:
             doctors = _load_doctors(session)
-            clinics = _load_clinics(session)
+            clinics = _load_clinics(session, doctors=doctors)
         finally:
             session.close()
 
