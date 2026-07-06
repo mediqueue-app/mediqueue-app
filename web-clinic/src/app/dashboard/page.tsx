@@ -1,6 +1,5 @@
 import { Users, CheckCircle2, Stethoscope, TrendingUp } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
-import { LiveQueueWidget } from "@/components/dashboard/LiveQueueWidget";
 import { QuickLeadsTable } from "@/components/dashboard/QuickLeadsTable";
 import { patientLeads, getClinicMetrics } from "@/lib/mock-data";
 
@@ -8,13 +7,13 @@ export default function DashboardOverviewPage() {
   const metrics = getClinicMetrics(patientLeads);
 
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-8">
       <div>
         <h1 className="text-xl font-semibold tracking-tight text-slate-900">
           Genel Bakış
         </h1>
         <p className="mt-1 text-sm text-slate-500">
-          Kliniğinizin bugünkü operasyon özeti ve canlı sıra durumu.
+          Kliniğinizin bugünkü operasyon özeti.
         </p>
       </div>
 
@@ -46,8 +45,6 @@ export default function DashboardOverviewPage() {
           trend={{ value: "Kayıp oranı %34'ün altında", positive: true }}
         />
       </div>
-
-      <LiveQueueWidget />
 
       <QuickLeadsTable leads={patientLeads} />
     </div>

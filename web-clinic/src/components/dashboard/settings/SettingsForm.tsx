@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ShieldCheck, PlaneTakeoff, Check } from "lucide-react";
-import { Toggle } from "@/components/ui/Toggle";
+import Link from "next/link";
+import { Check, Lock, Video, Image as ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Language } from "@/types";
 
@@ -14,11 +14,7 @@ export function SettingsForm() {
   const [description, setDescription] = useState(
     "Estetik cerrahi, saç ekimi ve diş tedavisi alanlarında uluslararası hastalara hizmet veren çok disiplinli sağlık kuruluşu."
   );
-  const [jciAccredited, setJciAccredited] = useState(true);
-  const [airportDistance, setAirportDistance] = useState(28);
   const [languages, setLanguages] = useState<Language[]>(["TR", "EN", "AR", "RU"]);
-  const [currency, setCurrency] = useState<"USD" | "EUR">("USD");
-  const [startingPrice, setStartingPrice] = useState(2500);
   const [saved, setSaved] = useState(false);
 
   function toggleLanguage(lang: Language) {
@@ -80,127 +76,73 @@ export function SettingsForm() {
 
       <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
         <h2 className="text-sm font-semibold text-slate-900">
-          Akreditasyon ve Lojistik
+          Desteklenen Diller
         </h2>
         <p className="mt-1 text-xs text-slate-500">
-          Uluslararası hasta karar sürecinde öne çıkan güven ve erişim
-          bilgileri.
+          Hasta iletişiminde desteklenen dilleri seçin.
         </p>
-
-        <div className="mt-5 flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-blue-50 text-blue-600">
-              <ShieldCheck className="h-4.5 w-4.5" />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-slate-800">
-                JCI Akreditasyon Rozeti
-              </p>
-              <p className="text-xs text-slate-500">
-                Aktif edildiğinde klinik profilinizde JCI rozeti görüntülenir.
-              </p>
-            </div>
-          </div>
-          <Toggle
-            checked={jciAccredited}
-            onChange={setJciAccredited}
-            label="JCI Akreditasyon Rozeti"
-          />
-        </div>
-
-        <div className="mt-4 flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50 px-4 py-3">
-          <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary-light text-primary">
-              <PlaneTakeoff className="h-4.5 w-4.5" />
-            </div>
-            <div>
-              <p className="text-sm font-medium text-slate-800">
-                Havalimanına Uzaklık
-              </p>
-              <p className="text-xs text-slate-500">
-                Hasta lojistik planlaması için kullanılır.
-              </p>
-            </div>
-          </div>
-          <div className="flex items-center gap-2">
-            <input
-              type="number"
-              min={0}
-              value={airportDistance}
-              onChange={(e) => setAirportDistance(Number(e.target.value))}
-              className="w-20 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-right text-sm text-slate-800 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
-            />
-            <span className="text-sm text-slate-500">km</span>
-          </div>
-        </div>
-
-        <div className="mt-4">
-          <p className="text-sm font-medium text-slate-800">
-            Sunulan Diller
-          </p>
-          <p className="text-xs text-slate-500">
-            Hasta iletişiminde desteklenen dilleri seçin.
-          </p>
-          <div className="mt-2.5 flex flex-wrap gap-2">
-            {ALL_LANGUAGES.map((lang) => {
-              const active = languages.includes(lang);
-              return (
-                <button
-                  key={lang}
-                  onClick={() => toggleLanguage(lang)}
-                  className={cn(
-                    "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold ring-1 ring-inset transition-colors",
-                    active
-                      ? "bg-primary text-white ring-primary"
-                      : "bg-white text-slate-500 ring-slate-200 hover:bg-slate-50"
-                  )}
-                >
-                  {active && <Check className="h-3 w-3" />}
-                  {lang}
-                </button>
-              );
-            })}
-          </div>
+        <div className="mt-4 flex flex-wrap gap-2">
+          {ALL_LANGUAGES.map((lang) => {
+            const active = languages.includes(lang);
+            return (
+              <button
+                key={lang}
+                onClick={() => toggleLanguage(lang)}
+                className={cn(
+                  "flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold ring-1 ring-inset transition-colors",
+                  active
+                    ? "bg-primary text-white ring-primary"
+                    : "bg-white text-slate-500 ring-slate-200 hover:bg-slate-50"
+                )}
+              >
+                {active && <Check className="h-3 w-3" />}
+                {lang}
+              </button>
+            );
+          })}
         </div>
       </section>
 
-      <section className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-        <h2 className="text-sm font-semibold text-slate-900">Paket Fiyatlandırması</h2>
+      <section className="relative overflow-hidden rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className="text-sm font-semibold text-slate-900">
+          Klinik Tanıtım Videosu & VIP Banner Yükle
+        </h2>
         <p className="mt-1 text-xs text-slate-500">
-          Platformda gösterilecek başlangıç paket fiyatı. Nihai fiyat, hasta
-          bazlı ön değerlendirme sonrası klinik tarafından teyit edilir.
+          Profilinizde öne çıkan bir video tanıtım banner&apos;ı ve sınırsız
+          galeri görseli yayınlayın.
         </p>
 
-        <div className="mt-5 flex flex-wrap items-end gap-4">
-          <div>
-            <label className="text-xs font-medium text-slate-500">
-              Para Birimi
-            </label>
-            <select
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value as "USD" | "EUR")}
-              className="mt-1.5 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+        <div
+          aria-hidden
+          className="mt-5 grid select-none grid-cols-1 gap-4 opacity-60 blur-[2px] sm:grid-cols-2"
+        >
+          <div className="flex h-32 flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-slate-400">
+            <Video className="h-6 w-6" />
+            <span className="text-xs font-medium">Tanıtım videosu yükle</span>
+          </div>
+          <div className="flex h-32 flex-col items-center justify-center gap-2 rounded-xl border border-dashed border-slate-300 bg-slate-50 text-slate-400">
+            <ImageIcon className="h-6 w-6" />
+            <span className="text-xs font-medium">
+              Sınırsız galeri görseli
+            </span>
+          </div>
+        </div>
+
+        <div className="absolute inset-0 flex items-center justify-center bg-white/60 backdrop-blur-[1px]">
+          <div className="flex flex-col items-center gap-3 rounded-2xl border border-slate-200 bg-white px-6 py-5 text-center shadow-lg">
+            <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-light text-primary">
+              <Lock className="h-4.5 w-4.5" />
+            </div>
+            <p className="text-sm font-medium text-slate-800">
+              Bu özellik Premium Plan gerektirir
+            </p>
+            <Link
+              href="/dashboard/billing"
+              className="rounded-lg bg-primary px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-primary-hover"
             >
-              <option value="USD">USD ($)</option>
-              <option value="EUR">EUR (€)</option>
-            </select>
+              Premium&apos;a Yükselt
+            </Link>
           </div>
-          <div>
-            <label className="text-xs font-medium text-slate-500">
-              Başlangıç Fiyatı
-            </label>
-            <input
-              type="number"
-              min={0}
-              value={startingPrice}
-              onChange={(e) => setStartingPrice(Number(e.target.value))}
-              className="mt-1.5 w-36 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-800 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
-            />
-          </div>
-          <p className="pb-2 text-sm text-slate-400">
-            Vitrinde: {currency === "USD" ? "$" : "€"}
-            {startingPrice.toLocaleString("tr-TR")} itibaren
-          </p>
         </div>
       </section>
 

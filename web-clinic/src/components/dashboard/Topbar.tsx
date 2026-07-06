@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Bell, ShieldCheck, Clock3 } from "lucide-react";
+import { Search, Bell } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NOTIFICATIONS = [
@@ -37,16 +37,6 @@ export function Topbar() {
       </div>
 
       <div className="ml-auto flex items-center gap-3">
-        <div className="hidden items-center gap-2 rounded-full bg-emerald-50 px-3 py-1.5 text-xs font-medium text-emerald-700 ring-1 ring-inset ring-emerald-100 md:flex">
-          <Clock3 className="h-3.5 w-3.5" />
-          Anlık Sıra: 12 Dk
-        </div>
-
-        <div className="hidden items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-medium text-blue-700 ring-1 ring-inset ring-blue-100 lg:flex">
-          <ShieldCheck className="h-3.5 w-3.5" />
-          JCI Akredite Klinik
-        </div>
-
         <div className="relative">
           <button
             onClick={() => setNotifOpen((v) => !v)}

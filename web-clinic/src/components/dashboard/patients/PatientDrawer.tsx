@@ -1,6 +1,6 @@
 "use client";
 
-import { X, Plane, BedDouble, Download, Eye, Mail, Phone } from "lucide-react";
+import { X, Download, Eye, Mail, Phone } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { leadStatusTone } from "@/lib/status";
 import { countryCodeToFlagEmoji } from "@/lib/mock-data";
@@ -91,36 +91,6 @@ export function PatientDrawer({
                     </>
                   )}
                 </dl>
-              </section>
-
-              <section className="mt-6">
-                <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400">
-                  Lojistik Tercihleri
-                </h3>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  <span
-                    className={cn(
-                      "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium ring-1 ring-inset",
-                      lead.hasVipTransfer
-                        ? "bg-blue-50 text-blue-700 ring-blue-100"
-                        : "bg-slate-50 text-slate-400 ring-slate-100"
-                    )}
-                  >
-                    <Plane className="h-3.5 w-3.5" />
-                    VIP Transfer {lead.hasVipTransfer ? "Talep Edildi" : "Yok"}
-                  </span>
-                  <span
-                    className={cn(
-                      "flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium ring-1 ring-inset",
-                      lead.needsHotel
-                        ? "bg-blue-50 text-blue-700 ring-blue-100"
-                        : "bg-slate-50 text-slate-400 ring-slate-100"
-                    )}
-                  >
-                    <BedDouble className="h-3.5 w-3.5" />
-                    Otel {lead.needsHotel ? "Talep Edildi" : "Yok"}
-                  </span>
-                </div>
               </section>
 
               <section className="mt-6">

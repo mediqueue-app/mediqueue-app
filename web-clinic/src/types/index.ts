@@ -6,8 +6,6 @@ export type Language = "EN" | "AR" | "RU" | "DE" | "TR" | "FR" | "ES";
 
 export type DocumentType = "PASAPORT" | "TIBBI_RAPOR" | "VIZE" | "SIGORTA";
 
-export type QueueDensity = "SAKİN" | "NORMAL" | "YOĞUN";
-
 export interface PatientDocument {
   id: string;
   type: DocumentType;
@@ -25,8 +23,6 @@ export interface PatientLead {
   requestedDate: string;
   createdAt: string;
   status: LeadStatus;
-  hasVipTransfer: boolean;
-  needsHotel: boolean;
   documents: PatientDocument[];
   phone: string;
   email: string;
@@ -57,5 +53,43 @@ export interface ClinicMetrics {
   approvedCount: number;
   activeDoctors: number;
   conversionRate: number;
-  liveQueueMinutes: number;
+}
+
+export interface FunnelStage {
+  label: string;
+  value: number;
+  suffix?: string;
+  isRate?: boolean;
+}
+
+export interface RegionalComparison {
+  region: string;
+  period: string;
+  clinicForeignPatients: number;
+  regionAverageForeignPatients: number;
+  percentAboveAverage: number;
+}
+
+export interface OriginShare {
+  country: string;
+  countryCode: string;
+  percentage: number;
+}
+
+export interface BranchRevenueShare {
+  branch: string;
+  percentage: number;
+}
+
+export interface AiReviewSummary {
+  positivePercentage: number;
+  topKeyword: string;
+  sampleSize: number;
+}
+
+export interface PlanFeature {
+  title: string;
+  description: string;
+  free: string;
+  premium: string;
 }

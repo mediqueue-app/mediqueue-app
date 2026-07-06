@@ -1,4 +1,14 @@
-import type { ClinicMetrics, Doctor, PatientLead } from "@/types";
+import type {
+  AiReviewSummary,
+  BranchRevenueShare,
+  ClinicMetrics,
+  Doctor,
+  FunnelStage,
+  OriginShare,
+  PatientLead,
+  PlanFeature,
+  RegionalComparison,
+} from "@/types";
 
 export function countryCodeToFlagEmoji(countryCode: string): string {
   return countryCode
@@ -29,8 +39,6 @@ export const patientLeads: PatientLead[] = [
     requestedDate: "2026-07-08",
     createdAt: "2026-07-04T08:12:00",
     status: "BEKLEMEDE",
-    hasVipTransfer: true,
-    needsHotel: true,
     phone: "+49 176 2231 8890",
     email: "klaus.richter@example.de",
     documents: [
@@ -47,8 +55,6 @@ export const patientLeads: PatientLead[] = [
     requestedDate: "2026-07-10",
     createdAt: "2026-07-04T07:40:00",
     status: "ONAYLANDI",
-    hasVipTransfer: true,
-    needsHotel: true,
     phone: "+966 50 123 4567",
     email: "fatima.alsayed@example.sa",
     assignedDoctor: "Op. Dr. Elif Yılmaz",
@@ -66,8 +72,6 @@ export const patientLeads: PatientLead[] = [
     requestedDate: "2026-07-06",
     createdAt: "2026-07-04T06:55:00",
     status: "BEKLEMEDE",
-    hasVipTransfer: false,
-    needsHotel: false,
     phone: "+7 916 234 5566",
     email: "igor.petrov@example.ru",
     documents: [
@@ -83,8 +87,6 @@ export const patientLeads: PatientLead[] = [
     requestedDate: "2026-07-05",
     createdAt: "2026-07-03T21:14:00",
     status: "REDDEDİLDİ",
-    hasVipTransfer: false,
-    needsHotel: true,
     phone: "+44 7700 900123",
     email: "james.whitfield@example.co.uk",
     notes: "Uygun tarih bulunamadı, hasta başka klinik ile görüşüyor.",
@@ -101,8 +103,6 @@ export const patientLeads: PatientLead[] = [
     requestedDate: "2026-07-12",
     createdAt: "2026-07-03T18:02:00",
     status: "ONAYLANDI",
-    hasVipTransfer: true,
-    needsHotel: true,
     phone: "+964 770 123 4567",
     email: "amina.haddad@example.iq",
     assignedDoctor: "Prof. Dr. Mehmet Kaya",
@@ -121,8 +121,6 @@ export const patientLeads: PatientLead[] = [
     requestedDate: "2026-07-09",
     createdAt: "2026-07-03T15:47:00",
     status: "BEKLEMEDE",
-    hasVipTransfer: false,
-    needsHotel: true,
     phone: "+218 91 234 5678",
     email: "youssef.benali@example.ly",
     documents: [
@@ -138,8 +136,6 @@ export const patientLeads: PatientLead[] = [
     requestedDate: "2026-07-07",
     createdAt: "2026-07-03T11:30:00",
     status: "ONAYLANDI",
-    hasVipTransfer: true,
-    needsHotel: false,
     phone: "+33 6 12 34 56 78",
     email: "sophie.bernard@example.fr",
     assignedDoctor: "Op. Dr. Elif Yılmaz",
@@ -156,8 +152,6 @@ export const patientLeads: PatientLead[] = [
     requestedDate: "2026-07-14",
     createdAt: "2026-07-02T09:18:00",
     status: "BEKLEMEDE",
-    hasVipTransfer: true,
-    needsHotel: true,
     phone: "+974 5512 3456",
     email: "ahmed.alfarsi@example.qa",
     documents: [
@@ -174,8 +168,6 @@ export const patientLeads: PatientLead[] = [
     requestedDate: "2026-07-06",
     createdAt: "2026-07-02T08:05:00",
     status: "ONAYLANDI",
-    hasVipTransfer: false,
-    needsHotel: false,
     phone: "+31 6 1234 5678",
     email: "laura.vandijk@example.nl",
     assignedDoctor: "Dt. Can Öztürk",
@@ -192,8 +184,6 @@ export const patientLeads: PatientLead[] = [
     requestedDate: "2026-07-11",
     createdAt: "2026-07-01T14:20:00",
     status: "BEKLEMEDE",
-    hasVipTransfer: true,
-    needsHotel: true,
     phone: "+1 305 234 5678",
     email: "robert.miller@example.com",
     documents: [
@@ -302,6 +292,85 @@ export const doctors: Doctor[] = [
   },
 ];
 
+export const conversionFunnel: FunnelStage[] = [
+  { label: "Görüntülenme", value: 1240 },
+  { label: "Gelen Talep", value: 84 },
+  { label: "Onaylanan Randevu", value: 32 },
+  { label: "Tedavi Başarısı", value: 38, suffix: "%", isRate: true },
+];
+
+export const regionalComparison: RegionalComparison = {
+  region: "İstanbul / Kadıköy",
+  period: "Bu Ay",
+  clinicForeignPatients: 50,
+  regionAverageForeignPatients: 45,
+  percentAboveAverage: 12,
+};
+
+export const patientOriginDistribution: OriginShare[] = [
+  { country: "Almanya", countryCode: "DE", percentage: 28 },
+  { country: "Birleşik Krallık", countryCode: "GB", percentage: 22 },
+  { country: "Rusya", countryCode: "RU", percentage: 18 },
+  { country: "Irak", countryCode: "IQ", percentage: 16 },
+  { country: "Katar", countryCode: "QA", percentage: 10 },
+  { country: "Diğer", countryCode: "UN", percentage: 6 },
+];
+
+export const branchRevenueDistribution: BranchRevenueShare[] = [
+  { branch: "Estetik Cerrahi", percentage: 34 },
+  { branch: "Saç Ekimi", percentage: 26 },
+  { branch: "Diş Tedavisi", percentage: 15 },
+  { branch: "Tüp Bebek (IVF)", percentage: 12 },
+  { branch: "Bariatrik Cerrahi", percentage: 8 },
+  { branch: "Ortopedi", percentage: 5 },
+];
+
+export const aiReviewSummary: AiReviewSummary = {
+  positivePercentage: 74,
+  topKeyword: "VIP Karşılama",
+  sampleSize: 116,
+};
+
+export const PLAN_FEATURES: PlanFeature[] = [
+  {
+    title: "Görünürlük Paketi",
+    description:
+      "Arama sonuçlarında öne çıkma ve hasta güveni kazandıran rozetler.",
+    free: "Standart sıralama",
+    premium: "Üst sırada \"Sponsorlu\" rozeti ile listelenme",
+  },
+  {
+    title: "Çok Kullanıcılı Erişim",
+    description: "Klinik ekibinize özel roller ve yetkiler tanımlayın.",
+    free: "1 Admin kullanıcı",
+    premium: "Sınırsız personel + Rol yönetimi (Resepsiyon, Muhasebe vb.)",
+  },
+  {
+    title: "Öncelikli Destek",
+    description: "Sorun yaşadığınızda size ulaşma hızımız.",
+    free: "E-posta desteği",
+    premium: "7/24 VIP WhatsApp & Telefon hattı",
+  },
+  {
+    title: "Özelleştirilmiş Profil",
+    description: "Kliniğinizi uluslararası hastalara en iyi şekilde tanıtın.",
+    free: "Standart profil",
+    premium: "Video tanıtım banner'ı + sınırsız galeri yükleme",
+  },
+  {
+    title: "Gelir & Komisyon Arşivi",
+    description: "Finansal süreçlerinizi tek yerden takip edin.",
+    free: "Yok",
+    premium: "Detaylı fatura ve komisyon analitikleri",
+  },
+  {
+    title: "Gelişmiş Rekabet & AI Raporları",
+    description: "Bölgesel kıyaslama ve yapay zeka destekli analizler.",
+    free: "Yok",
+    premium: "Analitik & Raporlar sayfasına tam erişim",
+  },
+];
+
 export function getClinicMetrics(leads: PatientLead[]): ClinicMetrics {
   const todayLeads = leads.length;
   const approvedCount = leads.filter((l) => l.status === "ONAYLANDI").length;
@@ -315,6 +384,5 @@ export function getClinicMetrics(leads: PatientLead[]): ClinicMetrics {
     approvedCount,
     activeDoctors,
     conversionRate,
-    liveQueueMinutes: 12,
   };
 }

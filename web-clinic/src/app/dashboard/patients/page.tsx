@@ -10,7 +10,7 @@ export default function PatientsPage() {
         </h1>
         <p className="mt-1 text-sm text-slate-500">
           Gelen tüm hasta taleplerini filtreleyin, belgelerini inceleyin ve
-          lojistik ihtiyaçlarını yönetin.
+          talepleri onaylayıp reddedin.
         </p>
       </div>
 

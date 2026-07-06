@@ -6,13 +6,11 @@ import { BRANCHES } from "@/lib/mock-data";
 export interface PatientFilters {
   country: string;
   branch: string;
-  logistics: "TÜMÜ" | "VIP_TRANSFER" | "OTEL";
 }
 
 export const DEFAULT_FILTERS: PatientFilters = {
   country: "TÜMÜ",
   branch: "TÜMÜ",
-  logistics: "TÜMÜ",
 };
 
 export function FilterBar({
@@ -55,21 +53,6 @@ export function FilterBar({
             {b}
           </option>
         ))}
-      </select>
-
-      <select
-        value={filters.logistics}
-        onChange={(e) =>
-          onChange({
-            ...filters,
-            logistics: e.target.value as PatientFilters["logistics"],
-          })
-        }
-        className="rounded-lg border border-slate-200 bg-slate-50 px-3 py-2 text-sm text-slate-700 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
-      >
-        <option value="TÜMÜ">Tüm Lojistik Durumlar</option>
-        <option value="VIP_TRANSFER">VIP Transfer İstiyor</option>
-        <option value="OTEL">Otel İstiyor</option>
       </select>
 
       <button

@@ -9,14 +9,24 @@ import {
   Settings,
   LogOut,
   Activity,
+  BarChart3,
+  CreditCard,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { ProBadge } from "@/components/ui/ProBadge";
 
 const NAV_ITEMS = [
   { href: "/dashboard", label: "Genel Bakış", icon: LayoutGrid },
   { href: "/dashboard/patients", label: "Hasta & Leadler", icon: Users },
   { href: "/dashboard/doctors", label: "Doktor Takvimi", icon: Stethoscope },
+  {
+    href: "/dashboard/analytics",
+    label: "Analitik & Raporlar",
+    icon: BarChart3,
+    pro: true,
+  },
   { href: "/dashboard/settings", label: "Klinik Ayarları", icon: Settings },
+  { href: "/dashboard/billing", label: "Abonelik", icon: CreditCard },
 ];
 
 export function Sidebar() {
@@ -58,7 +68,8 @@ export function Sidebar() {
                   isActive ? "text-primary" : "text-slate-400"
                 )}
               />
-              {item.label}
+              <span className="flex-1">{item.label}</span>
+              {item.pro && <ProBadge />}
             </Link>
           );
         })}

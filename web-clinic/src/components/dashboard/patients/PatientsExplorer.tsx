@@ -13,6 +13,7 @@ import type { PatientLead } from "@/types";
 export function PatientsExplorer({ leads }: { leads: PatientLead[] }) {
   const [filters, setFilters] = useState<PatientFilters>(DEFAULT_FILTERS);
   const [selected, setSelected] = useState<PatientLead | null>(null);
+  const [rows, setRows] = useState(leads);
 
   const countries = useMemo(
     () => Array.from(new Set(leads.map((l) => l.country))).sort(),
@@ -20,17 +21,20 @@ export function PatientsExplorer({ leads }: { leads: PatientLead[] }) {
   );
 
   const filtered = useMemo(() => {
-    return leads.filter((lead) => {
+    return rows.filter((lead) => {
       if (filters.country !== "TÜMÜ" && lead.country !== filters.country)
         return false;
       if (filters.branch !== "TÜMÜ" && lead.branch !== filters.branch)
         return false;
-      if (filters.logistics === "VIP_TRANSFER" && !lead.hasVipTransfer)
-        return false;
-      if (filters.logistics === "OTEL" && !lead.needsHotel) return false;
       return true;
     });
-  }, [leads, filters]);
+  }, [rows, filters]);
+
+  function updateStatus(id: string, status: PatientLead["status"]) {
+    setRows((prev) =>
+      prev.map((row) => (row.id === id ? { ...row, status } : row))
+    );
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -42,6 +46,7 @@ export function PatientsExplorer({ leads }: { leads: PatientLead[] }) {
       <LeadsTable
         leads={filtered}
         onSelect={setSelected}
+        onUpdateStatus={updateStatus}
         selectedId={selected?.id}
       />
       <PatientDrawer lead={selected} onClose={() => setSelected(null)} />
