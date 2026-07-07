@@ -1,7 +1,7 @@
 "use client";
 
 import { SlidersHorizontal, RotateCcw } from "lucide-react";
-import { BRANCHES } from "@/lib/mock-data";
+import { BRANCHES } from "@/lib/branches";
 
 export interface PatientFilters {
   country: string;

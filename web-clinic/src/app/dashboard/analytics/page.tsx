@@ -3,16 +3,18 @@ import { ConversionFunnelCard } from "@/components/dashboard/analytics/Conversio
 import { RegionalComparisonCard } from "@/components/dashboard/analytics/RegionalComparisonCard";
 import { AiReviewSummaryCard } from "@/components/dashboard/analytics/AiReviewSummaryCard";
 import { RankedShareList } from "@/components/dashboard/analytics/RankedShareList";
-import {
-  aiReviewSummary,
-  branchRevenueDistribution,
-  conversionFunnel,
-  countryCodeToFlagEmoji,
-  patientOriginDistribution,
-  regionalComparison,
-} from "@/lib/mock-data";
+import { countryCodeToFlagEmoji } from "@/lib/country";
+import { fetchAnalyticsData } from "@/lib/services/analytics";
 
-export default function AnalyticsPage() {
+export default async function AnalyticsPage() {
+  const {
+    conversionFunnel,
+    regionalComparison,
+    aiReviewSummary,
+    patientOriginDistribution,
+    branchRevenueDistribution,
+  } = await fetchAnalyticsData();
+
   return (
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
@@ -25,7 +27,11 @@ export default function AnalyticsPage() {
             derinlemesine keşfedin.
           </p>
         </div>
-        <button className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover">
+        <button
+          type="button"
+          title="Demo modunda PDF indirme Ay 2'de eklenecek"
+          className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover"
+        >
           <Download className="h-4 w-4" />
           İndirilebilir PDF Raporu Al
           <span className="rounded-full bg-white/20 px-2 py-0.5 text-[10px] font-bold tracking-wide">

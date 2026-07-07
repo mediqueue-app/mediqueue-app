@@ -1,9 +1,11 @@
 import { ArrowRight } from "lucide-react";
 import { CurrentPlanCard } from "@/components/dashboard/billing/CurrentPlanCard";
 import { PlanComparisonTable } from "@/components/dashboard/billing/PlanComparisonTable";
-import { PLAN_FEATURES } from "@/lib/mock-data";
+import { fetchPlanFeatures } from "@/lib/services/billing";
 
-export default function BillingPage() {
+export default async function BillingPage() {
+  const planFeatures = await fetchPlanFeatures();
+
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -17,7 +19,7 @@ export default function BillingPage() {
 
       <CurrentPlanCard leadsUsed={11} leadsLimit={15} />
 
-      <PlanComparisonTable features={PLAN_FEATURES} />
+      <PlanComparisonTable features={planFeatures} />
 
       <div className="flex flex-col items-center gap-3 rounded-2xl border border-slate-200 bg-white px-6 py-10 text-center shadow-sm">
         <h2 className="text-lg font-semibold tracking-tight text-slate-900">
@@ -27,7 +29,11 @@ export default function BillingPage() {
           Sponsorlu görünürlük, sınırsız ekip erişimi ve yapay zeka destekli
           rekabet raporlarıyla uluslararası hasta akışınızı büyütün.
         </p>
-        <button className="mt-2 flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-primary/30 transition-colors hover:bg-primary-hover">
+        <button
+          type="button"
+          title="Demo modunda ödeme entegrasyonu yok"
+          className="mt-2 flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-primary/30 transition-colors hover:bg-primary-hover"
+        >
           Premium&apos;a Yükselt — Aylık $199
           <ArrowRight className="h-4.5 w-4.5" />
         </button>

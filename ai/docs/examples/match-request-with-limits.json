@@ -1,0 +1,8 @@
+{
+  "specialty": "Cardiology",
+  "language": "Turkish",
+  "budget": 3000,
+  "city": "Istanbul",
+  "max_doctors": 5,
+  "max_clinics": 3
+}

@@ -88,6 +88,8 @@ npm run dev
 
 http://localhost:3000
 
+Detay: [`web-clinic/README.md`](web-clinic/README.md)
+
 **Doktor portalı:**
 
 ```powershell
@@ -105,7 +107,7 @@ Detay: [`web-doctor/README.md`](web-doctor/README.md)
 | Bileşen | Olgunluk | Not |
 |---------|----------|-----|
 | Backend API | ~70% | Auth, RBAC, klinikler, yorumlar, match proxy |
-| AI Matching | ~75% | Rule-based, PostgreSQL, CI, %96 test coverage |
+| AI Matching | ~85% | Rule-based, PostgreSQL, CI, ~%96 test coverage |
 | Web Clinic | ~25% | UI prototip, mock veri |
 | Web Doctor | ~25% | UI prototip, mock veri, odontogram |
 | Web Patient | 0% | Boş |
@@ -150,6 +152,9 @@ pytest --cov=app
 | [`backend/README.md`](backend/README.md) | Kurulum, migration, seed, API, smoke test |
 | [`ai/README.md`](ai/README.md) | AI servisi kurulum, API, Faz 2 planı |
 | [`ai/docs/API.md`](ai/docs/API.md) | Detaylı match API dokümantasyonu |
+| [`ai/docs/DEMO.md`](ai/docs/DEMO.md) | Demo Day match senaryosu |
+| [`ai/docs/DEMO_DAY_CHECKLIST.md`](ai/docs/DEMO_DAY_CHECKLIST.md) | AI smoke test checklist |
+| [`web-clinic/README.md`](web-clinic/README.md) | Klinik dashboard, demo akışı, Ay 1 kapsamı |
 | [`web-doctor/README.md`](web-doctor/README.md) | Doktor portalı, demo akışı, Ay 1 kapsamı |
 | [`backend/MANUAL_TEST_RBAC.md`](backend/MANUAL_TEST_RBAC.md) | Manuel RBAC doğrulama |
 

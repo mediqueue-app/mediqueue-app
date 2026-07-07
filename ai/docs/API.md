@@ -115,14 +115,16 @@ Content-Type: application/json
 
 ---
 
-### 2.3 Match Feedback (Draft)
+### 2.3 Match Feedback (Draft — kalıcı değil)
 
 ```http
 POST /feedback
 Content-Type: application/json
 ```
 
-**Draft — veritabanına yazılmaz.** Faz 2'de kalıcı depolama planlanmaktadır.
+> **ÖNEMLİ:** Bu endpoint **draft** aşamasındadır. Yanıt `202 Accepted` döner; veri yalnızca loglanır, **PostgreSQL'e veya dosyaya yazılmaz**. Demo'da canlı gösterilebilir ancak kalıcılık iddiası yapılmamalıdır.
+
+> **Backend ile fark:** Backend'de `POST /v1/reviews` (JWT + patient rolü) canlıdır ve yorumları DB'ye yazar. AI `/feedback` ile backend reviews **henüz entegre değildir** — Ay 2 planı.
 
 #### Request Body
 
@@ -144,7 +146,9 @@ Content-Type: application/json
 
 ## 3. Request JSON Örnekleri
 
-Dosya: [`docs/examples/match-request-with-city.json`](examples/match-request-with-city.json)
+Dosya: [`docs/examples/match-request-with-city.json`](examples/match-request-with-city.json) — şehir tercihi, limit yok
+
+Dosya: [`docs/examples/match-request-with-limits.json`](examples/match-request-with-limits.json) — şehir + `max_doctors` / `max_clinics`
 
 ```json
 {

@@ -25,6 +25,8 @@ DEBUG: Final[bool] = os.getenv("DEBUG", "false").lower() in {"1", "true", "yes"}
 # --- CORS ---
 _DEFAULT_ALLOWED_ORIGINS: Final[list[str]] = [
     "http://localhost:3000",
+    "http://localhost:3001",
+    "http://localhost:5173",
     "http://localhost:8080",
 ]
 

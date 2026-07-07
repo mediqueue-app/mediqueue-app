@@ -1,7 +1,9 @@
 import { PatientsExplorer } from "@/components/dashboard/patients/PatientsExplorer";
-import { patientLeads } from "@/lib/mock-data";
+import { fetchPatientLeads } from "@/lib/services/leads";
 
-export default function PatientsPage() {
+export default async function PatientsPage() {
+  const leads = await fetchPatientLeads();
+
   return (
     <div className="flex flex-col gap-6">
       <div>
@@ -14,7 +16,7 @@ export default function PatientsPage() {
         </p>
       </div>
 
-      <PatientsExplorer leads={patientLeads} />
+      <PatientsExplorer leads={leads} />
     </div>
   );
 }

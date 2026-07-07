@@ -1,7 +1,9 @@
 import { DoctorsGrid } from "@/components/dashboard/doctors/DoctorsGrid";
-import { doctors } from "@/lib/mock-data";
+import { fetchDoctors } from "@/lib/services/doctors";
 
-export default function DoctorsPage() {
+export default async function DoctorsPage() {
+  const doctors = await fetchDoctors();
+
   return (
     <div className="flex flex-col gap-6">
       <div>

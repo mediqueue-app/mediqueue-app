@@ -108,7 +108,9 @@ Servis varsayılan olarak **8001** portunda ayağa kalkar.
 |----------|--------|----------|
 | `/health` | GET | Health check |
 | `/match` | POST | Doktor + klinik eşleştirmesi |
-| `/feedback` | POST | Match geri bildirimi (draft, DB'ye yazılmaz) |
+| `/feedback` | POST | Match geri bildirimi (**draft — kalıcı değil**, yalnızca log) |
+
+> **`/feedback` vs backend reviews:** AI `/feedback` veritabanına yazmaz. Backend `POST /v1/reviews` canlıdır (patient JWT). İkisi Ay 2'de birleştirilecek; şu an ayrı sistemlerdir.
 
 ### POST /match — Response
 
@@ -134,7 +136,13 @@ Detaylı dokümantasyon: [`docs/API.md`](docs/API.md)
 | `HOST` | 0.0.0.0 | Bind adresi |
 | `PORT` | 8001 | Dinleme portu |
 | `DEBUG` | false | Debug / reload modu |
-| `ALLOWED_ORIGINS` | localhost:3000,8080 | CORS origin'leri |
+| `ALLOWED_ORIGINS` | localhost:3000,3001,5173,8080 | CORS origin'leri |
+
+## Demo Day
+
+- Match demo senaryosu: [`docs/DEMO.md`](docs/DEMO.md)
+- Smoke test checklist: [`docs/DEMO_DAY_CHECKLIST.md`](docs/DEMO_DAY_CHECKLIST.md)
+- Örnek JSON: [`docs/examples/`](docs/examples/)
 
 ## Test
 
@@ -160,4 +168,5 @@ pytest --cov=app --cov-report=term-missing
 - `matcher.py` — doktor eşleştirme (uzmanlık, dil, bütçe hard filter + skorlama)
 - `clinic_matcher.py` — klinik eşleştirme (uzmanlık, dil hard filter; bütçe uygulanmaz; city/rating bonus)
 - Klinik eşleştirme alanları bağlı doktorlardan türetilir (`doctor_clinics` join)
-- Backend proxy (`POST /v1/match`) aynı `{ doctors, clinics, message }` formatını döndürür — entegrasyon tamamlanmıştır (Temmuz 2026)
+- Backend proxy (`POST /v1/match`) aynı `{ doctors, clinics, message }` formatını döndürür — `max_doctors` / `max_clinics` yalnızca AI `/match` üzerinde (backend proxy Ay 2)
+- `POST /feedback` draft'tır; backend reviews API ile entegre değildir (Ay 2)

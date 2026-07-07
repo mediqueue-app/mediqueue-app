@@ -5,45 +5,43 @@ import type {
   Doctor,
   FunnelStage,
   OriginShare,
+  PatientDocument,
   PatientLead,
   PlanFeature,
   RegionalComparison,
 } from "@/types";
+import { mockDateKey, mockDateTime } from "@/lib/mock-date";
 
-export function countryCodeToFlagEmoji(countryCode: string): string {
-  return countryCode
-    .toUpperCase()
-    .replace(/./g, (char) =>
-      String.fromCodePoint(127397 + char.charCodeAt(0))
-    );
-}
+type DocumentTemplate = Omit<PatientDocument, "uploadedAt"> & {
+  uploadedDayOffset: number;
+};
 
-export const BRANCHES = [
-  "Saç Ekimi",
-  "Estetik Cerrahi",
-  "Diş Tedavisi",
-  "Göz (LASIK)",
-  "Bariatrik Cerrahi",
-  "Ortopedi",
-  "Tüp Bebek (IVF)",
-  "Kardiyoloji",
-] as const;
+type LeadTemplate = Omit<
+  PatientLead,
+  "requestedDate" | "createdAt" | "documents"
+> & {
+  requestedDayOffset: number;
+  createdDayOffset: number;
+  createdTime: string;
+  documentTemplates: DocumentTemplate[];
+};
 
-export const patientLeads: PatientLead[] = [
+const leadTemplates: LeadTemplate[] = [
   {
     id: "LD-1042",
     fullName: "Klaus Richter",
     country: "Almanya",
     countryCode: "DE",
     branch: "Saç Ekimi",
-    requestedDate: "2026-07-08",
-    createdAt: "2026-07-04T08:12:00",
+    requestedDayOffset: 1,
+    createdDayOffset: -3,
+    createdTime: "08:12",
     status: "BEKLEMEDE",
     phone: "+49 176 2231 8890",
     email: "klaus.richter@example.de",
-    documents: [
-      { id: "DOC-1", type: "PASAPORT", fileName: "passport_klaus.pdf", uploadedAt: "2026-07-03", fileSizeKb: 842 },
-      { id: "DOC-2", type: "TIBBI_RAPOR", fileName: "kan_tahlili_klaus.pdf", uploadedAt: "2026-07-03", fileSizeKb: 1203 },
+    documentTemplates: [
+      { id: "DOC-1", type: "PASAPORT", fileName: "passport_klaus.pdf", uploadedDayOffset: -4, fileSizeKb: 842 },
+      { id: "DOC-2", type: "TIBBI_RAPOR", fileName: "kan_tahlili_klaus.pdf", uploadedDayOffset: -4, fileSizeKb: 1203 },
     ],
   },
   {
@@ -52,15 +50,16 @@ export const patientLeads: PatientLead[] = [
     country: "Suudi Arabistan",
     countryCode: "SA",
     branch: "Estetik Cerrahi",
-    requestedDate: "2026-07-10",
-    createdAt: "2026-07-04T07:40:00",
+    requestedDayOffset: 3,
+    createdDayOffset: -3,
+    createdTime: "07:40",
     status: "ONAYLANDI",
     phone: "+966 50 123 4567",
     email: "fatima.alsayed@example.sa",
     assignedDoctor: "Op. Dr. Elif Yılmaz",
-    documents: [
-      { id: "DOC-3", type: "PASAPORT", fileName: "passport_fatima.pdf", uploadedAt: "2026-07-02", fileSizeKb: 765 },
-      { id: "DOC-4", type: "VIZE", fileName: "vize_fatima.pdf", uploadedAt: "2026-07-02", fileSizeKb: 511 },
+    documentTemplates: [
+      { id: "DOC-3", type: "PASAPORT", fileName: "passport_fatima.pdf", uploadedDayOffset: -5, fileSizeKb: 765 },
+      { id: "DOC-4", type: "VIZE", fileName: "vize_fatima.pdf", uploadedDayOffset: -5, fileSizeKb: 511 },
     ],
   },
   {
@@ -69,13 +68,14 @@ export const patientLeads: PatientLead[] = [
     country: "Rusya",
     countryCode: "RU",
     branch: "Diş Tedavisi",
-    requestedDate: "2026-07-06",
-    createdAt: "2026-07-04T06:55:00",
+    requestedDayOffset: -1,
+    createdDayOffset: -3,
+    createdTime: "06:55",
     status: "BEKLEMEDE",
     phone: "+7 916 234 5566",
     email: "igor.petrov@example.ru",
-    documents: [
-      { id: "DOC-5", type: "PASAPORT", fileName: "passport_igor.pdf", uploadedAt: "2026-07-01", fileSizeKb: 690 },
+    documentTemplates: [
+      { id: "DOC-5", type: "PASAPORT", fileName: "passport_igor.pdf", uploadedDayOffset: -6, fileSizeKb: 690 },
     ],
   },
   {
@@ -84,14 +84,15 @@ export const patientLeads: PatientLead[] = [
     country: "Birleşik Krallık",
     countryCode: "GB",
     branch: "Göz (LASIK)",
-    requestedDate: "2026-07-05",
-    createdAt: "2026-07-03T21:14:00",
+    requestedDayOffset: -2,
+    createdDayOffset: -4,
+    createdTime: "21:14",
     status: "REDDEDİLDİ",
     phone: "+44 7700 900123",
     email: "james.whitfield@example.co.uk",
     notes: "Uygun tarih bulunamadı, hasta başka klinik ile görüşüyor.",
-    documents: [
-      { id: "DOC-6", type: "PASAPORT", fileName: "passport_james.pdf", uploadedAt: "2026-06-30", fileSizeKb: 588 },
+    documentTemplates: [
+      { id: "DOC-6", type: "PASAPORT", fileName: "passport_james.pdf", uploadedDayOffset: -7, fileSizeKb: 588 },
     ],
   },
   {
@@ -100,16 +101,17 @@ export const patientLeads: PatientLead[] = [
     country: "Irak",
     countryCode: "IQ",
     branch: "Bariatrik Cerrahi",
-    requestedDate: "2026-07-12",
-    createdAt: "2026-07-03T18:02:00",
+    requestedDayOffset: 5,
+    createdDayOffset: -4,
+    createdTime: "18:02",
     status: "ONAYLANDI",
     phone: "+964 770 123 4567",
     email: "amina.haddad@example.iq",
     assignedDoctor: "Prof. Dr. Mehmet Kaya",
-    documents: [
-      { id: "DOC-7", type: "PASAPORT", fileName: "passport_amina.pdf", uploadedAt: "2026-07-01", fileSizeKb: 720 },
-      { id: "DOC-8", type: "TIBBI_RAPOR", fileName: "rapor_amina.pdf", uploadedAt: "2026-07-02", fileSizeKb: 980 },
-      { id: "DOC-9", type: "SIGORTA", fileName: "sigorta_amina.pdf", uploadedAt: "2026-07-02", fileSizeKb: 410 },
+    documentTemplates: [
+      { id: "DOC-7", type: "PASAPORT", fileName: "passport_amina.pdf", uploadedDayOffset: -6, fileSizeKb: 720 },
+      { id: "DOC-8", type: "TIBBI_RAPOR", fileName: "rapor_amina.pdf", uploadedDayOffset: -5, fileSizeKb: 980 },
+      { id: "DOC-9", type: "SIGORTA", fileName: "sigorta_amina.pdf", uploadedDayOffset: -5, fileSizeKb: 410 },
     ],
   },
   {
@@ -118,13 +120,14 @@ export const patientLeads: PatientLead[] = [
     country: "Libya",
     countryCode: "LY",
     branch: "Ortopedi",
-    requestedDate: "2026-07-09",
-    createdAt: "2026-07-03T15:47:00",
+    requestedDayOffset: 2,
+    createdDayOffset: -4,
+    createdTime: "15:47",
     status: "BEKLEMEDE",
     phone: "+218 91 234 5678",
     email: "youssef.benali@example.ly",
-    documents: [
-      { id: "DOC-10", type: "PASAPORT", fileName: "passport_youssef.pdf", uploadedAt: "2026-07-01", fileSizeKb: 655 },
+    documentTemplates: [
+      { id: "DOC-10", type: "PASAPORT", fileName: "passport_youssef.pdf", uploadedDayOffset: -6, fileSizeKb: 655 },
     ],
   },
   {
@@ -133,14 +136,15 @@ export const patientLeads: PatientLead[] = [
     country: "Fransa",
     countryCode: "FR",
     branch: "Estetik Cerrahi",
-    requestedDate: "2026-07-07",
-    createdAt: "2026-07-03T11:30:00",
+    requestedDayOffset: 0,
+    createdDayOffset: -4,
+    createdTime: "11:30",
     status: "ONAYLANDI",
     phone: "+33 6 12 34 56 78",
     email: "sophie.bernard@example.fr",
     assignedDoctor: "Op. Dr. Elif Yılmaz",
-    documents: [
-      { id: "DOC-11", type: "PASAPORT", fileName: "passport_sophie.pdf", uploadedAt: "2026-07-02", fileSizeKb: 702 },
+    documentTemplates: [
+      { id: "DOC-11", type: "PASAPORT", fileName: "passport_sophie.pdf", uploadedDayOffset: -5, fileSizeKb: 702 },
     ],
   },
   {
@@ -149,14 +153,15 @@ export const patientLeads: PatientLead[] = [
     country: "Katar",
     countryCode: "QA",
     branch: "Tüp Bebek (IVF)",
-    requestedDate: "2026-07-14",
-    createdAt: "2026-07-02T09:18:00",
+    requestedDayOffset: 7,
+    createdDayOffset: -5,
+    createdTime: "09:18",
     status: "BEKLEMEDE",
     phone: "+974 5512 3456",
     email: "ahmed.alfarsi@example.qa",
-    documents: [
-      { id: "DOC-12", type: "PASAPORT", fileName: "passport_ahmed.pdf", uploadedAt: "2026-06-29", fileSizeKb: 810 },
-      { id: "DOC-13", type: "TIBBI_RAPOR", fileName: "rapor_ahmed.pdf", uploadedAt: "2026-06-30", fileSizeKb: 1340 },
+    documentTemplates: [
+      { id: "DOC-12", type: "PASAPORT", fileName: "passport_ahmed.pdf", uploadedDayOffset: -8, fileSizeKb: 810 },
+      { id: "DOC-13", type: "TIBBI_RAPOR", fileName: "rapor_ahmed.pdf", uploadedDayOffset: -7, fileSizeKb: 1340 },
     ],
   },
   {
@@ -165,14 +170,15 @@ export const patientLeads: PatientLead[] = [
     country: "Hollanda",
     countryCode: "NL",
     branch: "Diş Tedavisi",
-    requestedDate: "2026-07-06",
-    createdAt: "2026-07-02T08:05:00",
+    requestedDayOffset: -1,
+    createdDayOffset: -5,
+    createdTime: "08:05",
     status: "ONAYLANDI",
     phone: "+31 6 1234 5678",
     email: "laura.vandijk@example.nl",
     assignedDoctor: "Dt. Can Öztürk",
-    documents: [
-      { id: "DOC-14", type: "PASAPORT", fileName: "passport_laura.pdf", uploadedAt: "2026-06-28", fileSizeKb: 640 },
+    documentTemplates: [
+      { id: "DOC-14", type: "PASAPORT", fileName: "passport_laura.pdf", uploadedDayOffset: -9, fileSizeKb: 640 },
     ],
   },
   {
@@ -181,19 +187,38 @@ export const patientLeads: PatientLead[] = [
     country: "Amerika Birleşik Devletleri",
     countryCode: "US",
     branch: "Kardiyoloji",
-    requestedDate: "2026-07-11",
-    createdAt: "2026-07-01T14:20:00",
+    requestedDayOffset: 4,
+    createdDayOffset: -6,
+    createdTime: "14:20",
     status: "BEKLEMEDE",
     phone: "+1 305 234 5678",
     email: "robert.miller@example.com",
-    documents: [
-      { id: "DOC-15", type: "PASAPORT", fileName: "passport_robert.pdf", uploadedAt: "2026-06-27", fileSizeKb: 730 },
-      { id: "DOC-16", type: "TIBBI_RAPOR", fileName: "ekg_robert.pdf", uploadedAt: "2026-06-28", fileSizeKb: 1580 },
+    documentTemplates: [
+      { id: "DOC-15", type: "PASAPORT", fileName: "passport_robert.pdf", uploadedDayOffset: -10, fileSizeKb: 730 },
+      { id: "DOC-16", type: "TIBBI_RAPOR", fileName: "ekg_robert.pdf", uploadedDayOffset: -9, fileSizeKb: 1580 },
     ],
   },
 ];
 
-export const doctors: Doctor[] = [
+function buildLead(template: LeadTemplate): PatientLead {
+  const { requestedDayOffset, createdDayOffset, createdTime, documentTemplates, ...lead } =
+    template;
+  return {
+    ...lead,
+    requestedDate: mockDateKey(requestedDayOffset),
+    createdAt: mockDateTime(createdDayOffset, createdTime),
+    documents: documentTemplates.map(({ uploadedDayOffset, ...doc }) => ({
+      ...doc,
+      uploadedAt: mockDateKey(uploadedDayOffset),
+    })),
+  };
+}
+
+export function getPatientLeads(): PatientLead[] {
+  return leadTemplates.map(buildLead);
+}
+
+const doctorRecords: Doctor[] = [
   {
     id: "DR-01",
     fullName: "Elif Yılmaz",
@@ -292,14 +317,22 @@ export const doctors: Doctor[] = [
   },
 ];
 
-export const conversionFunnel: FunnelStage[] = [
+export function getDoctors(): Doctor[] {
+  return doctorRecords.map((doctor) => ({ ...doctor, languages: [...doctor.languages] }));
+}
+
+const conversionFunnelData: FunnelStage[] = [
   { label: "Görüntülenme", value: 1240 },
   { label: "Gelen Talep", value: 84 },
   { label: "Onaylanan Randevu", value: 32 },
   { label: "Tedavi Başarısı", value: 38, suffix: "%", isRate: true },
 ];
 
-export const regionalComparison: RegionalComparison = {
+export function getConversionFunnel(): FunnelStage[] {
+  return conversionFunnelData.map((stage) => ({ ...stage }));
+}
+
+const regionalComparisonData: RegionalComparison = {
   region: "İstanbul / Kadıköy",
   period: "Bu Ay",
   clinicForeignPatients: 50,
@@ -307,7 +340,11 @@ export const regionalComparison: RegionalComparison = {
   percentAboveAverage: 12,
 };
 
-export const patientOriginDistribution: OriginShare[] = [
+export function getRegionalComparison(): RegionalComparison {
+  return { ...regionalComparisonData };
+}
+
+const patientOriginDistributionData: OriginShare[] = [
   { country: "Almanya", countryCode: "DE", percentage: 28 },
   { country: "Birleşik Krallık", countryCode: "GB", percentage: 22 },
   { country: "Rusya", countryCode: "RU", percentage: 18 },
@@ -316,7 +353,11 @@ export const patientOriginDistribution: OriginShare[] = [
   { country: "Diğer", countryCode: "UN", percentage: 6 },
 ];
 
-export const branchRevenueDistribution: BranchRevenueShare[] = [
+export function getPatientOriginDistribution(): OriginShare[] {
+  return patientOriginDistributionData.map((item) => ({ ...item }));
+}
+
+const branchRevenueDistributionData: BranchRevenueShare[] = [
   { branch: "Estetik Cerrahi", percentage: 34 },
   { branch: "Saç Ekimi", percentage: 26 },
   { branch: "Diş Tedavisi", percentage: 15 },
@@ -325,13 +366,21 @@ export const branchRevenueDistribution: BranchRevenueShare[] = [
   { branch: "Ortopedi", percentage: 5 },
 ];
 
-export const aiReviewSummary: AiReviewSummary = {
+export function getBranchRevenueDistribution(): BranchRevenueShare[] {
+  return branchRevenueDistributionData.map((item) => ({ ...item }));
+}
+
+const aiReviewSummaryData: AiReviewSummary = {
   positivePercentage: 74,
   topKeyword: "VIP Karşılama",
   sampleSize: 116,
 };
 
-export const PLAN_FEATURES: PlanFeature[] = [
+export function getAiReviewSummary(): AiReviewSummary {
+  return { ...aiReviewSummaryData };
+}
+
+const planFeaturesData: PlanFeature[] = [
   {
     title: "Görünürlük Paketi",
     description:
@@ -371,10 +420,14 @@ export const PLAN_FEATURES: PlanFeature[] = [
   },
 ];
 
+export function getPlanFeatures(): PlanFeature[] {
+  return planFeaturesData.map((feature) => ({ ...feature }));
+}
+
 export function getClinicMetrics(leads: PatientLead[]): ClinicMetrics {
   const todayLeads = leads.length;
   const approvedCount = leads.filter((l) => l.status === "ONAYLANDI").length;
-  const activeDoctors = doctors.filter((d) => d.status !== "DOLU").length;
+  const activeDoctors = getDoctors().filter((d) => d.status !== "DOLU").length;
   const conversionRate = todayLeads
     ? Math.round((approvedCount / todayLeads) * 100)
     : 0;

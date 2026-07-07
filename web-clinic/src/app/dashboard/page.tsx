@@ -1,10 +1,10 @@
 import { Users, CheckCircle2, Stethoscope, TrendingUp } from "lucide-react";
 import { KpiCard } from "@/components/dashboard/KpiCard";
 import { QuickLeadsTable } from "@/components/dashboard/QuickLeadsTable";
-import { patientLeads, getClinicMetrics } from "@/lib/mock-data";
+import { fetchDashboardOverview } from "@/lib/services/clinic";
 
-export default function DashboardOverviewPage() {
-  const metrics = getClinicMetrics(patientLeads);
+export default async function DashboardOverviewPage() {
+  const { leads, metrics } = await fetchDashboardOverview();
 
   return (
     <div className="flex flex-col gap-8">
@@ -46,7 +46,7 @@ export default function DashboardOverviewPage() {
         />
       </div>
 
-      <QuickLeadsTable leads={patientLeads} />
+      <QuickLeadsTable leads={leads} />
     </div>
   );
 }

@@ -3,7 +3,7 @@
 import { Check, X } from "lucide-react";
 import { Badge } from "@/components/ui/Badge";
 import { leadStatusTone } from "@/lib/status";
-import { countryCodeToFlagEmoji } from "@/lib/mock-data";
+import { countryCodeToFlagEmoji } from "@/lib/country";
 import type { PatientLead } from "@/types";
 import { cn } from "@/lib/utils";
 

@@ -1,36 +1,103 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MediQueue — Klinik Dashboard (`web-clinic`)
 
-## Getting Started
+Klinik yöneticilerinin operasyonel iş akışını yönettiği web arayüzü. **Ay 1 kapsamında gösterilebilir bir prototiptir:** mock veriyle çalışır, backend'e bağlı değildir.
 
-First, run the development server:
+Amaç; lead yönetimi, doktor kadrosu, analitik ve billing ekranlarını klinik görüşmelerinde ve Demo Day provalarında göstermektir.
 
-```bash
+## Teknolojiler
+
+- Next.js 16 (App Router)
+- React 19
+- TypeScript 5
+- Tailwind CSS 4
+- lucide-react
+
+## Hızlı Başlangıç
+
+```powershell
+cd web-clinic
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Uygulama **http://localhost:3000** adresinde açılır.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Production build:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```powershell
+npm run build
+npm run start
+```
 
-## Learn More
+## Demo Akışı
 
-To learn more about Next.js, take a look at the following resources:
+Önerilen sunum sırası:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```
+/dashboard → Hasta & Lead → Doktorlar → Analitik → Ayarlar → Abonelik
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Ana sayfa (`/`) otomatik olarak `/dashboard`'a yönlendirir.
+- **Login ekranı yok** — klinik yöneticisi doğrudan dashboard'a girer (Ay 1 bilinçli tercih; web-doctor'da dekoratif login vardır).
+- Lead onay/red işlemleri **local state**'tedir; sayfa yenilenince sıfırlanır.
 
-## Deploy on Vercel
+## Sayfalar
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+| Rota | Açıklama |
+|------|----------|
+| `/dashboard` | KPI özeti, hızlı lead tablosu |
+| `/dashboard/patients` | Lead listesi — filtre, onay/red, belge drawer |
+| `/dashboard/doctors` | Doktor grid — müsaitlik toggle (local state) |
+| `/dashboard/analytics` | Dönüşüm hunisi, bölgesel kıyaslama, AI yorum özeti |
+| `/dashboard/settings` | Klinik profil formu (mock kaydet) |
+| `/dashboard/billing` | Abonelik plan karşılaştırması |
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Ay 1 Kapsamı
+
+### Dahil
+
+- 6 sayfa, tıklanabilir navigasyon, mock veri
+- Lead yönetimi, doktor müsaitlik UI, analitik kartları
+- `lib/services/` katmanı — Ay 2 API geçişi için hazır
+- Mock tarihler her yüklemede **bugüne göre** üretilir
+
+### Bilinçli olarak dahil değil
+
+- Gerçek backend / JWT auth
+- Kalıcı lead/doktor/ayar kaydı
+- Gerçek ödeme / fatura entegrasyonu
+- PDF rapor indirme (buton dekoratif)
+
+## Veri Katmanı
+
+Sayfalar mock veriye **`lib/services/`** üzerinden erişir:
+
+- `clinic.ts` — `fetchDashboardOverview`
+- `leads.ts` — `fetchPatientLeads`
+- `doctors.ts` — `fetchDoctors`
+- `analytics.ts` — `fetchAnalyticsData`
+- `billing.ts` — `fetchPlanFeatures`
+
+Yardımcılar: `lib/country.ts`, `lib/branches.ts`, `lib/mock-date.ts`
+
+## web-doctor ile farklar
+
+| | web-clinic | web-doctor |
+|--|------------|------------|
+| Port | 3000 | 3001 |
+| Auth | Yok (açık dashboard) | Dekoratif login + demo guard |
+| Branş etiketleri | Türkçe (`Diş Tedavisi`) | İngilizce kod (`dentistry`) |
+| Odak | Lead, analitik, billing | Hasta detay, takvim, mesaj |
+
+Branş eşlemesi: `lib/branches.ts` → `BRANCH_DOCTOR_CODE_MAP`
+
+## Ay 2 Planı (özet)
+
+- Backend auth + klinik API entegrasyonu
+- `lib/services/*` → gerçek `fetch` çağrıları
+- Ortak branş enum'u (clinic + doctor app)
+
+## İlgili Dokümantasyon
+
+- Monorepo: [`../README.md`](../README.md)
+- Doktor portalı: [`../web-doctor/README.md`](../web-doctor/README.md)
