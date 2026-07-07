@@ -92,13 +92,22 @@ web-doctor/
 
 ## Veri Katmanı
 
-Component'ler doğrudan mock dosyalarına bağlanmaz. `lib/services/` altındaki fonksiyonlar kullanılır:
+Tüm sayfalar ve component'ler mock veriye **`lib/services/`** üzerinden erişir:
 
+- `doctor.ts` — `fetchCurrentDoctor`, `getCurrentDoctorSync`
 - `patients.ts` — `fetchPatients`, `fetchPatientById`
 - `appointments.ts` — `fetchTodayAppointments`, `fetchCalendarAppointments`
-- `messages.ts` — `fetchChatThreads`, `fetchQuickStats`, vb.
+- `messages.ts` — `fetchChatThreads`, `fetchQuickStats`, `fetchRecentActivities`, vb.
+- `calendar.ts` — `fetchAvailabilitySlots`, `getInitialAvailabilitySlots`
 
-Ay 2'de bu fonksiyonların içi `fetch` ile backend API çağrılarına dönüştürülecek; component'lere dokunmaya gerek kalmayacak.
+Mock tarihler (`randevular`, `aktiviteler`, `mesajlar`, hasta randevu geçmişi) her yüklemede **bugünün tarihine göre** üretilir.
+
+## Demo oturumu (Ay 1)
+
+- Giriş yapıldığında `sessionStorage` ile demo oturumu açılır.
+- `/dashboard` rotaları oturum yoksa `/login`'e yönlendirir.
+- Çıkış yapıldığında oturum temizlenir.
+- Ay 2'de JWT + middleware ile değiştirilecektir.
 
 ## Ay 2 Planı (özet)
 

@@ -13,7 +13,7 @@ import { AvailabilityEditor } from "@/components/calendar/AvailabilityEditor";
 import { DayAgendaPanel } from "@/components/calendar/DayAgendaPanel";
 import { MonthGrid } from "@/components/calendar/MonthGrid";
 import { WeekTimeGrid } from "@/components/calendar/WeekTimeGrid";
-import { availabilitySlots as initialAvailability } from "@/lib/mock-data";
+import { getInitialAvailabilitySlots } from "@/lib/services/calendar";
 import {
   countByStatus,
   formatMonthYear,
@@ -45,7 +45,7 @@ export function CalendarView({
   const [selectedDate, setSelectedDate] = useState(todayKey);
   const [showAvailability, setShowAvailability] = useState(false);
   const [availability, setAvailability] =
-    useState<AvailabilitySlot[]>(initialAvailability);
+    useState<AvailabilitySlot[]>(() => getInitialAvailabilitySlots());
 
   const appointmentsByDate = useMemo(
     () => groupAppointmentsByDate(appointments),

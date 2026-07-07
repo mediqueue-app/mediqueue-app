@@ -13,7 +13,7 @@ import {
 import type { Language } from "@/types";
 import { ProfileHero } from "@/components/profile/ProfileHero";
 import { ProfilePreviewCard } from "@/components/profile/ProfilePreviewCard";
-import { currentDoctor } from "@/lib/mock-data";
+import { getCurrentDoctorSync } from "@/lib/services/doctor";
 import { cn } from "@/lib/utils";
 
 const ALL_LANGUAGES: Language[] = ["TR", "EN", "AR", "RU", "DE", "FR"];
@@ -28,6 +28,7 @@ const LANGUAGE_LABELS: Record<Language, string> = {
 };
 
 export default function ProfilePage() {
+  const currentDoctor = getCurrentDoctorSync();
   const [fullName, setFullName] = useState(currentDoctor.fullName);
   const [title, setTitle] = useState(currentDoctor.title);
   const [specialty, setSpecialty] = useState(currentDoctor.specialty);

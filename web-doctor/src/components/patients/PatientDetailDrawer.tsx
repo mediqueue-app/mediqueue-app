@@ -2,18 +2,15 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { ArrowLeft, CalendarPlus, MoreHorizontal } from "lucide-react";
+import { ArrowLeft, CalendarPlus, Check, MoreHorizontal } from "lucide-react";
 import type { Patient, PatientDetailTab } from "@/types";
 import { PatientInfoTab } from "@/components/patients/PatientInfoTab";
 import { AppointmentHistoryTab } from "@/components/patients/AppointmentHistoryTab";
 import { NextTreatmentTab } from "@/components/patients/NextTreatmentTab";
-import {
-  MedicalRecordPlaceholder,
-  MedicalRecordTab,
-} from "@/components/patients/MedicalRecordTab";
+import { MedicalRecordTab } from "@/components/patients/MedicalRecordTab";
 import { cn } from "@/lib/utils";
 
-const TABS: { id: PatientDetailTab; label: string }[] = [
+const ALL_TABS: { id: PatientDetailTab; label: string }[] = [
   { id: "info", label: "Hasta Bilgisi" },
   { id: "appointments", label: "Randevu Geçmişi" },
   { id: "next_treatment", label: "Sıradaki Tedavi" },
@@ -21,11 +18,27 @@ const TABS: { id: PatientDetailTab; label: string }[] = [
 ];
 
 export function PatientDetailView({ patient }: { patient: Patient }) {
-  const [tab, setTab] = useState<PatientDetailTab>("medical_record");
+  const [tab, setTab] = useState<PatientDetailTab>("info");
+  const [toast, setToast] = useState<string | null>(null);
   const isDentistry = patient.branch === "dentistry" && patient.medicalRecord;
+  const tabs = ALL_TABS.filter(
+    (item) => item.id !== "medical_record" || isDentistry
+  );
+
+  function showDemoToast(message: string) {
+    setToast(message);
+    window.setTimeout(() => setToast(null), 2800);
+  }
 
   return (
     <div className="flex flex-col gap-6">
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-sm font-medium text-white shadow-lg">
+          <Check className="h-4 w-4 text-emerald-400" />
+          {toast}
+        </div>
+      )}
+
       <Link
         href="/dashboard/patients"
         className="inline-flex items-center gap-1 text-sm text-slate-500 hover:text-primary"
@@ -53,6 +66,12 @@ export function PatientDetailView({ patient }: { patient: Patient }) {
         <div className="flex items-center gap-2">
           <button
             type="button"
+            title="Demo modunda randevu oluşturma Ay 2'de eklenecek"
+            onClick={() =>
+              showDemoToast(
+                "Randevu oluşturma demo modunda simüle edildi — Ay 2'de aktif olacak."
+              )
+            }
             className="flex items-center gap-2 rounded-lg bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover"
           >
             <CalendarPlus className="h-4 w-4" />
@@ -60,6 +79,10 @@ export function PatientDetailView({ patient }: { patient: Patient }) {
           </button>
           <button
             type="button"
+            title="Demo modunda ek işlemler yakında"
+            onClick={() =>
+              showDemoToast("Ek işlemler menüsü Ay 2'de eklenecek.")
+            }
             className="flex h-10 w-10 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50"
             aria-label="Diğer işlemler"
           >
@@ -72,7 +95,7 @@ export function PatientDetailView({ patient }: { patient: Patient }) {
         className="flex gap-1 overflow-x-auto border-b border-slate-200"
         aria-label="Hasta detay sekmeleri"
       >
-        {TABS.map((t) => (
+        {tabs.map((t) => (
           <button
             key={t.id}
             type="button"
@@ -93,12 +116,9 @@ export function PatientDetailView({ patient }: { patient: Patient }) {
         {tab === "info" && <PatientInfoTab patient={patient} />}
         {tab === "appointments" && <AppointmentHistoryTab patient={patient} />}
         {tab === "next_treatment" && <NextTreatmentTab patient={patient} />}
-        {tab === "medical_record" &&
-          (isDentistry ? (
-            <MedicalRecordTab medicalRecord={patient.medicalRecord!} />
-          ) : (
-            <MedicalRecordPlaceholder />
-          ))}
+        {tab === "medical_record" && isDentistry && (
+          <MedicalRecordTab medicalRecord={patient.medicalRecord!} />
+        )}
       </div>
     </div>
   );

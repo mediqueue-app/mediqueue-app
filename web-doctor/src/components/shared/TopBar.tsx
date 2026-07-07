@@ -5,7 +5,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { Bell, ChevronRight, Menu, Search } from "lucide-react";
 import { getPageMeta } from "@/lib/navigation";
-import { currentDoctor, quickStats } from "@/lib/mock-data";
+import { getQuickStatsSync } from "@/lib/services/messages";
+import { getCurrentDoctorSync } from "@/lib/services/doctor";
 import { cn } from "@/lib/utils";
 
 export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
@@ -13,6 +14,8 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
   const meta = getPageMeta(pathname);
+  const doctor = getCurrentDoctorSync();
+  const stats = getQuickStatsSync();
 
   function handleSearch(e: React.FormEvent) {
     e.preventDefault();
@@ -75,12 +78,12 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
           <Link
             href="/dashboard/messages"
             className="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100"
-            aria-label={`Bildirimler, ${quickStats.pendingMessageCount} okunmamış`}
+            aria-label={`Bildirimler, ${stats.pendingMessageCount} okunmamış`}
           >
             <Bell className="h-[18px] w-[18px]" />
-            {quickStats.pendingMessageCount > 0 && (
+            {stats.pendingMessageCount > 0 && (
               <span className="absolute right-1.5 top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white ring-2 ring-white">
-                {quickStats.pendingMessageCount}
+                {stats.pendingMessageCount}
               </span>
             )}
           </Link>
@@ -93,10 +96,10 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
             )}
           >
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-white">
-              {currentDoctor.avatarInitials}
+              {doctor.avatarInitials}
             </div>
             <span className="hidden text-sm font-medium text-slate-700 md:block">
-              {currentDoctor.fullName.split(" ")[0]}
+              {doctor.fullName.split(" ")[0]}
             </span>
           </Link>
         </div>

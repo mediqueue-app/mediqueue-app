@@ -13,6 +13,7 @@ import {
   igorMedicalRecord,
   lauraMedicalRecord,
 } from "@/lib/mock-dental-records";
+import { mockDateKey, mockDateTime } from "@/lib/mock-date";
 
 const TIMELINE_LABELS = [
   "Keşif ve Eşleşme",
@@ -43,30 +44,41 @@ function buildTimeline(activeStep: number): TimelineStep[] {
               : `${label} aşaması`,
       status,
       completedAt:
-        step < activeStep ? `2026-06-${10 + step}T10:00:00` : undefined,
+        step < activeStep
+          ? mockDateTime(-(activeStep - step + 3), "10:00")
+          : undefined,
     };
   });
 }
 
-export const currentDoctor: DoctorProfile = {
+const doctorProfile: DoctorProfile = {
   id: "DR-001",
   email: "elif.yilmaz@anadolu-klinik.com",
   fullName: "Elif Yılmaz",
   title: "Op. Dr.",
-  specialty: "Estetik, Plastik ve Rekonstrüktif Cerrahi",
+  specialty:
+    "Estetik Cerrahi, Diş Tedavisi, Saç Ekimi, IVF ve Ortopedi (Çok Disiplinli Klinik)",
   languages: ["TR", "EN", "AR"],
-  bio: "14 yıllık deneyimle uluslararası hastalara estetik cerrahi ve saç ekimi kombinasyon tedavileri uyguluyorum.",
+  bio: "Anadolu Klinik bünyesinde uluslararası hasta portföyünü yönetiyorum. Estetik cerrahi, diş implantı, saç ekimi ve IVF alanlarında çok disiplinli ekip koordinasyonu sağlıyorum.",
   avatarInitials: "EY",
   rating: 4.9,
   reviewCount: 127,
 };
 
-export const quickStats: QuickStats = {
+export function getCurrentDoctor(): DoctorProfile {
+  return { ...doctorProfile };
+}
+
+const quickStatsData: QuickStats = {
   monthlyPatientCount: 34,
   averageRating: 4.9,
   pendingMessageCount: 3,
   weeklyCompletedAppointments: 12,
 };
+
+export function getQuickStats(): QuickStats {
+  return { ...quickStatsData };
+}
 
 export const queuePatient: QueuePatient = {
   patientId: "P-1003",
@@ -76,45 +88,71 @@ export const queuePatient: QueuePatient = {
   minutesUntil: 18,
 };
 
-export const recentActivities: ActivityItem[] = [
+type ActivityTemplate = Omit<ActivityItem, "timestamp"> & {
+  dayOffset: number;
+  time: string;
+};
+
+const activityTemplates: ActivityTemplate[] = [
   {
     id: "A1",
     message: "Yeni hasta mesajı: Ahmed Al-Farsi",
-    timestamp: "2026-07-07T11:42:00",
+    dayOffset: 0,
+    time: "11:42",
     type: "message",
   },
   {
     id: "A2",
     message: "Fatima Al-Sayed randevusu onaylandı",
-    timestamp: "2026-07-07T10:15:00",
+    dayOffset: 0,
+    time: "10:15",
     type: "appointment",
   },
   {
     id: "A3",
     message: "Igor Petrov tıbbi rapor yükledi",
-    timestamp: "2026-07-07T09:30:00",
+    dayOffset: 0,
+    time: "09:30",
     type: "document",
   },
   {
     id: "A4",
     message: "Sophie Bernard için yeni not eklendi",
-    timestamp: "2026-07-06T16:20:00",
+    dayOffset: -1,
+    time: "16:20",
     type: "note",
   },
   {
     id: "A5",
     message: "Laura van Dijk post-op takip mesajı gönderdi",
-    timestamp: "2026-07-06T14:05:00",
+    dayOffset: -1,
+    time: "14:05",
     type: "message",
   },
 ];
 
-export const todayAppointments: Appointment[] = [
+export function getRecentActivities(): ActivityItem[] {
+  return activityTemplates.map(({ dayOffset, time, ...activity }) => ({
+    ...activity,
+    timestamp: mockDateTime(dayOffset, time),
+  }));
+}
+
+type AppointmentTemplate = Omit<Appointment, "date"> & { dayOffset: number };
+
+function buildAppointments(templates: AppointmentTemplate[]): Appointment[] {
+  return templates.map(({ dayOffset, ...appointment }) => ({
+    ...appointment,
+    date: mockDateKey(dayOffset),
+  }));
+}
+
+const appointmentTemplates: AppointmentTemplate[] = [
   {
     id: "APT-01",
     patientId: "P-1001",
     patientName: "Fatima Al-Sayed",
-    date: "2026-07-07",
+    dayOffset: 0,
     time: "09:00",
     treatmentType: "Rinoplasti Ön Görüşme",
     status: "TAMAMLANDI",
@@ -124,7 +162,7 @@ export const todayAppointments: Appointment[] = [
     id: "APT-02",
     patientId: "P-1002",
     patientName: "James Whitfield",
-    date: "2026-07-07",
+    dayOffset: 0,
     time: "11:00",
     treatmentType: "Estetik Cerrahi Konsültasyon",
     status: "TAMAMLANDI",
@@ -134,7 +172,7 @@ export const todayAppointments: Appointment[] = [
     id: "APT-03",
     patientId: "P-1003",
     patientName: "Klaus Richter",
-    date: "2026-07-07",
+    dayOffset: 0,
     time: "14:30",
     treatmentType: "Saç Ekimi",
     status: "ONAYLANDI",
@@ -144,21 +182,17 @@ export const todayAppointments: Appointment[] = [
     id: "APT-04",
     patientId: "P-1004",
     patientName: "Amina Haddad",
-    date: "2026-07-07",
+    dayOffset: 0,
     time: "16:45",
     treatmentType: "Post-Op Kontrol",
     status: "BEKLIYOR",
     durationMinutes: 20,
   },
-];
-
-export const calendarAppointments: Appointment[] = [
-  ...todayAppointments,
   {
     id: "APT-05",
     patientId: "P-1005",
     patientName: "Sophie Bernard",
-    date: "2026-07-08",
+    dayOffset: 1,
     time: "11:00",
     treatmentType: "Yüz Germe Konsültasyon",
     status: "ONAYLANDI",
@@ -168,7 +202,7 @@ export const calendarAppointments: Appointment[] = [
     id: "APT-06",
     patientId: "P-1006",
     patientName: "Ahmed Al-Farsi",
-    date: "2026-07-08",
+    dayOffset: 1,
     time: "15:30",
     treatmentType: "IVF Ön Değerlendirme",
     status: "BEKLIYOR",
@@ -178,7 +212,7 @@ export const calendarAppointments: Appointment[] = [
     id: "APT-07",
     patientId: "P-1007",
     patientName: "Igor Petrov",
-    date: "2026-07-09",
+    dayOffset: 2,
     time: "10:00",
     treatmentType: "Diş İmplant Planlama",
     status: "IPTAL",
@@ -188,7 +222,7 @@ export const calendarAppointments: Appointment[] = [
     id: "APT-08",
     patientId: "P-1008",
     patientName: "Laura van Dijk",
-    date: "2026-07-10",
+    dayOffset: 3,
     time: "13:00",
     treatmentType: "Diş İmplant Seansı",
     status: "ONAYLANDI",
@@ -198,7 +232,7 @@ export const calendarAppointments: Appointment[] = [
     id: "APT-09",
     patientId: "P-1001",
     patientName: "Fatima Al-Sayed",
-    date: "2026-07-06",
+    dayOffset: -1,
     time: "14:00",
     treatmentType: "Rinoplasti Kontrol",
     status: "TAMAMLANDI",
@@ -208,7 +242,7 @@ export const calendarAppointments: Appointment[] = [
     id: "APT-10",
     patientId: "P-1007",
     patientName: "Igor Petrov",
-    date: "2026-07-11",
+    dayOffset: 4,
     time: "10:30",
     treatmentType: "Diş İmplant Kontrol",
     status: "ONAYLANDI",
@@ -218,7 +252,7 @@ export const calendarAppointments: Appointment[] = [
     id: "APT-11",
     patientId: "P-1002",
     patientName: "James Whitfield",
-    date: "2026-07-14",
+    dayOffset: 7,
     time: "09:30",
     treatmentType: "Estetik Cerrahi Takip",
     status: "BEKLIYOR",
@@ -228,7 +262,7 @@ export const calendarAppointments: Appointment[] = [
     id: "APT-12",
     patientId: "P-1005",
     patientName: "Sophie Bernard",
-    date: "2026-07-07",
+    dayOffset: 0,
     time: "12:00",
     treatmentType: "Yüz Germe Ön Değerlendirme",
     status: "BEKLIYOR",
@@ -236,7 +270,114 @@ export const calendarAppointments: Appointment[] = [
   },
 ];
 
-export const patients: Patient[] = [
+export function getCalendarAppointments(): Appointment[] {
+  return buildAppointments(appointmentTemplates);
+}
+
+export function getTodayAppointments(): Appointment[] {
+  const today = mockDateKey(0);
+  return getCalendarAppointments().filter((appointment) => appointment.date === today);
+}
+
+type AppointmentHistoryLink =
+  | {
+      id: string;
+      aptId: string;
+      outcomeNote?: string;
+      time?: string;
+      status?: Appointment["status"];
+    }
+  | {
+      id: string;
+      dayOffset: number;
+      time: string;
+      treatmentType: string;
+      status: Appointment["status"];
+      outcomeNote?: string;
+    };
+
+const patientHistoryLinks: Record<string, AppointmentHistoryLink[]> = {
+  "P-1001": [
+    {
+      id: "AH1",
+      aptId: "APT-01",
+      outcomeNote: "Operasyon tarihi planlandı.",
+    },
+  ],
+  "P-1002": [{ id: "AH2", aptId: "APT-02", outcomeNote: "Hasta teklif değerlendirmesi için 1 hafta süre istedi." }],
+  "P-1003": [{ id: "AH3", aptId: "APT-03" }],
+  "P-1004": [
+    { id: "AH4", aptId: "APT-04", time: "16:45" },
+    {
+      id: "AH5",
+      dayOffset: -17,
+      time: "08:00",
+      treatmentType: "Karın Germe Operasyonu",
+      status: "TAMAMLANDI",
+      outcomeNote: "Operasyon başarıyla tamamlandı, taburcu edildi.",
+    },
+  ],
+  "P-1005": [{ id: "AH6", aptId: "APT-05" }],
+  "P-1006": [],
+  "P-1007": [
+    {
+      id: "AH7",
+      aptId: "APT-07",
+      outcomeNote: "Hasta tarihi ertelemek istedi.",
+    },
+  ],
+  "P-1008": [{ id: "AH8", aptId: "APT-08" }],
+  "P-1009": [
+    {
+      id: "AH9",
+      dayOffset: -22,
+      time: "09:30",
+      treatmentType: "Diz Artroskopisi",
+      status: "TAMAMLANDI",
+      outcomeNote: "Başarılı operasyon, 6 hafta fizik tedavi önerildi.",
+    },
+  ],
+  "P-1010": [],
+};
+
+function resolveAppointmentHistory(
+  links: AppointmentHistoryLink[],
+  apptById: Map<string, Appointment>
+): NonNullable<Patient["appointmentHistory"]> {
+  return links.map((link) => {
+    if ("aptId" in link) {
+      const apt = apptById.get(link.aptId);
+      if (!apt) {
+        throw new Error(`Missing appointment template: ${link.aptId}`);
+      }
+      return {
+        id: link.id,
+        date: apt.date,
+        time: link.time ?? apt.time,
+        treatmentType: apt.treatmentType,
+        status: link.status ?? apt.status,
+        outcomeNote: link.outcomeNote,
+      };
+    }
+    return {
+      id: link.id,
+      date: mockDateKey(link.dayOffset),
+      time: link.time,
+      treatmentType: link.treatmentType,
+      status: link.status,
+      outcomeNote: link.outcomeNote,
+    };
+  });
+}
+
+function latestVisitDate(
+  history: NonNullable<Patient["appointmentHistory"]>
+): string {
+  if (history.length === 0) return mockDateKey(-30);
+  return [...history].sort((a, b) => b.date.localeCompare(a.date))[0]!.date;
+}
+
+const patientRecords: Patient[] = [
   {
     id: "P-1001",
     fullName: "Fatima Al-Sayed",
@@ -560,7 +701,8 @@ export const patients: Patient[] = [
     medicalNotes: [
       {
         id: "N4",
-        content: "Üst blefaroplasti için uygun. Anestezi ön görüşmesi planlandı.",
+        content:
+          "Ön bölgede implant için kemik hacmi yeterli. Lokal anestezi altında implant yerleştirme planlandı.",
         createdAt: "2026-07-01T15:00:00",
         authorName: "Op. Dr. Elif Yılmaz",
       },
@@ -634,34 +776,70 @@ export const patients: Patient[] = [
   },
 ];
 
-export const chatThreads: ChatThread[] = [
+export function getPatients(): Patient[] {
+  const apptById = new Map(
+    getCalendarAppointments().map((appointment) => [appointment.id, appointment])
+  );
+
+  return patientRecords.map((patient) => {
+    const appointmentHistory = resolveAppointmentHistory(
+      patientHistoryLinks[patient.id] ?? [],
+      apptById
+    );
+    return {
+      ...patient,
+      appointmentHistory,
+      lastVisitDate: latestVisitDate(appointmentHistory),
+    };
+  });
+}
+
+type ChatMessageTemplate = {
+  id: string;
+  sender: "patient" | "doctor";
+  content: string;
+  dayOffset: number;
+  time: string;
+};
+
+type ChatThreadTemplate = Omit<ChatThread, "lastMessageAt" | "messages"> & {
+  lastMessageDayOffset: number;
+  lastMessageTime: string;
+  messageTemplates: ChatMessageTemplate[];
+};
+
+const chatThreadTemplates: ChatThreadTemplate[] = [
   {
     id: "C1",
     patientId: "P-1006",
     patientName: "Ahmed Al-Farsi",
     countryCode: "QA",
     lastMessage: "Doktor hanım, tedavi süreci hakkında bilgi alabilir miyim?",
-    lastMessageAt: "2026-07-07T11:42:00",
+    lastMessageDayOffset: 0,
+    lastMessageTime: "11:42",
     unreadCount: 2,
-    messages: [
+    messageTemplates: [
       {
         id: "M1",
         sender: "patient",
         content: "Merhaba, IVF tedavisi için süreç ne kadar sürer?",
-        timestamp: "2026-07-07T11:30:00",
+        dayOffset: 0,
+        time: "11:30",
       },
       {
         id: "M2",
         sender: "doctor",
         content:
           "Merhaba Ahmed Bey, ön değerlendirme sonrası genellikle 2-3 haftalık bir hazırlık süreci olur.",
-        timestamp: "2026-07-07T11:35:00",
+        dayOffset: 0,
+        time: "11:35",
       },
       {
         id: "M3",
         sender: "patient",
         content: "Doktor hanım, tedavi süreci hakkında bilgi alabilir miyim?",
-        timestamp: "2026-07-07T11:42:00",
+        dayOffset: 0,
+        time: "11:42",
       },
     ],
   },
@@ -671,27 +849,31 @@ export const chatThreads: ChatThread[] = [
     patientName: "Klaus Richter",
     countryCode: "DE",
     lastMessage: "Teşekkürler, yarın görüşmek üzere.",
-    lastMessageAt: "2026-07-07T08:15:00",
+    lastMessageDayOffset: 0,
+    lastMessageTime: "08:15",
     unreadCount: 0,
-    messages: [
+    messageTemplates: [
       {
         id: "M4",
         sender: "patient",
         content: "Operasyon öncesi özel bir hazırlık yapmam gerekiyor mu?",
-        timestamp: "2026-07-07T08:00:00",
+        dayOffset: 0,
+        time: "08:00",
       },
       {
         id: "M5",
         sender: "doctor",
         content:
           "Kan sulandırıcı kullanmamanızı ve operasyondan 8 saat önce aç kalmanızı rica ederim.",
-        timestamp: "2026-07-07T08:10:00",
+        dayOffset: 0,
+        time: "08:10",
       },
       {
         id: "M6",
         sender: "patient",
         content: "Teşekkürler, yarın görüşmek üzere.",
-        timestamp: "2026-07-07T08:15:00",
+        dayOffset: 0,
+        time: "08:15",
       },
     ],
   },
@@ -701,20 +883,35 @@ export const chatThreads: ChatThread[] = [
     patientName: "Amina Haddad",
     countryCode: "IQ",
     lastMessage: "Ödem tamamen geçti, çok teşekkürler.",
-    lastMessageAt: "2026-07-06T14:05:00",
+    lastMessageDayOffset: -1,
+    lastMessageTime: "14:05",
     unreadCount: 1,
-    messages: [
+    messageTemplates: [
       {
         id: "M7",
         sender: "patient",
         content: "Ödem tamamen geçti, çok teşekkürler.",
-        timestamp: "2026-07-06T14:05:00",
+        dayOffset: -1,
+        time: "14:05",
       },
     ],
   },
 ];
 
-export const availabilitySlots: AvailabilitySlot[] = [
+export function getChatThreads(): ChatThread[] {
+  return chatThreadTemplates.map(
+    ({ lastMessageDayOffset, lastMessageTime, messageTemplates, ...thread }) => ({
+      ...thread,
+      lastMessageAt: mockDateTime(lastMessageDayOffset, lastMessageTime),
+      messages: messageTemplates.map(({ dayOffset, time, ...message }) => ({
+        ...message,
+        timestamp: mockDateTime(dayOffset, time),
+      })),
+    })
+  );
+}
+
+const availabilitySlotsData: AvailabilitySlot[] = [
   {
     dayOfWeek: 1,
     label: "Pazartesi",
@@ -769,6 +966,13 @@ export const availabilitySlots: AvailabilitySlot[] = [
   },
 ];
 
+export function getAvailabilitySlots(): AvailabilitySlot[] {
+  return availabilitySlotsData.map((day) => ({
+    ...day,
+    slots: day.slots.map((slot) => ({ ...slot })),
+  }));
+}
+
 export function getPatientById(id: string): Patient | undefined {
-  return patients.find((p) => p.id === id);
+  return getPatients().find((p) => p.id === id);
 }

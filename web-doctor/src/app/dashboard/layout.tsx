@@ -1,3 +1,6 @@
+"use client";
+
+import { DemoAuthGuard } from "@/components/shared/DemoAuthGuard";
 import { DashboardShell } from "@/components/shared/DashboardShell";
 
 export default function DashboardLayout({
@@ -5,5 +8,9 @@ export default function DashboardLayout({
 }: {
   children: React.ReactNode;
 }) {
-  return <DashboardShell>{children}</DashboardShell>;
+  return (
+    <DemoAuthGuard>
+      <DashboardShell>{children}</DashboardShell>
+    </DemoAuthGuard>
+  );
 }

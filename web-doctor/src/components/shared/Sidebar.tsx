@@ -4,8 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { LogOut, Stethoscope } from "lucide-react";
 import { NAV_ITEMS } from "@/lib/navigation";
-import { quickStats } from "@/lib/mock-data";
-import { currentDoctor } from "@/lib/mock-data";
+import { getQuickStatsSync } from "@/lib/services/messages";
+import { getCurrentDoctorSync } from "@/lib/services/doctor";
+import { clearDemoAuthenticated } from "@/lib/demo-auth";
 import { cn } from "@/lib/utils";
 
 export function Sidebar({
@@ -16,7 +17,8 @@ export function Sidebar({
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
-  const unreadMessages = quickStats.pendingMessageCount;
+  const doctor = getCurrentDoctorSync();
+  const unreadMessages = getQuickStatsSync().pendingMessageCount;
 
   return (
     <aside
@@ -111,20 +113,23 @@ export function Sidebar({
           className="flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-slate-50"
         >
           <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-light text-sm font-bold text-primary">
-            {currentDoctor.avatarInitials}
+            {doctor.avatarInitials}
           </div>
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-slate-900">
-              {currentDoctor.title} {currentDoctor.fullName.split(" ")[0]}
+              {doctor.title} {doctor.fullName.split(" ")[0]}
             </p>
             <p className="truncate text-xs text-slate-500">
-              {currentDoctor.specialty.split(",")[0]}
+              {doctor.specialty.split(",")[0]}
             </p>
           </div>
         </Link>
         <Link
           href="/login"
-          onClick={onNavigate}
+          onClick={() => {
+            clearDemoAuthenticated();
+            onNavigate?.();
+          }}
           className="mt-1 flex w-full items-center gap-3 rounded-xl px-2 py-2.5 text-sm font-medium text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600"
         >
           <LogOut className="h-[18px] w-[18px]" />

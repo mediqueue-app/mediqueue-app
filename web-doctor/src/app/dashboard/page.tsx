@@ -10,14 +10,15 @@ import {
   fetchQueuePatient,
   fetchRecentActivities,
 } from "@/lib/services/messages";
-import { currentDoctor } from "@/lib/mock-data";
+import { fetchCurrentDoctor } from "@/lib/services/doctor";
 
 export default async function DashboardPage() {
-  const [appointments, stats, queue, activities] = await Promise.all([
+  const [appointments, stats, queue, activities, doctor] = await Promise.all([
     fetchTodayAppointments(),
     fetchQuickStats(),
     fetchQueuePatient(),
     fetchRecentActivities(),
+    fetchCurrentDoctor(),
   ]);
 
   const nextAppointment = getNextAppointment(appointments);
@@ -25,7 +26,7 @@ export default async function DashboardPage() {
   return (
     <div className="flex flex-col gap-5 lg:gap-6">
       <DashboardHero
-        doctor={currentDoctor}
+        doctor={doctor}
         todayCount={appointments.length}
         pendingMessages={stats.pendingMessageCount}
         nextAppointment={nextAppointment}

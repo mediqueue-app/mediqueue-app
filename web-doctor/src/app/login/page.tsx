@@ -2,16 +2,18 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, Stethoscope } from "lucide-react";
-import Link from "next/link";
+import { Lock, Stethoscope, X } from "lucide-react";
+import { setDemoAuthenticated } from "@/lib/demo-auth";
 
 export default function LoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [forgotOpen, setForgotOpen] = useState(false);
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+    setDemoAuthenticated();
     router.push("/dashboard");
   }
 
@@ -81,24 +83,58 @@ export default function LoginPage() {
           </button>
 
           <p className="mt-4 text-center">
-            <Link
-              href="#"
+            <button
+              type="button"
               className="text-sm font-medium text-primary hover:underline"
-              onClick={(e) => e.preventDefault()}
+              onClick={() => setForgotOpen(true)}
             >
               Şifremi Unuttum
-            </Link>
+            </button>
           </p>
 
           <div className="mt-6 flex items-start gap-2 rounded-xl bg-slate-50 px-3.5 py-3">
             <Lock className="mt-0.5 h-4 w-4 shrink-0 text-slate-400" />
             <p className="text-xs leading-relaxed text-slate-500">
               Bu portal yalnızca davetli doktorlar içindir. Self-servis kayıt
-              bulunmamaktadır.
+              bulunmamaktadır. Demo modunda herhangi bir e-posta ve şifre ile
+              giriş yapabilirsiniz.
             </p>
           </div>
         </form>
       </div>
+
+      {forgotOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
+          <div
+            role="dialog"
+            aria-labelledby="forgot-title"
+            className="relative w-full max-w-sm rounded-2xl border border-slate-200 bg-white p-6 shadow-xl"
+          >
+            <button
+              type="button"
+              onClick={() => setForgotOpen(false)}
+              className="absolute right-4 top-4 rounded-lg p-1 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+              aria-label="Kapat"
+            >
+              <X className="h-4 w-4" />
+            </button>
+            <h3 id="forgot-title" className="text-lg font-semibold text-slate-900">
+              Şifre sıfırlama
+            </h3>
+            <p className="mt-2 text-sm leading-relaxed text-slate-600">
+              Şifre sıfırlama özelliği Ay 2&apos;de eklenecek. Demo sırasında
+              klinik yöneticinizden yeni davet bağlantısı isteyebilirsiniz.
+            </p>
+            <button
+              type="button"
+              onClick={() => setForgotOpen(false)}
+              className="mt-5 w-full rounded-xl bg-primary py-2.5 text-sm font-semibold text-white hover:bg-primary-hover"
+            >
+              Tamam
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
