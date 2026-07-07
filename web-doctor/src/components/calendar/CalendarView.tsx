@@ -1,151 +1,242 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import type { Appointment, CalendarViewMode } from "@/types";
-import { AppointmentSlot } from "@/components/calendar/AppointmentSlot";
+import {
+  CalendarDays,
+  ChevronLeft,
+  ChevronRight,
+  Settings2,
+  X,
+} from "lucide-react";
+import type { Appointment, AvailabilitySlot, CalendarViewMode } from "@/types";
 import { AvailabilityEditor } from "@/components/calendar/AvailabilityEditor";
+import { DayAgendaPanel } from "@/components/calendar/DayAgendaPanel";
+import { MonthGrid } from "@/components/calendar/MonthGrid";
+import { WeekTimeGrid } from "@/components/calendar/WeekTimeGrid";
 import { availabilitySlots as initialAvailability } from "@/lib/mock-data";
-import type { AvailabilitySlot } from "@/types";
+import {
+  countByStatus,
+  formatMonthYear,
+  getMonthWeeks,
+  getWeekDays,
+  getWeekStart,
+  groupAppointmentsByDate,
+  toDateKey,
+} from "@/lib/calendar-utils";
 import { cn } from "@/lib/utils";
-import { X } from "lucide-react";
+
+const STATUS_LEGEND = [
+  { label: "Onaylandı", className: "bg-emerald-500" },
+  { label: "Bekliyor", className: "bg-amber-500" },
+  { label: "Tamamlandı", className: "bg-blue-500" },
+  { label: "İptal", className: "bg-red-400" },
+] as const;
 
 export function CalendarView({
   appointments,
 }: {
   appointments: Appointment[];
 }) {
+  const today = useMemo(() => new Date(), []);
+  const todayKey = toDateKey(today);
+
   const [viewMode, setViewMode] = useState<CalendarViewMode>("HAFTA");
-  const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [focusDate, setFocusDate] = useState(() => new Date(today));
+  const [selectedDate, setSelectedDate] = useState(todayKey);
   const [showAvailability, setShowAvailability] = useState(false);
   const [availability, setAvailability] =
     useState<AvailabilitySlot[]>(initialAvailability);
 
-  const dates = useMemo(() => {
-    const unique = [...new Set(appointments.map((a) => a.date))].sort();
-    return unique;
-  }, [appointments]);
+  const appointmentsByDate = useMemo(
+    () => groupAppointmentsByDate(appointments),
+    [appointments]
+  );
 
-  const selectedAppointments = selectedDate
-    ? appointments.filter((a) => a.date === selectedDate)
-    : [];
+  const weekStart = useMemo(() => getWeekStart(focusDate), [focusDate]);
+  const weekDays = useMemo(() => getWeekDays(weekStart), [weekStart]);
+  const monthWeeks = useMemo(
+    () => getMonthWeeks(focusDate.getFullYear(), focusDate.getMonth()),
+    [focusDate]
+  );
+
+  const weekAppointments = useMemo(() => {
+    const keys = new Set(weekDays.map(toDateKey));
+    return appointments.filter((a) => keys.has(a.date));
+  }, [appointments, weekDays]);
+
+  const selectedAppointments = appointmentsByDate.get(selectedDate) ?? [];
+
+  function navigate(delta: number) {
+    setFocusDate((prev) => {
+      const next = new Date(prev);
+      if (viewMode === "HAFTA") {
+        next.setDate(prev.getDate() + delta * 7);
+      } else {
+        next.setMonth(prev.getMonth() + delta);
+      }
+      return next;
+    });
+  }
+
+  function goToToday() {
+    setFocusDate(new Date(today));
+    setSelectedDate(todayKey);
+  }
 
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex flex-wrap items-center justify-between gap-4">
-        <div className="flex gap-2">
-          {(["HAFTA", "AY"] as CalendarViewMode[]).map((mode) => (
+    <div className="flex flex-col gap-5">
+      {/* Üst toolbar */}
+      <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:flex-row lg:items-center lg:justify-between">
+        <div className="flex flex-wrap items-center gap-3">
+          <div className="flex items-center rounded-xl border border-slate-200 bg-slate-50 p-1">
             <button
-              key={mode}
               type="button"
-              onClick={() => setViewMode(mode)}
-              className={cn(
-                "rounded-lg px-4 py-2 text-sm font-medium",
-                viewMode === mode
-                  ? "bg-primary text-white"
-                  : "bg-white text-slate-600 ring-1 ring-slate-200"
-              )}
+              onClick={() => navigate(-1)}
+              aria-label="Önceki"
+              className="rounded-lg p-2 text-slate-500 hover:bg-white hover:text-slate-800"
             >
-              {mode === "HAFTA" ? "Haftalık" : "Aylık"}
+              <ChevronLeft className="h-4 w-4" />
             </button>
-          ))}
-        </div>
-        <button
-          type="button"
-          onClick={() => setShowAvailability(true)}
-          className="rounded-lg border border-slate-200 bg-white px-4 py-2 text-sm font-medium text-slate-700 hover:bg-slate-50"
-        >
-          Müsaitlik Düzenle
-        </button>
-      </div>
-
-      <div
-        className={cn(
-          "grid gap-3",
-          viewMode === "HAFTA" ? "grid-cols-2 lg:grid-cols-4" : "grid-cols-3 lg:grid-cols-7"
-        )}
-      >
-        {dates.map((date) => {
-          const dayAppointments = appointments.filter((a) => a.date === date);
-          const d = new Date(date + "T12:00:00");
-          return (
             <button
-              key={date}
               type="button"
-              onClick={() => setSelectedDate(date)}
-              className={cn(
-                "rounded-xl border p-4 text-left transition-colors hover:border-primary/40",
-                selectedDate === date
-                  ? "border-primary bg-primary-light/30"
-                  : "border-slate-200 bg-white"
-              )}
+              onClick={() => navigate(1)}
+              aria-label="Sonraki"
+              className="rounded-lg p-2 text-slate-500 hover:bg-white hover:text-slate-800"
             >
-              <p className="text-xs font-medium uppercase text-slate-400">
-                {d.toLocaleDateString("tr-TR", { weekday: "short" })}
-              </p>
-              <p className="text-lg font-semibold text-slate-900">
-                {d.getDate()}{" "}
-                {d.toLocaleDateString("tr-TR", { month: "short" })}
-              </p>
-              <div className="mt-2 space-y-1">
-                {dayAppointments.slice(0, viewMode === "AY" ? 2 : 4).map((apt) => (
-                  <AppointmentSlot key={apt.id} appointment={apt} />
-                ))}
-                {dayAppointments.length > (viewMode === "AY" ? 2 : 4) && (
-                  <p className="text-xs text-slate-400">
-                    +{dayAppointments.length - (viewMode === "AY" ? 2 : 4)} daha
-                  </p>
-                )}
-              </div>
+              <ChevronRight className="h-4 w-4" />
             </button>
-          );
-        })}
-      </div>
-
-      {selectedDate && (
-        <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h3 className="font-semibold text-slate-900">
-            {new Date(selectedDate + "T12:00:00").toLocaleDateString("tr-TR", {
-              weekday: "long",
-              day: "numeric",
-              month: "long",
-            })}
-          </h3>
-          <div className="mt-4 space-y-2">
-            {selectedAppointments.length === 0 ? (
-              <p className="text-sm text-slate-400">Bu gün randevu yok.</p>
-            ) : (
-              selectedAppointments.map((apt) => (
-                <AppointmentSlot key={apt.id} appointment={apt} />
-              ))
-            )}
           </div>
-        </div>
-      )}
 
+          <div>
+            <h2 className="text-base font-semibold text-slate-900">
+              {viewMode === "HAFTA"
+                ? `${formatMonthYear(weekDays[0])} — Hafta`
+                : formatMonthYear(focusDate)}
+            </h2>
+            <p className="text-xs text-slate-500">
+              {weekAppointments.length} randevu
+              {viewMode === "HAFTA" && " bu hafta"}
+              {" · "}
+              {countByStatus(weekAppointments, "ONAYLANDI")} onaylı
+              {" · "}
+              {countByStatus(weekAppointments, "BEKLIYOR")} beklemede
+            </p>
+          </div>
+
+          <button
+            type="button"
+            onClick={goToToday}
+            className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 hover:bg-slate-50"
+          >
+            Bugün
+          </button>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex rounded-xl border border-slate-200 bg-slate-50 p-1">
+            {(["HAFTA", "AY"] as CalendarViewMode[]).map((mode) => (
+              <button
+                key={mode}
+                type="button"
+                onClick={() => setViewMode(mode)}
+                className={cn(
+                  "rounded-lg px-3 py-1.5 text-xs font-semibold transition-colors",
+                  viewMode === mode
+                    ? "bg-white text-primary shadow-sm"
+                    : "text-slate-500 hover:text-slate-700"
+                )}
+              >
+                {mode === "HAFTA" ? "Haftalık" : "Aylık"}
+              </button>
+            ))}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setShowAvailability(true)}
+            className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-primary-hover"
+          >
+            <Settings2 className="h-3.5 w-3.5" />
+            Müsaitlik
+          </button>
+        </div>
+      </div>
+
+      {/* Durum göstergesi */}
+      <div className="flex flex-wrap items-center gap-3 px-1">
+        <CalendarDays className="h-4 w-4 text-slate-400" />
+        {STATUS_LEGEND.map((item) => (
+          <span
+            key={item.label}
+            className="inline-flex items-center gap-1.5 text-xs text-slate-500"
+          >
+            <span className={cn("h-2 w-2 rounded-full", item.className)} />
+            {item.label}
+          </span>
+        ))}
+      </div>
+
+      {/* Ana içerik */}
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[1fr_320px]">
+        <div>
+          {viewMode === "HAFTA" ? (
+            <WeekTimeGrid
+              weekDays={weekDays}
+              appointmentsByDate={appointmentsByDate}
+              selectedDate={selectedDate}
+              onSelectDate={setSelectedDate}
+            />
+          ) : (
+            <MonthGrid
+              weeks={monthWeeks}
+              focusDate={focusDate}
+              appointmentsByDate={appointmentsByDate}
+              selectedDate={selectedDate}
+              onSelectDate={setSelectedDate}
+            />
+          )}
+        </div>
+
+        <DayAgendaPanel
+          selectedDate={selectedDate}
+          appointments={selectedAppointments}
+        />
+      </div>
+
+      {/* Müsaitlik modal */}
       {showAvailability && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4">
-          <div className="max-h-[90vh] w-full max-w-lg overflow-y-auto rounded-2xl bg-white p-6 shadow-xl">
-            <div className="mb-4 flex items-center justify-between">
-              <h2 className="text-lg font-semibold text-slate-900">
-                Müsaitlik Düzenle
-              </h2>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
+          <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+            <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
+              <div>
+                <h2 className="text-lg font-semibold text-slate-900">
+                  Müsaitlik Düzenle
+                </h2>
+                <p className="text-xs text-slate-500">
+                  Haftalık çalışma saatlerinizi belirleyin
+                </p>
+              </div>
               <button
                 type="button"
                 onClick={() => setShowAvailability(false)}
                 aria-label="Kapat"
-                className="rounded-lg p-1 text-slate-400 hover:bg-slate-100"
+                className="rounded-lg p-2 text-slate-400 hover:bg-slate-100"
               >
                 <X className="h-5 w-5" />
               </button>
             </div>
-            <AvailabilityEditor slots={availability} onChange={setAvailability} />
-            <button
-              type="button"
-              onClick={() => setShowAvailability(false)}
-              className="mt-6 w-full rounded-lg bg-primary py-2.5 text-sm font-semibold text-white"
-            >
-              Kaydet
-            </button>
+            <div className="overflow-y-auto px-6 py-4">
+              <AvailabilityEditor slots={availability} onChange={setAvailability} />
+            </div>
+            <div className="border-t border-slate-100 px-6 py-4">
+              <button
+                type="button"
+                onClick={() => setShowAvailability(false)}
+                className="w-full rounded-xl bg-primary py-2.5 text-sm font-semibold text-white hover:bg-primary-hover"
+              >
+                Kaydet
+              </button>
+            </div>
           </div>
         </div>
       )}

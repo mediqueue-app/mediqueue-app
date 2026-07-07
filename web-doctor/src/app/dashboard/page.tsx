@@ -1,7 +1,9 @@
-import { TodaySchedule } from "@/components/dashboard/TodaySchedule";
+import { DashboardHero, getNextAppointment } from "@/components/dashboard/DashboardHero";
+import { QuickActions } from "@/components/dashboard/QuickActions";
 import { QuickStats } from "@/components/dashboard/QuickStats";
 import { PatientQueue } from "@/components/dashboard/PatientQueue";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
+import { TodaySchedule } from "@/components/dashboard/TodaySchedule";
 import { fetchTodayAppointments } from "@/lib/services/appointments";
 import {
   fetchQuickStats,
@@ -18,24 +20,28 @@ export default async function DashboardPage() {
     fetchRecentActivities(),
   ]);
 
+  const nextAppointment = getNextAppointment(appointments);
+
   return (
-    <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">
-          Hoş geldiniz, {currentDoctor.title} {currentDoctor.fullName}
-        </h1>
-        <p className="mt-1 text-sm text-slate-500">
-          Bugünkü programınız ve hasta özetiniz.
-        </p>
-      </div>
+    <div className="flex flex-col gap-5 lg:gap-6">
+      <DashboardHero
+        doctor={currentDoctor}
+        todayCount={appointments.length}
+        pendingMessages={stats.pendingMessageCount}
+        nextAppointment={nextAppointment}
+      />
 
       <QuickStats {...stats} />
 
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        <div className="lg:col-span-2">
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-3 xl:gap-6">
+        <div className="xl:col-span-2">
           <TodaySchedule appointments={appointments} />
         </div>
-        <PatientQueue {...queue} />
+
+        <div className="flex flex-col gap-5">
+          <PatientQueue {...queue} />
+          <QuickActions />
+        </div>
       </div>
 
       <RecentActivity activities={activities} />
