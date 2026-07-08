@@ -2,98 +2,197 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Building2, ChevronLeft, ChevronRight, LogOut } from "lucide-react";
+import { NAV_ITEMS } from "@/lib/navigation";
 import {
-  LayoutGrid,
-  Users,
-  Stethoscope,
-  Settings,
-  LogOut,
-  Activity,
-  BarChart3,
-  CreditCard,
-} from "lucide-react";
+  getClinicProfileSync,
+  getPendingLeadCountSync,
+} from "@/lib/services/clinic";
+import { useDemoToast } from "@/components/ui/DemoToast";
+import { useSidebar } from "@/components/shared/SidebarContext";
 import { cn } from "@/lib/utils";
-import { ProBadge } from "@/components/ui/ProBadge";
 
-const NAV_ITEMS = [
-  { href: "/dashboard", label: "Genel Bakış", icon: LayoutGrid },
-  { href: "/dashboard/patients", label: "Hasta & Leadler", icon: Users },
-  { href: "/dashboard/doctors", label: "Doktor Takvimi", icon: Stethoscope },
-  {
-    href: "/dashboard/analytics",
-    label: "Analitik & Raporlar",
-    icon: BarChart3,
-    pro: true,
-  },
-  { href: "/dashboard/settings", label: "Klinik Ayarları", icon: Settings },
-  { href: "/dashboard/billing", label: "Abonelik", icon: CreditCard },
-];
-
-export function Sidebar() {
+export function Sidebar({
+  mobileOpen = false,
+  onNavigate,
+}: {
+  mobileOpen?: boolean;
+  onNavigate?: () => void;
+}) {
   const pathname = usePathname();
+  const clinic = getClinicProfileSync();
+  const pendingLeads = getPendingLeadCountSync();
+  const { collapsed, toggleCollapsed } = useSidebar();
+  const { show, Toast } = useDemoToast();
 
   return (
-    <aside className="sticky top-0 flex h-screen w-64 shrink-0 flex-col border-r border-slate-200 bg-white">
-      <div className="flex h-16 items-center gap-2 border-b border-slate-200 px-5">
-        <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">
-          <Activity className="h-4.5 w-4.5" strokeWidth={2.5} />
+    <>
+      <aside
+        className={cn(
+          "flex shrink-0 flex-col border-r border-slate-200/80 bg-white transition-all duration-200",
+          "fixed inset-y-0 left-0 z-50 shadow-xl lg:relative lg:z-auto lg:shadow-none",
+          collapsed ? "w-[76px]" : "w-[260px]",
+          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+        )}
+      >
+        <div
+          className={cn(
+            "flex h-16 items-center border-b border-slate-100",
+            collapsed ? "justify-center px-2" : "gap-2.5 px-5"
+          )}
+        >
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary text-white shadow-sm shadow-primary/20">
+            <Building2 className="h-5 w-5" strokeWidth={2.25} />
+          </div>
+          {!collapsed && (
+            <div className="min-w-0">
+              <span className="text-[15px] font-bold tracking-tight text-slate-900">
+                MEDI<span className="text-primary">·</span>QUEUE
+              </span>
+              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+                Clinic
+              </p>
+            </div>
+          )}
         </div>
-        <span className="text-[15px] font-semibold tracking-tight text-slate-900">
-          MEDI<span className="text-primary">·</span>QUEUE
-          <span className="ml-1 text-slate-400 font-medium">CLINIC</span>
-        </span>
-      </div>
 
-      <nav className="flex-1 space-y-1 px-3 py-4">
-        {NAV_ITEMS.map((item) => {
-          const isActive =
-            item.href === "/dashboard"
-              ? pathname === item.href
-              : pathname.startsWith(item.href);
+        <nav
+          className="flex-1 overflow-y-auto px-2 py-5"
+          aria-label="Ana menü"
+        >
+          {!collapsed && (
+            <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+              Menü
+            </p>
+          )}
+          <ul className="space-y-1">
+            {NAV_ITEMS.map((item) => {
+              const isActive =
+                item.href === "/dashboard"
+                  ? pathname === item.href
+                  : pathname.startsWith(item.href);
 
-          return (
-            <Link
-              key={item.href}
-              href={item.href}
-              className={cn(
-                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors",
-                isActive
-                  ? "bg-primary-light text-primary"
-                  : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              )}
+              const badge =
+                item.href === "/dashboard/patients" && pendingLeads > 0
+                  ? pendingLeads
+                  : undefined;
+
+              return (
+                <li key={item.href}>
+                  <Link
+                    href={item.href}
+                    onClick={onNavigate}
+                    title={collapsed ? item.label : undefined}
+                    className={cn(
+                      "group relative flex items-center rounded-xl text-sm font-medium transition-all duration-150",
+                      collapsed
+                        ? "justify-center px-0 py-2.5"
+                        : "gap-3 px-3 py-2.5",
+                      isActive
+                        ? "bg-primary text-white shadow-sm shadow-primary/20"
+                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                    )}
+                  >
+                    {isActive && !collapsed && (
+                      <span
+                        className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-white/50"
+                        aria-hidden
+                      />
+                    )}
+                    <item.icon
+                      className={cn(
+                        "h-[18px] w-[18px] shrink-0",
+                        isActive
+                          ? "text-white"
+                          : "text-slate-400 group-hover:text-slate-600"
+                      )}
+                      strokeWidth={2}
+                    />
+                    {!collapsed && <span className="flex-1">{item.label}</span>}
+                    {!collapsed && badge !== undefined && (
+                      <span
+                        className={cn(
+                          "flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10px] font-bold",
+                          isActive
+                            ? "bg-white/20 text-white"
+                            : "bg-primary text-white"
+                        )}
+                      >
+                        {badge}
+                      </span>
+                    )}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
+
+        <div className="border-t border-slate-100 p-3">
+          {!collapsed ? (
+            <>
+              <Link
+                href="/dashboard/settings"
+                onClick={onNavigate}
+                className="flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-slate-50"
+              >
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-light text-sm font-bold text-primary">
+                  {clinic.initials}
+                </div>
+                <div className="min-w-0 flex-1">
+                  <p className="truncate text-sm font-semibold text-slate-900">
+                    {clinic.shortName}
+                  </p>
+                  <p className="truncate text-xs text-slate-500">
+                    {clinic.managerRole}
+                  </p>
+                </div>
+              </Link>
+              <button
+                type="button"
+                onClick={() =>
+                  show("Oturum yönetimi Ay 2'de backend ile eklenecek.")
+                }
+                className="mt-1 flex w-full items-center gap-3 rounded-xl px-2 py-2.5 text-sm font-medium text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600"
+              >
+                <LogOut className="h-[18px] w-[18px]" />
+                Çıkış Yap
+              </button>
+            </>
+          ) : (
+            <button
+              type="button"
+              onClick={() =>
+                show("Oturum yönetimi Ay 2'de backend ile eklenecek.")
+              }
+              className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-600"
+              aria-label="Çıkış Yap"
             >
-              <item.icon
-                className={cn(
-                  "h-[18px] w-[18px]",
-                  isActive ? "text-primary" : "text-slate-400"
-                )}
-              />
-              <span className="flex-1">{item.label}</span>
-              {item.pro && <ProBadge />}
-            </Link>
-          );
-        })}
-      </nav>
+              <LogOut className="h-[18px] w-[18px]" />
+            </button>
+          )}
 
-      <div className="border-t border-slate-200 p-4">
-        <div className="flex items-center gap-3 rounded-lg px-2 py-2">
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-light text-sm font-semibold text-primary">
-            AK
-          </div>
-          <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-medium text-slate-900">
-              Anadolu Estetik Kliniği
-            </p>
-            <p className="truncate text-xs text-slate-500">
-              Klinik Yöneticisi
-            </p>
-          </div>
+          <button
+            type="button"
+            onClick={toggleCollapsed}
+            className={cn(
+              "mt-2 hidden w-full items-center justify-center rounded-xl border border-slate-200 py-2 text-slate-500 transition-colors hover:bg-slate-50 lg:flex",
+              collapsed && "px-0"
+            )}
+            aria-label={collapsed ? "Menüyü genişlet" : "Menüyü daralt"}
+          >
+            {collapsed ? (
+              <ChevronRight className="h-4 w-4" />
+            ) : (
+              <>
+                <ChevronLeft className="h-4 w-4" />
+                <span className="ml-1 text-xs font-medium">Daralt</span>
+              </>
+            )}
+          </button>
         </div>
-        <button className="mt-2 flex w-full items-center gap-3 rounded-lg px-2 py-2 text-sm font-medium text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600">
-          <LogOut className="h-[18px] w-[18px]" />
-          Çıkış Yap
-        </button>
-      </div>
-    </aside>
+      </aside>
+      {Toast}
+    </>
   );
 }

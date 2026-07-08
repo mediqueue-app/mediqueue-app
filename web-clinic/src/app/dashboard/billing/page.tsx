@@ -1,23 +1,26 @@
-import { ArrowRight } from "lucide-react";
 import { CurrentPlanCard } from "@/components/dashboard/billing/CurrentPlanCard";
 import { PlanComparisonTable } from "@/components/dashboard/billing/PlanComparisonTable";
-import { fetchPlanFeatures } from "@/lib/services/billing";
+import { UpgradeButton } from "@/components/dashboard/billing/UpgradeButton";
+import { PageHeader } from "@/components/shared/PageHeader";
+import { fetchBillingUsage, fetchPlanFeatures } from "@/lib/services/billing";
 
 export default async function BillingPage() {
-  const planFeatures = await fetchPlanFeatures();
+  const [planFeatures, usage] = await Promise.all([
+    fetchPlanFeatures(),
+    fetchBillingUsage(),
+  ]);
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">
-          Abonelik ve Planlar
-        </h1>
-        <p className="mt-1 text-sm text-slate-500">
-          Kliniğinizi büyüten global bir yönetim sistemine yükseltin.
-        </p>
-      </div>
+      <PageHeader
+        title="Abonelik ve Planlar"
+        description="Kliniğinizi büyüten global bir yönetim sistemine yükseltin."
+      />
 
-      <CurrentPlanCard leadsUsed={11} leadsLimit={15} />
+      <CurrentPlanCard
+        leadsUsed={usage.leadsUsed}
+        leadsLimit={usage.leadsLimit}
+      />
 
       <PlanComparisonTable features={planFeatures} />
 
@@ -29,14 +32,7 @@ export default async function BillingPage() {
           Sponsorlu görünürlük, sınırsız ekip erişimi ve yapay zeka destekli
           rekabet raporlarıyla uluslararası hasta akışınızı büyütün.
         </p>
-        <button
-          type="button"
-          title="Demo modunda ödeme entegrasyonu yok"
-          className="mt-2 flex items-center gap-2 rounded-xl bg-primary px-8 py-3.5 text-base font-semibold text-white shadow-lg shadow-primary/30 transition-colors hover:bg-primary-hover"
-        >
-          Premium&apos;a Yükselt — Aylık $199
-          <ArrowRight className="h-4.5 w-4.5" />
-        </button>
+        <UpgradeButton />
         <p className="text-xs text-slate-400">
           İstediğiniz zaman iptal edebilirsiniz. Kurulum ücreti yoktur.
         </p>

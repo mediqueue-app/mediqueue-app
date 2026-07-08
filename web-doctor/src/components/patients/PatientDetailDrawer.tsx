@@ -8,7 +8,19 @@ import { PatientInfoTab } from "@/components/patients/PatientInfoTab";
 import { AppointmentHistoryTab } from "@/components/patients/AppointmentHistoryTab";
 import { NextTreatmentTab } from "@/components/patients/NextTreatmentTab";
 import { MedicalRecordTab } from "@/components/patients/MedicalRecordTab";
+import { MedicalRecordPlaceholder } from "@/components/patients/MedicalRecordPlaceholder";
 import { cn } from "@/lib/utils";
+
+const BRANCH_LABELS: Record<string, string> = {
+  dentistry: "Diş Tedavisi",
+  hair_transplant: "Saç Ekimi",
+  aesthetic: "Estetik Cerrahi",
+  ophthalmology: "Göz (LASIK)",
+  bariatric: "Bariatrik Cerrahi",
+  orthopedics: "Ortopedi",
+  ivf: "Tüp Bebek (IVF)",
+  cardiology: "Kardiyoloji",
+};
 
 const ALL_TABS: { id: PatientDetailTab; label: string }[] = [
   { id: "info", label: "Hasta Bilgisi" },
@@ -21,9 +33,7 @@ export function PatientDetailView({ patient }: { patient: Patient }) {
   const [tab, setTab] = useState<PatientDetailTab>("info");
   const [toast, setToast] = useState<string | null>(null);
   const isDentistry = patient.branch === "dentistry" && patient.medicalRecord;
-  const tabs = ALL_TABS.filter(
-    (item) => item.id !== "medical_record" || isDentistry
-  );
+  const tabs = ALL_TABS;
 
   function showDemoToast(message: string) {
     setToast(message);
@@ -116,9 +126,14 @@ export function PatientDetailView({ patient }: { patient: Patient }) {
         {tab === "info" && <PatientInfoTab patient={patient} />}
         {tab === "appointments" && <AppointmentHistoryTab patient={patient} />}
         {tab === "next_treatment" && <NextTreatmentTab patient={patient} />}
-        {tab === "medical_record" && isDentistry && (
-          <MedicalRecordTab medicalRecord={patient.medicalRecord!} />
-        )}
+        {tab === "medical_record" &&
+          (isDentistry ? (
+            <MedicalRecordTab medicalRecord={patient.medicalRecord!} />
+          ) : (
+            <MedicalRecordPlaceholder
+              branchLabel={BRANCH_LABELS[patient.branch] ?? patient.treatmentType}
+            />
+          ))}
       </div>
     </div>
   );

@@ -1,32 +1,32 @@
 import type {
-  AiReviewSummary,
   BranchRevenueShare,
   FunnelStage,
   OriginShare,
   RegionalComparison,
+  TreatmentDemand,
 } from "@/types";
 import {
-  getAiReviewSummary,
   getBranchRevenueDistribution,
   getConversionFunnel,
   getPatientOriginDistribution,
   getRegionalComparison,
+  getTreatmentDemand,
 } from "@/lib/mock-data";
 
 export async function fetchAnalyticsData(): Promise<{
   conversionFunnel: FunnelStage[];
   regionalComparison: RegionalComparison;
-  aiReviewSummary: AiReviewSummary;
   patientOriginDistribution: OriginShare[];
   branchRevenueDistribution: BranchRevenueShare[];
+  treatmentDemand: TreatmentDemand[];
 }> {
   await delay(80);
   return {
     conversionFunnel: getConversionFunnel(),
     regionalComparison: getRegionalComparison(),
-    aiReviewSummary: getAiReviewSummary(),
     patientOriginDistribution: getPatientOriginDistribution(),
     branchRevenueDistribution: getBranchRevenueDistribution(),
+    treatmentDemand: getTreatmentDemand(),
   };
 }
 

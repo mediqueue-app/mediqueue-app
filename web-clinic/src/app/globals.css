@@ -4,18 +4,16 @@
   --background: #f8fafc;
   --foreground: #0f172a;
 
-  --color-primary: #3a6ad6;
-  --color-primary-hover: #2f57b3;
-  --color-primary-light: #eaf0fc;
+  --color-primary: #1e4fa8;
+  --color-primary-hover: #163d85;
+  --color-primary-light: #eff6ff;
 
-  --color-status-pending-bg: #fffbeb;
-  --color-status-pending-text: #b45309;
-  --color-status-approved-bg: #ecfdf5;
-  --color-status-approved-text: #047857;
-  --color-status-rejected-bg: #fef2f2;
-  --color-status-rejected-text: #b91c1c;
-  --color-status-vip-bg: #eff6ff;
-  --color-status-vip-text: #1d4ed8;
+  --color-surface: #ffffff;
+  --color-border: #e2e8f0;
+
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
 }
 
 @theme inline {
@@ -24,13 +22,29 @@
   --color-primary: var(--color-primary);
   --color-primary-hover: var(--color-primary-hover);
   --color-primary-light: var(--color-primary-light);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-surface: var(--color-surface);
+  --color-border: var(--color-border);
+  --color-success: var(--color-success);
+  --color-warning: var(--color-warning);
+  --color-danger: var(--color-danger);
+  --font-sans: var(--font-inter);
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
+  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  line-height: 1.6;
+}
+
+::selection {
+  background-color: #1e4fa833;
+  color: #0f172a;
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 2px;
 }
 
 * {
@@ -39,11 +53,31 @@ body {
 }
 
 *::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
+  height: 6px;
 }
 
 *::-webkit-scrollbar-thumb {
   background-color: #cbd5e1;
   border-radius: 9999px;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background-color: #94a3b8;
+}
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.skeleton {
+  animation: skeleton-pulse 1.8s ease-in-out infinite;
+  background: linear-gradient(90deg, #f1f5f9 0%, #e2e8f0 50%, #f1f5f9 100%);
+  background-size: 200% 100%;
 }

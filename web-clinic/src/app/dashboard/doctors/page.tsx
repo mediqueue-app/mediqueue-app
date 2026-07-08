@@ -1,22 +1,22 @@
 import { DoctorsGrid } from "@/components/dashboard/doctors/DoctorsGrid";
+import { PageHeader } from "@/components/shared/PageHeader";
 import { fetchDoctors } from "@/lib/services/doctors";
+import { fetchPatientLeads } from "@/lib/services/leads";
 
 export default async function DoctorsPage() {
-  const doctors = await fetchDoctors();
+  const [doctors, leads] = await Promise.all([
+    fetchDoctors(),
+    fetchPatientLeads(),
+  ]);
 
   return (
     <div className="flex flex-col gap-6">
-      <div>
-        <h1 className="text-xl font-semibold tracking-tight text-slate-900">
-          Doktor ve Takvim Yönetimi
-        </h1>
-        <p className="mt-1 text-sm text-slate-500">
-          Doktorlarınızın uzmanlık alanlarını, dillerini ve anlık müsaitlik
-          durumlarını yönetin.
-        </p>
-      </div>
+      <PageHeader
+        title="Doktorlar"
+        description="Kadronuzu yönetin, müsaitlik durumlarını ve performansı takip edin."
+      />
 
-      <DoctorsGrid doctors={doctors} />
+      <DoctorsGrid doctors={doctors} leads={leads} />
     </div>
   );
 }

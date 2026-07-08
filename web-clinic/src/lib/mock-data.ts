@@ -1,7 +1,9 @@
 import type {
-  AiReviewSummary,
+  ActivityItem,
   BranchRevenueShare,
   ClinicMetrics,
+  ClinicProfile,
+  ContactMessage,
   Doctor,
   FunnelStage,
   OriginShare,
@@ -9,8 +11,10 @@ import type {
   PatientLead,
   PlanFeature,
   RegionalComparison,
+  TrendPoint,
+  TreatmentDemand,
 } from "@/types";
-import { mockDateKey, mockDateTime } from "@/lib/mock-date";
+import { mockDateKey, mockDateTime, isMockToday } from "@/lib/mock-date";
 
 type DocumentTemplate = Omit<PatientDocument, "uploadedAt"> & {
   uploadedDayOffset: number;
@@ -18,12 +22,13 @@ type DocumentTemplate = Omit<PatientDocument, "uploadedAt"> & {
 
 type LeadTemplate = Omit<
   PatientLead,
-  "requestedDate" | "createdAt" | "documents"
+  "requestedDate" | "createdAt" | "documents" | "contactHistory"
 > & {
   requestedDayOffset: number;
   createdDayOffset: number;
   createdTime: string;
   documentTemplates: DocumentTemplate[];
+  contactHistory?: ContactMessage[];
 };
 
 const leadTemplates: LeadTemplate[] = [
@@ -34,11 +39,12 @@ const leadTemplates: LeadTemplate[] = [
     countryCode: "DE",
     branch: "Saç Ekimi",
     requestedDayOffset: 1,
-    createdDayOffset: -3,
-    createdTime: "08:12",
+    createdDayOffset: 0,
+    createdTime: "09:42",
     status: "BEKLEMEDE",
     phone: "+49 176 2231 8890",
     email: "klaus.richter@example.de",
+    responseTimeHours: 3.5,
     documentTemplates: [
       { id: "DOC-1", type: "PASAPORT", fileName: "passport_klaus.pdf", uploadedDayOffset: -4, fileSizeKb: 842 },
       { id: "DOC-2", type: "TIBBI_RAPOR", fileName: "kan_tahlili_klaus.pdf", uploadedDayOffset: -4, fileSizeKb: 1203 },
@@ -69,8 +75,8 @@ const leadTemplates: LeadTemplate[] = [
     countryCode: "RU",
     branch: "Diş Tedavisi",
     requestedDayOffset: -1,
-    createdDayOffset: -3,
-    createdTime: "06:55",
+    createdDayOffset: 0,
+    createdTime: "08:15",
     status: "BEKLEMEDE",
     phone: "+7 916 234 5566",
     email: "igor.petrov@example.ru",
@@ -87,10 +93,11 @@ const leadTemplates: LeadTemplate[] = [
     requestedDayOffset: -2,
     createdDayOffset: -4,
     createdTime: "21:14",
-    status: "REDDEDİLDİ",
+    status: "IPTAL_EDILDI",
     phone: "+44 7700 900123",
     email: "james.whitfield@example.co.uk",
     notes: "Uygun tarih bulunamadı, hasta başka klinik ile görüşüyor.",
+    responseTimeHours: 18,
     documentTemplates: [
       { id: "DOC-6", type: "PASAPORT", fileName: "passport_james.pdf", uploadedDayOffset: -7, fileSizeKb: 588 },
     ],
@@ -123,9 +130,11 @@ const leadTemplates: LeadTemplate[] = [
     requestedDayOffset: 2,
     createdDayOffset: -4,
     createdTime: "15:47",
-    status: "BEKLEMEDE",
+    status: "ALTERNATIF_TARIH",
     phone: "+218 91 234 5678",
     email: "youssef.benali@example.ly",
+    notes: "Hasta 12-15 Haziran aralığı için alternatif tarih bekliyor.",
+    responseTimeHours: 6,
     documentTemplates: [
       { id: "DOC-10", type: "PASAPORT", fileName: "passport_youssef.pdf", uploadedDayOffset: -6, fileSizeKb: 655 },
     ],
@@ -137,8 +146,8 @@ const leadTemplates: LeadTemplate[] = [
     countryCode: "FR",
     branch: "Estetik Cerrahi",
     requestedDayOffset: 0,
-    createdDayOffset: -4,
-    createdTime: "11:30",
+    createdDayOffset: 0,
+    createdTime: "10:05",
     status: "ONAYLANDI",
     phone: "+33 6 12 34 56 78",
     email: "sophie.bernard@example.fr",
@@ -173,10 +182,11 @@ const leadTemplates: LeadTemplate[] = [
     requestedDayOffset: -1,
     createdDayOffset: -5,
     createdTime: "08:05",
-    status: "ONAYLANDI",
+    status: "TAMAMLANDI",
     phone: "+31 6 1234 5678",
     email: "laura.vandijk@example.nl",
     assignedDoctor: "Dt. Can Öztürk",
+    responseTimeHours: 2,
     documentTemplates: [
       { id: "DOC-14", type: "PASAPORT", fileName: "passport_laura.pdf", uploadedDayOffset: -9, fileSizeKb: 640 },
     ],
@@ -201,8 +211,14 @@ const leadTemplates: LeadTemplate[] = [
 ];
 
 function buildLead(template: LeadTemplate): PatientLead {
-  const { requestedDayOffset, createdDayOffset, createdTime, documentTemplates, ...lead } =
-    template;
+  const {
+    requestedDayOffset,
+    createdDayOffset,
+    createdTime,
+    documentTemplates,
+    contactHistory,
+    ...lead
+  } = template;
   return {
     ...lead,
     requestedDate: mockDateKey(requestedDayOffset),
@@ -211,6 +227,15 @@ function buildLead(template: LeadTemplate): PatientLead {
       ...doc,
       uploadedAt: mockDateKey(uploadedDayOffset),
     })),
+    contactHistory: contactHistory ?? [
+      {
+        id: `MSG-${lead.id}`,
+        direction: "INBOUND",
+        channel: "PORTAL",
+        preview: "Tedavi talebi ve belgeler gönderildi.",
+        sentAt: mockDateTime(createdDayOffset, createdTime),
+      },
+    ],
   };
 }
 
@@ -230,6 +255,10 @@ const doctorRecords: Doctor[] = [
     patientsToday: 4,
     yearsExperience: 14,
     avatarInitials: "EY",
+    rating: 4.9,
+    reviewCount: 48,
+    isActive: true,
+    assignedPatientIds: ["LD-1041", "LD-1036"],
   },
   {
     id: "DR-02",
@@ -242,6 +271,10 @@ const doctorRecords: Doctor[] = [
     patientsToday: 3,
     yearsExperience: 21,
     avatarInitials: "MK",
+    rating: 4.8,
+    reviewCount: 36,
+    isActive: true,
+    assignedPatientIds: ["LD-1038"],
   },
   {
     id: "DR-03",
@@ -254,6 +287,10 @@ const doctorRecords: Doctor[] = [
     patientsToday: 6,
     yearsExperience: 9,
     avatarInitials: "CÖ",
+    rating: 4.7,
+    reviewCount: 29,
+    isActive: true,
+    assignedPatientIds: ["LD-1034"],
   },
   {
     id: "DR-04",
@@ -266,6 +303,10 @@ const doctorRecords: Doctor[] = [
     patientsToday: 2,
     yearsExperience: 12,
     avatarInitials: "ZA",
+    rating: 4.6,
+    reviewCount: 22,
+    isActive: true,
+    assignedPatientIds: [],
   },
   {
     id: "DR-05",
@@ -278,6 +319,10 @@ const doctorRecords: Doctor[] = [
     patientsToday: 8,
     yearsExperience: 11,
     avatarInitials: "BD",
+    rating: 4.8,
+    reviewCount: 41,
+    isActive: true,
+    assignedPatientIds: ["LD-1042"],
   },
   {
     id: "DR-06",
@@ -290,6 +335,10 @@ const doctorRecords: Doctor[] = [
     patientsToday: 3,
     yearsExperience: 16,
     avatarInitials: "SA",
+    rating: 4.9,
+    reviewCount: 33,
+    isActive: true,
+    assignedPatientIds: ["LD-1035"],
   },
   {
     id: "DR-07",
@@ -302,6 +351,10 @@ const doctorRecords: Doctor[] = [
     patientsToday: 5,
     yearsExperience: 19,
     avatarInitials: "OŞ",
+    rating: 4.5,
+    reviewCount: 27,
+    isActive: true,
+    assignedPatientIds: [],
   },
   {
     id: "DR-08",
@@ -314,11 +367,19 @@ const doctorRecords: Doctor[] = [
     patientsToday: 4,
     yearsExperience: 15,
     avatarInitials: "DK",
+    rating: 4.4,
+    reviewCount: 19,
+    isActive: false,
+    assignedPatientIds: ["LD-1033"],
   },
 ];
 
 export function getDoctors(): Doctor[] {
-  return doctorRecords.map((doctor) => ({ ...doctor, languages: [...doctor.languages] }));
+  return doctorRecords.map((doctor) => ({
+    ...doctor,
+    languages: [...doctor.languages],
+    assignedPatientIds: [...doctor.assignedPatientIds],
+  }));
 }
 
 const conversionFunnelData: FunnelStage[] = [
@@ -370,14 +431,64 @@ export function getBranchRevenueDistribution(): BranchRevenueShare[] {
   return branchRevenueDistributionData.map((item) => ({ ...item }));
 }
 
-const aiReviewSummaryData: AiReviewSummary = {
-  positivePercentage: 74,
-  topKeyword: "VIP Karşılama",
-  sampleSize: 116,
-};
+const treatmentDemandData: TreatmentDemand[] = [
+  { branch: "Estetik Cerrahi", count: 24 },
+  { branch: "Saç Ekimi", count: 18 },
+  { branch: "Diş Tedavisi", count: 14 },
+  { branch: "Tüp Bebek (IVF)", count: 11 },
+  { branch: "Bariatrik Cerrahi", count: 9 },
+  { branch: "Ortopedi", count: 8 },
+];
 
-export function getAiReviewSummary(): AiReviewSummary {
-  return { ...aiReviewSummaryData };
+export function getTreatmentDemand(): TreatmentDemand[] {
+  return treatmentDemandData.map((item) => ({ ...item }));
+}
+
+const leadTrendData: TrendPoint[] = [
+  { label: "Oca", value: 42 },
+  { label: "Şub", value: 48 },
+  { label: "Mar", value: 51 },
+  { label: "Nis", value: 46 },
+  { label: "May", value: 58 },
+  { label: "Haz", value: 63 },
+  { label: "Tem", value: 10 },
+];
+
+export function getLeadTrend(): TrendPoint[] {
+  return leadTrendData.map((point) => ({ ...point }));
+}
+
+export function getRecentActivities(): ActivityItem[] {
+  return [
+    {
+      id: "ACT-1",
+      title: "Yeni talep alındı",
+      description: "Klaus Richter — Saç Ekimi",
+      timestamp: mockDateTime(0, "09:42"),
+      tone: "primary",
+    },
+    {
+      id: "ACT-2",
+      title: "Randevu onaylandı",
+      description: "Fatima Al-Sayed — Estetik Cerrahi",
+      timestamp: mockDateTime(-1, "16:10"),
+      tone: "success",
+    },
+    {
+      id: "ACT-3",
+      title: "Alternatif tarih önerildi",
+      description: "Youssef Ben Ali — Ortopedi",
+      timestamp: mockDateTime(-1, "11:25"),
+      tone: "warning",
+    },
+    {
+      id: "ACT-4",
+      title: "Yeni hasta yorumu",
+      description: "Sophie Bernard 5 yıldız bıraktı",
+      timestamp: mockDateTime(-2, "14:20"),
+      tone: "neutral",
+    },
+  ];
 }
 
 const planFeaturesData: PlanFeature[] = [
@@ -424,18 +535,59 @@ export function getPlanFeatures(): PlanFeature[] {
   return planFeaturesData.map((feature) => ({ ...feature }));
 }
 
+export function getTodayLeads(leads: PatientLead[]): PatientLead[] {
+  return leads.filter((lead) => isMockToday(lead.createdAt));
+}
+
+export function getPendingLeadCount(leads: PatientLead[]): number {
+  return leads.filter(
+    (lead) =>
+      lead.status === "BEKLEMEDE" || lead.status === "ALTERNATIF_TARIH"
+  ).length;
+}
+
+const clinicProfile: ClinicProfile = {
+  name: "Anadolu Estetik Kliniği",
+  shortName: "Anadolu Estetik",
+  initials: "AE",
+  managerRole: "Klinik Yöneticisi",
+  city: "İstanbul, Türkiye",
+  phone: "+90 216 555 01 42",
+  address: "Caferağa Mah. Moda Cad. No:84, Kadıköy / İstanbul",
+};
+
+export function getClinicProfile(): ClinicProfile {
+  return { ...clinicProfile };
+}
+
 export function getClinicMetrics(leads: PatientLead[]): ClinicMetrics {
-  const todayLeads = leads.length;
-  const approvedCount = leads.filter((l) => l.status === "ONAYLANDI").length;
-  const activeDoctors = getDoctors().filter((d) => d.status !== "DOLU").length;
-  const conversionRate = todayLeads
-    ? Math.round((approvedCount / todayLeads) * 100)
+  const monthlyLeads = leads.length;
+  const approved = leads.filter(
+    (l) => l.status === "ONAYLANDI" || l.status === "TAMAMLANDI"
+  ).length;
+  const approvalRate = monthlyLeads
+    ? Math.round((approved / monthlyLeads) * 100)
     : 0;
+  const responseTimes = leads
+    .map((l) => l.responseTimeHours ?? 0)
+    .filter((h) => h > 0);
+  const avgResponseHours = responseTimes.length
+    ? Math.round(
+        (responseTimes.reduce((a, b) => a + b, 0) / responseTimes.length) * 10
+      ) / 10
+    : 0;
+  const activeDoctors = getDoctors().filter(
+    (d) => d.isActive && d.status === "MÜSAİT"
+  ).length;
 
   return {
-    todayLeads,
-    approvedCount,
+    monthlyLeads,
+    monthlyLeadsDelta: 12,
+    approvalRate,
+    approvalRateDelta: 4,
+    avgResponseHours,
+    avgResponseDelta: -1.2,
     activeDoctors,
-    conversionRate,
+    activeDoctorsDelta: 1,
   };
 }

@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 export function KpiCard({
@@ -6,14 +7,16 @@ export function KpiCard({
   value,
   suffix,
   icon: Icon,
-  trend,
+  delta,
+  deltaLabel,
   iconTone = "primary",
 }: {
   label: string;
   value: string | number;
   suffix?: string;
   icon: LucideIcon;
-  trend?: { value: string; positive: boolean };
+  delta?: number;
+  deltaLabel?: string;
   iconTone?: "primary" | "emerald" | "amber";
 }) {
   const iconToneClasses = {
@@ -22,15 +25,18 @@ export function KpiCard({
     amber: "bg-amber-50 text-amber-600",
   } as const;
 
+  const positive = delta !== undefined ? delta >= 0 : true;
+  const invertDelta = label.toLowerCase().includes("yanıt");
+
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-all hover:shadow-md">
-      <div className="flex items-start justify-between">
-        <div>
+    <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-all duration-200 hover:border-slate-200 hover:shadow-md">
+      <div className="flex items-start justify-between gap-4">
+        <div className="min-w-0">
           <p className="text-sm font-medium text-slate-500">{label}</p>
-          <p className="mt-2 text-2xl font-semibold tracking-tight text-slate-900">
+          <p className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
             {value}
             {suffix && (
-              <span className="ml-1 text-base font-medium text-slate-400">
+              <span className="ml-1 text-lg font-semibold text-slate-400">
                 {suffix}
               </span>
             )}
@@ -38,22 +44,37 @@ export function KpiCard({
         </div>
         <div
           className={cn(
-            "flex h-10 w-10 shrink-0 items-center justify-center rounded-xl",
+            "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl",
             iconToneClasses[iconTone]
           )}
         >
-          <Icon className="h-5 w-5" />
+          <Icon className="h-5 w-5" strokeWidth={2} />
         </div>
       </div>
-      {trend && (
-        <p
-          className={cn(
-            "mt-3 text-xs font-medium",
-            trend.positive ? "text-emerald-600" : "text-red-600"
+
+      {(delta !== undefined || deltaLabel) && (
+        <div className="mt-4 flex items-center gap-2">
+          {delta !== undefined && (
+            <span
+              className={cn(
+                "inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-xs font-semibold",
+                (positive && !invertDelta) || (!positive && invertDelta)
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "bg-red-50 text-red-600"
+              )}
+            >
+              {(positive && !invertDelta) || (!positive && invertDelta) ? (
+                <ArrowUpRight className="h-3.5 w-3.5" />
+              ) : (
+                <ArrowDownRight className="h-3.5 w-3.5" />
+              )}
+              {Math.abs(delta)}%
+            </span>
           )}
-        >
-          {trend.value}
-        </p>
+          <span className="text-xs text-slate-500">
+            {deltaLabel ?? "önceki aya göre"}
+          </span>
+        </div>
       )}
     </div>
   );

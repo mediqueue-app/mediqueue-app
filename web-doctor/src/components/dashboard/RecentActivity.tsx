@@ -8,32 +8,15 @@ import {
 import type { LucideIcon } from "lucide-react";
 import type { ActivityItem } from "@/types";
 import { formatTimeAgo } from "@/lib/utils";
-import { cn } from "@/lib/utils";
 
 const typeConfig: Record<
   ActivityItem["type"],
-  { icon: LucideIcon; tone: string; label: string }
+  { icon: LucideIcon; label: string }
 > = {
-  message: {
-    icon: MessageSquare,
-    tone: "bg-blue-50 text-blue-600",
-    label: "Mesaj",
-  },
-  appointment: {
-    icon: Calendar,
-    tone: "bg-emerald-50 text-emerald-600",
-    label: "Randevu",
-  },
-  document: {
-    icon: FileText,
-    tone: "bg-violet-50 text-violet-600",
-    label: "Belge",
-  },
-  note: {
-    icon: StickyNote,
-    tone: "bg-amber-50 text-amber-600",
-    label: "Not",
-  },
+  message: { icon: MessageSquare, label: "Mesaj" },
+  appointment: { icon: Calendar, label: "Randevu" },
+  document: { icon: FileText, label: "Belge" },
+  note: { icon: StickyNote, label: "Not" },
 };
 
 export function RecentActivity({
@@ -42,7 +25,7 @@ export function RecentActivity({
   activities: ActivityItem[];
 }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
       <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 lg:px-6">
         <div>
           <h2 className="text-base font-semibold text-slate-900">Son Aktiviteler</h2>
@@ -63,12 +46,7 @@ export function RecentActivity({
 
           return (
             <li key={item.id} className="flex gap-3 px-5 py-3.5 lg:px-6">
-              <div
-                className={cn(
-                  "flex h-9 w-9 shrink-0 items-center justify-center rounded-xl",
-                  config.tone
-                )}
-              >
+              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-light text-primary">
                 <Icon className="h-4 w-4" />
               </div>
               <div className="min-w-0 flex-1">

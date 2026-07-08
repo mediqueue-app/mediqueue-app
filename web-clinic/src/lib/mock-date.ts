@@ -14,3 +14,8 @@ export function mockDateTime(dayOffset: number, time: string): string {
   const [hours, minutes] = time.split(":");
   return `${mockDateKey(dayOffset)}T${hours.padStart(2, "0")}:${minutes.padStart(2, "0")}:00`;
 }
+
+export function isMockToday(isoOrDateKey: string): boolean {
+  const today = mockDateKey(0);
+  return isoOrDateKey.startsWith(today);
+}

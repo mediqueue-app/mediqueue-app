@@ -1,5 +1,4 @@
 import { DashboardHero, getNextAppointment } from "@/components/dashboard/DashboardHero";
-import { QuickActions } from "@/components/dashboard/QuickActions";
 import { QuickStats } from "@/components/dashboard/QuickStats";
 import { PatientQueue } from "@/components/dashboard/PatientQueue";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
@@ -24,7 +23,7 @@ export default async function DashboardPage() {
   const nextAppointment = getNextAppointment(appointments);
 
   return (
-    <div className="flex flex-col gap-5 lg:gap-6">
+    <div className="flex flex-col gap-6 lg:gap-8">
       <DashboardHero
         doctor={doctor}
         todayCount={appointments.length}
@@ -32,20 +31,16 @@ export default async function DashboardPage() {
         nextAppointment={nextAppointment}
       />
 
+      <TodaySchedule appointments={appointments} />
+
       <QuickStats {...stats} />
 
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-3 xl:gap-6">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="xl:col-span-2">
-          <TodaySchedule appointments={appointments} />
+          <RecentActivity activities={activities.slice(0, 5)} />
         </div>
-
-        <div className="flex flex-col gap-5">
-          <PatientQueue {...queue} />
-          <QuickActions />
-        </div>
+        <PatientQueue {...queue} />
       </div>
-
-      <RecentActivity activities={activities} />
     </div>
   );
 }

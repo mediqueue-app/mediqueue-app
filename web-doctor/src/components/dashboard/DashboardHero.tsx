@@ -1,8 +1,6 @@
 import Link from "next/link";
-import { Calendar, ChevronRight, MessageSquare, Users } from "lucide-react";
-import type { Appointment } from "@/types";
-import type { DoctorProfile } from "@/types";
-import { cn } from "@/lib/utils";
+import { Calendar, MessageSquare, Users } from "lucide-react";
+import type { Appointment, DoctorProfile } from "@/types";
 
 function greetingForHour(hour: number): string {
   if (hour < 12) return "Günaydın";
@@ -31,56 +29,50 @@ export function DashboardHero({
   });
 
   return (
-    <section className="relative overflow-hidden rounded-2xl border border-slate-200 bg-gradient-to-br from-primary via-primary to-[#2f57b3] p-6 text-white shadow-lg shadow-primary/20 lg:p-8">
-      <div className="pointer-events-none absolute -right-8 -top-8 h-40 w-40 rounded-full bg-white/10 blur-2xl" />
-      <div className="pointer-events-none absolute -bottom-12 right-1/4 h-32 w-32 rounded-full bg-white/5 blur-xl" />
-
-      <div className="relative flex flex-col gap-6 lg:flex-row lg:items-end lg:justify-between">
+    <section className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm lg:p-8">
+      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-start gap-4">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/15 text-lg font-bold backdrop-blur-sm ring-1 ring-white/20">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary-light text-lg font-bold text-primary">
             {doctor.avatarInitials}
           </div>
           <div>
-            <p className="text-sm font-medium text-white/70">{dateLabel}</p>
-            <h1 className="mt-1 text-2xl font-semibold tracking-tight lg:text-[1.65rem]">
+            <p className="text-sm text-slate-500">{dateLabel}</p>
+            <h1 className="mt-1 text-2xl font-bold tracking-tight text-slate-900 lg:text-[28px]">
               {greeting}, {doctor.title} {doctor.fullName.split(" ")[0]}
             </h1>
-            <p className="mt-1.5 max-w-lg text-sm text-white/75">
-              {doctor.specialty.split(",")[0]} · Bugünkü programınız ve hasta
-              özetiniz burada.
+            <p className="mt-2 max-w-xl text-sm leading-relaxed text-slate-500">
+              Bugün odaklanmanız gereken randevular ve mesajlar aşağıda.
             </p>
           </div>
         </div>
 
-        <div className="flex flex-wrap gap-2 lg:justify-end">
-          <HeroPill
+        <div className="flex flex-wrap gap-3">
+          <MetaChip
             icon={Calendar}
             label="Bugün"
             value={`${todayCount} randevu`}
           />
-          <HeroPill
+          <MetaChip
             icon={MessageSquare}
             label="Mesaj"
             value={`${pendingMessages} bekleyen`}
             href="/dashboard/messages"
           />
           {nextAppointment ? (
-            <HeroPill
+            <MetaChip
               icon={Users}
               label="Sıradaki"
               value={`${nextAppointment.time} · ${nextAppointment.patientName.split(" ")[0]}`}
               href={`/dashboard/patients/${nextAppointment.patientId}`}
             />
-          ) : (
-            <HeroPill icon={Users} label="Sıradaki" value="Randevu yok" />
-          )}
+          ) : null}
         </div>
       </div>
     </section>
   );
 }
 
-function HeroPill({
+function MetaChip({
   icon: Icon,
   label,
   value,
@@ -92,30 +84,24 @@ function HeroPill({
   href?: string;
 }) {
   const inner = (
-    <div
-      className={cn(
-        "flex items-center gap-2.5 rounded-xl bg-white/10 px-3.5 py-2.5 backdrop-blur-sm ring-1 ring-white/15 transition-colors",
-        href && "hover:bg-white/15"
-      )}
-    >
-      <Icon className="h-4 w-4 shrink-0 text-white/80" />
-      <div className="min-w-0 text-left">
-        <p className="text-[10px] font-semibold uppercase tracking-wide text-white/60">
+    <div className="flex items-center gap-2.5 rounded-xl border border-slate-100 bg-slate-50/80 px-3.5 py-2.5 transition-colors hover:border-slate-200 hover:bg-white">
+      <Icon className="h-4 w-4 text-primary" strokeWidth={2} />
+      <div>
+        <p className="text-[10px] font-semibold uppercase tracking-wide text-slate-400">
           {label}
         </p>
-        <p className="truncate text-sm font-semibold">{value}</p>
+        <p className="text-sm font-semibold text-slate-800">{value}</p>
       </div>
-      {href && <ChevronRight className="h-4 w-4 shrink-0 text-white/50" />}
     </div>
   );
 
-  if (href) {
-    return <Link href={href}>{inner}</Link>;
-  }
+  if (href) return <Link href={href}>{inner}</Link>;
   return inner;
 }
 
-function getNextAppointment(appointments: Appointment[]): Appointment | null {
+export function getNextAppointment(
+  appointments: Appointment[]
+): Appointment | null {
   const now = new Date();
   const nowMinutes = now.getHours() * 60 + now.getMinutes();
 
@@ -129,5 +115,3 @@ function getNextAppointment(appointments: Appointment[]): Appointment | null {
 
   return upcoming[0] ?? null;
 }
-
-export { getNextAppointment };
