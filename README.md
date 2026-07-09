@@ -8,9 +8,9 @@ Sağlık turizmi odaklı klinik yönetim ve hasta–doktor eşleştirme platform
 |--------|-------|----------|------|
 | [`backend/`](backend/) | Aktif | FastAPI REST API — auth, klinikler, hastalar, randevular, yorumlar, AI proxy, Fernet | 8000 |
 | [`ai/`](ai/) | Aktif | Kural tabanlı doktor/klinik eşleştirme microservice | 8001 |
-| [`web-clinic/`](web-clinic/) | Prototip | Klinik yönetim dashboard'u (mock veri) | 3000 |
-| [`web-doctor/`](web-doctor/) | Prototip | Doktor portalı (mock veri) | 3001 |
-| [`web-patient/`](web-patient/) | Planlanmış | Hasta uygulaması — henüz başlanmadı | — |
+| [`web-clinic/`](web-clinic/) | Aktif (kısmi API) | Klinik dashboard — JWT + client fetch; analytics/billing mock | 3000 |
+| [`web-doctor/`](web-doctor/) | Aktif (kısmi API) | Doktor portalı — JWT + randevular; mesajlar mock | 3001 |
+| [`web-patient/`](web-patient/) | Prototip | Hasta B2C UI — mock veri, API bağlama bekleniyor | 3002? |
 | `mobile/` | Planlanmış | Mobil uygulama — henüz başlanmadı | — |
 
 ## Mimari Özet
@@ -18,11 +18,11 @@ Sağlık turizmi odaklı klinik yönetim ve hasta–doktor eşleştirme platform
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │ web-clinic  │     │ web-doctor  │     │ web-patient │
-│  (mock)     │     │  (mock)     │     │   (yok)     │
+│ (JWT+API)   │     │ (JWT+API)   │     │  (mock UI)  │
 └──────┬──────┘     └──────┬──────┘     └──────┬──────┘
        │                   │                   │
        └───────────────────┼───────────────────┘
-                           │  ← Ay 2: API entegrasyonu
+                           │  patient API → Ay 2 / Furkan
                     ┌──────▼──────┐
                     │   backend   │  JWT auth, RBAC, REST API
                     │  (FastAPI)  │
@@ -32,11 +32,11 @@ Sağlık turizmi odaklı klinik yönetim ve hasta–doktor eşleştirme platform
               │            │            │
        ┌──────▼──────┐ ┌───▼───┐ ┌─────▼─────┐
        │ PostgreSQL  │ │  ai/  │ │  mobile   │
-       │  (ortak)    │ │ match │ │  (yok)    │
+       │  (ortak)    │ │ match │ │ (erteli)  │
        └─────────────┘ └───────┘ └───────────┘
 ```
 
-**Şu an:** Backend (Sprint 2: hastalar, randevular, Fernet) ve AI servisi gerçek API + PostgreSQL ile çalışır. Web arayüzleri (klinik, doktor) zengin UI prototipleri olarak mock veriyle çalışır; backend'e bağlı değildir.
+**Şu an:** Backend (Sprint 2) ve AI gerçek API ile çalışır. web-clinic / web-doctor JWT login + client-side API (SSR token sorunu giderildi). web-patient UI var, API henüz bağlı değil. Analytics / mesaj / billing mock.
 
 ## Hızlı Başlangıç
 
@@ -106,13 +106,13 @@ Detay: [`web-doctor/README.md`](web-doctor/README.md)
 
 | Bileşen | Olgunluk | Not |
 |---------|----------|-----|
-| Backend API | ~78% | Auth, RBAC, klinikler, hastalar, randevular, yorumlar, match proxy, Fernet (`health_history`) — Sprint 2 |
-| AI Matching | ~85% | Rule-based, PostgreSQL, CI, ~%96 test coverage |
-| Web Clinic | ~25% | UI prototip, mock veri |
-| Web Doctor | ~25% | UI prototip, mock veri, odontogram |
-| Web Patient | 0% | Boş |
-| Mobile | 0% | Yok |
-| Frontend ↔ Backend | 0% | Entegrasyon Ay 2 |
+| Backend API | ~90% | Auth, RBAC, hastalar, randevular, match, Fernet — Sprint 2 |
+| AI Matching | ~85% | Rule-based, CI, ~%96 coverage |
+| Web Clinic | ~55% | JWT + client API; analytics/billing mock |
+| Web Doctor | ~45% | JWT + randevular; profil /auth/me; mesajlar mock |
+| Web Patient | ~35% | UI prototip, API %0 |
+| Mobile | 0% | Ertelendi |
+| Frontend ↔ Backend | ~40% | Clinic/doctor kısmi; patient yok |
 
 ## Test ve CI
 
@@ -160,8 +160,8 @@ pytest --cov=app
 
 ## Yol Haritası
 
-**Ay 1 (mevcut):** Gösterilebilir UI prototipleri — web-clinic, web-doctor mock veriyle.
+**Ay 1 (mevcut):** Backend + AI hazır; clinic/doctor JWT + client API; web-patient UI mock.
 
-**Ay 2:** Frontend–backend entegrasyonu, web auth, hasta uygulaması MVP; mesajlaşma ve kalan operasyonel API'ler (randevu/hasta API'leri Sprint 2'de hazır).
+**Ay 2:** web-patient API, cookie auth, mesajlaşma, billing, FCM/S3, doktor GET/PATCH tamamı.
 
 **Faz 2:** AI feedback kalıcılığı, ML tabanlı eşleştirme, mobil uygulama.

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Plus } from "lucide-react";
 import { DoctorCard } from "@/components/dashboard/doctors/DoctorCard";
 import { DoctorDetailDrawer } from "@/components/dashboard/doctors/DoctorDetailDrawer";
@@ -17,6 +17,10 @@ export function DoctorsGrid({
   const [doctors, setDoctors] = useState(initialDoctors);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const { show, Toast } = useDemoToast();
+
+  useEffect(() => {
+    setDoctors(initialDoctors);
+  }, [initialDoctors]);
 
   const selected = useMemo(
     () => doctors.find((d) => d.id === selectedId) ?? null,

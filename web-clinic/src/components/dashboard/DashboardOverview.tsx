@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { motion } from "framer-motion";
 import {
   CheckCircle2,
@@ -35,7 +35,18 @@ export function DashboardOverview({
   activities: ActivityItem[];
 }) {
   const [leads, setLeads] = useState(initialLeads);
-  const metrics = useMemo(() => getClinicMetrics(leads), [leads]);
+  const [trendData, setTrendData] = useState(trend);
+  const [activityData, setActivityData] = useState(activities);
+  const metrics = useMemo(
+    () => (leads.length ? getClinicMetrics(leads) : initialMetrics),
+    [leads, initialMetrics]
+  );
+
+  useEffect(() => {
+    setLeads(initialLeads);
+    setTrendData(trend);
+    setActivityData(activities);
+  }, [initialLeads, trend, activities]);
 
   const pendingLeads = useMemo(
     () =>
@@ -98,9 +109,9 @@ export function DashboardOverview({
 
       <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
         <div className="xl:col-span-2">
-          <LeadTrendChart data={trend} />
+          <LeadTrendChart data={trendData} />
         </div>
-        <RecentActivityWidget activities={activities} />
+        <RecentActivityWidget activities={activityData} />
       </div>
 
       <PendingRequestsList
