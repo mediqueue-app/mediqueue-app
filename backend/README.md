@@ -48,12 +48,24 @@ python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().d
 alembic upgrade head
 ```
 
-4. Seed reference data (order matters — doctors first, then clinics):
+4. Seed reference data (order matters — doctors first, then clinics, then demo users):
 
 ```powershell
 python -m scripts.seed_doctors_from_ai_json
 python -m scripts.seed_clinics_from_ai_json
+python -m scripts.seed_demo_users
 ```
+
+Demo logins (password `Demo1234!`):
+
+| Email | Role | Portal |
+|-------|------|--------|
+| `patient@mediqueue.com` | patient | web-patient `:3002` |
+| `clinic@mediqueue.com` | clinic (`clinic_id` linked) | web-clinic `:3000` |
+| `doctor@mediqueue.com` | doctor (`doctor_id` linked) | web-doctor `:3001` |
+| `admin@mediqueue.com` | admin | web-admin `:3003` |
+
+**Doctor profile (Ay 1):** `GET /v1/doctors/{id}` is not required. Portals use `GET /v1/auth/me` (`doctor_id` / `clinic_id` on the user). Dedicated doctor GET can wait for Ay 2.
 
 ## Run services
 

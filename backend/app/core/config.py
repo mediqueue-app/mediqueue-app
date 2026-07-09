@@ -34,7 +34,8 @@ class Settings(BaseSettings):
     MEDIQUEUE_AI_TIMEOUT_SECONDS: float = 5.0
 
     BACKEND_CORS_ORIGINS: str = (
-        "http://localhost:3000,http://localhost:5173,http://localhost:8080"
+        "http://localhost:3000,http://localhost:3001,http://localhost:3002,"
+        "http://localhost:3003,http://localhost:5173,http://localhost:8080"
     )
 
     model_config = SettingsConfigDict(

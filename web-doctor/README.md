@@ -19,6 +19,13 @@ npm run dev
 
 → **http://localhost:3001/login**
 
+Demo hesap (backend `seed_demo_users` sonrası):
+
+- Email: `doctor@mediqueue.com`
+- Şifre: `Demo1234!`
+
+Profil Ay 1’de `GET /auth/me` ile kurulur (`GET /doctors/{id}` yok).
+
 ## Demo Akışı
 
 ```

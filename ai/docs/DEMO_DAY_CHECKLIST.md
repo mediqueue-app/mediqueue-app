@@ -8,7 +8,9 @@ Demo öncesi ve sunum günü hızlı doğrulama listesi. Tam senaryolar: [`DEMO.
 - [ ] `cd backend && alembic upgrade head` uygulandı
 - [ ] `python -m scripts.seed_doctors_from_ai_json` çalıştırıldı
 - [ ] `python -m scripts.seed_clinics_from_ai_json` çalıştırıldı
+- [ ] `python -m scripts.seed_demo_users` çalıştırıldı (portal login’leri)
 - [ ] AI servisi ayakta: `uvicorn app.main:app --port 8001` (`ai/` klasöründen)
+- [ ] Backend CORS’ta `3000–3003` var (`.env` / `.env.example`)
 
 ## Health
 
@@ -27,11 +29,19 @@ Demo öncesi ve sunum günü hızlı doğrulama listesi. Tam senaryolar: [`DEMO.
 - [ ] Yanıt `200`, `doctors` ve `clinics` boş dizi
 - [ ] `message` alanı dolu (bilgilendirme metni)
 
-## Backend proxy (opsiyonel demo)
+## Backend proxy (Ay 1 P0)
 
 - [ ] Backend ayakta: http://localhost:8000/docs
-- [ ] Login/register → JWT alındı
-- [ ] `POST /v1/match` aynı gövde ile `200` döndü (limit alanları backend'de henüz yok — limit demosu için AI `:8001` kullanın)
+- [ ] `POST /v1/auth/login` — `patient@mediqueue.com` / `Demo1234!` → JWT
+- [ ] `POST /v1/match` (Bearer JWT) — hit: `specialty=Cardiology`, `language=Turkish`, `budget=3000`, `city=Istanbul` → en az bir sonuç
+- [ ] `POST /v1/match` — empty: `specialty=Cardiology`, `language=Turkish`, `budget=1` → boş listeler + `message`
+- [ ] Limit alanları (`max_doctors` vb.) AI `:8001` üzerinden demo edilir; backend proxy temel match için yeterli
+
+## Doctor portal smoke (Azra)
+
+- [ ] `web-doctor` `:3001` — `doctor@mediqueue.com` / `Demo1234!`
+- [ ] Login sonrası `/auth/me` → `role=doctor`, `doctor_id` dolu
+- [ ] Dashboard / patients — token varken `GET /v1/doctors/{id}/appointments` (liste boş olabilir)
 
 ## CI (geliştirici)
 

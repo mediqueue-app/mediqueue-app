@@ -66,8 +66,11 @@ copy .env.example .env
 alembic upgrade head
 python -m scripts.seed_doctors_from_ai_json
 python -m scripts.seed_clinics_from_ai_json
+python -m scripts.seed_demo_users
 uvicorn app.main:app --port 8000 --reload
 ```
+
+Demo hesaplar (şifre: `Demo1234!`): `patient@` / `clinic@` / `doctor@` / `admin@mediqueue.com`
 
 Detay: [`backend/README.md`](backend/README.md)
 

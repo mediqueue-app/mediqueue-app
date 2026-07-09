@@ -108,6 +108,16 @@ class TestCorsHeaders:
         assert response.headers.get("access-control-allow-origin") == "http://localhost:3000"
         assert response.headers.get("access-control-allow-credentials") == "true"
 
+    def test_doctor_and_patient_origins_are_allowed(self, client: TestClient) -> None:
+        for origin in (
+            "http://localhost:3001",
+            "http://localhost:3002",
+            "http://localhost:3003",
+        ):
+            response = client.get("/", headers={"Origin": origin})
+            assert response.status_code == 200
+            assert response.headers.get("access-control-allow-origin") == origin
+
     def test_disallowed_origin_does_not_receive_allow_origin(self, client: TestClient) -> None:
         response = client.get(
             "/",
