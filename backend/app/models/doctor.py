@@ -39,3 +39,4 @@ class Doctor(Base):
         viewonly=True,
     )
     reviews: Mapped[list["Review"]] = relationship(back_populates="doctor")
+    appointments: Mapped[list["Appointment"]] = relationship(back_populates="doctor")

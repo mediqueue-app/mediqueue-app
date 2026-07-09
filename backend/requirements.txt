@@ -1,14 +1,15 @@
-fastapi
-uvicorn[standard]
-SQLAlchemy
-alembic
-psycopg2-binary
-pydantic-settings
-python-jose[cryptography]
-passlib[bcrypt]
+fastapi>=0.115.0,<0.140.0
+uvicorn[standard]>=0.30.0,<0.40.0
+SQLAlchemy>=2.0.0,<3.0.0
+alembic>=1.13.0,<2.0.0
+psycopg2-binary>=2.9.0,<3.0.0
+pydantic-settings>=2.5.0,<3.0.0
+python-jose[cryptography]>=3.3.0,<4.0.0
+passlib[bcrypt]>=1.7.0,<2.0.0
 # passlib 1.7.x expects bcrypt.__about__, which was removed in bcrypt 4.1.
 bcrypt<4.1
-python-multipart
-email-validator
-httpx
-pytest
+python-multipart>=0.0.9,<1.0.0
+email-validator>=2.0.0,<3.0.0
+httpx>=0.27.0,<1.0.0
+cryptography>=43.0.0,<46.0.0
+pytest>=8.0.0,<9.0.0

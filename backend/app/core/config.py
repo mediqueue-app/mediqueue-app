@@ -20,6 +20,13 @@ class Settings(BaseSettings):
         default=UNSAFE_DEV_SECRET_KEY,
         description="JWT signing key. Must be set via SECRET_KEY env in production.",
     )
+    ENCRYPTION_KEY: str = Field(
+        default="",
+        description=(
+            "Fernet key for encrypting sensitive patient health history. "
+            "Must be set in production/staging."
+        ),
+    )
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
@@ -40,6 +47,7 @@ class Settings(BaseSettings):
     def validate_secret_key_for_environment(self) -> "Settings":
         env = self.APP_ENV.strip().lower()
         secret = self.SECRET_KEY.strip()
+        encryption_key = self.ENCRYPTION_KEY.strip()
 
         if env in PROTECTED_ENVIRONMENTS and (
             not secret or secret == UNSAFE_DEV_SECRET_KEY
@@ -47,6 +55,11 @@ class Settings(BaseSettings):
             raise ValueError(
                 "SECRET_KEY must be set to a secure, non-default value when "
                 f"APP_ENV is '{env}'. Set SECRET_KEY in the environment or .env file."
+            )
+        if env in PROTECTED_ENVIRONMENTS and not encryption_key:
+            raise ValueError(
+                "ENCRYPTION_KEY must be set when APP_ENV is "
+                f"'{env}' to protect sensitive patient data."
             )
 
         return self

@@ -21,6 +21,8 @@ def active_user() -> User:
         hashed_password="hashed",
         full_name="Test Patient",
         role="patient",
+        clinic_id=None,
+        doctor_id=None,
         is_active=True,
         created_at=datetime.now(timezone.utc),
     )
@@ -34,6 +36,38 @@ def admin_user() -> User:
         hashed_password="hashed",
         full_name="Test Admin",
         role="admin",
+        clinic_id=None,
+        doctor_id=None,
+        is_active=True,
+        created_at=datetime.now(timezone.utc),
+    )
+
+
+@pytest.fixture
+def clinic_user() -> User:
+    return User(
+        id=3,
+        email="clinic@example.com",
+        hashed_password="hashed",
+        full_name="Clinic User",
+        role="clinic",
+        clinic_id=1,
+        doctor_id=None,
+        is_active=True,
+        created_at=datetime.now(timezone.utc),
+    )
+
+
+@pytest.fixture
+def doctor_user() -> User:
+    return User(
+        id=4,
+        email="doctor@example.com",
+        hashed_password="hashed",
+        full_name="Doctor User",
+        role="doctor",
+        clinic_id=None,
+        doctor_id=7,
         is_active=True,
         created_at=datetime.now(timezone.utc),
     )
@@ -59,3 +93,19 @@ def admin_client(admin_user: User) -> Generator[TestClient, None, None]:
 def client() -> Generator[TestClient, None, None]:
     with TestClient(app) as client:
         yield client
+
+
+@pytest.fixture
+def clinic_client(clinic_user: User) -> Generator[TestClient, None, None]:
+    app.dependency_overrides[get_current_user] = lambda: clinic_user
+    with TestClient(app) as client:
+        yield client
+    app.dependency_overrides.clear()
+
+
+@pytest.fixture
+def doctor_client(doctor_user: User) -> Generator[TestClient, None, None]:
+    app.dependency_overrides[get_current_user] = lambda: doctor_user
+    with TestClient(app) as client:
+        yield client
+    app.dependency_overrides.clear()

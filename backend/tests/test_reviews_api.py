@@ -139,6 +139,52 @@ class TestCreateReview:
 
         assert response.status_code == 422
 
+    def test_whitespace_only_comment_rejected(self, authenticated_client: TestClient) -> None:
+        payload = {**CLINIC_REVIEW_PAYLOAD, "comment": "   "}
+        response = authenticated_client.post("/v1/reviews", json=payload)
+        assert response.status_code == 422
+
+    @patch("app.api.v1.reviews.create_review")
+    @patch("app.api.v1.reviews.clinic_exists", return_value=True)
+    def test_comment_is_trimmed_before_create(
+        self,
+        _mock_clinic_exists,
+        mock_create_review,
+        authenticated_client: TestClient,
+    ) -> None:
+        mock_create_review.return_value = _sample_review(comment="trimmed")
+
+        payload = {**CLINIC_REVIEW_PAYLOAD, "comment": "  trimmed  "}
+        response = authenticated_client.post("/v1/reviews", json=payload)
+
+        assert response.status_code == 201
+        _, kwargs = mock_create_review.call_args
+        assert kwargs["review_in"].comment == "trimmed"
+
+    @patch("app.api.v1.reviews.clinic_exists", return_value=False)
+    @patch("app.api.v1.reviews.create_review")
+    def test_create_review_returns_404_for_missing_clinic(
+        self,
+        mock_create_review,
+        _mock_clinic_exists,
+        authenticated_client: TestClient,
+    ) -> None:
+        response = authenticated_client.post("/v1/reviews", json=CLINIC_REVIEW_PAYLOAD)
+        assert response.status_code == 404
+        mock_create_review.assert_not_called()
+
+    @patch("app.api.v1.reviews.get_doctor", return_value=None)
+    @patch("app.api.v1.reviews.create_review")
+    def test_create_review_returns_404_for_missing_doctor(
+        self,
+        mock_create_review,
+        _mock_get_doctor,
+        authenticated_client: TestClient,
+    ) -> None:
+        response = authenticated_client.post("/v1/reviews", json=DOCTOR_REVIEW_PAYLOAD)
+        assert response.status_code == 404
+        mock_create_review.assert_not_called()
+
 
 class TestListClinicReviews:
     @patch("app.api.v1.clinics.get_reviews_by_clinic")

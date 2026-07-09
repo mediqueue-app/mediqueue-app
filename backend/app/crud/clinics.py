@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.models.clinic import Clinic
 from app.models.doctor import Doctor
 from app.models.doctor_clinic import DoctorClinic
+from app.schemas.clinic import ClinicUpdate
 
 
 def get_clinics(db: Session, skip: int = 0, limit: int = 100) -> list[Clinic]:
@@ -34,3 +35,12 @@ def get_active_doctors_by_clinic(db: Session, clinic_id: int) -> list[Doctor]:
         .order_by(Doctor.full_name)
     )
     return list(db.scalars(stmt).all())
+
+
+def update_clinic(db: Session, *, clinic: Clinic, clinic_in: ClinicUpdate) -> Clinic:
+    updates = clinic_in.model_dump(exclude_unset=True)
+    for field, value in updates.items():
+        setattr(clinic, field, value)
+    db.commit()
+    db.refresh(clinic)
+    return clinic

@@ -1,6 +1,6 @@
 from datetime import datetime
 
-from pydantic import BaseModel, ConfigDict, Field, model_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator, model_validator
 
 
 class ReviewCreate(BaseModel):
@@ -8,6 +8,14 @@ class ReviewCreate(BaseModel):
     doctor_id: int | None = None
     rating: int = Field(ge=1, le=5)
     comment: str = Field(min_length=1, max_length=2000)
+
+    @field_validator("comment")
+    @classmethod
+    def validate_comment(cls, value: str) -> str:
+        trimmed = value.strip()
+        if not trimmed:
+            raise ValueError("comment must not be empty")
+        return trimmed
 
     @model_validator(mode="after")
     def validate_exactly_one_target(self) -> "ReviewCreate":

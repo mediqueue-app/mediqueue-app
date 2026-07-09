@@ -7,7 +7,7 @@ FastAPI backend for authentication, clinics, and AI match proxying.
 - PostgreSQL running locally (default database: `mediqueue`)
 - Python 3.11+ recommended
 
-Current Alembic head revision: **`202607040007`**
+Current Alembic head revision: **`202607090001`**
 
 ## Setup
 
@@ -33,6 +33,13 @@ APP_ENV=development
 DATABASE_URL=postgresql+psycopg2://postgres:postgres@localhost:5432/mediqueue
 MEDIQUEUE_AI_BASE_URL=http://localhost:8001
 SECRET_KEY=replace-this-with-a-long-random-secret
+ENCRYPTION_KEY=your-base64-fernet-key
+```
+
+Generate an encryption key once:
+
+```powershell
+python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
 ```
 
 3. Apply database migrations:
@@ -107,7 +114,35 @@ Example create body:
 }
 ```
 
-`comment` is required (non-empty) to satisfy the database constraint.
+`comment` is required and whitespace-only comments are rejected with `422`.
+
+> Review sentiment fields (`sentiment_label`, `sentiment_score`, `ai_summary`) are Phase 2 and currently unused.
+
+## Patients API
+
+- `POST /v1/patients` — roles: `patient`, `clinic`, `admin`
+  - `patient` upserts own profile (`user_id=current_user.id`)
+  - `clinic` / `admin` can create manual lead (`user_id=null`) or attach existing `user_id`
+- `GET /v1/patients/me` — role: `patient`
+- `GET /v1/patients/me/appointments` — role: `patient`
+
+Sensitive health history is encrypted with `ENCRYPTION_KEY` and never returned decrypted by API responses.
+
+## Appointments API
+
+- `POST /v1/appointments` — roles: `patient`, `clinic`, `admin`
+- `PATCH /v1/appointments/{appointment_id}/status` — roles: `clinic`, `doctor`, `admin`
+- `GET /v1/clinics/{clinic_id}/appointments` — roles: `clinic`, `admin`
+- `GET /v1/doctors/{doctor_id}/appointments` — roles: `doctor`, `admin`
+
+Status values:
+
+- `pending`
+- `confirmed`
+- `alternative_date`
+- `cancelled`
+- `arrived`
+- `completed`
 
 ## Tests
 
@@ -117,18 +152,19 @@ pytest
 ```
 
 Automated coverage includes auth, clinics, doctors, reviews, match, clinic seed sync, admin RBAC, and config security checks.
+Most unit/API tests mock DB engine interactions; real schema verification is covered by Alembic migration execution and optional CI smoke tests (`BACKEND_DB_SMOKE=1`).
 
 ## Troubleshooting Alembic
 
 ### Error: `Can't locate revision identified by '202607050001'`
 
-This means the database `alembic_version` table references a revision that is **not** in this repository. The repo head is `202607040007` — do not create a fake `202607050001` migration.
+This means the database `alembic_version` table references a revision that is **not** in this repository. The repo head is `202607090001` — do not create a fake `202607050001` migration.
 
 **Option A — stamp to the repo head (keep existing data if schema already matches):**
 
 ```powershell
 cd backend
-alembic stamp 202607040007
+alembic stamp 202607090001
 alembic upgrade head
 ```
 
@@ -229,5 +265,7 @@ Non-admin users should receive `403 Forbidden`.
 
 ## Production notes
 
-- Set `APP_ENV=production` or `APP_ENV=staging` and provide a strong `SECRET_KEY` in the environment.
-- Startup fails if `APP_ENV` is `production`/`staging` and `SECRET_KEY` is missing or still the unsafe dev default.
+- Set `APP_ENV=production` or `APP_ENV=staging` and provide a strong `SECRET_KEY` and `ENCRYPTION_KEY`.
+- Startup fails in protected environments when `SECRET_KEY` is missing/unsafe or `ENCRYPTION_KEY` is missing.
+- Backend specialty aliases intentionally mirror AI-service aliases. If AI aliases change, update backend alias mappings too.
+- This service is a medical-tourism matching MVP backend, not a hospital EHR/EMR system.

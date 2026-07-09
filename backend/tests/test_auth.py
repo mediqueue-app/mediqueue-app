@@ -21,6 +21,8 @@ def _sample_user(**overrides: object) -> User:
         "hashed_password": "hashed",
         "full_name": "New User",
         "role": "patient",
+        "clinic_id": None,
+        "doctor_id": None,
         "is_active": True,
         "created_at": datetime.now(timezone.utc),
     }

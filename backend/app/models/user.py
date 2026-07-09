@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 from enum import Enum
 
-from sqlalchemy import Boolean, CheckConstraint, DateTime, String, func
+from sqlalchemy import Boolean, CheckConstraint, DateTime, ForeignKey, String, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -35,6 +35,16 @@ class User(Base):
         default=UserRole.PATIENT.value,
         server_default=UserRole.PATIENT.value,
     )
+    clinic_id: Mapped[int | None] = mapped_column(
+        ForeignKey("clinics.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
+    doctor_id: Mapped[int | None] = mapped_column(
+        ForeignKey("doctors.id", ondelete="SET NULL"),
+        nullable=True,
+        index=True,
+    )
     is_active: Mapped[bool] = mapped_column(Boolean, nullable=False, default=True, server_default="true")
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True),
@@ -42,3 +52,4 @@ class User(Base):
         server_default=func.now(),
     )
     reviews: Mapped[list["Review"]] = relationship(back_populates="patient")
+    patient_profile: Mapped["Patient | None"] = relationship(back_populates="user")

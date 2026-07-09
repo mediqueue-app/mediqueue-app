@@ -22,6 +22,15 @@ class TestSettingsSecurity:
         settings = Settings(
             APP_ENV="production",
             SECRET_KEY="a-secure-random-production-secret",
+            ENCRYPTION_KEY="8sWf7I4vjns6NixJl16x2qxGn8UKA0fFAL0s8GF95VQ=",
         )
 
         assert settings.SECRET_KEY == "a-secure-random-production-secret"
+
+    def test_rejects_missing_encryption_key_in_production(self) -> None:
+        with pytest.raises(ValidationError, match="ENCRYPTION_KEY must be set"):
+            Settings(
+                APP_ENV="production",
+                SECRET_KEY="a-secure-random-production-secret",
+                ENCRYPTION_KEY="",
+            )

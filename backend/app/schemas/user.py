@@ -16,6 +16,8 @@ class UserRead(BaseModel):
     email: EmailStr
     full_name: str | None
     role: UserRole
+    clinic_id: int | None = None
+    doctor_id: int | None = None
     is_active: bool
     created_at: datetime
 
