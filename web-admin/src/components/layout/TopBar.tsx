@@ -5,7 +5,8 @@ import { useState } from "react";
 import { Bell, ChevronRight, Menu, Search } from "lucide-react";
 import { getPageMeta } from "@/lib/navigation";
 import { getCurrentAdmin } from "@/lib/auth";
-import { clinicApplications, tickets } from "@/lib/mock-data";
+import { getPendingApplicationCountSync } from "@/lib/services/applications";
+import { getOpenTicketCountSync } from "@/lib/services/feedback";
 import { cn } from "@/lib/utils";
 
 const NOTIFICATIONS = [
@@ -33,8 +34,7 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
   const admin = getCurrentAdmin();
 
   const alerts =
-    clinicApplications.filter((a) => a.status === "pending").length +
-    tickets.filter((t) => t.status === "open").length;
+    getPendingApplicationCountSync() + getOpenTicketCountSync();
 
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">

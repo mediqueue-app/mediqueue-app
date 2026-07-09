@@ -1,12 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Building2, ChevronRight, FileText, Search } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge, type BadgeTone } from "@/components/ui/StatusBadge";
-import { clinicApplications } from "@/lib/mock-data";
-import type { ApplicationStatus } from "@/types";
+import { fetchClinicApplications } from "@/lib/services/applications";
+import type { ApplicationStatus, ClinicApplication } from "@/types";
 import { cn, formatRelative } from "@/lib/utils";
 
 const STATUS_META: Record<
@@ -28,8 +28,27 @@ const FILTERS: { key: FilterKey; label: string }[] = [
 ];
 
 export default function ApplicationsPage() {
+  const [clinicApplications, setClinicApplications] = useState<ClinicApplication[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterKey>("pending");
   const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchClinicApplications()
+      .then((data) => {
+        if (!cancelled) {
+          setClinicApplications(data);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const counts = useMemo(() => {
     return {
@@ -38,7 +57,7 @@ export default function ApplicationsPage() {
       approved: clinicApplications.filter((a) => a.status === "approved").length,
       rejected: clinicApplications.filter((a) => a.status === "rejected").length,
     } as Record<FilterKey, number>;
-  }, []);
+  }, [clinicApplications]);
 
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -51,7 +70,15 @@ export default function ApplicationsPage() {
         app.contactName.toLowerCase().includes(q);
       return matchesFilter && matchesQuery;
     });
-  }, [filter, query]);
+  }, [filter, query, clinicApplications]);
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">

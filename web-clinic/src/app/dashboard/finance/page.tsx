@@ -1,14 +1,46 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Download, FileText, Receipt } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { financeSummary, invoices } from "@/lib/growth-mock";
+import type { FinanceSummary, InvoiceRow } from "@/lib/growth-mock";
+import { fetchFinanceData } from "@/lib/services/growth";
 import { formatTRY } from "@/lib/utils";
 
 export default function FinancePage() {
-  const s = financeSummary;
+  const [summary, setSummary] = useState<FinanceSummary | null>(null);
+  const [invoices, setInvoices] = useState<InvoiceRow[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchFinanceData()
+      .then(({ summary: nextSummary, invoices: nextInvoices }) => {
+        if (!cancelled) {
+          setSummary(nextSummary);
+          setInvoices(nextInvoices);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (loading || !summary) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
+    );
+  }
+
+  const s = summary;
 
   return (
     <div className="flex flex-col gap-6 lg:gap-8">

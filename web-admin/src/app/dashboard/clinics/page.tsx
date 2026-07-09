@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   BadgeCheck,
   ChevronDown,
@@ -12,16 +12,34 @@ import {
 import { PageHeader } from "@/components/shared/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { clinics as seedClinics } from "@/lib/mock-data";
-import type { EntityStatus } from "@/types";
+import { fetchClinics } from "@/lib/services/clinics";
+import type { Clinic, EntityStatus } from "@/types";
 import { cn, formatNumber, formatTRY } from "@/lib/utils";
 
 export default function ClinicsPage() {
-  const [statuses, setStatuses] = useState<Record<string, EntityStatus>>(() =>
-    Object.fromEntries(seedClinics.map((c) => [c.id, c.status]))
-  );
+  const [seedClinics, setSeedClinics] = useState<Clinic[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [statuses, setStatuses] = useState<Record<string, EntityStatus>>({});
   const [expanded, setExpanded] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchClinics()
+      .then((data) => {
+        if (!cancelled) {
+          setSeedClinics(data);
+          setStatuses(Object.fromEntries(data.map((c) => [c.id, c.status])));
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function toggleStatus(id: string) {
     setStatuses((prev) => ({
@@ -49,6 +67,14 @@ export default function ClinicsPage() {
     (sum, c) => sum + c.revenueContribution,
     0
   );
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">

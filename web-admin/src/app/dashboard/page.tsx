@@ -13,14 +13,9 @@ import { KpiCard } from "@/components/ui/KpiCard";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { GrowthChart } from "@/components/dashboard/GrowthChart";
 import { RevenueChart } from "@/components/dashboard/RevenueChart";
-import {
-  clinicApplications,
-  dashboardSummary,
-  growthData,
-  revenueData,
-  specialtyDemand,
-  tickets,
-} from "@/lib/mock-data";
+import { fetchDashboardData } from "@/lib/services/dashboard";
+import { fetchClinicApplications } from "@/lib/services/applications";
+import { fetchTickets } from "@/lib/services/feedback";
 import { formatNumber, formatRelative, formatTRY } from "@/lib/utils";
 
 const PRIORITY_TONE = {
@@ -29,8 +24,13 @@ const PRIORITY_TONE = {
   low: "neutral",
 } as const;
 
-export default function DashboardPage() {
-  const s = dashboardSummary;
+export default async function DashboardPage() {
+  const [{ summary: s, growthData, revenueData, specialtyDemand }, clinicApplications, tickets] =
+    await Promise.all([
+      fetchDashboardData(),
+      fetchClinicApplications(),
+      fetchTickets(),
+    ]);
   const pendingApps = clinicApplications
     .filter((a) => a.status === "pending")
     .slice(0, 4);

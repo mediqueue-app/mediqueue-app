@@ -25,7 +25,7 @@ export function SearchBar() {
       onSubmit={handleSubmit}
       className="flex w-full flex-col gap-1.5 rounded-2xl bg-white p-2 shadow-md ring-1 ring-slate-200/70 md:flex-row md:items-stretch md:gap-0 md:rounded-full"
     >
-      <label className="group flex flex-1 items-center gap-3 rounded-xl px-4 py-2.5 transition-colors hover:bg-slate-50 md:rounded-full">
+      <label className="group flex flex-1 items-center gap-3 rounded-xl px-4 py-2.5 transition-colors hover:bg-slate-50 focus-within:bg-slate-50 focus-within:ring-2 focus-within:ring-[#3a6ad6]/25 md:rounded-full">
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#eaf0fc] text-[#3a6ad6]">
           <Stethoscope className="h-5 w-5" />
         </span>
@@ -50,7 +50,7 @@ export function SearchBar() {
 
       <span className="mx-1 hidden w-px self-center bg-slate-200 md:block md:h-8" />
 
-      <label className="group flex flex-1 items-center gap-3 rounded-xl px-4 py-2.5 transition-colors hover:bg-slate-50 md:rounded-full">
+      <label className="group flex flex-1 items-center gap-3 rounded-xl px-4 py-2.5 transition-colors hover:bg-slate-50 focus-within:bg-slate-50 focus-within:ring-2 focus-within:ring-[#3a6ad6]/25 md:rounded-full">
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#eaf0fc] text-[#3a6ad6]">
           <MapPin className="h-5 w-5" />
         </span>
@@ -75,7 +75,7 @@ export function SearchBar() {
 
       <span className="mx-1 hidden w-px self-center bg-slate-200 md:block md:h-8" />
 
-      <label className="group flex flex-1 items-center gap-3 rounded-xl px-4 py-2.5 transition-colors hover:bg-slate-50 md:rounded-full">
+      <label className="group flex flex-1 items-center gap-3 rounded-xl px-4 py-2.5 transition-colors hover:bg-slate-50 focus-within:bg-slate-50 focus-within:ring-2 focus-within:ring-[#3a6ad6]/25 md:rounded-full">
         <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#eaf0fc] text-[#3a6ad6]">
           <CalendarDays className="h-5 w-5" />
         </span>

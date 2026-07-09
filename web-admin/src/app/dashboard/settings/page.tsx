@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Check, Percent, Settings2, Sparkles, Store } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
-import { clinics } from "@/lib/mock-data";
+import { fetchSettingsClinics } from "@/lib/services/settings";
+import type { Clinic } from "@/types";
 import { cn } from "@/lib/utils";
 
 const CATEGORY_RATES = [
@@ -36,19 +37,45 @@ const PLATFORM_TOGGLES = [
 ] as const;
 
 export default function SettingsPage() {
+  const [clinics, setClinics] = useState<Clinic[]>([]);
+  const [loading, setLoading] = useState(true);
   const [defaultRate, setDefaultRate] = useState(12);
   const [rates, setRates] = useState(CATEGORY_RATES);
-  const [featured, setFeatured] = useState<Record<string, boolean>>(() =>
-    Object.fromEntries(clinics.map((c) => [c.id, c.featured]))
-  );
+  const [featured, setFeatured] = useState<Record<string, boolean>>({});
   const [toggles, setToggles] = useState<Record<string, boolean>>(() =>
     Object.fromEntries(PLATFORM_TOGGLES.map((t) => [t.key, t.on]))
   );
   const [saved, setSaved] = useState(false);
 
+  useEffect(() => {
+    let cancelled = false;
+    fetchSettingsClinics()
+      .then((data) => {
+        if (!cancelled) {
+          setClinics(data);
+          setFeatured(Object.fromEntries(data.map((c) => [c.id, c.featured])));
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   function save() {
     setSaved(true);
     setTimeout(() => setSaved(false), 2200);
+  }
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
+    );
   }
 
   return (

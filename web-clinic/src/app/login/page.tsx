@@ -3,12 +3,13 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { HeartPulse, Sparkles } from "lucide-react";
-import { DEMO_CLINIC_USER, isAuthenticated, login } from "@/lib/auth";
+import { ApiError } from "@/lib/api/client";
+import { isAuthenticated, login } from "@/lib/auth";
 
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail] = useState(DEMO_CLINIC_USER.email);
-  const [password, setPassword] = useState("mediqueue");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -26,7 +27,13 @@ export default function LoginPage() {
       await login(email, password);
       router.push("/dashboard");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Giriş başarısız");
+      const message =
+        err instanceof ApiError
+          ? err.detail
+          : err instanceof Error
+            ? err.message
+            : "Giriş başarısız";
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -149,8 +156,10 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-6 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-xs text-slate-500">
-            <span className="font-semibold text-slate-600">Demo erişimi:</span> Ön
-            tanımlı bilgiler dolu — doğrudan “Panele Giriş Yap” diyebilirsiniz.
+            <span className="font-semibold text-slate-600">Backend bağlantısı:</span>{" "}
+            Klinik hesabınızla{" "}
+            <code className="rounded bg-slate-200/60 px-1 py-0.5">/auth/login</code>{" "}
+            üzerinden JWT oturumu açılır.
           </div>
         </div>
       </div>

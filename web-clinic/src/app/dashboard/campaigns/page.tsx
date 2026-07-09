@@ -1,14 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ToggleSwitch } from "@/components/ui/ToggleSwitch";
-import { campaigns as seedCampaigns, type Campaign } from "@/lib/growth-mock";
+import type { Campaign } from "@/lib/growth-mock";
+import { fetchCampaigns } from "@/lib/services/growth";
 
 export default function CampaignsPage() {
-  const [items, setItems] = useState<Campaign[]>(seedCampaigns);
+  const [items, setItems] = useState<Campaign[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchCampaigns()
+      .then((data) => {
+        if (!cancelled) {
+          setItems(data);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function toggleActive(id: string) {
     setItems((prev) =>
@@ -17,6 +36,14 @@ export default function CampaignsPage() {
   }
 
   const activeCount = items.filter((c) => c.active).length;
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">

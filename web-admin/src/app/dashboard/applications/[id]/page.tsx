@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowLeft,
@@ -21,8 +21,8 @@ import {
   XCircle,
 } from "lucide-react";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { getApplicationById } from "@/lib/mock-data";
-import type { ClinicDocument } from "@/types";
+import { fetchApplicationById } from "@/lib/services/applications";
+import type { ClinicApplication, ClinicDocument } from "@/types";
 import { formatDateTr } from "@/lib/utils";
 
 type Decision = "pending" | "approved" | "rejected";
@@ -33,14 +33,37 @@ export default function ApplicationDetailPage({
   params: Promise<{ id: string }>;
 }) {
   const { id } = use(params);
-  const application = getApplicationById(id);
-
-  const [decision, setDecision] = useState<Decision>(
-    application?.status ?? "pending"
+  const [application, setApplication] = useState<ClinicApplication | null | undefined>(
+    undefined
   );
+  const [decision, setDecision] = useState<Decision>("pending");
   const [preview, setPreview] = useState<ClinicDocument | null>(null);
   const [modal, setModal] = useState<"approve" | "reject" | null>(null);
   const [rejectReason, setRejectReason] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchApplicationById(id)
+      .then((app) => {
+        if (cancelled) return;
+        setApplication(app ?? null);
+        if (app) setDecision(app.status);
+      })
+      .catch(() => {
+        if (!cancelled) setApplication(null);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, [id]);
+
+  if (application === undefined) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
+    );
+  }
 
   if (!application) {
     return (

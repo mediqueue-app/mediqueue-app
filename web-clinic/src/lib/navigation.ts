@@ -9,6 +9,7 @@ import {
   Megaphone,
   MessageCircle,
   Receipt,
+  Stethoscope,
   TrendingUp,
   Zap,
 } from "lucide-react";
@@ -99,6 +100,12 @@ export const NAV_ITEMS: NavItem[] = [
     group: "Ayarlar",
   },
   {
+    href: "/dashboard/doctors",
+    label: "Doktor Kadrosu",
+    icon: Stethoscope,
+    group: "Ayarlar",
+  },
+  {
     href: "/dashboard/finance",
     label: "Finans & Komisyonlar",
     icon: Receipt,
@@ -172,23 +179,16 @@ export function getPageMeta(pathname: string): {
       description: "JCI ve diğer akreditasyon belgeleri",
     };
   }
-  if (pathname.startsWith("/dashboard/finance")) {
-    return {
-      title: "Finans & Komisyonlar",
-      description: "Platform komisyonları ve gelir özeti",
-    };
-  }
-  // Legacy routes
-  if (pathname.startsWith("/dashboard/showcase")) {
-    return {
-      title: "Klinik Profili & Belgeler",
-      description: "JCI ve diğer akreditasyon belgeleri",
-    };
-  }
   if (pathname.startsWith("/dashboard/doctors")) {
     return {
       title: "Doktor Kadrosu",
       description: "Platformda listelenen hekimlerinizi yönetin",
+    };
+  }
+  if (pathname.startsWith("/dashboard/finance")) {
+    return {
+      title: "Finans & Komisyonlar",
+      description: "Platform komisyonları ve gelir özeti",
     };
   }
   return { title: "Klinik Paneli" };

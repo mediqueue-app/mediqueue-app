@@ -1,12 +1,12 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, UserRound } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { StatusBadge, type BadgeTone } from "@/components/ui/StatusBadge";
-import { patients } from "@/lib/mock-data";
-import type { PatientStatus } from "@/types";
+import { fetchPatients } from "@/lib/services/patients";
+import type { Patient, PatientStatus } from "@/types";
 import {
   cn,
   formatDateTr,
@@ -32,8 +32,27 @@ const FILTERS: { key: FilterKey; label: string }[] = [
 ];
 
 export default function PatientsPage() {
+  const [patients, setPatients] = useState<Patient[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterKey>("all");
   const [query, setQuery] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchPatients()
+      .then((data) => {
+        if (!cancelled) {
+          setPatients(data);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -46,11 +65,19 @@ export default function PatientsPage() {
         p.country.toLowerCase().includes(q);
       return matchesFilter && matchesQuery;
     });
-  }, [filter, query]);
+  }, [filter, query, patients]);
 
   const activeCount = patients.filter((p) => p.status === "active").length;
   const totalSpend = patients.reduce((sum, p) => sum + p.totalSpend, 0);
   const totalAppointments = patients.reduce((sum, p) => sum + p.appointments, 0);
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">

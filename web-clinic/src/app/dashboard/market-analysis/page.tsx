@@ -2,10 +2,13 @@ import { Clock, Eye, Star } from "lucide-react";
 import { MarketComparisonChart } from "@/components/dashboard/growth/MarketComparisonChart";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { competitorTable, priceComparison } from "@/lib/growth-mock";
+import { fetchMarketAnalysis } from "@/lib/services/growth";
 import { cn } from "@/lib/utils";
 
-export default function MarketAnalysisPage() {
+export default async function MarketAnalysisPage() {
+  const { priceComparison, competitors: competitorTable } =
+    await fetchMarketAnalysis();
+
   return (
     <div className="flex flex-col gap-6 lg:gap-8">
       <PageHeader

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CalendarDays,
   Check,
@@ -15,11 +15,11 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge, type BadgeTone } from "@/components/ui/StatusBadge";
+import type { AppointmentRequest, RequestStatus } from "@/lib/clinic-mock";
 import {
-  appointmentRequests,
-  type AppointmentRequest,
-  type RequestStatus,
-} from "@/lib/clinic-mock";
+  fetchAppointmentRequests,
+  updateRequestStatus,
+} from "@/lib/services/requests";
 import { cn } from "@/lib/utils";
 
 type FilterKey = "all" | RequestStatus;
@@ -38,11 +38,29 @@ const STATUS_META: Record<RequestStatus, { label: string; tone: BadgeTone }> = {
 };
 
 export default function RequestsPage() {
-  const [requests, setRequests] = useState<AppointmentRequest[]>(appointmentRequests);
+  const [requests, setRequests] = useState<AppointmentRequest[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterKey>("all");
-  const [selectedId, setSelectedId] = useState<string>(appointmentRequests[0].id);
+  const [selectedId, setSelectedId] = useState<string>("");
   const [message, setMessage] = useState("");
   const [sent, setSent] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchAppointmentRequests()
+      .then((data) => {
+        if (cancelled) return;
+        setRequests(data);
+        setSelectedId(data[0]?.id ?? "");
+        setLoading(false);
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filtered = useMemo(
     () =>
@@ -55,9 +73,11 @@ export default function RequestsPage() {
   const selected = requests.find((r) => r.id === selectedId) ?? filtered[0] ?? null;
 
   function updateStatus(id: string, status: RequestStatus) {
-    setRequests((prev) =>
-      prev.map((r) => (r.id === id ? { ...r, status } : r))
-    );
+    void updateRequestStatus(id, status).then((updated) => {
+      setRequests((prev) =>
+        prev.map((r) => (r.id === id ? updated : r))
+      );
+    });
     setSent(false);
     setMessage("");
   }
@@ -77,6 +97,14 @@ export default function RequestsPage() {
     }),
     [requests]
   );
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">

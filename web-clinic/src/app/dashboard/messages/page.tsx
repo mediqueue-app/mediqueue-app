@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Globe,
   Languages,
@@ -9,20 +9,37 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { ToggleSwitch } from "@/components/ui/ToggleSwitch";
-import {
-  chatMessages,
-  messageThreads,
-  type ChatMessage,
-} from "@/lib/growth-mock";
+import type { ChatMessage } from "@/lib/growth-mock";
+import { fetchChatMessages, fetchMessageThreads } from "@/lib/services/growth";
 import { cn } from "@/lib/utils";
 
 export default function MessagesPage() {
-  const [selectedId, setSelectedId] = useState(messageThreads[0].id);
+  const [messageThreads, setThreads] = useState<Awaited<ReturnType<typeof fetchMessageThreads>>>([]);
+  const [selectedId, setSelectedId] = useState("");
   const [autoTranslate, setAutoTranslate] = useState(true);
   const [draft, setDraft] = useState("");
-  const [messages, setMessages] = useState<ChatMessage[]>(chatMessages);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const selected = messageThreads.find((t) => t.id === selectedId)!;
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([fetchMessageThreads(), fetchChatMessages()])
+      .then(([nextThreads, nextMessages]) => {
+        if (cancelled) return;
+        setThreads(nextThreads);
+        setMessages(nextMessages);
+        setSelectedId(nextThreads[0]?.id ?? "");
+        setLoading(false);
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const selected = messageThreads.find((t) => t.id === selectedId) ?? messageThreads[0];
   const threadMessages = useMemo(
     () => messages.filter((m) => m.threadId === selectedId),
     [messages, selectedId]
@@ -44,6 +61,14 @@ export default function MessagesPage() {
       },
     ]);
     setDraft("");
+  }
+
+  if (loading || !selected) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
+    );
   }
 
   return (

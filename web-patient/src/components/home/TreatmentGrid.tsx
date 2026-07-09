@@ -11,7 +11,7 @@ export function TreatmentGrid() {
         <Link
           key={t.id}
           href={`/treatments#${t.slug}`}
-          className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all hover:-translate-y-1 hover:border-[#3a6ad6]/40 hover:shadow-xl"
+          className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all hover:-translate-y-1 hover:border-[#3a6ad6]/40 hover:shadow-xl hover:shadow-slate-200/60"
         >
           <div className="relative aspect-[4/3] overflow-hidden">
             <SmartImage

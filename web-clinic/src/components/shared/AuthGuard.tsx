@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
+import { fetchClinicProfile } from "@/lib/services/clinic";
+import { fetchAppointmentRequests } from "@/lib/services/requests";
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
@@ -10,13 +12,21 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     let cancelled = false;
-    if (!isAuthenticated()) {
-      router.replace("/login");
-      return;
-    }
-    Promise.resolve().then(() => {
+
+    async function boot() {
+      if (!isAuthenticated()) {
+        router.replace("/login");
+        return;
+      }
+      try {
+        await Promise.all([fetchClinicProfile(), fetchAppointmentRequests()]);
+      } catch {
+        // Pages handle empty/error states; shell can still render.
+      }
       if (!cancelled) setReady(true);
-    });
+    }
+
+    void boot();
     return () => {
       cancelled = true;
     };

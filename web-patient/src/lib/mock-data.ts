@@ -179,7 +179,8 @@ export const doctors: Doctor[] = [
     gender: "male",
     title: "Plastik ve Rekonstrüktif Cerrahi Uzmanı",
     specialty: "Estetik & Plastik Cerrahi",
-    photo: "https://randomuser.me/api/portraits/men/32.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1612349317150-e413f6a5b16d?auto=format&fit=crop&crop=faces&facepad=2.5&w=700&h=880&q=80",
     rating: 4.9,
     reviewCount: 214,
     experienceYears: 22,
@@ -220,7 +221,8 @@ export const doctors: Doctor[] = [
     gender: "female",
     title: "Göz Hastalıkları Uzmanı",
     specialty: "Göz Sağlığı & Lazer",
-    photo: "https://randomuser.me/api/portraits/women/44.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1594824476967-48c8b964273f?auto=format&fit=crop&crop=faces&facepad=2.5&w=700&h=880&q=80",
     rating: 4.8,
     reviewCount: 176,
     experienceYears: 15,
@@ -252,7 +254,8 @@ export const doctors: Doctor[] = [
     gender: "male",
     title: "Saç Ekimi & Estetik Uzmanı",
     specialty: "Saç Ekimi",
-    photo: "https://randomuser.me/api/portraits/men/54.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1622253692010-333f2da6031d?auto=format&fit=crop&crop=faces&facepad=2.5&w=700&h=880&q=80",
     rating: 4.9,
     reviewCount: 302,
     experienceYears: 12,
@@ -284,7 +287,8 @@ export const doctors: Doctor[] = [
     gender: "female",
     title: "Dermatoloji Uzmanı",
     specialty: "Dermatoloji & Cilt Bakımı",
-    photo: "https://randomuser.me/api/portraits/women/68.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1582750433449-648ed127bb54?auto=format&fit=crop&crop=faces&facepad=2.5&w=700&h=880&q=80",
     rating: 4.7,
     reviewCount: 189,
     experienceYears: 14,
@@ -316,7 +320,8 @@ export const doctors: Doctor[] = [
     gender: "male",
     title: "Ortopedi ve Travmatoloji Uzmanı",
     specialty: "Ortopedi & Fizik Tedavi",
-    photo: "https://randomuser.me/api/portraits/men/76.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1537368910025-700350fe46c7?auto=format&fit=crop&crop=faces&facepad=2.5&w=700&h=880&q=80",
     rating: 4.8,
     reviewCount: 141,
     experienceYears: 18,
@@ -348,7 +353,8 @@ export const doctors: Doctor[] = [
     gender: "female",
     title: "Kadın Hastalıkları ve Doğum Uzmanı",
     specialty: "Kadın Doğum",
-    photo: "https://randomuser.me/api/portraits/women/90.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1651008376811-b90baee60c1f?auto=format&fit=crop&crop=faces&facepad=2.5&w=700&h=880&q=80",
     rating: 4.9,
     reviewCount: 223,
     experienceYears: 16,
@@ -380,7 +386,8 @@ export const doctors: Doctor[] = [
     gender: "male",
     title: "İç Hastalıkları (Dahiliye) Uzmanı",
     specialty: "Check-up & Dahiliye",
-    photo: "https://randomuser.me/api/portraits/men/85.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1559839734-2b71ea197ec2?auto=format&fit=crop&crop=faces&facepad=2.5&w=700&h=880&q=80",
     rating: 4.7,
     reviewCount: 158,
     experienceYears: 20,
@@ -412,7 +419,8 @@ export const doctors: Doctor[] = [
     gender: "female",
     title: "Diş Hekimi — İmplantoloji",
     specialty: "Diş Tedavisi & İmplant",
-    photo: "https://randomuser.me/api/portraits/women/12.jpg",
+    photo:
+      "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&crop=faces&facepad=2.5&w=700&h=880&q=80",
     rating: 4.9,
     reviewCount: 267,
     experienceYears: 13,

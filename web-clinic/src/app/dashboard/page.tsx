@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   ArrowRight,
@@ -13,19 +16,64 @@ import {
 import { PageHeader } from "@/components/shared/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import {
-  appointmentRequests,
-  clinicProfile,
-  dashboardSummary,
-  upcomingAppointments,
+import type {
+  AppointmentRequest,
+  ClinicProfile,
+  DashboardSummary,
+  UpcomingAppointment,
 } from "@/lib/clinic-mock";
+import { fetchDashboardOverview } from "@/lib/services/clinic";
+import { fetchAppointmentRequests } from "@/lib/services/requests";
 import { formatNumber, formatTRY } from "@/lib/utils";
 
 export default function DashboardPage() {
-  const s = dashboardSummary;
-  const recentRequests = appointmentRequests
-    .filter((r) => r.status === "pending")
-    .slice(0, 4);
+  const [summary, setSummary] = useState<DashboardSummary | null>(null);
+  const [profile, setProfile] = useState<ClinicProfile | null>(null);
+  const [upcoming, setUpcoming] = useState<UpcomingAppointment[]>([]);
+  const [recentRequests, setRecentRequests] = useState<AppointmentRequest[]>([]);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    Promise.all([fetchDashboardOverview(), fetchAppointmentRequests()])
+      .then(([overview, requests]) => {
+        if (cancelled) return;
+        setSummary(overview.summary);
+        setProfile(overview.profile);
+        setUpcoming(overview.upcoming);
+        setRecentRequests(
+          requests.filter((r) => r.status === "pending").slice(0, 4)
+        );
+      })
+      .catch((err) => {
+        if (!cancelled) {
+          setError(err instanceof Error ? err.message : "Dashboard yüklenemedi");
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (error) {
+    return (
+      <p className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
+        {error}
+      </p>
+    );
+  }
+
+  if (!summary || !profile) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
+    );
+  }
+
+  const s = summary;
 
   return (
     <div className="flex flex-col gap-6 lg:gap-8">
@@ -48,7 +96,7 @@ export default function DashboardPage() {
               <h2 className="text-lg font-semibold text-slate-900">
                 Profil Tamamlama Oranı
               </h2>
-              <StatusBadge label={`%${clinicProfile.completion}`} tone="primary" dot={false} />
+              <StatusBadge label={`%${profile.completion}`} tone="primary" dot={false} />
             </div>
             <p className="mt-1 text-sm text-slate-500">
               Profiliniz ne kadar eksiksizse, platformda o kadar üst sıralarda
@@ -57,11 +105,11 @@ export default function DashboardPage() {
             <div className="mt-4 h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
               <div
                 className="h-full rounded-full bg-primary transition-all"
-                style={{ width: `${clinicProfile.completion}%` }}
+                style={{ width: `${profile.completion}%` }}
               />
             </div>
             <ul className="mt-4 flex flex-col gap-2">
-              {clinicProfile.missingItems.map((item) => (
+              {profile.missingItems.map((item) => (
                 <li
                   key={item}
                   className="flex items-center gap-2 text-sm text-amber-700"
@@ -173,11 +221,11 @@ export default function DashboardPage() {
             </h2>
           </div>
           <ol className="mt-5 space-y-1">
-            {upcomingAppointments.map((appt, i) => (
+            {upcoming.map((appt, i) => (
               <li key={appt.id} className="relative flex gap-4 pb-5 last:pb-0">
                 <div className="flex flex-col items-center">
                   <span className="flex h-2.5 w-2.5 shrink-0 rounded-full bg-primary ring-4 ring-primary-light" />
-                  {i !== upcomingAppointments.length - 1 && (
+                  {i !== upcoming.length - 1 && (
                     <span className="mt-1 w-px flex-1 bg-slate-200" />
                   )}
                 </div>

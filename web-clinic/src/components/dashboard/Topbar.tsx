@@ -4,8 +4,8 @@ import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Bell, ChevronRight, Menu, Search } from "lucide-react";
 import { getPageMeta } from "@/lib/navigation";
-import { getCurrentClinicUser } from "@/lib/auth";
-import { appointmentRequests } from "@/lib/clinic-mock";
+import { getClinicUserSync } from "@/lib/services/clinic";
+import { getPendingRequestCountSync } from "@/lib/services/requests";
 import { cn } from "@/lib/utils";
 
 const NOTIFICATIONS = [
@@ -30,9 +30,8 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
   const pathname = usePathname();
   const [notifOpen, setNotifOpen] = useState(false);
   const meta = getPageMeta(pathname);
-  const user = getCurrentClinicUser();
-
-  const alerts = appointmentRequests.filter((r) => r.status === "pending").length;
+  const user = getClinicUserSync();
+  const alerts = getPendingRequestCountSync();
 
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">

@@ -8,8 +8,9 @@ import {
   NAV_ITEMS,
   GROWTH_ENGINE_TAGLINE,
 } from "@/lib/navigation";
-import { getCurrentClinicUser, logout } from "@/lib/auth";
-import { appointmentRequests } from "@/lib/clinic-mock";
+import { logout } from "@/lib/auth";
+import { getClinicUserSync } from "@/lib/services/clinic";
+import { getPendingRequestCountSync } from "@/lib/services/requests";
 import { useSidebar } from "@/components/shared/SidebarContext";
 import { NavPremiumBadge } from "@/components/ui/NavPremiumBadge";
 import { cn } from "@/lib/utils";
@@ -24,11 +25,8 @@ export function Sidebar({
   const pathname = usePathname();
   const router = useRouter();
   const { collapsed, toggleCollapsed } = useSidebar();
-  const user = getCurrentClinicUser();
-
-  const pendingRequests = appointmentRequests.filter(
-    (r) => r.status === "pending"
-  ).length;
+  const user = getClinicUserSync();
+  const pendingRequests = getPendingRequestCountSync();
 
   function handleLogout() {
     logout();

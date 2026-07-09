@@ -26,7 +26,7 @@ export default function TreatmentsPage() {
           <div
             key={t.id}
             id={t.slug}
-            className="group flex scroll-mt-24 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all hover:-translate-y-1 hover:border-[#3a6ad6]/30 hover:shadow-xl"
+            className="group flex scroll-mt-24 flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all hover:-translate-y-1 hover:border-[#3a6ad6]/30 hover:shadow-xl hover:shadow-slate-200/60"
           >
             <div className="relative aspect-[16/10] overflow-hidden">
               <SmartImage

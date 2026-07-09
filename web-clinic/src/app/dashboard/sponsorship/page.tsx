@@ -1,12 +1,11 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { Check, Eye, Sparkles } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import {
-  sponsorshipPackages,
-  visibilityScore,
-} from "@/lib/growth-mock";
+import type { SponsorshipPackage } from "@/lib/growth-mock";
+import { fetchSponsorshipData } from "@/lib/services/growth";
 import { cn } from "@/lib/utils";
 
 const TIER_LABELS = {
@@ -16,6 +15,40 @@ const TIER_LABELS = {
 } as const;
 
 export default function SponsorshipPage() {
+  const [visibilityScore, setVisibilityScore] = useState<
+    Awaited<ReturnType<typeof fetchSponsorshipData>>["visibility"] | null
+  >(null);
+  const [sponsorshipPackages, setSponsorshipPackages] = useState<
+    SponsorshipPackage[]
+  >([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchSponsorshipData()
+      .then(({ visibility, packages }) => {
+        if (!cancelled) {
+          setVisibilityScore(visibility);
+          setSponsorshipPackages(packages);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (loading || !visibilityScore) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
+    );
+  }
+
   const pct = (visibilityScore.score / visibilityScore.max) * 100;
 
   return (

@@ -1,10 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Building2, Send, UserRound } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge, type BadgeTone } from "@/components/ui/StatusBadge";
-import { tickets as seedTickets } from "@/lib/mock-data";
+import { fetchTickets } from "@/lib/services/feedback";
 import type { Ticket, TicketPriority, TicketStatus } from "@/types";
 import { cn, formatRelative } from "@/lib/utils";
 
@@ -30,10 +30,29 @@ const FILTERS: { key: FilterKey; label: string }[] = [
 ];
 
 export default function FeedbackPage() {
-  const [items, setItems] = useState<Ticket[]>(seedTickets);
+  const [items, setItems] = useState<Ticket[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterKey>("all");
-  const [selectedId, setSelectedId] = useState<string>(seedTickets[0].id);
+  const [selectedId, setSelectedId] = useState<string>("");
   const [reply, setReply] = useState("");
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchTickets()
+      .then((data) => {
+        if (!cancelled) {
+          setItems(data);
+          setSelectedId(data[0]?.id ?? "");
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filtered = useMemo(
     () => items.filter((t) => filter === "all" || t.status === filter),
@@ -52,6 +71,14 @@ export default function FeedbackPage() {
     if (!selected || !reply.trim()) return;
     setStatus(selected.id, "resolved");
     setReply("");
+  }
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
+    );
   }
 
   return (

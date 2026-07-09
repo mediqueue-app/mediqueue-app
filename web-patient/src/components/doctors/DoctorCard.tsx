@@ -1,5 +1,11 @@
 import Link from "next/link";
-import { MapPin, Clock } from "lucide-react";
+import {
+  Stethoscope,
+  BriefcaseBusiness,
+  MapPin,
+  BadgeCheck,
+  ArrowRight,
+} from "lucide-react";
 import type { Doctor } from "@/lib/mock-data";
 import { Avatar } from "@/components/ui/Avatar";
 import { StarRating } from "@/components/ui/StarRating";
@@ -9,55 +15,61 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
   return (
     <Link
       href={`/doctors/${doctor.id}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white p-5 transition-all hover:-translate-y-1 hover:border-[#3a6ad6]/30 hover:shadow-xl"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1.5 hover:border-[#3a6ad6]/30 hover:shadow-2xl hover:shadow-[#3a6ad6]/10"
     >
-      <div className="flex items-center gap-4">
+      <div className="relative aspect-[4/5] overflow-hidden bg-slate-100">
         <Avatar
           src={doctor.photo}
           name={doctor.name}
-          className="h-16 w-16 shrink-0 rounded-full ring-2 ring-[#eaf0fc]"
+          className="h-full w-full text-4xl transition-transform duration-500 group-hover:scale-105"
         />
-        <div className="min-w-0">
-          <h3 className="truncate font-semibold text-slate-900 group-hover:text-[#3a6ad6]">
-            {doctor.name}
-          </h3>
-          <p className="truncate text-sm text-slate-500">{doctor.title}</p>
-          <div className="mt-1">
-            <StarRating rating={doctor.rating} reviewCount={doctor.reviewCount} />
-          </div>
-        </div>
-      </div>
+        <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/25 to-transparent" />
 
-      <div className="mt-4 flex flex-wrap gap-1.5">
-        <span className="rounded-full bg-[#eaf0fc] px-2.5 py-1 text-xs font-medium text-[#3a6ad6]">
-          {doctor.specialty}
+        <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-semibold text-[#3a6ad6] shadow-sm ring-1 ring-black/5 backdrop-blur">
+          <BadgeCheck className="h-3.5 w-3.5" />
+          Doğrulanmış Uzman
         </span>
-        <span className="rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
-          {doctor.experienceYears} yıl deneyim
+
+        <span className="absolute bottom-3 left-3 inline-flex items-center rounded-full bg-white/95 px-2.5 py-1 shadow-sm ring-1 ring-black/5 backdrop-blur">
+          <StarRating rating={doctor.rating} reviewCount={doctor.reviewCount} />
         </span>
       </div>
 
-      <div className="mt-4 flex items-center justify-between text-sm text-slate-500">
-        <span className="flex items-center gap-1">
-          <MapPin className="h-4 w-4" />
-          {doctor.city}
-        </span>
-        <span className="flex items-center gap-1 font-medium text-emerald-600">
-          <Clock className="h-4 w-4" />
-          {doctor.nextAvailable}
-        </span>
-      </div>
+      <div className="flex flex-1 flex-col p-5">
+        <h3 className="text-lg font-semibold leading-snug text-slate-900 transition-colors group-hover:text-[#3a6ad6]">
+          {doctor.name}
+        </h3>
 
-      <div className="mt-4 flex items-end justify-between border-t border-slate-100 pt-3">
-        <div>
-          <p className="text-xs text-slate-400">Muayene ücreti</p>
-          <p className="text-lg font-bold text-slate-900">
-            {formatPrice(doctor.priceFrom)}
+        <div className="mt-3 space-y-2 text-sm text-slate-500">
+          <p className="flex items-center gap-2">
+            <Stethoscope className="h-4 w-4 shrink-0 text-slate-400" />
+            <span className="truncate">{doctor.specialty}</span>
+          </p>
+          <p className="flex items-center gap-2">
+            <BriefcaseBusiness className="h-4 w-4 shrink-0 text-slate-400" />
+            <span>{doctor.experienceYears} yıl deneyim</span>
           </p>
         </div>
-        <span className="rounded-full bg-[#3a6ad6] px-4 py-2 text-sm font-semibold text-white transition-colors group-hover:bg-[#2f57b3]">
-          Randevu Al
-        </span>
+
+        <div className="mt-4 flex items-center justify-between border-t border-slate-100 pt-3 text-xs text-slate-400">
+          <span className="flex items-center gap-1">
+            <MapPin className="h-3.5 w-3.5" />
+            {doctor.city}
+          </span>
+          <span>
+            <span className="font-semibold text-slate-600">
+              {formatPrice(doctor.priceFrom)}
+            </span>{" "}
+            &apos;den itibaren
+          </span>
+        </div>
+
+        <div className="mt-4 flex items-center justify-end">
+          <span className="inline-flex items-center gap-1 text-sm font-semibold text-slate-500 transition-colors group-hover:text-[#3a6ad6]">
+            Profili Görüntüle
+            <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
+          </span>
+        </div>
       </div>
     </Link>
   );

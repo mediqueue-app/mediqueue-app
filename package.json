@@ -1,0 +1,23 @@
+{
+  "name": "mediqueue-app-main",
+  "version": "1.0.0",
+  "description": "Sağlık turizmi odaklı klinik yönetim ve hasta–doktor eşleştirme platformu. Monorepo yapısında backend, AI servisi ve web arayüzlerini barındırır.",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mediqueue-app/mediqueue-app.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mediqueue-app/mediqueue-app/issues"
+  },
+  "homepage": "https://github.com/mediqueue-app/mediqueue-app#readme"
+}

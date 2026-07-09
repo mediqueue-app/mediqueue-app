@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CheckCheck,
   FileText,
@@ -12,11 +12,8 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge, type BadgeTone } from "@/components/ui/StatusBadge";
-import {
-  consultationRequests,
-  type ConsultationRequest,
-  type ConsultationStatus,
-} from "@/lib/clinic-mock";
+import type { ConsultationRequest, ConsultationStatus } from "@/lib/clinic-mock";
+import { fetchConsultationRequests } from "@/lib/services/consultations";
 import { cn } from "@/lib/utils";
 
 type FilterKey = "all" | ConsultationStatus;
@@ -40,13 +37,31 @@ const STATUS_META: Record<
 };
 
 export default function ConsultationsPage() {
-  const [items, setItems] = useState<ConsultationRequest[]>(consultationRequests);
+  const [items, setItems] = useState<ConsultationRequest[]>([]);
+  const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterKey>("all");
-  const [selectedId, setSelectedId] = useState<string>(consultationRequests[0].id);
+  const [selectedId, setSelectedId] = useState<string>("");
   const [packageName, setPackageName] = useState("");
   const [price, setPrice] = useState("");
   const [note, setNote] = useState("");
   const [sent, setSent] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchConsultationRequests()
+      .then((data) => {
+        if (cancelled) return;
+        setItems(data);
+        setSelectedId(data[0]?.id ?? "");
+        setLoading(false);
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const filtered = useMemo(
     () =>
@@ -97,6 +112,14 @@ export default function ConsultationsPage() {
       )
     );
     setSent(true);
+  }
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
+    );
   }
 
   return (

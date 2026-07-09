@@ -8,10 +8,10 @@ Sağlık turizmi odaklı klinik yönetim ve hasta–doktor eşleştirme platform
 |--------|-------|----------|------|
 | [`backend/`](backend/) | Aktif | FastAPI REST API — auth, klinikler, yorumlar, AI proxy | 8000 |
 | [`ai/`](ai/) | Aktif | Kural tabanlı doktor/klinik eşleştirme microservice | 8001 |
-| [`web-admin/`](web-admin/) | Prototip | Süperadmin pazar yeri kontrol paneli (mock veri) | 3003 |
-| [`web-clinic/`](web-clinic/) | Prototip | Klinik büyüme motoru / marketplace host paneli (mock veri) | 3000 |
-| [`web-doctor/`](web-doctor/) | Prototip | Doktor portalı (mock veri) | 3001 |
-| [`web-patient/`](web-patient/) | Prototip | Hasta marketplace uygulaması (mock veri) | 3002 |
+| [`web-admin/`](web-admin/) | UI + servis katmanı | Süperadmin pazar yeri kontrol paneli (servis katmanı hazır, mock veri) | 3003 |
+| [`web-clinic/`](web-clinic/) | Hybrid entegre | JWT auth + API; büyüme modülleri mock fallback | 3000 |
+| [`web-doctor/`](web-doctor/) | Kısmen entegre | Doktor portalı — JWT auth + randevu/hasta API entegrasyonu | 3001 |
+| [`web-patient/`](web-patient/) | UI + servis katmanı | Hasta marketplace uygulaması (yüksek kaliteli UI, entegrasyona hazır) | 3002 |
 | `mobile/` | Planlanmış | Mobil uygulama — henüz başlanmadı | — |
 
 ## Mimari Özet
@@ -19,11 +19,11 @@ Sağlık turizmi odaklı klinik yönetim ve hasta–doktor eşleştirme platform
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │ web-clinic  │     │ web-doctor  │     │ web-patient │
-│  (mock)     │     │  (mock)     │     │   (mock)    │
+│ JWT + API   │     │ JWT + API   │     │ UI + svc    │
 └──────┬──────┘     └──────┬──────┘     └──────┬──────┘
        │                   │                   │
        └───────────────────┼───────────────────┘
-                           │  ← Ay 2: API entegrasyonu
+                           │
                     ┌──────▼──────┐
                     │   backend   │  JWT auth, RBAC, REST API
                     │  (FastAPI)  │
@@ -37,7 +37,17 @@ Sağlık turizmi odaklı klinik yönetim ve hasta–doktor eşleştirme platform
        └─────────────┘ └───────┘ └───────────┘
 ```
 
-**Şu an:** Backend ve AI servisi gerçek API + PostgreSQL ile çalışır. Web arayüzleri (admin, klinik, doktor, hasta) zengin UI prototipleri olarak mock veriyle çalışır; backend'e bağlı değildir.
+**Frontend mimarisi (hybrid):** Paneller `Component → Service → API` katmanını kullanır.
+
+- **web-doctor** kısmen API'ye bağlıdır (JWT auth, randevu/hasta uç noktaları).
+- **web-clinic** login ve auth süreçlerinde JWT ile gerçek API'ye bağlıdır; klinik profili, talepler ve doktor kadrosu hybrid çalışır (token varken API, aksi halde mock fallback). Kampanyalar, mesajlar, finans vb. büyüme modülleri henüz mock veri döner — sayfalar silinmez, `growth-mock.ts` üzerinden çalışır.
+- **web-admin / web-patient:** Yüksek kaliteli UI; servis katmanı backend entegrasyonuna hazır.
+
+**Entegrasyon durumu:**
+- **Backend + AI:** PostgreSQL ile çalışır; CI/CD aktif (`backend-tests.yml`, `ai-tests.yml`).
+- **web-doctor:** JWT kimlik doğrulama, `/auth/me`, randevu ve hasta listesi API entegrasyonu (kısmi).
+- **web-clinic:** JWT + `/auth/me` gerçek API; operasyonel uç noktalar hybrid; büyüme modülleri mock.
+- **web-admin / web-patient:** Servis katmanı hazır, API entegrasyonu sırada.
 
 ## Hızlı Başlangıç
 
@@ -89,11 +99,12 @@ npm run dev
 
 http://localhost:3003
 
-**Klinik büyüme paneli:**
+**Klinik büyüme paneli** (backend `http://localhost:8000` gerekir):
 
 ```powershell
 cd web-clinic
 npm install
+copy .env.example .env
 npm run dev
 ```
 
@@ -106,6 +117,7 @@ Detay: [`web-clinic/README.md`](web-clinic/README.md)
 ```powershell
 cd web-doctor
 npm install
+copy .env.example .env
 npm run dev
 ```
 
@@ -119,19 +131,19 @@ Detay: [`web-doctor/README.md`](web-doctor/README.md)
 |---------|----------|-----|
 | Backend API | ~70% | Auth, RBAC, klinikler, yorumlar, match proxy |
 | AI Matching | ~85% | Rule-based, PostgreSQL, CI, ~%96 test coverage |
-| Web Admin | ~40% | Süperadmin marketplace paneli, mock veri |
-| Web Clinic | ~45% | Büyüme motoru UI, premium modüller, mock veri |
-| Web Doctor | ~25% | UI prototip, mock veri, odontogram |
-| Web Patient | ~30% | Marketplace UI prototip, mock veri |
+| Web Admin | ~45% | Süperadmin marketplace paneli, servis katmanı + mock veri |
+| Web Clinic | ~50% | Büyüme motoru UI, JWT auth, API servis katmanı |
+| Web Doctor | ~35% | UI + JWT auth, kısmi API entegrasyonu |
+| Web Patient | ~30% | Marketplace UI prototip, servis katmanına hazır |
 | Mobile | 0% | Yok |
-| Frontend ↔ Backend | 0% | Entegrasyon Ay 2 |
+| Frontend ↔ Backend | ~30% | web-doctor kısmi; web-clinic hybrid (auth + operasyonel API) |
 
 ## Test ve CI
 
 | Bileşen | Test | CI |
 |---------|------|-----|
 | AI | pytest, ~%96 coverage | GitHub Actions (`ai-tests.yml`) |
-| Backend | pytest (~88 test) | Yok |
+| Backend | pytest (~110 test) | GitHub Actions ([`backend-tests.yml`](.github/workflows/backend-tests.yml)) |
 | Web | Yok | Yok |
 
 Backend testleri:
@@ -166,14 +178,14 @@ pytest --cov=app
 | [`ai/docs/API.md`](ai/docs/API.md) | Detaylı match API dokümantasyonu |
 | [`ai/docs/DEMO.md`](ai/docs/DEMO.md) | Demo Day match senaryosu |
 | [`ai/docs/DEMO_DAY_CHECKLIST.md`](ai/docs/DEMO_DAY_CHECKLIST.md) | AI smoke test checklist |
-| [`web-clinic/README.md`](web-clinic/README.md) | Klinik büyüme paneli, demo akışı |
-| [`web-doctor/README.md`](web-doctor/README.md) | Doktor portalı, demo akışı |
+| [`web-clinic/README.md`](web-clinic/README.md) | Klinik büyüme paneli, API auth akışı |
+| [`web-doctor/README.md`](web-doctor/README.md) | Doktor portalı, API auth akışı |
 | [`backend/MANUAL_TEST_RBAC.md`](backend/MANUAL_TEST_RBAC.md) | Manuel RBAC doğrulama |
 
 ## Yol Haritası
 
-**Ay 1 (mevcut):** Gösterilebilir UI prototipleri — web-admin, web-clinic, web-doctor, web-patient mock veriyle.
+**Mevcut:** Backend CI/CD, JWT auth, web-clinic/web-doctor API servis katmanı, yüksek kaliteli admin/patient/klinik UI.
 
-**Ay 2:** Frontend–backend entegrasyonu, web auth, hasta uygulaması MVP, operasyonel API'ler (randevu, mesaj).
+**Sırada:** web-admin ve web-patient backend entegrasyonu, büyüme modülleri için operasyonel API'ler, hasta uygulaması MVP.
 
 **Faz 2:** AI feedback kalıcılığı, ML tabanlı eşleştirme, mobil uygulama.

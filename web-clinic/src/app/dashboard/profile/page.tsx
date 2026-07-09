@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   BadgeCheck,
   Clock3,
@@ -16,10 +16,11 @@ import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge, type BadgeTone } from "@/components/ui/StatusBadge";
 import { ToggleSwitch } from "@/components/ui/ToggleSwitch";
 import {
-  clinicProfile,
   type Amenity,
+  type ClinicProfile,
   type VerificationStatus,
 } from "@/lib/clinic-mock";
+import { fetchClinicProfile } from "@/lib/services/clinic";
 import { cn } from "@/lib/utils";
 
 const VERIFICATION_META: Record<
@@ -32,11 +33,38 @@ const VERIFICATION_META: Record<
 };
 
 export default function ProfilePage() {
-  const [amenities, setAmenities] = useState<Amenity[]>(clinicProfile.amenities);
+  const [profile, setProfile] = useState<ClinicProfile | null>(null);
+  const [amenities, setAmenities] = useState<Amenity[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchClinicProfile()
+      .then((data) => {
+        if (cancelled) return;
+        setProfile(data);
+        setAmenities(data.amenities);
+        setLoading(false);
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function toggleAmenity(id: string) {
     setAmenities((prev) =>
       prev.map((a) => (a.id === id ? { ...a, enabled: !a.enabled } : a))
+    );
+  }
+
+  if (loading || !profile) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
     );
   }
 
@@ -59,20 +87,20 @@ export default function ProfilePage() {
       <section className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-primary-light text-xl font-bold text-primary">
-            {clinicProfile.name.slice(0, 2).toUpperCase()}
+            {profile.name.slice(0, 2).toUpperCase()}
           </div>
           <div className="min-w-0 flex-1">
             <h2 className="text-lg font-bold text-slate-900">
-              {clinicProfile.name}
+              {profile.name}
             </h2>
-            <p className="text-sm text-slate-500">{clinicProfile.tagline}</p>
+            <p className="text-sm text-slate-500">{profile.tagline}</p>
             <p className="mt-1 flex items-center gap-1 text-xs text-slate-400">
               <MapPin className="h-3.5 w-3.5" />
-              {clinicProfile.city}, {clinicProfile.country}
+              {profile.city}, {profile.country}
             </p>
           </div>
           <StatusBadge
-            label={`Profil %${clinicProfile.completion}`}
+            label={`Profil %${profile.completion}`}
             tone="primary"
             dot={false}
           />
@@ -82,7 +110,7 @@ export default function ProfilePage() {
             Klinik Tanıtım Metni
           </label>
           <textarea
-            defaultValue={clinicProfile.about}
+            defaultValue={profile.about}
             rows={3}
             className="w-full resize-none rounded-xl border border-slate-200 px-3.5 py-3 text-sm text-slate-700 transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
           />
@@ -100,12 +128,12 @@ export default function ProfilePage() {
             </p>
           </div>
           <span className="text-xs font-medium text-slate-400">
-            {clinicProfile.gallery.length} fotoğraf
+            {profile.gallery.length} fotoğraf
           </span>
         </div>
 
         <div className="mt-5 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
-          {clinicProfile.gallery.map((photo) => (
+          {profile.gallery.map((photo) => (
             <div
               key={photo.id}
               className="group relative aspect-[4/3] overflow-hidden rounded-xl"
@@ -150,7 +178,7 @@ export default function ProfilePage() {
         </p>
 
         <ul className="mt-5 flex flex-col gap-3">
-          {clinicProfile.accreditations.map((doc) => {
+          {profile.accreditations.map((doc) => {
             const meta = VERIFICATION_META[doc.status];
             return (
               <li

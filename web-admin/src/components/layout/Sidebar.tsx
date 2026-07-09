@@ -5,7 +5,8 @@ import { usePathname, useRouter } from "next/navigation";
 import { ChevronLeft, ChevronRight, LogOut, ShieldCheck } from "lucide-react";
 import { NAV_ITEMS, type NavItem } from "@/lib/navigation";
 import { getCurrentAdmin, logout } from "@/lib/auth";
-import { clinicApplications, tickets } from "@/lib/mock-data";
+import { getPendingApplicationCountSync } from "@/lib/services/applications";
+import { getOpenTicketCountSync } from "@/lib/services/feedback";
 import { useSidebar } from "@/components/shared/SidebarContext";
 import { cn } from "@/lib/utils";
 
@@ -23,10 +24,8 @@ export function Sidebar({
   const { collapsed, toggleCollapsed } = useSidebar();
   const admin = getCurrentAdmin();
 
-  const pendingApplications = clinicApplications.filter(
-    (a) => a.status === "pending"
-  ).length;
-  const openTickets = tickets.filter((t) => t.status === "open").length;
+  const pendingApplications = getPendingApplicationCountSync();
+  const openTickets = getOpenTicketCountSync();
 
   function handleLogout() {
     logout();

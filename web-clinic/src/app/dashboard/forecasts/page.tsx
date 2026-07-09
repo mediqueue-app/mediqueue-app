@@ -2,10 +2,15 @@ import { Sparkles } from "lucide-react";
 import { DemandForecastChart } from "@/components/dashboard/growth/DemandForecastChart";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { aiInsights, forecastData } from "@/lib/growth-mock";
+import { fetchAiInsights, fetchForecastData } from "@/lib/services/growth";
 import { cn } from "@/lib/utils";
 
-export default function ForecastsPage() {
+export default async function ForecastsPage() {
+  const [forecastData, aiInsights] = await Promise.all([
+    fetchForecastData(),
+    fetchAiInsights(),
+  ]);
+
   return (
     <div className="flex flex-col gap-6 lg:gap-8">
       <PageHeader

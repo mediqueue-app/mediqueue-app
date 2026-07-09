@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Camera,
   Clock,
@@ -13,7 +13,8 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge } from "@/components/ui/StatusBadge";
-import { doctors as seedDoctors, type Doctor } from "@/lib/clinic-mock";
+import type { Doctor } from "@/lib/clinic-mock";
+import { addDoctorLocally, fetchDoctors } from "@/lib/services/doctors";
 import { cn } from "@/lib/utils";
 
 const TONES = [
@@ -25,8 +26,26 @@ const TONES = [
 ];
 
 export default function DoctorsPage() {
-  const [doctors, setDoctors] = useState<Doctor[]>(seedDoctors);
+  const [doctors, setDoctors] = useState<Doctor[]>([]);
+  const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchDoctors()
+      .then((data) => {
+        if (!cancelled) {
+          setDoctors(data);
+          setLoading(false);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   const [form, setForm] = useState({
     name: "",
@@ -70,12 +89,20 @@ export default function DoctorsPage() {
       status: "pending",
       tone: TONES[doctors.length % TONES.length],
     };
-    setDoctors((prev) => [newDoctor, ...prev]);
+    void addDoctorLocally(newDoctor).then(setDoctors);
     resetForm();
     setModalOpen(false);
   }
 
   const activeCount = doctors.filter((d) => d.status === "active").length;
+
+  if (loading) {
+    return (
+      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        Yükleniyor…
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6">
