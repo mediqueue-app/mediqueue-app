@@ -6,7 +6,7 @@ Sağlık turizmi odaklı klinik yönetim ve hasta–doktor eşleştirme platform
 
 | Klasör | Durum | Açıklama | Port |
 |--------|-------|----------|------|
-| [`backend/`](backend/) | Aktif | FastAPI REST API — auth, klinikler, yorumlar, AI proxy | 8000 |
+| [`backend/`](backend/) | Aktif | FastAPI REST API — auth, klinikler, hastalar, randevular, yorumlar, AI proxy, Fernet | 8000 |
 | [`ai/`](ai/) | Aktif | Kural tabanlı doktor/klinik eşleştirme microservice | 8001 |
 | [`web-clinic/`](web-clinic/) | Prototip | Klinik yönetim dashboard'u (mock veri) | 3000 |
 | [`web-doctor/`](web-doctor/) | Prototip | Doktor portalı (mock veri) | 3001 |
@@ -36,7 +36,7 @@ Sağlık turizmi odaklı klinik yönetim ve hasta–doktor eşleştirme platform
        └─────────────┘ └───────┘ └───────────┘
 ```
 
-**Şu an:** Backend ve AI servisi gerçek API + PostgreSQL ile çalışır. Web arayüzleri (klinik, doktor) zengin UI prototipleri olarak mock veriyle çalışır; backend'e bağlı değildir.
+**Şu an:** Backend (Sprint 2: hastalar, randevular, Fernet) ve AI servisi gerçek API + PostgreSQL ile çalışır. Web arayüzleri (klinik, doktor) zengin UI prototipleri olarak mock veriyle çalışır; backend'e bağlı değildir.
 
 ## Hızlı Başlangıç
 
@@ -106,7 +106,7 @@ Detay: [`web-doctor/README.md`](web-doctor/README.md)
 
 | Bileşen | Olgunluk | Not |
 |---------|----------|-----|
-| Backend API | ~70% | Auth, RBAC, klinikler, yorumlar, match proxy |
+| Backend API | ~78% | Auth, RBAC, klinikler, hastalar, randevular, yorumlar, match proxy, Fernet (`health_history`) — Sprint 2 |
 | AI Matching | ~85% | Rule-based, PostgreSQL, CI, ~%96 test coverage |
 | Web Clinic | ~25% | UI prototip, mock veri |
 | Web Doctor | ~25% | UI prototip, mock veri, odontogram |
@@ -119,7 +119,7 @@ Detay: [`web-doctor/README.md`](web-doctor/README.md)
 | Bileşen | Test | CI |
 |---------|------|-----|
 | AI | pytest, ~%96 coverage | GitHub Actions (`ai-tests.yml`) |
-| Backend | pytest (~88 test) | Yok |
+| Backend | pytest (~110 test) | GitHub Actions (`backend-tests.yml`) |
 | Web | Yok | Yok |
 
 Backend testleri:
@@ -162,6 +162,6 @@ pytest --cov=app
 
 **Ay 1 (mevcut):** Gösterilebilir UI prototipleri — web-clinic, web-doctor mock veriyle.
 
-**Ay 2:** Frontend–backend entegrasyonu, web auth, hasta uygulaması MVP, operasyonel API'ler (randevu, mesaj).
+**Ay 2:** Frontend–backend entegrasyonu, web auth, hasta uygulaması MVP; mesajlaşma ve kalan operasyonel API'ler (randevu/hasta API'leri Sprint 2'de hazır).
 
 **Faz 2:** AI feedback kalıcılığı, ML tabanlı eşleştirme, mobil uygulama.

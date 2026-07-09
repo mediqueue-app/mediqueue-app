@@ -5,7 +5,10 @@ import Link from "next/link";
 import { Check, Lock, Video, Image as ImageIcon } from "lucide-react";
 import { ToggleSwitch } from "@/components/ui/ToggleSwitch";
 import { BRANCHES } from "@/lib/branches";
-import { getClinicProfileSync } from "@/lib/services/clinic";
+import {
+  getClinicProfileSync,
+  updateClinicProfile,
+} from "@/lib/services/clinic";
 import { cn } from "@/lib/utils";
 import type { Language, NotificationPreferences, Specialty } from "@/types";
 
@@ -34,6 +37,8 @@ export function SettingsForm() {
     inAppReviews: false,
   });
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   function toggleLanguage(lang: Language) {
     setLanguages((prev) =>
@@ -49,9 +54,25 @@ export function SettingsForm() {
     );
   }
 
-  function handleSave() {
-    setSaved(true);
-    window.setTimeout(() => setSaved(false), 2500);
+  async function handleSave() {
+    setSaving(true);
+    setError(null);
+    try {
+      await updateClinicProfile({
+        name: clinicName,
+        address,
+        phone,
+        city,
+        description,
+        languages,
+      });
+      setSaved(true);
+      window.setTimeout(() => setSaved(false), 2500);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Kayıt başarısız");
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -248,6 +269,9 @@ export function SettingsForm() {
       </section>
 
       <div className="flex items-center justify-end gap-3">
+        {error ? (
+          <span className="text-sm font-medium text-red-600">{error}</span>
+        ) : null}
         {saved && (
           <span className="flex items-center gap-1.5 text-sm font-medium text-emerald-600">
             <Check className="h-4 w-4" />
@@ -257,9 +281,10 @@ export function SettingsForm() {
         <button
           type="button"
           onClick={handleSave}
-          className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
+          disabled={saving}
+          className="rounded-xl bg-primary px-5 py-2.5 text-sm font-semibold text-white transition-colors hover:bg-primary-hover disabled:opacity-60"
         >
-          Değişiklikleri Kaydet
+          {saving ? "Kaydediliyor…" : "Değişiklikleri Kaydet"}
         </button>
       </div>
     </div>

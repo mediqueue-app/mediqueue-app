@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, Stethoscope, X } from "lucide-react";
+import { Building2, Lock, X } from "lucide-react";
 import { ApiError } from "@/lib/api/client";
 import { isAuthenticated, login } from "@/lib/auth";
 
@@ -48,13 +48,13 @@ export default function LoginPage() {
       <div className="relative w-full max-w-md">
         <div className="mb-8 text-center">
           <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-2xl bg-primary text-white shadow-xl shadow-primary/30">
-            <Stethoscope className="h-8 w-8" strokeWidth={2.5} />
+            <Building2 className="h-8 w-8" strokeWidth={2.5} />
           </div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-900">
             MEDI<span className="text-primary">·</span>QUEUE
           </h1>
           <p className="mt-1 text-sm font-semibold uppercase tracking-widest text-slate-400">
-            Doctor Portal
+            Clinic Portal
           </p>
         </div>
 
@@ -64,7 +64,7 @@ export default function LoginPage() {
         >
           <h2 className="text-lg font-semibold text-slate-900">Giriş Yap</h2>
           <p className="mt-1 text-sm text-slate-500">
-            Klinik yöneticiniz tarafından davet edilen hesabınızla giriş yapın.
+            Klinik yöneticisi hesabınızla giriş yapın.
           </p>
 
           {error ? (
@@ -83,13 +83,16 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="doktor@klinik.com"
+                placeholder="yonetici@klinik.com"
                 required
                 className="mt-1.5 w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
               />
             </div>
             <div>
-              <label htmlFor="password" className="text-sm font-medium text-slate-700">
+              <label
+                htmlFor="password"
+                className="text-sm font-medium text-slate-700"
+              >
                 Şifre
               </label>
               <input
@@ -116,7 +119,7 @@ export default function LoginPage() {
           <button
             type="button"
             onClick={() => setForgotOpen(true)}
-            className="mt-4 w-full text-center text-sm font-medium text-slate-500 hover:text-primary"
+            className="mt-3 w-full text-center text-sm font-medium text-slate-500 hover:text-primary"
           >
             Şifremi unuttum
           </button>
@@ -141,7 +144,7 @@ export default function LoginPage() {
             </div>
             <p className="text-sm text-slate-600">
               Şifre sıfırlama özelliği sonraki sprintte eklenecek. Demo için
-              seed edilmiş doktor hesabını kullanın.
+              seed edilmiş klinik hesabını kullanın.
             </p>
           </div>
         </div>

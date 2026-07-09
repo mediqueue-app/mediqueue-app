@@ -13,7 +13,10 @@ import {
 import type { Language } from "@/types";
 import { ProfileHero } from "@/components/profile/ProfileHero";
 import { ProfilePreviewCard } from "@/components/profile/ProfilePreviewCard";
-import { getCurrentDoctorSync } from "@/lib/services/doctor";
+import {
+  getCurrentDoctorSync,
+  updateCurrentDoctor,
+} from "@/lib/services/doctor";
 import { cn } from "@/lib/utils";
 
 const ALL_LANGUAGES: Language[] = ["TR", "EN", "AR", "RU", "DE", "FR"];
@@ -35,6 +38,8 @@ export default function ProfilePage() {
   const [bio, setBio] = useState(currentDoctor.bio);
   const [languages, setLanguages] = useState<Language[]>(currentDoctor.languages);
   const [saved, setSaved] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   function toggleLanguage(lang: Language) {
     setLanguages((prev) =>
@@ -42,9 +47,23 @@ export default function ProfilePage() {
     );
   }
 
-  function handleSave() {
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
+  async function handleSave() {
+    setSaving(true);
+    setError(null);
+    try {
+      await updateCurrentDoctor({
+        full_name: fullName,
+        specialty,
+        bio,
+        languages,
+      });
+      setSaved(true);
+      setTimeout(() => setSaved(false), 2500);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Kayıt başarısız");
+    } finally {
+      setSaving(false);
+    }
   }
 
   return (
@@ -188,9 +207,12 @@ export default function ProfilePage() {
           </section>
 
           {/* Kaydet — mobil */}
-          <div className="flex items-center justify-end gap-3 xl:hidden">
+          <div className="flex flex-col items-end gap-2 xl:hidden">
+            {error ? (
+              <span className="text-sm font-medium text-red-600">{error}</span>
+            ) : null}
             {saved && <SavedBadge />}
-            <SaveButton onClick={handleSave} />
+            <SaveButton onClick={handleSave} saving={saving} />
           </div>
         </div>
 
@@ -208,12 +230,15 @@ export default function ProfilePage() {
           />
 
           <div className="hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm xl:block">
+            {error ? (
+              <p className="mb-3 text-sm font-medium text-red-600">{error}</p>
+            ) : null}
             {saved && (
               <div className="mb-3">
                 <SavedBadge />
               </div>
             )}
-            <SaveButton onClick={handleSave} fullWidth />
+            <SaveButton onClick={handleSave} fullWidth saving={saving} />
           </div>
 
           <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
@@ -261,21 +286,24 @@ function SavedBadge() {
 function SaveButton({
   onClick,
   fullWidth,
+  saving,
 }: {
   onClick: () => void;
   fullWidth?: boolean;
+  saving?: boolean;
 }) {
   return (
     <button
       type="button"
       onClick={onClick}
+      disabled={saving}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-xl bg-primary py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover",
+        "inline-flex items-center justify-center gap-2 rounded-xl bg-primary py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover disabled:opacity-60",
         fullWidth ? "w-full" : "px-6"
       )}
     >
       <Save className="h-4 w-4" />
-      Değişiklikleri Kaydet
+      {saving ? "Kaydediliyor…" : "Değişiklikleri Kaydet"}
     </button>
   );
 }

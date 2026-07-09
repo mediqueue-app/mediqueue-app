@@ -1,11 +1,23 @@
-import type { Doctor } from "@/types";
+import { apiFetch } from "@/lib/api/client";
+import { mapDoctorRead } from "@/lib/api/mappers";
+import type { DoctorRead } from "@/lib/api/types";
+import { getToken, requireClinicId } from "@/lib/auth";
 import { getDoctors } from "@/lib/mock-data";
+import type { Doctor } from "@/types";
 
-export async function fetchDoctors(): Promise<Doctor[]> {
-  await delay(60);
-  return getDoctors();
+function useApi(): boolean {
+  return Boolean(getToken());
 }
 
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+export async function fetchDoctors(): Promise<Doctor[]> {
+  if (!useApi()) {
+    return getDoctors();
+  }
+
+  const clinicId = requireClinicId();
+  const doctors = await apiFetch<DoctorRead[]>(
+    `/clinics/${clinicId}/doctors`,
+    { token: getToken() }
+  );
+  return doctors.map(mapDoctorRead);
 }

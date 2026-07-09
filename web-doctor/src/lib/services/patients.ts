@@ -1,12 +1,30 @@
-import type { Patient, PatientFilterTab } from "@/types";
+import { apiFetch } from "@/lib/api/client";
+import { mapAppointmentsToPatients } from "@/lib/api/mappers";
+import type { AppointmentRead } from "@/lib/api/types";
+import { getToken, requireDoctorId } from "@/lib/auth";
 import { getPatients } from "@/lib/mock-data";
+import type { Patient, PatientFilterTab } from "@/types";
+
+function useApi(): boolean {
+  return Boolean(getToken());
+}
 
 export async function fetchPatients(
   filter: PatientFilterTab = "TUMU",
   search = ""
 ): Promise<Patient[]> {
-  await delay(80);
-  let result = getPatients();
+  let result: Patient[];
+
+  if (!useApi()) {
+    result = getPatients();
+  } else {
+    const doctorId = requireDoctorId();
+    const appointments = await apiFetch<AppointmentRead[]>(
+      `/doctors/${doctorId}/appointments`,
+      { token: getToken() }
+    );
+    result = mapAppointmentsToPatients(appointments);
+  }
 
   if (filter === "AKTIF") {
     result = result.filter((p) => p.treatmentStatus === "AKTIF");
@@ -23,10 +41,6 @@ export async function fetchPatients(
 }
 
 export async function fetchPatientById(id: string): Promise<Patient | null> {
-  await delay(60);
-  return getPatients().find((p) => p.id === id) ?? null;
-}
-
-function delay(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+  const patients = await fetchPatients("TUMU", "");
+  return patients.find((p) => p.id === id) ?? null;
 }

@@ -5,8 +5,8 @@ import { usePathname } from "next/navigation";
 import { ChevronLeft, ChevronRight, LogOut, Stethoscope } from "lucide-react";
 import { NAV_ITEMS } from "@/lib/navigation";
 import { getQuickStatsSync } from "@/lib/services/messages";
+import { logout } from "@/lib/auth";
 import { getCurrentDoctorSync } from "@/lib/services/doctor";
-import { clearDemoAuthenticated } from "@/lib/demo-auth";
 import { useSidebar } from "@/components/shared/SidebarContext";
 import { cn } from "@/lib/utils";
 
@@ -142,7 +142,7 @@ export function Sidebar({
             <Link
               href="/login"
               onClick={() => {
-                clearDemoAuthenticated();
+                logout();
                 onNavigate?.();
               }}
               className="mt-1 flex w-full items-center gap-3 rounded-xl px-2 py-2.5 text-sm font-medium text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600"
@@ -155,7 +155,7 @@ export function Sidebar({
           <Link
             href="/login"
             onClick={() => {
-              clearDemoAuthenticated();
+              logout();
               onNavigate?.();
             }}
             className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-600"

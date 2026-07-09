@@ -6,6 +6,7 @@ import { Search } from "lucide-react";
 import { LeadsTable } from "@/components/dashboard/patients/LeadsTable";
 import { PatientDrawer } from "@/components/dashboard/patients/PatientDrawer";
 import { StatusTabs } from "@/components/ui/StatusTabs";
+import { updateLeadStatus } from "@/lib/services/leads";
 import type { LeadStatus, PatientLead } from "@/types";
 
 export function PatientsExplorer({ leads }: { leads: PatientLead[] }) {
@@ -16,6 +17,7 @@ export function PatientsExplorer({ leads }: { leads: PatientLead[] }) {
   const [query, setQuery] = useState(initialQuery);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [rows, setRows] = useState(leads);
+  const [error, setError] = useState<string | null>(null);
 
   const counts = useMemo(() => {
     const base: Record<LeadStatus | "TÜMÜ", number> = {
@@ -51,14 +53,30 @@ export function PatientsExplorer({ leads }: { leads: PatientLead[] }) {
     [rows, selectedId]
   );
 
-  function updateStatus(id: string, status: PatientLead["status"]) {
+  async function updateStatus(id: string, nextStatus: PatientLead["status"]) {
+    setError(null);
+    const previous = rows;
     setRows((prev) =>
-      prev.map((row) => (row.id === id ? { ...row, status } : row))
+      prev.map((row) => (row.id === id ? { ...row, status: nextStatus } : row))
     );
+    try {
+      const updated = await updateLeadStatus(id, nextStatus);
+      setRows((prev) =>
+        prev.map((row) => (row.id === id ? updated : row))
+      );
+    } catch (err) {
+      setRows(previous);
+      setError(err instanceof Error ? err.message : "Durum güncellenemedi");
+    }
   }
 
   return (
     <div className="flex flex-col gap-5">
+      {error ? (
+        <p className="rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700">
+          {error}
+        </p>
+      ) : null}
       <div className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
         <div className="relative mb-4 max-w-md">
           <Search className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
