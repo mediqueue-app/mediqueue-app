@@ -1,6 +1,8 @@
 # MediQueue — Klinik Dashboard (`web-clinic`)
 
-Klinik yöneticilerinin operasyonel iş akışını yönettiği SaaS düzeyinde web arayüzü. **Ay 1 prototipi:** mock veri, backend bağlantısı yok.
+Klinik yöneticilerinin operasyonel iş akışını yönettiği SaaS web arayüzü.
+
+**Durum:** JWT login + client-side API bağlama (randevular/doktorlar/yorumlar/ayarlar). Analytics ve billing hâlâ mock. Backend’de clinic rolü + `clinic_id` seed hesabı gerekir.
 
 ## Teknolojiler
 
@@ -8,52 +10,38 @@ Klinik yöneticilerinin operasyonel iş akışını yönettiği SaaS düzeyinde 
 - **Inter** tipografi · **Lucide** ikonlar
 - **Recharts** grafikler · **Framer Motion** sayfa geçişleri
 
-## Tasarım Sistemi
-
-| Token | Değer |
-|-------|-------|
-| Marka mavisi | `#1E4FA8` |
-| Başarı | `#10B981` |
-| Uyarı | `#F59E0B` |
-| Hata | `#EF4444` |
-
 ## Hızlı Başlangıç
 
 ```powershell
 cd web-clinic
+copy .env.example .env.local
 npm install
 npm run dev
 ```
 
-→ **http://localhost:3000/dashboard**
+→ **http://localhost:3000/login**
+
+`NEXT_PUBLIC_API_BASE_URL` varsayılan: `http://localhost:8000/v1`
 
 ## Sayfalar
 
-| Rota | Açıklama |
-|------|----------|
-| `/dashboard` | KPI, trend grafiği, bekleyen talepler, aktiviteler |
-| `/dashboard/patients` | Durum sekmeleri, arama, onay/alternatif/iptal |
-| `/dashboard/doctors` | Doktor grid, yıldız puanı, aktif toggle, detay paneli |
-| `/dashboard/analytics` | Dönüşüm hunisi, tedavi talebi grafiği, menşei |
-| `/dashboard/reviews` | AI yorum özeti + hasta yorum listesi |
-| `/dashboard/settings` | Profil, diller, branşlar, bildirim tercihleri |
-| `/dashboard/billing` | Abonelik (ayarlardan link) |
+| Rota | Açıklama | Veri |
+|------|----------|------|
+| `/login` | Klinik JWT girişi | API |
+| `/dashboard` | KPI, trend, bekleyen talepler | API (client fetch) |
+| `/dashboard/patients` | Lead listesi, onay/red | API |
+| `/dashboard/doctors` | Doktor grid | API |
+| `/dashboard/reviews` | Yorum listesi | API |
+| `/dashboard/settings` | Klinik profil PATCH | API |
+| `/dashboard/analytics` | Huniler / grafikler | Mock |
+| `/dashboard/billing` | Abonelik | Mock |
 
 ## Demo Akışı
 
 ```
-Özet → Hasta Talepleri → Doktorlar → Analitik → Yorumlar → Ayarlar
+/login → Özet → Hasta Talepleri → Doktorlar → Yorumlar → Ayarlar
 ```
 
-## Veri Katmanı
+## Ay 2’ye ertelenenler
 
-`lib/services/` — Ay 2 API geçişi için hazır:
-
-- `clinic.ts` · `leads.ts` · `doctors.ts` · `analytics.ts` · `reviews.ts` · `billing.ts`
-
-Mock: `lib/mock-data.ts` · `lib/mock-reviews.ts` · `lib/mock-date.ts`
-
-## Ay 1 / Ay 2
-
-**Dahil:** 7 sayfa, collapsible sidebar, recharts, demo toast, genişletilmiş lead durumları  
-**Ay 2:** Backend auth, kalıcı kayıt, gerçek PDF/ödeme, AI yorum özeti API
+PDF export, ödeme, AI yorum özeti API, belge önizleme, cookie-based auth.

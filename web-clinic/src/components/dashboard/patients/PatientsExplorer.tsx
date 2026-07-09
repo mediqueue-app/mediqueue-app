@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search } from "lucide-react";
 import { LeadsTable } from "@/components/dashboard/patients/LeadsTable";
@@ -18,6 +18,10 @@ export function PatientsExplorer({ leads }: { leads: PatientLead[] }) {
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [rows, setRows] = useState(leads);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    setRows(leads);
+  }, [leads]);
 
   const counts = useMemo(() => {
     const base: Record<LeadStatus | "TÜMÜ", number> = {
