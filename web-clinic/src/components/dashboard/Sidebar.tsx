@@ -2,14 +2,16 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Building2, ChevronLeft, ChevronRight, LogOut } from "lucide-react";
-import { NAV_ITEMS } from "@/lib/navigation";
-import { logout } from "@/lib/auth";
+import { ChevronLeft, ChevronRight, HeartPulse, LogOut } from "lucide-react";
 import {
-  getClinicProfileSync,
-  getPendingLeadCountSync,
-} from "@/lib/services/clinic";
+  GROUP_ORDER,
+  NAV_ITEMS,
+  GROWTH_ENGINE_TAGLINE,
+} from "@/lib/navigation";
+import { getCurrentClinicUser, logout } from "@/lib/auth";
+import { appointmentRequests } from "@/lib/clinic-mock";
 import { useSidebar } from "@/components/shared/SidebarContext";
+import { NavPremiumBadge } from "@/components/ui/NavPremiumBadge";
 import { cn } from "@/lib/utils";
 
 export function Sidebar({
@@ -21,178 +23,215 @@ export function Sidebar({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const clinic = getClinicProfileSync();
-  const pendingLeads = getPendingLeadCountSync();
   const { collapsed, toggleCollapsed } = useSidebar();
+  const user = getCurrentClinicUser();
+
+  const pendingRequests = appointmentRequests.filter(
+    (r) => r.status === "pending"
+  ).length;
 
   function handleLogout() {
     logout();
     router.replace("/login");
   }
 
+  function inboxBadgeFor(href: string): number | undefined {
+    if (href === "/dashboard/requests" && pendingRequests > 0)
+      return pendingRequests;
+    return undefined;
+  }
+
   return (
-    <>
-      <aside
+    <aside
+      className={cn(
+        "flex shrink-0 flex-col border-r border-slate-800/60 bg-slate-900 transition-all duration-200",
+        "fixed inset-y-0 left-0 z-50 shadow-xl lg:relative lg:z-auto lg:shadow-none",
+        collapsed ? "w-[76px]" : "w-[260px]",
+        mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+      )}
+    >
+      <div
         className={cn(
-          "flex shrink-0 flex-col border-r border-slate-200/80 bg-white transition-all duration-200",
-          "fixed inset-y-0 left-0 z-50 shadow-xl lg:relative lg:z-auto lg:shadow-none",
-          collapsed ? "w-[76px]" : "w-[260px]",
-          mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
+          "flex h-16 items-center border-b border-slate-800/60",
+          collapsed ? "justify-center px-2" : "gap-2.5 px-5"
         )}
       >
-        <div
-          className={cn(
-            "flex h-16 items-center border-b border-slate-100",
-            collapsed ? "justify-center px-2" : "gap-2.5 px-5"
-          )}
-        >
-          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary text-white shadow-sm shadow-primary/20">
-            <Building2 className="h-5 w-5" strokeWidth={2.25} />
-          </div>
-          {!collapsed && (
-            <div className="min-w-0">
-              <span className="text-[15px] font-bold tracking-tight text-slate-900">
-                MEDI<span className="text-primary">·</span>QUEUE
-              </span>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-400">
-                Clinic
-              </p>
-            </div>
-          )}
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary text-white shadow-sm shadow-primary/30">
+          <HeartPulse className="h-5 w-5" strokeWidth={2.25} />
         </div>
-
-        <nav
-          className="flex-1 overflow-y-auto px-2 py-5"
-          aria-label="Ana menü"
-        >
-          {!collapsed && (
-            <p className="mb-2 px-3 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
-              Menü
+        {!collapsed && (
+          <div className="min-w-0">
+            <span className="text-[15px] font-bold tracking-tight text-white">
+              MEDI<span className="text-primary">·</span>QUEUE
+            </span>
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
+              Büyüme Motoru
             </p>
-          )}
-          <ul className="space-y-1">
-            {NAV_ITEMS.map((item) => {
-              const isActive =
-                item.href === "/dashboard"
-                  ? pathname === item.href
-                  : pathname.startsWith(item.href);
+          </div>
+        )}
+      </div>
 
-              const badge =
-                item.href === "/dashboard/patients" && pendingLeads > 0
-                  ? pendingLeads
-                  : undefined;
+      <nav className="flex-1 overflow-y-auto px-2 py-4" aria-label="Ana menü">
+        {GROUP_ORDER.map((group) => {
+          const items = NAV_ITEMS.filter((item) => item.group === group);
+          if (items.length === 0) return null;
 
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={item.href}
-                    onClick={onNavigate}
-                    title={collapsed ? item.label : undefined}
-                    className={cn(
-                      "group relative flex items-center rounded-xl text-sm font-medium transition-all duration-150",
-                      collapsed
-                        ? "justify-center px-0 py-2.5"
-                        : "gap-3 px-3 py-2.5",
-                      isActive
-                        ? "bg-primary text-white shadow-sm shadow-primary/20"
-                        : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                    )}
-                  >
-                    {isActive && !collapsed && (
-                      <span
-                        className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-white/50"
-                        aria-hidden
-                      />
-                    )}
-                    <item.icon
-                      className={cn(
-                        "h-[18px] w-[18px] shrink-0",
-                        isActive
-                          ? "text-white"
-                          : "text-slate-400 group-hover:text-slate-600"
-                      )}
-                      strokeWidth={2}
+          const isGrowthGroup =
+            group === "Büyüme & Pazarlama" || group === "Veri & Yapay Zeka";
+
+          return (
+            <div key={group} className="mb-4 last:mb-0">
+              {!collapsed && (
+                <div className="mb-2 flex items-center gap-1.5 px-3">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
+                    {group}
+                  </p>
+                  {isGrowthGroup && (
+                    <GROWTH_ENGINE_TAGLINE.icon
+                      className="h-3 w-3 text-amber-500/80"
+                      strokeWidth={2.5}
+                      aria-hidden
                     />
-                    {!collapsed && <span className="flex-1">{item.label}</span>}
-                    {!collapsed && badge !== undefined && (
-                      <span
+                  )}
+                </div>
+              )}
+              <ul className="space-y-0.5">
+                {items.map((item) => {
+                  const isActive =
+                    item.href === "/dashboard"
+                      ? pathname === item.href
+                      : pathname.startsWith(item.href);
+                  const inboxBadge = inboxBadgeFor(item.href);
+
+                  return (
+                    <li key={item.href}>
+                      <Link
+                        href={item.href}
+                        onClick={onNavigate}
+                        title={collapsed ? item.label : undefined}
                         className={cn(
-                          "flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10px] font-bold",
+                          "group relative flex items-center rounded-xl text-sm font-medium transition-all duration-150",
+                          collapsed
+                            ? "justify-center px-0 py-2.5"
+                            : "gap-2.5 px-3 py-2.5",
                           isActive
-                            ? "bg-white/20 text-white"
-                            : "bg-primary text-white"
+                            ? "bg-primary text-white shadow-sm shadow-primary/30"
+                            : "text-slate-400 hover:bg-slate-800/70 hover:text-white"
                         )}
                       >
-                        {badge}
-                      </span>
-                    )}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+                        {isActive && !collapsed && (
+                          <span
+                            className="absolute left-0 top-1/2 h-6 w-1 -translate-y-1/2 rounded-r-full bg-white/60"
+                            aria-hidden
+                          />
+                        )}
+                        <item.icon
+                          className={cn(
+                            "h-[18px] w-[18px] shrink-0",
+                            isActive
+                              ? "text-white"
+                              : "text-slate-500 group-hover:text-slate-200"
+                          )}
+                          strokeWidth={2}
+                        />
+                        {!collapsed && (
+                          <span className="min-w-0 flex-1 truncate leading-snug">
+                            {item.label}
+                          </span>
+                        )}
+                        {!collapsed && item.badge && (
+                          <NavPremiumBadge
+                            type={item.badge}
+                            active={isActive}
+                          />
+                        )}
+                        {!collapsed && inboxBadge !== undefined && (
+                          <span
+                            className={cn(
+                              "flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[10px] font-bold",
+                              isActive
+                                ? "bg-white/20 text-white"
+                                : "bg-primary text-white"
+                            )}
+                          >
+                            {inboxBadge}
+                          </span>
+                        )}
+                        {collapsed && item.badge && (
+                          <NavPremiumBadge
+                            type={item.badge}
+                            active={isActive}
+                            collapsed
+                          />
+                        )}
+                        {collapsed && inboxBadge !== undefined && (
+                          <span className="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-primary ring-2 ring-slate-900" />
+                        )}
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          );
+        })}
+      </nav>
 
-        <div className="border-t border-slate-100 p-3">
-          {!collapsed ? (
-            <>
-              <Link
-                href="/dashboard/settings"
-                onClick={onNavigate}
-                className="flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-slate-50"
-              >
-                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary-light text-sm font-bold text-primary">
-                  {clinic.initials}
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="truncate text-sm font-semibold text-slate-900">
-                    {clinic.shortName}
-                  </p>
-                  <p className="truncate text-xs text-slate-500">
-                    {clinic.managerRole}
-                  </p>
-                </div>
-              </Link>
-              <button
-                type="button"
-                onClick={handleLogout}
-                className="mt-1 flex w-full items-center gap-3 rounded-xl px-2 py-2.5 text-sm font-medium text-slate-500 transition-colors hover:bg-red-50 hover:text-red-600"
-              >
-                <LogOut className="h-[18px] w-[18px]" />
-                Çıkış Yap
-              </button>
-            </>
-          ) : (
+      <div className="border-t border-slate-800/60 p-3">
+        {!collapsed ? (
+          <>
+            <div className="flex items-center gap-3 rounded-xl p-2">
+              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-sm font-bold text-primary ring-1 ring-primary/20">
+                {user.initials}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate text-sm font-semibold text-white">
+                  {user.name}
+                </p>
+                <p className="truncate text-xs text-slate-500">
+                  {user.clinicName}
+                </p>
+              </div>
+            </div>
             <button
               type="button"
               onClick={handleLogout}
-              className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 hover:bg-red-50 hover:text-red-600"
-              aria-label="Çıkış Yap"
+              className="mt-1 flex w-full items-center gap-3 rounded-xl px-2 py-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-red-500/10 hover:text-red-400"
             >
               <LogOut className="h-[18px] w-[18px]" />
+              Çıkış Yap
             </button>
-          )}
-
+          </>
+        ) : (
           <button
             type="button"
-            onClick={toggleCollapsed}
-            className={cn(
-              "mt-2 hidden w-full items-center justify-center rounded-xl border border-slate-200 py-2 text-slate-500 transition-colors hover:bg-slate-50 lg:flex",
-              collapsed && "px-0"
-            )}
-            aria-label={collapsed ? "Menüyü genişlet" : "Menüyü daralt"}
+            onClick={handleLogout}
+            className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400"
+            aria-label="Çıkış Yap"
           >
-            {collapsed ? (
-              <ChevronRight className="h-4 w-4" />
-            ) : (
-              <>
-                <ChevronLeft className="h-4 w-4" />
-                <span className="ml-1 text-xs font-medium">Daralt</span>
-              </>
-            )}
+            <LogOut className="h-[18px] w-[18px]" />
           </button>
-        </div>
-      </aside>
-    </>
+        )}
+
+        <button
+          type="button"
+          onClick={toggleCollapsed}
+          className={cn(
+            "mt-2 hidden w-full items-center justify-center rounded-xl border border-slate-800 py-2 text-slate-400 transition-colors hover:bg-slate-800/70 lg:flex",
+            collapsed && "px-0"
+          )}
+          aria-label={collapsed ? "Menüyü genişlet" : "Menüyü daralt"}
+        >
+          {collapsed ? (
+            <ChevronRight className="h-4 w-4" />
+          ) : (
+            <>
+              <ChevronLeft className="h-4 w-4" />
+              <span className="ml-1 text-xs font-medium">Daralt</span>
+            </>
+          )}
+        </button>
+      </div>
+    </aside>
   );
 }

@@ -1,0 +1,29 @@
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+
+const inter = Inter({
+  variable: "--font-inter",
+  subsets: ["latin", "latin-ext"],
+  display: "swap",
+});
+
+export const metadata: Metadata = {
+  title: "MediQueue Admin | Marketplace Kontrol Merkezi",
+  description:
+    "MediQueue Süperadmin Paneli — klinik başvurularını onaylayın, hastaları ve klinikleri yönetin, platform gelirini ve kalite standartlarını izleyin.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="tr" className={`${inter.variable} h-full antialiased`}>
+      <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
+        {children}
+      </body>
+    </html>
+  );
+}

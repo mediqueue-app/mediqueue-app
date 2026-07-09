@@ -1,47 +1,64 @@
-# MediQueue — Klinik Dashboard (`web-clinic`)
+# MediQueue — Klinik Büyüme Paneli (`web-clinic`)
 
-Klinik yöneticilerinin operasyonel iş akışını yönettiği SaaS web arayüzü.
-
-**Durum:** JWT login + client-side API bağlama (randevular/doktorlar/yorumlar/ayarlar). Analytics ve billing hâlâ mock. Backend’de clinic rolü + `clinic_id` seed hesabı gerekir.
+Kliniklerin MediQueue pazar yerinde hasta kazanımı, vitrin görünürlüğü ve büyüme modüllerini yönettiği **Marketplace Host Paneli**. ERP/HIS değildir; iç operasyon (stok, vardiya, maaş) kapsam dışıdır.
 
 ## Teknolojiler
 
-- Next.js 16 · React 19 · TypeScript 5 · Tailwind CSS 4
-- **Inter** tipografi · **Lucide** ikonlar
-- **Recharts** grafikler · **Framer Motion** sayfa geçişleri
+- Next.js 16 (App Router)
+- React 19 · TypeScript 5 · Tailwind CSS 4
+- lucide-react · Recharts
+- Mock veri (`lib/clinic-mock.ts`, `lib/growth-mock.ts`)
+
+## Tasarım Sistemi
+
+| Token | Değer |
+|-------|-------|
+| Marka mavisi | `#3a6ad6` |
+| Sidebar | `bg-slate-900` |
+| İçerik | `bg-slate-50`, beyaz kartlar |
+| Başarı | `#10B981` |
 
 ## Hızlı Başlangıç
 
 ```powershell
 cd web-clinic
-copy .env.example .env.local
 npm install
 npm run dev
 ```
 
-→ **http://localhost:3000/login**
+→ **http://localhost:3000/login** (demo: `clinic@mediqueue.com` / herhangi bir şifre)
 
-`NEXT_PUBLIC_API_BASE_URL` varsayılan: `http://localhost:8000/v1`
+## Modüller
 
-## Sayfalar
-
-| Rota | Açıklama | Veri |
-|------|----------|------|
-| `/login` | Klinik JWT girişi | API |
-| `/dashboard` | KPI, trend, bekleyen talepler | API (client fetch) |
-| `/dashboard/patients` | Lead listesi, onay/red | API |
-| `/dashboard/doctors` | Doktor grid | API |
-| `/dashboard/reviews` | Yorum listesi | API |
-| `/dashboard/settings` | Klinik profil PATCH | API |
-| `/dashboard/analytics` | Huniler / grafikler | Mock |
-| `/dashboard/billing` | Abonelik | Mock |
+| Rota | Açıklama |
+|------|----------|
+| `/dashboard` | Genel bakış, profil tamamlama, KPI, yaklaşan randevular |
+| `/dashboard/requests` | Randevu talepleri gelen kutusu |
+| `/dashboard/consultations` | Ön konsültasyon & fiyat teklifleri |
+| `/dashboard/messages` | Hasta mesajları (otomatik çeviri) |
+| `/dashboard/sponsorship` | Vitrin & sponsorluk paketleri |
+| `/dashboard/campaigns` | Kampanya yönetimi |
+| `/dashboard/forecasts` | AI talep öngörüleri |
+| `/dashboard/market-analysis` | Rakip & pazar analizi |
+| `/dashboard/profile` | Klinik profili & belgeler |
+| `/dashboard/finance` | Finans & komisyonlar |
+| `/dashboard/doctors` | Doktor kadrosu |
 
 ## Demo Akışı
 
 ```
-/login → Özet → Hasta Talepleri → Doktorlar → Yorumlar → Ayarlar
+Login → Dashboard → Randevu Talepleri → Ön Konsültasyon → Hasta Mesajları
+→ Vitrin & Sponsorluk → Talep Öngörüleri
 ```
 
-## Ay 2’ye ertelenenler
+## Veri Katmanı
 
-PDF export, ödeme, AI yorum özeti API, belge önizleme, cookie-based auth.
+- `lib/clinic-mock.ts` — profil, talepler, doktorlar, konsültasyonlar
+- `lib/growth-mock.ts` — mesajlar, sponsorluk, kampanyalar, AI öngörüleri, finans
+
+Backend entegrasyonu Ay 2 planındadır.
+
+## İlgili Dokümantasyon
+
+- Monorepo: [`../README.md`](../README.md)
+- Süperadmin: [`../web-admin/`](../web-admin/)

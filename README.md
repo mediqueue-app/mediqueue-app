@@ -6,11 +6,12 @@ Sağlık turizmi odaklı klinik yönetim ve hasta–doktor eşleştirme platform
 
 | Klasör | Durum | Açıklama | Port |
 |--------|-------|----------|------|
-| [`backend/`](backend/) | Aktif | FastAPI REST API — auth, klinikler, hastalar, randevular, yorumlar, AI proxy, Fernet | 8000 |
+| [`backend/`](backend/) | Aktif | FastAPI REST API — auth, klinikler, yorumlar, AI proxy | 8000 |
 | [`ai/`](ai/) | Aktif | Kural tabanlı doktor/klinik eşleştirme microservice | 8001 |
-| [`web-clinic/`](web-clinic/) | Aktif (kısmi API) | Klinik dashboard — JWT + client fetch; analytics/billing mock | 3000 |
-| [`web-doctor/`](web-doctor/) | Aktif (kısmi API) | Doktor portalı — JWT + randevular; mesajlar mock | 3001 |
-| [`web-patient/`](web-patient/) | Prototip | Hasta B2C UI — mock veri, API bağlama bekleniyor | 3002? |
+| [`web-admin/`](web-admin/) | Prototip | Süperadmin pazar yeri kontrol paneli (mock veri) | 3003 |
+| [`web-clinic/`](web-clinic/) | Prototip | Klinik büyüme motoru / marketplace host paneli (mock veri) | 3000 |
+| [`web-doctor/`](web-doctor/) | Prototip | Doktor portalı (mock veri) | 3001 |
+| [`web-patient/`](web-patient/) | Prototip | Hasta marketplace uygulaması (mock veri) | 3002 |
 | `mobile/` | Planlanmış | Mobil uygulama — henüz başlanmadı | — |
 
 ## Mimari Özet
@@ -18,11 +19,11 @@ Sağlık turizmi odaklı klinik yönetim ve hasta–doktor eşleştirme platform
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
 │ web-clinic  │     │ web-doctor  │     │ web-patient │
-│ (JWT+API)   │     │ (JWT+API)   │     │  (mock UI)  │
+│  (mock)     │     │  (mock)     │     │   (mock)    │
 └──────┬──────┘     └──────┬──────┘     └──────┬──────┘
        │                   │                   │
        └───────────────────┼───────────────────┘
-                           │  patient API → Ay 2 / Furkan
+                           │  ← Ay 2: API entegrasyonu
                     ┌──────▼──────┐
                     │   backend   │  JWT auth, RBAC, REST API
                     │  (FastAPI)  │
@@ -32,11 +33,11 @@ Sağlık turizmi odaklı klinik yönetim ve hasta–doktor eşleştirme platform
               │            │            │
        ┌──────▼──────┐ ┌───▼───┐ ┌─────▼─────┐
        │ PostgreSQL  │ │  ai/  │ │  mobile   │
-       │  (ortak)    │ │ match │ │ (erteli)  │
+       │  (ortak)    │ │ match │ │  (yok)    │
        └─────────────┘ └───────┘ └───────────┘
 ```
 
-**Şu an:** Backend (Sprint 2) ve AI gerçek API ile çalışır. web-clinic / web-doctor JWT login + client-side API (SSR token sorunu giderildi). web-patient UI var, API henüz bağlı değil. Analytics / mesaj / billing mock.
+**Şu an:** Backend ve AI servisi gerçek API + PostgreSQL ile çalışır. Web arayüzleri (admin, klinik, doktor, hasta) zengin UI prototipleri olarak mock veriyle çalışır; backend'e bağlı değildir.
 
 ## Hızlı Başlangıç
 
@@ -78,7 +79,17 @@ Detay: [`ai/README.md`](ai/README.md)
 
 ### 4. Web Arayüzleri
 
-**Klinik dashboard:**
+**Süperadmin paneli:**
+
+```powershell
+cd web-admin
+npm install
+npm run dev
+```
+
+http://localhost:3003
+
+**Klinik büyüme paneli:**
 
 ```powershell
 cd web-clinic
@@ -106,20 +117,21 @@ Detay: [`web-doctor/README.md`](web-doctor/README.md)
 
 | Bileşen | Olgunluk | Not |
 |---------|----------|-----|
-| Backend API | ~90% | Auth, RBAC, hastalar, randevular, match, Fernet — Sprint 2 |
-| AI Matching | ~85% | Rule-based, CI, ~%96 coverage |
-| Web Clinic | ~55% | JWT + client API; analytics/billing mock |
-| Web Doctor | ~45% | JWT + randevular; profil /auth/me; mesajlar mock |
-| Web Patient | ~35% | UI prototip, API %0 |
-| Mobile | 0% | Ertelendi |
-| Frontend ↔ Backend | ~40% | Clinic/doctor kısmi; patient yok |
+| Backend API | ~70% | Auth, RBAC, klinikler, yorumlar, match proxy |
+| AI Matching | ~85% | Rule-based, PostgreSQL, CI, ~%96 test coverage |
+| Web Admin | ~40% | Süperadmin marketplace paneli, mock veri |
+| Web Clinic | ~45% | Büyüme motoru UI, premium modüller, mock veri |
+| Web Doctor | ~25% | UI prototip, mock veri, odontogram |
+| Web Patient | ~30% | Marketplace UI prototip, mock veri |
+| Mobile | 0% | Yok |
+| Frontend ↔ Backend | 0% | Entegrasyon Ay 2 |
 
 ## Test ve CI
 
 | Bileşen | Test | CI |
 |---------|------|-----|
 | AI | pytest, ~%96 coverage | GitHub Actions (`ai-tests.yml`) |
-| Backend | pytest (~110 test) | GitHub Actions (`backend-tests.yml`) |
+| Backend | pytest (~88 test) | Yok |
 | Web | Yok | Yok |
 
 Backend testleri:
@@ -141,7 +153,7 @@ pytest --cov=app
 ## Tasarım Prensipleri
 
 - **Doktor portalı** yalnızca klinik işine odaklanır — fatura, komisyon, personel yönetimi yoktur.
-- **Klinik dashboard** operasyonel yönetim (lead, analitik, billing) içindir.
+- **Klinik paneli** pazar yeri görünürlüğü, hasta kazanımı ve büyüme odaklıdır (ERP/HIS değildir).
 - **Hasta uygulaması** eşleştirme akışının asıl tüketicisi olacaktır.
 - Mock veri kullanan arayüzlerde KVKK'ya duyarlı dil tercih edilir; gerçek veri geldiğinde aynı prensipler korunur.
 
@@ -154,14 +166,14 @@ pytest --cov=app
 | [`ai/docs/API.md`](ai/docs/API.md) | Detaylı match API dokümantasyonu |
 | [`ai/docs/DEMO.md`](ai/docs/DEMO.md) | Demo Day match senaryosu |
 | [`ai/docs/DEMO_DAY_CHECKLIST.md`](ai/docs/DEMO_DAY_CHECKLIST.md) | AI smoke test checklist |
-| [`web-clinic/README.md`](web-clinic/README.md) | Klinik dashboard, demo akışı, Ay 1 kapsamı |
-| [`web-doctor/README.md`](web-doctor/README.md) | Doktor portalı, demo akışı, Ay 1 kapsamı |
+| [`web-clinic/README.md`](web-clinic/README.md) | Klinik büyüme paneli, demo akışı |
+| [`web-doctor/README.md`](web-doctor/README.md) | Doktor portalı, demo akışı |
 | [`backend/MANUAL_TEST_RBAC.md`](backend/MANUAL_TEST_RBAC.md) | Manuel RBAC doğrulama |
 
 ## Yol Haritası
 
-**Ay 1 (mevcut):** Backend + AI hazır; clinic/doctor JWT + client API; web-patient UI mock.
+**Ay 1 (mevcut):** Gösterilebilir UI prototipleri — web-admin, web-clinic, web-doctor, web-patient mock veriyle.
 
-**Ay 2:** web-patient API, cookie auth, mesajlaşma, billing, FCM/S3, doktor GET/PATCH tamamı.
+**Ay 2:** Frontend–backend entegrasyonu, web auth, hasta uygulaması MVP, operasyonel API'ler (randevu, mesaj).
 
 **Faz 2:** AI feedback kalıcılığı, ML tabanlı eşleştirme, mobil uygulama.

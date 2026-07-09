@@ -5,6 +5,18 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function formatNumber(value: number): string {
+  return new Intl.NumberFormat("tr-TR").format(value);
+}
+
+export function formatTRY(value: number): string {
+  return new Intl.NumberFormat("tr-TR", {
+    style: "currency",
+    currency: "TRY",
+    maximumFractionDigits: 0,
+  }).format(value);
+}
+
 export function formatDateTr(dateKey: string): string {
   const [year, month, day] = dateKey.split("-").map(Number);
   return new Date(year, month - 1, day).toLocaleDateString("tr-TR", {

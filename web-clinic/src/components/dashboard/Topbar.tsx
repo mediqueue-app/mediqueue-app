@@ -1,49 +1,38 @@
 "use client";
 
-import { usePathname, useRouter } from "next/navigation";
-import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Bell, ChevronRight, Menu, Search } from "lucide-react";
 import { getPageMeta } from "@/lib/navigation";
-import { getClinicProfileSync, getPendingLeadCountSync } from "@/lib/services/clinic";
+import { getCurrentClinicUser } from "@/lib/auth";
+import { appointmentRequests } from "@/lib/clinic-mock";
 import { cn } from "@/lib/utils";
 
 const NOTIFICATIONS = [
   {
     id: 1,
-    title: "Yeni lead: Ahmed Al-Farsi",
-    detail: "Tüp Bebek (IVF) talebi az önce geldi.",
+    title: "Yeni randevu talebi",
+    detail: "Ahmed Al-Farsi · Saç Ekimi (DHI) talebi geldi.",
   },
   {
     id: 2,
-    title: "Belge yüklendi",
-    detail: "Amina Haddad sigorta belgesini yükledi.",
+    title: "Belge doğrulaması bekleniyor",
+    detail: "JCI akreditasyon belgeniz admin onayında.",
   },
   {
     id: 3,
-    title: "Doktor müsaitlik değişti",
-    detail: "Op. Dr. Burak Demir 'Dolu' durumuna geçti.",
+    title: "Profil görünürlüğü arttı",
+    detail: "Vitrininiz bu hafta %17 daha fazla görüntülendi.",
   },
 ];
 
 export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
   const pathname = usePathname();
-  const router = useRouter();
-  const [query, setQuery] = useState("");
   const [notifOpen, setNotifOpen] = useState(false);
   const meta = getPageMeta(pathname);
-  const clinic = getClinicProfileSync();
-  const pendingLeads = getPendingLeadCountSync();
+  const user = getCurrentClinicUser();
 
-  function handleSearch(e: React.FormEvent) {
-    e.preventDefault();
-    const q = query.trim();
-    if (q) {
-      router.push(`/dashboard/patients?q=${encodeURIComponent(q)}`);
-    } else {
-      router.push("/dashboard/patients");
-    }
-  }
+  const alerts = appointmentRequests.filter((r) => r.status === "pending").length;
 
   return (
     <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
@@ -65,7 +54,7 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
 
         <div className="hidden min-w-0 flex-col lg:flex">
           <div className="flex items-center gap-1.5 text-xs text-slate-400">
-            <span>Dashboard</span>
+            <span>Klinik</span>
             {pathname !== "/dashboard" && (
               <>
                 <ChevronRight className="h-3 w-3" />
@@ -80,36 +69,31 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
           )}
         </div>
 
-        <form
-          onSubmit={handleSearch}
-          className="relative ml-auto max-w-sm flex-1 lg:max-w-md"
-        >
+        <div className="relative ml-auto hidden max-w-sm flex-1 sm:block lg:max-w-md">
           <Search
             className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
             aria-hidden
           />
           <input
             type="search"
-            value={query}
-            onChange={(e) => setQuery(e.target.value)}
-            placeholder="Hasta, lead veya doktor ara..."
-            aria-label="Hasta ara"
+            placeholder="Hasta, talep veya doktor ara..."
+            aria-label="Ara"
             className="w-full rounded-xl border border-slate-200 bg-slate-50/80 py-2.5 pl-10 pr-3 text-sm text-slate-700 placeholder:text-slate-400 transition-colors focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10"
           />
-        </form>
+        </div>
 
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="ml-auto flex items-center gap-1.5 sm:ml-0 sm:gap-2">
           <div className="relative">
             <button
               type="button"
               onClick={() => setNotifOpen((v) => !v)}
               className="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100"
-              aria-label={`Bildirimler${pendingLeads > 0 ? `, ${pendingLeads} bekleyen lead` : ""}`}
+              aria-label="Bildirimler"
             >
               <Bell className="h-[18px] w-[18px]" />
-              {pendingLeads > 0 && (
+              {alerts > 0 && (
                 <span className="absolute right-1.5 top-1.5 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-bold text-white ring-2 ring-white">
-                  {pendingLeads > 9 ? "9+" : pendingLeads}
+                  {alerts > 9 ? "9+" : alerts}
                 </span>
               )}
             </button>
@@ -146,20 +130,19 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
             )}
           </div>
 
-          <Link
-            href="/dashboard/settings"
-            className={cn(
-              "flex h-10 items-center gap-2 rounded-xl pl-1 pr-3 transition-colors hover:bg-slate-100",
-              pathname.startsWith("/dashboard/settings") && "bg-primary-light"
-            )}
-          >
+          <div className="flex h-10 items-center gap-2 rounded-xl pl-1 pr-2 sm:pr-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-white">
-              {clinic.initials}
+              {user.initials}
             </div>
-            <span className="hidden text-sm font-medium text-slate-700 md:block">
-              {clinic.shortName.split(" ")[0]}
-            </span>
-          </Link>
+            <div className="hidden leading-tight md:block">
+              <p className="text-sm font-medium text-slate-700">
+                {user.name.split(" ").slice(-1)[0]}
+              </p>
+              <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">
+                Klinik Yöneticisi
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </header>

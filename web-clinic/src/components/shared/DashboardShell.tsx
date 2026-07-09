@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Sidebar } from "@/components/dashboard/Sidebar";
-import { TopBar } from "@/components/dashboard/TopBar";
+import { TopBar } from "@/components/dashboard/Topbar";
 import { SidebarProvider } from "@/components/shared/SidebarContext";
 
 export function DashboardShell({ children }: { children: React.ReactNode }) {
