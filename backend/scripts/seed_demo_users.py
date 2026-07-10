@@ -203,10 +203,10 @@ def main() -> int:
     print(f"  Demo doctor_id: {relationships['doctor_id']}")
     print()
     print(f"Password for all demo accounts: {DEMO_PASSWORD}")
-    print("  patient@mediqueue.com  → web-patient :3002")
-    print("  clinic@mediqueue.com   → web-clinic  :3000")
-    print("  doctor@mediqueue.com   → web-doctor  :3001")
-    print("  admin@mediqueue.com    → web-admin   :3003")
+    print("  patient@mediqueue.com  -> web-patient :3002")
+    print("  clinic@mediqueue.com   -> web-clinic  :3000")
+    print("  doctor@mediqueue.com   -> web-doctor  :3001")
+    print("  admin@mediqueue.com    -> web-admin   :3003")
     return 0
 
 

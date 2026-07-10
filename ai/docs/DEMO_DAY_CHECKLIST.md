@@ -25,17 +25,20 @@ Demo öncesi ve sunum günü hızlı doğrulama listesi. Tam senaryolar: [`DEMO.
 
 ## Match — boş sonuç (fallback)
 
-- [ ] `POST /match` — `{"specialty":"Cardiology","language":"Turkish","budget":1}`
+- [ ] `POST /match` (veya backend `POST /v1/match` + JWT) — `{"specialty":"Cardiology","language":"Japanese","budget":1}`
 - [ ] Yanıt `200`, `doctors` ve `clinics` boş dizi
 - [ ] `message` alanı dolu (bilgilendirme metni)
+
+> Not: `budget: 1` + `language: Turkish` bazı klinik seed’lerinde hâlâ klinik döndürebilir; boş senaryo için dil uyuşmazlığı (`Japanese`) kullan.
 
 ## Backend proxy (Ay 1 P0)
 
 - [ ] Backend ayakta: http://localhost:8000/docs
 - [ ] `POST /v1/auth/login` — `patient@mediqueue.com` / `Demo1234!` → JWT
 - [ ] `POST /v1/match` (Bearer JWT) — hit: `specialty=Cardiology`, `language=Turkish`, `budget=3000`, `city=Istanbul` → en az bir sonuç
-- [ ] `POST /v1/match` — empty: `specialty=Cardiology`, `language=Turkish`, `budget=1` → boş listeler + `message`
+- [ ] `POST /v1/match` — empty: `specialty=Cardiology`, `language=Japanese`, `budget=1` → boş listeler + `message`
 - [ ] Limit alanları (`max_doctors` vb.) AI `:8001` üzerinden demo edilir; backend proxy temel match için yeterli
+- [ ] Tekrarlanabilir smoke: `cd backend && python -m scripts.smoke_ay1_doctor_match`
 
 ## Doctor portal smoke (Azra)
 
