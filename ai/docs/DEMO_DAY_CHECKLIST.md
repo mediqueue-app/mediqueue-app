@@ -45,6 +45,8 @@ Demo öncesi ve sunum günü hızlı doğrulama listesi. Tam senaryolar: [`DEMO.
 - [ ] `web-doctor` `:3001` — `doctor@mediqueue.com` / `Demo1234!`
 - [ ] Login sonrası `/auth/me` → `role=doctor`, `doctor_id` dolu
 - [ ] Dashboard / patients — token varken `GET /v1/doctors/{id}/appointments` (liste boş olabilir)
+- [ ] Tekrarlanabilir: `cd backend && python -m scripts.smoke_ay1_doctor_match`
+- [ ] Full E2E: `python -m scripts.smoke_ay1_e2e` (patient→clinic confirm→doctor)
 
 ## CI (geliştirici)
 

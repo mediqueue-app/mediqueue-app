@@ -1,69 +1,75 @@
 # MediQueue — Hasta Paneli (`web-patient`)
 
-B2C sağlık pazaryeri arayüzü. Hastalar klinik/doktor keşfeder ve randevu talebi oluşturur.
+B2C sağlık pazaryeri. Hastalar klinik/doktor keşfeder ve randevu talebi oluşturur.
 
-**Durum (Ay 1):** UI prototip — **backend API katmanı yok**. Auth, klinik listesi ve booking `src/lib/mock-data.ts` üzerinden çalışır.
-
-> Ay 1 kapanış P0: clinic/doctor’daki gibi `lib/api` + JWT + `POST /appointments` bağlanacak. O zamana kadar demo hesaplarla gerçek login bu uygulamada çalışmaz.
+**Durum (Ay 1):** Hybrid — JWT auth + klinik listesi/detay + booking (`POST /appointments`). API yoksa/fail olursa `mock-data.ts` fallback.
 
 ## Teknoloji
 
 - Next.js 16 (App Router) · React 19 · TypeScript 5 · Tailwind CSS v4 · lucide-react
 
-## Marka
-
-- Ana renk: `#3a6ad6`
-- Hover: `#2f57b3`
-- Açık ton: `#eaf0fc`
-
 ## Kurulum
+
+Backend (`:8000`) + `seed_demo_users` gerekir.
 
 ```powershell
 cd web-patient
 npm install
+# .env.local:
+# NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/v1
 npm run dev
 ```
 
 → **http://localhost:3002**
 
-API bağlandığında eklenecek:
+| Alan | Değer |
+|------|--------|
+| Email | `patient@mediqueue.com` |
+| Şifre | `Demo1234!` |
 
-```env
-NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/v1
+## Veri katmanı
+
+| Alan | Kaynak |
+|------|--------|
+| Login / register | API (`/auth/*`) |
+| Klinik listesi / detay / doktorlar | API (`/clinics...`) |
+| Randevu oluşturma | `ensurePatientProfile` + `POST /appointments` |
+| Tedaviler, home showcase (kısmi) | Mock fallback olabilir |
+
+## Demo notu (E2E)
+
+`clinic@mediqueue.com` yalnızca seed kliniğini görür (genelde **Istanbul Hair Center**, `clinic_id=1`).  
+Clinic onay demosu için patient bu kliniğe randevu açmalı.
+
+Uçtan uca API smoke:
+
+```powershell
+cd backend
+python -m scripts.smoke_ay1_e2e
 ```
-
-Backend demo kullanıcı (entegrasyon sonrası): `patient@mediqueue.com` / `Demo1234!`
 
 ## Sayfalar
 
-| Rota | Veri (şimdi) |
-|------|----------------|
-| `/` | Mock |
-| `/treatments` | Mock |
-| `/clinics`, `/clinics/[id]` | Mock |
-| `/doctors`, `/doctors/[id]` | Mock |
-| `/auth/login`, `/auth/register` | Görsel only (API yok) |
-| `/how-it-works` | Statik |
+| Rota | Not |
+|------|-----|
+| `/auth/login`, `/auth/register` | JWT |
+| `/clinics`, `/clinics/[id]` | API + BookingWidget |
+| `/doctors`, `/doctors/[id]` | Liste/detay + booking |
+| `/` | UI; öne çıkanlar kısmen mock |
 
-## Klasör yapısı
+## Klasör
 
 ```
-src/
-  app/            # rotalar
-  components/     # layout, clinics, doctors, booking, ui
-  lib/            # mock-data.ts, utils.ts  (api/ henüz yok)
+src/lib/
+  api/client.ts, types.ts
+  auth.ts
+  mappers.ts
+  services/clinics.ts, patients.ts, appointments.ts
+  mock-data.ts   # fallback
 ```
-
-## Ay 1 entegrasyon hedefi (sırada)
-
-1. `lib/api/client.ts` + `auth.ts` (clinic/doctor pattern)
-2. Login/register → `/auth/*`
-3. Klinikler → `GET /clinics`
-4. Booking → `POST /patients` (gerekirse) + `POST /appointments`
-5. Clinic requests E2E
 
 ## İlgili
 
 - Monorepo: [`../README.md`](../README.md)
-- Backend seed: [`../backend/README.md`](../backend/README.md)
-- Klinik hybrid: [`../web-clinic/README.md`](../web-clinic/README.md)
+- Klinik: [`../web-clinic/README.md`](../web-clinic/README.md)
+- Backend: [`../backend/README.md`](../backend/README.md)

@@ -88,6 +88,14 @@ Doctor login + appointments + `/v1/match` hit/empty (AI `:8001` ayaktayken):
 python -m scripts.smoke_ay1_doctor_match
 ```
 
+Full Ay 1 E2E (patient book → clinic confirm → doctor sees):
+
+```powershell
+python -m scripts.smoke_ay1_e2e
+```
+
+Book against the seeded demo clinic (`clinic@` → `clinic_id`), not necessarily `GET /clinics` first item (list is name-ordered).
+
 ## Run services
 
 Start the AI service on port **8001**:

@@ -76,9 +76,11 @@ Login (clinic@) → Dashboard → Randevu Talepleri → (Patient E2E sonrası) o
 
 Patient tarafı API’ye bağlanınca requests kutusu gerçek `pending` randevularla dolar.
 
+Patient demoda `clinic@` inbox’u için seed kliniğine (`clinic_id`, genelde Istanbul Hair Center) randevu açılmalı.
+
 ## İlgili dokümantasyon
 
 - Monorepo: [`../README.md`](../README.md)
-- Backend seed: [`../backend/README.md`](../backend/README.md)
+- Backend seed / E2E: [`../backend/README.md`](../backend/README.md) — `python -m scripts.smoke_ay1_e2e`
 - Doktor: [`../web-doctor/README.md`](../web-doctor/README.md)
-- Hasta (mock): [`../web-patient/README.md`](../web-patient/README.md)
+- Hasta: [`../web-patient/README.md`](../web-patient/README.md)
