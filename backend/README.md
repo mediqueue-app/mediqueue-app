@@ -82,6 +82,12 @@ Invoke-RestMethod -Method Get `
   -Headers @{ Authorization = "Bearer $($login.access_token)" }
 ```
 
+Doctor login + appointments + `/v1/match` hit/empty (AI `:8001` ayaktayken):
+
+```powershell
+python -m scripts.smoke_ay1_doctor_match
+```
+
 ## Run services
 
 Start the AI service on port **8001**:

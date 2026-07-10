@@ -1,59 +1,69 @@
-# MediQueue — Hasta Paneli (web-patient)
+# MediQueue — Hasta Paneli (`web-patient`)
 
-Profesyonel bir B2C sağlık pazaryeri arayüzü. Hastalar semptom, şehir ve tarihe
-göre akredite klinikleri ve uzman doktorları keşfeder, şeffaf fiyatlarla anında
-randevu talebi oluşturur.
+B2C sağlık pazaryeri arayüzü. Hastalar klinik/doktor keşfeder ve randevu talebi oluşturur.
+
+**Durum (Ay 1):** UI prototip — **backend API katmanı yok**. Auth, klinik listesi ve booking `src/lib/mock-data.ts` üzerinden çalışır.
+
+> Ay 1 kapanış P0: clinic/doctor’daki gibi `lib/api` + JWT + `POST /appointments` bağlanacak. O zamana kadar demo hesaplarla gerçek login bu uygulamada çalışmaz.
 
 ## Teknoloji
 
-- **Next.js 16** (App Router)
-- **React 19**
-- **TypeScript 5**
-- **Tailwind CSS v4**
-- **lucide-react** (kurumsal / medikal ikonlar)
+- Next.js 16 (App Router) · React 19 · TypeScript 5 · Tailwind CSS v4 · lucide-react
 
 ## Marka
 
-- Ana renk: `#3a6ad6` (Medikal Mavi)
+- Ana renk: `#3a6ad6`
 - Hover: `#2f57b3`
 - Açık ton: `#eaf0fc`
 
 ## Kurulum
 
-```bash
+```powershell
+cd web-patient
 npm install
 npm run dev
 ```
 
-Uygulama `http://localhost:3002` adresinde çalışır.
+→ **http://localhost:3002**
 
-```bash
-npm run build   # production derlemesi
-npm run start   # production sunucusu
-npm run lint    # eslint
+API bağlandığında eklenecek:
+
+```env
+NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/v1
 ```
+
+Backend demo kullanıcı (entegrasyon sonrası): `patient@mediqueue.com` / `Demo1234!`
 
 ## Sayfalar
 
-| Rota | Açıklama |
-| --- | --- |
-| `/` | Ana sayfa: hero + gölgeli arama barı, tedaviler, öne çıkan klinik & doktorlar, nasıl çalışır |
-| `/treatments` | Tedavi kategorileri |
-| `/clinics` | Klinik keşfet (arama + filtre) |
-| `/clinics/[id]` | Klinik detay: galeri, yapışkan sekmeler, yapışkan randevu widget'ı |
-| `/doctors` | Doktor keşfet (arama + filtre) |
-| `/doctors/[id]` | Doktor profili: biyografi, eğitim, diller, yorumlar + yapışkan randevu widget'ı |
-| `/how-it-works` | Nasıl çalışır |
+| Rota | Veri (şimdi) |
+|------|----------------|
+| `/` | Mock |
+| `/treatments` | Mock |
+| `/clinics`, `/clinics/[id]` | Mock |
+| `/doctors`, `/doctors/[id]` | Mock |
+| `/auth/login`, `/auth/register` | Görsel only (API yok) |
+| `/how-it-works` | Statik |
 
-## Klasör Yapısı
+## Klasör yapısı
 
 ```
 src/
-  app/            # rotalar (App Router)
-  components/     # UI bileşenleri (layout, home, clinics, doctors, booking, ui)
-  lib/            # mock-data.ts, utils.ts
+  app/            # rotalar
+  components/     # layout, clinics, doctors, booking, ui
+  lib/            # mock-data.ts, utils.ts  (api/ henüz yok)
 ```
 
-> Not: Görseller Unsplash (klinik fotoğrafları) ve randomuser.me (doktor
-> portreleri) üzerinden servis edilir; isim–cinsiyet eşleşmesi elle
-> doğrulanmıştır. Yükleme hatasında zarif bir yedek gösterilir.
+## Ay 1 entegrasyon hedefi (sırada)
+
+1. `lib/api/client.ts` + `auth.ts` (clinic/doctor pattern)
+2. Login/register → `/auth/*`
+3. Klinikler → `GET /clinics`
+4. Booking → `POST /patients` (gerekirse) + `POST /appointments`
+5. Clinic requests E2E
+
+## İlgili
+
+- Monorepo: [`../README.md`](../README.md)
+- Backend seed: [`../backend/README.md`](../backend/README.md)
+- Klinik hybrid: [`../web-clinic/README.md`](../web-clinic/README.md)

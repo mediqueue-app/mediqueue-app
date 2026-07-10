@@ -136,13 +136,15 @@ Detaylı dokümantasyon: [`docs/API.md`](docs/API.md)
 | `HOST` | 0.0.0.0 | Bind adresi |
 | `PORT` | 8001 | Dinleme portu |
 | `DEBUG` | false | Debug / reload modu |
-| `ALLOWED_ORIGINS` | localhost:3000,3001,5173,8080 | CORS origin'leri |
+| `ALLOWED_ORIGINS` | localhost:3000–3003,5173,8080 | CORS (clinic/doctor/patient/admin) |
 
 ## Demo Day
 
 - Match demo senaryosu: [`docs/DEMO.md`](docs/DEMO.md)
 - Smoke test checklist: [`docs/DEMO_DAY_CHECKLIST.md`](docs/DEMO_DAY_CHECKLIST.md)
 - Örnek JSON: [`docs/examples/`](docs/examples/)
+- Backend üzerinden doctor+match smoke: `cd backend && python -m scripts.smoke_ay1_doctor_match` (AI `:8001` + seed gerekir)
+- Boş match senaryosu için dil uyuşmazlığı kullan (`language=Japanese`); yalnızca `budget=1` klinik döndürebilir
 
 ## Test
 
