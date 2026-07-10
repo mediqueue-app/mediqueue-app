@@ -33,6 +33,13 @@ export default async function DoctorProfilePage({
   if (!doctor) notFound();
 
   const clinic = getClinicForDoctor(doctor.id);
+  const clinicApiId =
+    doctor.clinicApiId ??
+    clinic?.apiId ??
+    (/^\d+$/.test(doctor.clinicId) ? Number(doctor.clinicId) : 0);
+  const doctorApiId =
+    doctor.apiId ??
+    (/^\d+$/.test(doctor.id) ? Number(doctor.id) : undefined);
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
@@ -188,6 +195,9 @@ export default async function DoctorProfilePage({
         <aside className="lg:w-[360px] lg:shrink-0">
           <div className="lg:sticky lg:top-24">
             <BookingWidget
+              clinicId={clinicApiId}
+              doctorId={doctorApiId}
+              branch={doctor.specialty}
               title={`${doctor.name}`}
               subtitle={doctor.title}
               price={doctor.priceFrom}

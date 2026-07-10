@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ApiError } from "@/lib/api/client";
+import { login } from "@/lib/auth";
 import {
   Stethoscope,
   Mail,
@@ -15,17 +18,32 @@ import {
 import { cn } from "@/lib/utils";
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (loading) return;
+    setError(null);
     setLoading(true);
-    // Şimdilik yalnızca görsel: kısa bir bekleme sonrası state sıfırlanır.
-    setTimeout(() => setLoading(false), 1600);
+    try {
+      await login(email, password);
+      router.push("/clinics");
+    } catch (err) {
+      const message =
+        err instanceof ApiError
+          ? err.detail
+          : err instanceof Error
+            ? err.message
+            : "Giriş başarısız";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -129,6 +147,12 @@ export default function LoginPage() {
               />
               Beni hatırla
             </label>
+
+            {error ? (
+              <p className="text-sm text-red-600" role="alert">
+                {error}
+              </p>
+            ) : null}
 
             <button
               type="submit"

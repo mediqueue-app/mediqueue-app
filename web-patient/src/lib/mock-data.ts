@@ -32,6 +32,10 @@ export type Treatment = {
 
 export type Doctor = {
   id: string;
+  /** Backend numeric id — set when loaded from API */
+  apiId?: number;
+  /** Backend clinic id — set when loaded from API */
+  clinicApiId?: number;
   name: string;
   gender: Gender;
   title: string;
@@ -53,6 +57,8 @@ export type Doctor = {
 
 export type Clinic = {
   id: string;
+  /** Backend numeric id — set when loaded from API */
+  apiId?: number;
   name: string;
   slug: string;
   city: string;

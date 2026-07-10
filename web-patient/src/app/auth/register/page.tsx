@@ -2,6 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { ApiError } from "@/lib/api/client";
+import { login, register } from "@/lib/auth";
 import {
   Stethoscope,
   User,
@@ -14,19 +17,36 @@ import {
 import { cn } from "@/lib/utils";
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   function update(key: keyof typeof form) {
     return (e: React.ChangeEvent<HTMLInputElement>) =>
       setForm((prev) => ({ ...prev, [key]: e.target.value }));
   }
 
-  function handleSubmit(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     if (loading) return;
+    setError(null);
     setLoading(true);
-    setTimeout(() => setLoading(false), 1600);
+    try {
+      await register(form.email, form.password, form.name || undefined);
+      await login(form.email, form.password);
+      router.push("/clinics");
+    } catch (err) {
+      const message =
+        err instanceof ApiError
+          ? err.detail
+          : err instanceof Error
+            ? err.message
+            : "Kayıt başarısız";
+      setError(message);
+    } finally {
+      setLoading(false);
+    }
   }
 
   return (
@@ -119,6 +139,12 @@ export default function RegisterPage() {
                 />
               </div>
             </div>
+
+            {error ? (
+              <p className="text-sm text-red-600" role="alert">
+                {error}
+              </p>
+            ) : null}
 
             <button
               type="submit"

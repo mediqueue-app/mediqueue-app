@@ -1,9 +1,10 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search, MapPin, ArrowUpDown, Map, X } from "lucide-react";
-import { clinics, cities, type Clinic } from "@/lib/mock-data";
+import { cities, type Clinic } from "@/lib/mock-data";
+import { fetchClinics } from "@/lib/services/clinics";
 import { ClinicListCard } from "@/components/clinics/ClinicListCard";
 import { ClinicMap } from "@/components/clinics/ClinicMap";
 import { cn } from "@/lib/utils";
@@ -54,6 +55,8 @@ type SortKey = (typeof SORTS)[number]["key"];
 
 export function ClinicsExplorer() {
   const searchParams = useSearchParams();
+  const [allClinics, setAllClinics] = useState<Clinic[]>([]);
+  const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [city, setCity] = useState(searchParams.get("city") ?? "");
   const [specialty, setSpecialty] = useState("Tümü");
@@ -63,6 +66,21 @@ export function ClinicsExplorer() {
   const [mobileMap, setMobileMap] = useState(false);
 
   const sort: SortKey = SORTS[sortIndex].key;
+
+  useEffect(() => {
+    let cancelled = false;
+    setLoading(true);
+    fetchClinics()
+      .then((data) => {
+        if (!cancelled) setAllClinics(data);
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
 
   function toggleFeature(key: string) {
     setFeatures((prev) => {
@@ -75,7 +93,7 @@ export function ClinicsExplorer() {
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    const list = clinics.filter((c) => {
+    const list = allClinics.filter((c) => {
       const matchesCity = !city || c.city === city;
       const matchesSpecialty =
         specialty === "Tümü" || c.specialties.includes(specialty);
@@ -94,7 +112,7 @@ export function ClinicsExplorer() {
     if (sort === "priceAsc") sorted.sort((a, b) => a.priceFrom - b.priceFrom);
     else if (sort === "rating") sorted.sort((a, b) => b.rating - a.rating);
     return sorted;
-  }, [query, city, specialty, features, sort]);
+  }, [allClinics, query, city, specialty, features, sort]);
 
   return (
     <div className="flex h-[calc(100vh-4rem)] flex-col">
@@ -185,12 +203,21 @@ export function ClinicsExplorer() {
         <div className="w-full overflow-y-auto px-4 py-5 sm:px-6 lg:w-[55%]">
           <p className="mb-4 text-sm text-slate-500">
             <span className="font-semibold text-slate-900">
-              {results.length}
+              {loading ? "…" : results.length}
             </span>{" "}
             klinik bulundu
           </p>
 
-          {results.length > 0 ? (
+          {loading ? (
+            <div className="flex flex-col gap-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div
+                  key={i}
+                  className="h-40 animate-pulse rounded-2xl border border-slate-200 bg-slate-50"
+                />
+              ))}
+            </div>
+          ) : results.length > 0 ? (
             <div className="flex flex-col gap-4">
               {results.map((clinic) => (
                 <ClinicListCard

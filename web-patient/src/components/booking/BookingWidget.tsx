@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Clock,
   ShieldCheck,
@@ -8,7 +9,11 @@ import {
   CreditCard,
   ChevronLeft,
   ChevronRight,
+  Loader2,
 } from "lucide-react";
+import { ApiError } from "@/lib/api/client";
+import { isAuthenticated } from "@/lib/auth";
+import { createAppointment } from "@/lib/services/appointments";
 import { cn, formatPrice } from "@/lib/utils";
 
 const MONTHS = [
@@ -60,21 +65,39 @@ function isBeforeToday(year: number, month: number, day: number): boolean {
   return d < new Date(TODAY.getFullYear(), TODAY.getMonth(), TODAY.getDate());
 }
 
+function formatRequestedDate(year: number, month: number, day: number): string {
+  const m = String(month + 1).padStart(2, "0");
+  const d = String(day).padStart(2, "0");
+  return `${year}-${m}-${d}`;
+}
+
 export function BookingWidget({
+  clinicId,
+  doctorId,
+  branch,
   title,
   subtitle,
   price,
   priceLabel = "Muayene ücreti",
 }: {
+  clinicId: number;
+  doctorId?: number;
+  branch: string;
   title: string;
   subtitle: string;
   price: number;
   priceLabel?: string;
 }) {
+  const router = useRouter();
   const [view, setView] = useState({ year: 2026, month: 6 }); // Temmuz 2026
   const [selectedDay, setSelectedDay] = useState<number | null>(9);
   const [time, setTime] = useState<string | null>(null);
   const [confirmed, setConfirmed] = useState(false);
+  const [appointmentStatus, setAppointmentStatus] = useState<string | null>(
+    null
+  );
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const cells = useMemo(() => {
     const offset = startOfMonthMondayOffset(view.year, view.month);
@@ -100,6 +123,54 @@ export function BookingWidget({
     });
     setSelectedDay(null);
     setTime(null);
+    setError(null);
+  }
+
+  async function handleSubmit() {
+    if (!time || selectedDay === null || submitting) return;
+
+    if (!isAuthenticated()) {
+      router.push("/auth/login");
+      return;
+    }
+
+    if (clinicId < 1) {
+      setError("Bu klinik için çevrimiçi randevu henüz kullanılamıyor.");
+      return;
+    }
+
+    setError(null);
+    setSubmitting(true);
+
+    try {
+      const requestedDate = formatRequestedDate(
+        view.year,
+        view.month,
+        selectedDay
+      );
+      const notes = `Saat: ${time}`;
+
+      const appointment = await createAppointment({
+        clinicId,
+        doctorId,
+        branch,
+        requestedDate,
+        notes,
+      });
+
+      setAppointmentStatus(appointment.status);
+      setConfirmed(true);
+    } catch (err) {
+      const message =
+        err instanceof ApiError
+          ? err.detail
+          : err instanceof Error
+            ? err.message
+            : "Randevu oluşturulamadı";
+      setError(message);
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   if (confirmed) {
@@ -112,6 +183,11 @@ export function BookingWidget({
         <p className="mt-1 text-sm text-slate-600">
           {selectedDay} {MONTHS[view.month]} {view.year} — {time}
         </p>
+        {appointmentStatus ? (
+          <p className="mt-2 text-sm font-medium text-emerald-700">
+            Talebiniz iletildi. Durum: {appointmentStatus}
+          </p>
+        ) : null}
         <p className="mt-3 text-sm text-slate-500">
           Klinik en kısa sürede sizi arayarak randevunuzu onaylayacaktır.
         </p>
@@ -120,6 +196,8 @@ export function BookingWidget({
           onClick={() => {
             setConfirmed(false);
             setTime(null);
+            setAppointmentStatus(null);
+            setError(null);
           }}
           className="mt-4 text-sm font-semibold text-[#3a6ad6] hover:underline"
         >
@@ -199,6 +277,7 @@ export function BookingWidget({
                 onClick={() => {
                   setSelectedDay(day);
                   setTime(null);
+                  setError(null);
                 }}
                 className={cn(
                   "flex h-9 items-center justify-center rounded-lg text-sm font-medium transition-colors",
@@ -226,7 +305,10 @@ export function BookingWidget({
               <button
                 key={t}
                 type="button"
-                onClick={() => setTime(t)}
+                onClick={() => {
+                  setTime(t);
+                  setError(null);
+                }}
                 className={cn(
                   "rounded-lg border py-2 text-sm font-medium transition-colors",
                   time === t
@@ -242,19 +324,34 @@ export function BookingWidget({
       )}
 
       <div className="p-5 pt-3">
+        {error ? (
+          <p className="mb-3 text-sm text-red-600" role="alert">
+            {error}
+          </p>
+        ) : null}
+
         <button
           type="button"
-          disabled={!time}
-          onClick={() => setConfirmed(true)}
+          disabled={!time || submitting}
+          onClick={() => void handleSubmit()}
           className={cn(
             "flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-colors",
-            time
+            time && !submitting
               ? "bg-[#3a6ad6] text-white hover:bg-[#2f57b3]"
               : "cursor-not-allowed bg-slate-100 text-slate-400"
           )}
         >
-          <CreditCard className="h-4 w-4" />
-          {time ? "Randevu Talebi Oluştur" : "Tarih ve saat seçin"}
+          {submitting ? (
+            <>
+              <Loader2 className="h-4 w-4 animate-spin" />
+              Gönderiliyor...
+            </>
+          ) : (
+            <>
+              <CreditCard className="h-4 w-4" />
+              {time ? "Randevu Talebi Oluştur" : "Tarih ve saat seçin"}
+            </>
+          )}
         </button>
         <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-slate-400">
           <ShieldCheck className="h-4 w-4 text-emerald-500" />
