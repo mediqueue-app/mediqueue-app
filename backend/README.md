@@ -65,7 +65,22 @@ Demo logins (password `Demo1234!`):
 | `doctor@mediqueue.com` | doctor (`doctor_id` linked) | web-doctor `:3001` |
 | `admin@mediqueue.com` | admin | web-admin `:3003` |
 
+`scripts.seed_demo_users` is idempotent — safe to run again before demos.
+
 **Doctor profile (Ay 1):** `GET /v1/doctors/{id}` is not required. Portals use `GET /v1/auth/me` (`doctor_id` / `clinic_id` on the user). Dedicated doctor GET can wait for Ay 2.
+
+Verify login and relationships:
+
+```powershell
+$login = Invoke-RestMethod -Method Post `
+  -Uri "http://127.0.0.1:8000/v1/auth/login" `
+  -ContentType "application/x-www-form-urlencoded" `
+  -Body "username=doctor@mediqueue.com&password=Demo1234!"
+
+Invoke-RestMethod -Method Get `
+  -Uri "http://127.0.0.1:8000/v1/auth/me" `
+  -Headers @{ Authorization = "Bearer $($login.access_token)" }
+```
 
 ## Run services
 
