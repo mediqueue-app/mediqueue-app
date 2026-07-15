@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { isAuthenticated } from "@/lib/auth";
+import { clearSession, isAuthenticated } from "@/lib/auth";
 import { fetchCurrentDoctor } from "@/lib/services/doctor";
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
@@ -19,10 +19,11 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       }
       try {
         await fetchCurrentDoctor();
+        if (!cancelled) setReady(true);
       } catch {
-        // Pages handle empty/error states; shell can still render.
+        clearSession();
+        if (!cancelled) router.replace("/login");
       }
-      if (!cancelled) setReady(true);
     }
 
     void boot();

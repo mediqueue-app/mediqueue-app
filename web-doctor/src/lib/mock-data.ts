@@ -72,7 +72,7 @@ export function getCurrentDoctor(): DoctorProfile {
 const quickStatsData: QuickStats = {
   monthlyPatientCount: 34,
   averageRating: 4.9,
-  pendingMessageCount: 3,
+  pendingMessageCount: 4,
   weeklyCompletedAppointments: 12,
 };
 
@@ -127,6 +127,34 @@ const activityTemplates: ActivityTemplate[] = [
     message: "Laura van Dijk post-op takip mesajı gönderdi",
     dayOffset: -1,
     time: "14:05",
+    type: "message",
+  },
+  {
+    id: "A6",
+    message: "Klaus Richter saç ekimi hazırlık notu güncellendi",
+    dayOffset: 0,
+    time: "08:40",
+    type: "note",
+  },
+  {
+    id: "A7",
+    message: "Robert Miller EKG raporu yüklendi",
+    dayOffset: -2,
+    time: "11:10",
+    type: "document",
+  },
+  {
+    id: "A8",
+    message: "Youssef Ben Ali fizik tedavi kontrolü planlandı",
+    dayOffset: -1,
+    time: "09:00",
+    type: "appointment",
+  },
+  {
+    id: "A9",
+    message: "Amina Haddad post-op mesajı okunmayı bekliyor",
+    dayOffset: -1,
+    time: "14:06",
     type: "message",
   },
 ];
@@ -268,6 +296,86 @@ const appointmentTemplates: AppointmentTemplate[] = [
     status: "BEKLIYOR",
     durationMinutes: 45,
   },
+  {
+    id: "APT-13",
+    patientId: "P-1009",
+    patientName: "Youssef Ben Ali",
+    dayOffset: 2,
+    time: "15:00",
+    treatmentType: "Fizik Tedavi Kontrol",
+    status: "ONAYLANDI",
+    durationMinutes: 40,
+  },
+  {
+    id: "APT-14",
+    patientId: "P-1010",
+    patientName: "Robert Miller",
+    dayOffset: 3,
+    time: "09:30",
+    treatmentType: "Kardiyoloji Takip",
+    status: "ONAYLANDI",
+    durationMinutes: 30,
+  },
+  {
+    id: "APT-15",
+    patientId: "P-1004",
+    patientName: "Amina Haddad",
+    dayOffset: 5,
+    time: "11:30",
+    treatmentType: "Post-Op 3. Hafta Kontrol",
+    status: "BEKLIYOR",
+    durationMinutes: 25,
+  },
+  {
+    id: "APT-16",
+    patientId: "P-1008",
+    patientName: "Laura van Dijk",
+    dayOffset: -3,
+    time: "10:00",
+    treatmentType: "Diş İmplant Planlama",
+    status: "TAMAMLANDI",
+    durationMinutes: 45,
+  },
+  {
+    id: "APT-17",
+    patientId: "P-1003",
+    patientName: "Klaus Richter",
+    dayOffset: 6,
+    time: "08:30",
+    treatmentType: "Saç Ekimi Operasyonu",
+    status: "ONAYLANDI",
+    durationMinutes: 180,
+  },
+  {
+    id: "APT-18",
+    patientId: "P-1001",
+    patientName: "Fatima Al-Sayed",
+    dayOffset: 8,
+    time: "14:00",
+    treatmentType: "Rinoplasti Operasyon Hazırlık",
+    status: "BEKLIYOR",
+    durationMinutes: 60,
+  },
+  {
+    id: "APT-19",
+    patientId: "P-1009",
+    patientName: "Youssef Ben Ali",
+    dayOffset: -7,
+    time: "16:00",
+    treatmentType: "Fizik Tedavi Seansı",
+    status: "TAMAMLANDI",
+    durationMinutes: 50,
+  },
+  {
+    id: "APT-20",
+    patientId: "P-1010",
+    patientName: "Robert Miller",
+    dayOffset: 1,
+    time: "09:00",
+    treatmentType: "İlaç Düzenleme Görüşmesi",
+    status: "ONAYLANDI",
+    durationMinutes: 20,
+  },
 ];
 
 export function getCalendarAppointments(): Appointment[] {
@@ -318,7 +426,31 @@ const patientHistoryLinks: Record<string, AppointmentHistoryLink[]> = {
     },
   ],
   "P-1005": [{ id: "AH6", aptId: "APT-05" }],
-  "P-1006": [],
+  "P-1006": [
+    {
+      id: "AH6a",
+      dayOffset: -12,
+      time: "11:00",
+      treatmentType: "IVF Ön Değerlendirme",
+      status: "TAMAMLANDI",
+      outcomeNote: "Kan ve hormon paneli alındı; protokol planlandı.",
+    },
+    {
+      id: "AH6b",
+      dayOffset: -5,
+      time: "14:00",
+      treatmentType: "IVF Takip Konsültasyonu",
+      status: "ONAYLANDI",
+      outcomeNote: "Ultrason kontrolü ve ilaç başlangıcı.",
+    },
+    {
+      id: "AH6c",
+      dayOffset: 0,
+      time: "14:00",
+      treatmentType: "IVF Kontrol Randevusu",
+      status: "BEKLIYOR",
+    },
+  ],
   "P-1007": [
     {
       id: "AH7",
@@ -336,8 +468,32 @@ const patientHistoryLinks: Record<string, AppointmentHistoryLink[]> = {
       status: "TAMAMLANDI",
       outcomeNote: "Başarılı operasyon, 6 hafta fizik tedavi önerildi.",
     },
+    {
+      id: "AH9b",
+      aptId: "APT-19",
+      outcomeNote: "ROM iyileşiyor; ev egzersiz programı güncellendi.",
+    },
+    { id: "AH9c", aptId: "APT-13" },
   ],
-  "P-1010": [],
+  "P-1010": [
+    {
+      id: "AH10a",
+      dayOffset: -9,
+      time: "10:30",
+      treatmentType: "Kardiyoloji İlk Muayene",
+      status: "TAMAMLANDI",
+      outcomeNote: "EKG ve efor testi istendi.",
+    },
+    {
+      id: "AH10b",
+      dayOffset: -2,
+      time: "09:00",
+      treatmentType: "Efor Testi Değerlendirme",
+      status: "ONAYLANDI",
+    },
+    { id: "AH10c", aptId: "APT-20" },
+    { id: "AH10d", aptId: "APT-14" },
+  ],
 };
 
 function resolveAppointmentHistory(
@@ -455,7 +611,22 @@ const patientRecords: Patient[] = [
         fileSizeKb: 588,
       },
     ],
-    medicalNotes: [],
+    medicalNotes: [
+      {
+        id: "N-JW1",
+        content:
+          "Estetik paket teklifi paylaşıldı; hasta 1 hafta değerlendirme istedi.",
+        createdAt: "2026-07-07T13:20:00",
+        authorName: "Op. Dr. Elif Yılmaz",
+      },
+      {
+        id: "N-JW2",
+        content:
+          "Fotoğraf seti incelendi; endikasyon uygun, kontrendikasyon yok.",
+        createdAt: "2026-07-08T10:05:00",
+        authorName: "Op. Dr. Elif Yılmaz",
+      },
+    ],
     appointmentHistory: [
       {
         id: "AH2",
@@ -593,7 +764,22 @@ const patientRecords: Patient[] = [
         fileSizeKb: 702,
       },
     ],
-    medicalNotes: [],
+    medicalNotes: [
+      {
+        id: "N-SB1",
+        content:
+          "Yüz germe adayı; cilt elastikiyeti iyi, anestezi riski düşük.",
+        createdAt: "2026-07-04T11:00:00",
+        authorName: "Op. Dr. Elif Yılmaz",
+      },
+      {
+        id: "N-SB2",
+        content:
+          "Ön değerlendirme randevusu bugün 12:00 — beklenen süre 45 dk.",
+        createdAt: "2026-07-15T09:10:00",
+        authorName: "Op. Dr. Elif Yılmaz",
+      },
+    ],
     appointmentHistory: [
       {
         id: "AH6",
@@ -619,6 +805,8 @@ const patientRecords: Patient[] = [
     treatmentStatus: "BEKLEMEDE",
     lastVisitDate: "2026-07-03",
     avatarInitials: "AA",
+    highlightNote:
+      "Demo çeviri hastası — Arapça yazar, siz Türkçe okursunuz (Mesajlar → Ahmed)",
     timeline: buildTimeline(2),
     documents: [
       {
@@ -629,7 +817,22 @@ const patientRecords: Patient[] = [
         fileSizeKb: 1340,
       },
     ],
-    medicalNotes: [],
+    medicalNotes: [
+      {
+        id: "N-AH1",
+        content:
+          "Hasta Arapça iletişim tercih ediyor. Ön değerlendirme sonrası 2–3 haftalık hazırlık planlandı.",
+        createdAt: "2026-07-10T09:15:00",
+        authorName: "Op. Dr. Elif Yılmaz",
+      },
+      {
+        id: "N-AH2",
+        content:
+          "IVF protokolü için laboratuvar sonuçları dosyaya yüklendi. Partner değerlendirmesi bekleniyor.",
+        createdAt: "2026-07-12T14:40:00",
+        authorName: "Op. Dr. Elif Yılmaz",
+      },
+    ],
     appointmentHistory: [],
   },
   {
@@ -659,7 +862,15 @@ const patientRecords: Patient[] = [
         fileSizeKb: 3200,
       },
     ],
-    medicalNotes: [],
+    medicalNotes: [
+      {
+        id: "N-IG1",
+        content:
+          "Diş 22 bölgesinde soğuk hassasiyeti. Tomografi sonrası implant planı netleştirilecek.",
+        createdAt: "2026-07-02T11:20:00",
+        authorName: "Op. Dr. Elif Yılmaz",
+      },
+    ],
     appointmentHistory: [
       {
         id: "AH7",
@@ -733,8 +944,38 @@ const patientRecords: Patient[] = [
     lastVisitDate: "2026-06-15",
     avatarInitials: "YB",
     timeline: buildTimeline(7),
-    documents: [],
-    medicalNotes: [],
+    documents: [
+      {
+        id: "D-YB1",
+        type: "PASAPORT",
+        fileName: "pasaport_youssef.pdf",
+        uploadedAt: "2026-06-10",
+        fileSizeKb: 820,
+      },
+      {
+        id: "D-YB2",
+        type: "TIBBI_RAPOR",
+        fileName: "diz_mri_youssef.pdf",
+        uploadedAt: "2026-06-12",
+        fileSizeKb: 4100,
+      },
+      {
+        id: "D-YB3",
+        type: "RONTGEN",
+        fileName: "fizik_tedavi_plani.pdf",
+        uploadedAt: "2026-06-16",
+        fileSizeKb: 960,
+      },
+    ],
+    medicalNotes: [
+      {
+        id: "N-YB1",
+        content:
+          "Diz artroskopisi sonrası fizik tedavi programı başlatıldı. 6 haftalık takip.",
+        createdAt: "2026-06-16T09:00:00",
+        authorName: "Op. Dr. Elif Yılmaz",
+      },
+    ],
     appointmentHistory: [
       {
         id: "AH9",
@@ -771,7 +1012,15 @@ const patientRecords: Patient[] = [
         fileSizeKb: 1580,
       },
     ],
-    medicalNotes: [],
+    medicalNotes: [
+      {
+        id: "N-RM1",
+        content:
+          "Efor testi sonuçları değerlendirildi. Risk skoru düşük-orta; ilaç düzenlemesi önerildi.",
+        createdAt: "2026-06-28T11:10:00",
+        authorName: "Op. Dr. Elif Yılmaz",
+      },
+    ],
     appointmentHistory: [],
   },
 ];
@@ -800,6 +1049,11 @@ type ChatMessageTemplate = {
   content: string;
   dayOffset: number;
   time: string;
+  originalLanguage?: string;
+  originalText?: string;
+  translatedTo?: string;
+  patientSeesText?: string;
+  patientLanguage?: string;
 };
 
 type ChatThreadTemplate = Omit<ChatThread, "lastMessageAt" | "messages"> & {
@@ -814,32 +1068,90 @@ const chatThreadTemplates: ChatThreadTemplate[] = [
     patientId: "P-1006",
     patientName: "Ahmed Al-Farsi",
     countryCode: "QA",
-    lastMessage: "Doktor hanım, tedavi süreci hakkında bilgi alabilir miyim?",
+    patientLanguage: "AR",
+    lastMessage: "Teşekkürler, yarın 14:00’te görüşürüz.",
     lastMessageDayOffset: 0,
-    lastMessageTime: "11:42",
-    unreadCount: 2,
+    lastMessageTime: "12:10",
+    unreadCount: 1,
     messageTemplates: [
       {
         id: "M1",
         sender: "patient",
-        content: "Merhaba, IVF tedavisi için süreç ne kadar sürer?",
+        content:
+          "Klinik randevumu onayladı. Operasyon Panelinde bugünkü listede adımı görebiliyor musunuz?",
+        originalLanguage: "AR",
+        originalText:
+          "أكدت العيادة موعدي. هل تراني في قائمة اليوم على لوحة العمليات؟",
+        translatedTo: "TR",
         dayOffset: 0,
-        time: "11:30",
+        time: "11:20",
       },
       {
         id: "M2",
         sender: "doctor",
         content:
-          "Merhaba Ahmed Bey, ön değerlendirme sonrası genellikle 2-3 haftalık bir hazırlık süreci olur.",
+          "Evet — Operasyon Panelinde kuyrukta IVF randevunuz var. Randevu Takviminde de 14:00 slotu onaylı görünüyor.",
+        patientLanguage: "AR",
+        patientSeesText:
+          "نعم — أنت في قائمة اليوم لموعد أطفال الأنابيب. الموعد مؤكد أيضاً في التقويم الساعة ١٤:٠٠.",
         dayOffset: 0,
-        time: "11:35",
+        time: "11:28",
       },
       {
         id: "M3",
         sender: "patient",
-        content: "Doktor hanım, tedavi süreci hakkında bilgi alabilir miyim?",
+        content:
+          "Pasaport ve tıbbi raporu Hasta Dosyama yükledim. Belgeler tamam mı?",
+        originalLanguage: "AR",
+        originalText:
+          "رفعت جواز السفر والتقرير الطبي إلى ملف المريض. هل المستندات مكتملة؟",
+        translatedTo: "TR",
         dayOffset: 0,
-        time: "11:42",
+        time: "11:40",
+      },
+      {
+        id: "M4",
+        sender: "doctor",
+        content:
+          "Hasta Dosyanızda belgeler görünüyor, durum Beklemede. Ön değerlendirme sonrası 2–3 haftalık hazırlık planlarız.",
+        patientLanguage: "AR",
+        patientSeesText:
+          "المستندات ظاهرة في ملفك والحالة قيد الانتظار. بعد التقييم الأولي نخطط لفترة تحضير من ٢–٣ أسابيع.",
+        dayOffset: 0,
+        time: "11:48",
+      },
+      {
+        id: "M5",
+        sender: "patient",
+        content:
+          "Mesajlar ekranında Arapça yazıyorum, siz Türkçe okuyorsunuz; yanıtınızı Arapça görüyorum — doğru mu?",
+        originalLanguage: "AR",
+        originalText:
+          "أكتب بالعربية في الرسائل وأنت تقرأ بالتركية؛ وأرى ردودك بالعربية — صحيح؟",
+        translatedTo: "TR",
+        dayOffset: 0,
+        time: "11:58",
+      },
+      {
+        id: "M6",
+        sender: "doctor",
+        content:
+          "Doğru — çeviri otomatik. Vitrin Profilimde Arapça seçili olduğu için klinik sizi bana eşleştirdi. Yarın 14:00’te görüşürüz.",
+        patientLanguage: "AR",
+        patientSeesText:
+          "صحيح — الترجمة تلقائية. لأن ملفي يشمل العربية ربطتك العيادة بي. نلتقي غداً الساعة ١٤:٠٠.",
+        dayOffset: 0,
+        time: "12:05",
+      },
+      {
+        id: "M7",
+        sender: "patient",
+        content: "Teşekkürler, yarın 14:00’te görüşürüz.",
+        originalLanguage: "AR",
+        originalText: "شكراً، إلى اللقاء غداً الساعة ١٤:٠٠.",
+        translatedTo: "TR",
+        dayOffset: 0,
+        time: "12:10",
       },
     ],
   },
@@ -848,15 +1160,30 @@ const chatThreadTemplates: ChatThreadTemplate[] = [
     patientId: "P-1003",
     patientName: "Klaus Richter",
     countryCode: "DE",
+    patientLanguage: "DE",
     lastMessage: "Teşekkürler, yarın görüşmek üzere.",
     lastMessageDayOffset: 0,
     lastMessageTime: "08:15",
     unreadCount: 0,
     messageTemplates: [
       {
+        id: "M4a",
+        sender: "patient",
+        content: "Takvimde 14:30 saç ekimi randevumu görüyorum — doğru mu?",
+        originalLanguage: "DE",
+        originalText:
+          "Ich sehe meinen Haartransplantations-Termin um 14:30 im Kalender — stimmt das?",
+        translatedTo: "TR",
+        dayOffset: 0,
+        time: "07:45",
+      },
+      {
         id: "M4",
         sender: "patient",
         content: "Operasyon öncesi özel bir hazırlık yapmam gerekiyor mu?",
+        originalLanguage: "DE",
+        originalText: "Muss ich vor der Operation besondere Vorbereitungen treffen?",
+        translatedTo: "TR",
         dayOffset: 0,
         time: "08:00",
       },
@@ -864,7 +1191,10 @@ const chatThreadTemplates: ChatThreadTemplate[] = [
         id: "M5",
         sender: "doctor",
         content:
-          "Kan sulandırıcı kullanmamanızı ve operasyondan 8 saat önce aç kalmanızı rica ederim.",
+          "Evet, 14:30 onaylı. Kan sulandırıcı kullanmayın ve operasyondan 8 saat önce aç kalın. Greft planı Hasta Dosyanızda.",
+        patientLanguage: "DE",
+        patientSeesText:
+          "Ja, 14:30 ist bestätigt. Bitte keine Blutverdünner und 8 Stunden nüchtern. Der Graft-Plan steht in Ihrer Patientenakte.",
         dayOffset: 0,
         time: "08:10",
       },
@@ -872,6 +1202,9 @@ const chatThreadTemplates: ChatThreadTemplate[] = [
         id: "M6",
         sender: "patient",
         content: "Teşekkürler, yarın görüşmek üzere.",
+        originalLanguage: "DE",
+        originalText: "Danke, bis morgen!",
+        translatedTo: "TR",
         dayOffset: 0,
         time: "08:15",
       },
@@ -882,17 +1215,198 @@ const chatThreadTemplates: ChatThreadTemplate[] = [
     patientId: "P-1004",
     patientName: "Amina Haddad",
     countryCode: "IQ",
+    patientLanguage: "AR",
     lastMessage: "Ödem tamamen geçti, çok teşekkürler.",
     lastMessageDayOffset: -1,
     lastMessageTime: "14:05",
     unreadCount: 1,
     messageTemplates: [
       {
+        id: "M7a",
+        sender: "doctor",
+        content:
+          "Post-op 2. hafta kontrolünüz nasıl geçti? Ödem ve kızarıklık azaldı mı?",
+        patientLanguage: "AR",
+        patientSeesText:
+          "كيف كانت متابعة الأسبوع الثاني بعد العملية؟ هل قل التورم والاحمرار؟",
+        dayOffset: -2,
+        time: "10:20",
+      },
+      {
+        id: "M7b",
+        sender: "patient",
+        content: "Kızarıklık büyük ölçüde geçti. Yürüyüşe başladım.",
+        originalLanguage: "AR",
+        originalText: "اختفى الاحمرار تقريباً. بدأت بالمشي.",
+        translatedTo: "TR",
+        dayOffset: -1,
+        time: "13:50",
+      },
+      {
         id: "M7",
         sender: "patient",
         content: "Ödem tamamen geçti, çok teşekkürler.",
+        originalLanguage: "AR",
+        originalText: "اختفى التورم تماماً، شكراً جزيلاً.",
+        translatedTo: "TR",
         dayOffset: -1,
         time: "14:05",
+      },
+    ],
+  },
+  {
+    id: "C4",
+    patientId: "P-1001",
+    patientName: "Fatima Al-Sayed",
+    countryCode: "SA",
+    patientLanguage: "AR",
+    lastMessage: "Rinoplasti hazırlık listesini inceledim, onaylıyorum.",
+    lastMessageDayOffset: -1,
+    lastMessageTime: "18:20",
+    unreadCount: 0,
+    messageTemplates: [
+      {
+        id: "M8",
+        sender: "doctor",
+        content:
+          "Operasyon hazırlık listesini Hasta Dosyanıza yükledim. Kan tahlili sonuçlarınızı da kontrol edebilirsiniz.",
+        patientLanguage: "AR",
+        patientSeesText:
+          "رفعت قائمة التحضير للعملية إلى ملفك. يمكنك أيضاً مراجعة نتائج تحاليل الدم.",
+        dayOffset: -2,
+        time: "11:00",
+      },
+      {
+        id: "M9",
+        sender: "patient",
+        content: "Rinoplasti hazırlık listesini inceledim, onaylıyorum.",
+        originalLanguage: "AR",
+        originalText: "راجعت قائمة التحضير لعملية الأنف، وأوافق عليها.",
+        translatedTo: "TR",
+        dayOffset: -1,
+        time: "18:20",
+      },
+    ],
+  },
+  {
+    id: "C5",
+    patientId: "P-1008",
+    patientName: "Laura van Dijk",
+    countryCode: "NL",
+    patientLanguage: "EN",
+    lastMessage: "Implant seansı için 13:00 uygun, teşekkürler.",
+    lastMessageDayOffset: -1,
+    lastMessageTime: "14:05",
+    unreadCount: 1,
+    messageTemplates: [
+      {
+        id: "M10",
+        sender: "patient",
+        content: "Post-op şişlik biraz devam ediyor — normal mi?",
+        originalLanguage: "EN",
+        originalText: "Some swelling is still there after the procedure — is that normal?",
+        translatedTo: "TR",
+        dayOffset: -1,
+        time: "13:40",
+      },
+      {
+        id: "M11",
+        sender: "doctor",
+        content:
+          "İlk 72 saatte beklenen bir durum. Soğuk uygulama ve yumuşak gıdaya devam edin. Cuma 13:00 implant seansı onaylı.",
+        patientLanguage: "EN",
+        patientSeesText:
+          "Expected in the first 72 hours. Keep cold packs and soft foods. Friday 13:00 implant session is confirmed.",
+        dayOffset: -1,
+        time: "13:55",
+      },
+      {
+        id: "M12",
+        sender: "patient",
+        content: "Implant seansı için 13:00 uygun, teşekkürler.",
+        originalLanguage: "EN",
+        originalText: "13:00 works for the implant session, thank you.",
+        translatedTo: "TR",
+        dayOffset: -1,
+        time: "14:05",
+      },
+    ],
+  },
+  {
+    id: "C6",
+    patientId: "P-1007",
+    patientName: "Igor Petrov",
+    countryCode: "RU",
+    patientLanguage: "RU",
+    lastMessage: "Tomografi yüklendi, yeni tarih için uygun günlerimi yazdım.",
+    lastMessageDayOffset: 0,
+    lastMessageTime: "09:35",
+    unreadCount: 1,
+    messageTemplates: [
+      {
+        id: "M13",
+        sender: "patient",
+        content: "Planlama randevusunu ertelemek zorundayım — üzgünüm.",
+        originalLanguage: "RU",
+        originalText: "Мне нужно перенести планирование импланта — извините.",
+        translatedTo: "TR",
+        dayOffset: -1,
+        time: "16:00",
+      },
+      {
+        id: "M14",
+        sender: "doctor",
+        content:
+          "Sorun değil. Tomografi dosyanız geldi. Takvimden yeni slot seçebilirsiniz; Perşembe 10:30 öneriyorum.",
+        patientLanguage: "RU",
+        patientSeesText:
+          "Ничего страшного. Томография уже в файле. Можете выбрать слот в календаре; предлагаю четверг 10:30.",
+        dayOffset: 0,
+        time: "09:20",
+      },
+      {
+        id: "M15",
+        sender: "patient",
+        content: "Tomografi yüklendi, yeni tarih için uygun günlerimi yazdım.",
+        originalLanguage: "RU",
+        originalText: "Томография загружена, написал удобные дни для новой даты.",
+        translatedTo: "TR",
+        dayOffset: 0,
+        time: "09:35",
+      },
+    ],
+  },
+  {
+    id: "C7",
+    patientId: "P-1010",
+    patientName: "Robert Miller",
+    countryCode: "US",
+    patientLanguage: "EN",
+    lastMessage: "İlaç dozunu anladım, yarın 09:00’da görüşürüz.",
+    lastMessageDayOffset: 0,
+    lastMessageTime: "10:05",
+    unreadCount: 0,
+    messageTemplates: [
+      {
+        id: "M16",
+        sender: "doctor",
+        content:
+          "Efor testi sonuçlarınıza göre antihipertansif dozu hafif artırıyoruz. Detaylar Hasta Dosyanızda.",
+        patientLanguage: "EN",
+        patientSeesText:
+          "Based on your stress test we are slightly increasing the antihypertensive dose. Details are in your patient file.",
+        dayOffset: 0,
+        time: "09:50",
+      },
+      {
+        id: "M17",
+        sender: "patient",
+        content: "İlaç dozunu anladım, yarın 09:00’da görüşürüz.",
+        originalLanguage: "EN",
+        originalText: "Got the dosage change — see you tomorrow at 09:00.",
+        translatedTo: "TR",
+        dayOffset: 0,
+        time: "10:05",
       },
     ],
   },

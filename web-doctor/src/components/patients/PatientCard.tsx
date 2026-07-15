@@ -30,7 +30,7 @@ export function PatientCard({
     <Link
       href={`/dashboard/patients/${patient.id}`}
       className={cn(
-        "group block overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm transition-all hover:border-primary/25 hover:shadow-md",
+        "group panel-lift block overflow-hidden rounded-[1.25rem] border border-white/80 bg-white/95 shadow-sm backdrop-blur-sm",
         "border-l-[3px]",
         STATUS_ACCENT[patient.treatmentStatus],
         variant === "grid" ? "p-4" : "p-5"

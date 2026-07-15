@@ -2,8 +2,7 @@
 
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
-import { PatientList } from "@/components/patients/PatientList";
-import { PatientsPageHeader } from "@/components/patients/PatientsPageHeader";
+import { PatientsBoard } from "@/components/patients/PatientsBoard";
 import { fetchPatients } from "@/lib/services/patients";
 import type { Patient } from "@/types";
 
@@ -39,25 +38,20 @@ function PatientsPageContent() {
 
   if (patients === null) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+      <div className="rounded-[1.5rem] border border-slate-100 bg-white p-10 text-center text-sm text-slate-400 shadow-sm">
         Yükleniyor…
       </div>
     );
   }
 
-  return (
-    <div className="flex flex-col gap-5 lg:gap-6">
-      <PatientsPageHeader patients={patients} />
-      <PatientList initialPatients={patients} initialSearch={q} />
-    </div>
-  );
+  return <PatientsBoard patients={patients} initialSearch={q} />;
 }
 
 export default function PatientsPage() {
   return (
     <Suspense
       fallback={
-        <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+        <div className="rounded-[1.5rem] border border-slate-100 bg-white p-10 text-center text-sm text-slate-400 shadow-sm">
           Yükleniyor…
         </div>
       }

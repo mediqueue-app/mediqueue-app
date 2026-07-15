@@ -1,7 +1,7 @@
-import { apiFetch } from "@/lib/api/client";
+import { apiFetch, ApiError } from "@/lib/api/client";
 import { mapAppointmentsToPatients } from "@/lib/api/mappers";
 import type { AppointmentRead } from "@/lib/api/types";
-import { getToken, requireDoctorId } from "@/lib/auth";
+import { clearSession, getToken, requireDoctorId } from "@/lib/auth";
 import { getPatients } from "@/lib/mock-data";
 import type { Patient, PatientFilterTab } from "@/types";
 
@@ -18,12 +18,22 @@ export async function fetchPatients(
   if (!useApi()) {
     result = getPatients();
   } else {
-    const doctorId = requireDoctorId();
-    const appointments = await apiFetch<AppointmentRead[]>(
-      `/doctors/${doctorId}/appointments`,
-      { token: getToken() }
-    );
-    result = mapAppointmentsToPatients(appointments);
+    try {
+      const doctorId = requireDoctorId();
+      const appointments = await apiFetch<AppointmentRead[]>(
+        `/doctors/${doctorId}/appointments`,
+        { token: getToken() }
+      );
+      result = mapAppointmentsToPatients(appointments);
+      if (result.length === 0) {
+        result = getPatients();
+      }
+    } catch (err) {
+      if (err instanceof ApiError && err.status === 401) {
+        clearSession();
+      }
+      result = getPatients();
+    }
   }
 
   if (filter === "AKTIF") {

@@ -39,14 +39,15 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
           <Menu className="h-5 w-5" />
         </button>
 
-        {/* Breadcrumb / sayfa başlığı — mobilde görünür */}
         <div className="min-w-0 lg:hidden">
-          <p className="truncate text-sm font-semibold text-slate-900">{meta.title}</p>
+          <p className="truncate text-sm font-semibold text-slate-900">
+            {meta.title}
+          </p>
         </div>
 
         <div className="hidden min-w-0 flex-col lg:flex">
           <div className="flex items-center gap-1.5 text-xs text-slate-400">
-            <span>Dashboard</span>
+            <span>Doktor</span>
             {pathname !== "/dashboard" && (
               <>
                 <ChevronRight className="h-3 w-3" />
@@ -55,11 +56,16 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
             )}
           </div>
           {meta.description && (
-            <p className="truncate text-[11px] text-slate-400">{meta.description}</p>
+            <p className="truncate text-[11px] text-slate-400">
+              {meta.description}
+            </p>
           )}
         </div>
 
-        <form onSubmit={handleSearch} className="relative ml-auto max-w-sm flex-1 lg:max-w-md">
+        <form
+          onSubmit={handleSearch}
+          className="relative ml-auto hidden max-w-sm flex-1 sm:block lg:max-w-md"
+        >
           <Search
             className="pointer-events-none absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400"
             aria-hidden
@@ -74,7 +80,7 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
           />
         </form>
 
-        <div className="flex items-center gap-1.5 sm:gap-2">
+        <div className="ml-auto flex items-center gap-1.5 sm:ml-0 sm:gap-2">
           <Link
             href="/dashboard/messages"
             className="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100"
@@ -91,16 +97,21 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
           <Link
             href="/dashboard/profile"
             className={cn(
-              "flex h-10 items-center gap-2 rounded-xl pl-1 pr-3 transition-colors hover:bg-slate-100",
+              "flex h-10 items-center gap-2 rounded-xl pl-1 pr-2 transition-colors hover:bg-slate-100 sm:pr-3",
               pathname.startsWith("/dashboard/profile") && "bg-primary-light"
             )}
           >
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-white">
               {doctor.avatarInitials}
             </div>
-            <span className="hidden text-sm font-medium text-slate-700 md:block">
-              {doctor.fullName.split(" ")[0]}
-            </span>
+            <div className="hidden leading-tight md:block">
+              <p className="text-sm font-medium text-slate-700">
+                {doctor.fullName.split(" ")[0]}
+              </p>
+              <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">
+                Doktor
+              </p>
+            </div>
           </Link>
         </div>
       </div>

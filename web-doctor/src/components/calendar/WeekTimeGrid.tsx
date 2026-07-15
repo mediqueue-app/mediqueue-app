@@ -30,7 +30,7 @@ export function WeekTimeGrid({
   const gridHeight = (CALENDAR_END_HOUR - CALENDAR_START_HOUR) * HOUR_ROW_PX;
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="bg-white">
       <div className="overflow-x-auto">
         <div className="min-w-[840px]">
           {/* Gün başlıkları */}

@@ -11,12 +11,28 @@ import { formatTimeAgo } from "@/lib/utils";
 
 const typeConfig: Record<
   ActivityItem["type"],
-  { icon: LucideIcon; label: string }
+  { icon: LucideIcon; label: string; well: string }
 > = {
-  message: { icon: MessageSquare, label: "Mesaj" },
-  appointment: { icon: Calendar, label: "Randevu" },
-  document: { icon: FileText, label: "Belge" },
-  note: { icon: StickyNote, label: "Not" },
+  message: {
+    icon: MessageSquare,
+    label: "Mesaj",
+    well: "bg-violet-50 text-violet-600",
+  },
+  appointment: {
+    icon: Calendar,
+    label: "Randevu",
+    well: "bg-primary-light text-primary",
+  },
+  document: {
+    icon: FileText,
+    label: "Belge",
+    well: "bg-sky-50 text-sky-600",
+  },
+  note: {
+    icon: StickyNote,
+    label: "Not",
+    well: "bg-amber-50 text-amber-600",
+  },
 };
 
 export function RecentActivity({
@@ -25,11 +41,18 @@ export function RecentActivity({
   activities: ActivityItem[];
 }) {
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
-      <div className="flex items-center justify-between border-b border-slate-100 px-5 py-4 lg:px-6">
+    <div className="overflow-hidden rounded-[1.5rem] border border-white/80 bg-white/95 shadow-sm backdrop-blur-sm">
+      <div className="flex items-center justify-between border-b border-slate-100 px-5 py-5 lg:px-6">
         <div>
-          <h2 className="text-base font-semibold text-slate-900">Son Aktiviteler</h2>
-          <p className="text-xs text-slate-500">Klinik akışındaki son hareketler</p>
+          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
+            Canlı akış
+          </p>
+          <h2 className="font-display mt-1 text-2xl tracking-tight text-slate-900">
+            Son Aktiviteler
+          </h2>
+          <p className="mt-0.5 text-sm text-slate-500">
+            Klinik akışındaki son hareketler
+          </p>
         </div>
         <Link
           href="/dashboard/messages"
@@ -45,8 +68,13 @@ export function RecentActivity({
           const Icon = config.icon;
 
           return (
-            <li key={item.id} className="flex gap-3 px-5 py-3.5 lg:px-6">
-              <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-light text-primary">
+            <li
+              key={item.id}
+              className="flex gap-3 px-5 py-4 transition-colors hover:bg-primary-light/35 lg:px-6"
+            >
+              <div
+                className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${config.well}`}
+              >
                 <Icon className="h-4 w-4" />
               </div>
               <div className="min-w-0 flex-1">
@@ -58,7 +86,9 @@ export function RecentActivity({
                     {formatTimeAgo(item.timestamp)}
                   </span>
                 </div>
-                <p className="mt-1 text-sm text-slate-700">{item.message}</p>
+                <p className="mt-1.5 text-sm leading-relaxed text-slate-700">
+                  {item.message}
+                </p>
               </div>
             </li>
           );

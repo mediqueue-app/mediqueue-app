@@ -1,7 +1,7 @@
-import { apiFetch } from "@/lib/api/client";
+import { apiFetch, ApiError } from "@/lib/api/client";
 import { mapUserToDoctorProfile } from "@/lib/api/profile";
 import type { UserRead } from "@/lib/api/types";
-import { getStoredUser, getToken, setSession } from "@/lib/auth";
+import { clearSession, getStoredUser, getToken, setSession } from "@/lib/auth";
 import { getCurrentDoctor } from "@/lib/mock-data";
 import type { DoctorProfile } from "@/types";
 
@@ -36,11 +36,16 @@ export async function fetchCurrentDoctor(): Promise<DoctorProfile> {
   try {
     user = await apiFetch<UserRead>("/auth/me", { token });
     if (user) setSession(token!, user);
-  } catch {
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 401) {
+      clearSession();
+      throw new Error("Oturum süresi doldu. Tekrar giriş yapın.");
+    }
     // saklı user ile devam
   }
 
   if (!user) {
+    clearSession();
     throw new Error("Oturum bulunamadı. Tekrar giriş yapın.");
   }
 

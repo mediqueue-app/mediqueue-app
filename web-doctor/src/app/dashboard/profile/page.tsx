@@ -70,33 +70,37 @@ export default function ProfilePage() {
     <div className="flex flex-col gap-5 lg:gap-6">
       <ProfileHero doctor={currentDoctor} />
 
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-3 xl:gap-6">
-        {/* Form */}
+      <div className="animate-fade-in-up stagger-1 grid grid-cols-1 gap-5 xl:grid-cols-3 xl:gap-6">
         <div className="space-y-5 xl:col-span-2">
-          {/* Kişisel bilgiler */}
-          <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:p-6">
+          <section className="rounded-[1.5rem] border border-white/80 bg-white/95 p-5 shadow-sm backdrop-blur-sm lg:p-6">
             <div className="mb-5 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-light text-primary">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary-hover text-white">
                 <User className="h-4 w-4" />
               </div>
               <div>
-                <h2 className="text-sm font-semibold text-slate-900">Kişisel Bilgiler</h2>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
+                  Kimlik
+                </p>
+                <h2 className="font-display text-xl tracking-tight text-slate-900">
+                  Kişisel Bilgiler
+                </h2>
                 <p className="text-xs text-slate-500">Ad, unvan ve uzmanlık alanı</p>
               </div>
             </div>
 
-            <div className="mb-5 flex items-center gap-4 rounded-xl border border-slate-100 bg-slate-50/50 p-4">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-light text-lg font-bold text-primary">
+            <div className="mb-5 flex items-center gap-4 rounded-2xl border border-slate-100 bg-slate-50/60 p-4">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary-hover text-lg font-bold text-white shadow-md shadow-primary/25">
                 {currentDoctor.avatarInitials}
               </div>
               <div>
-                <p className="text-sm font-medium text-slate-700">Profil fotoğrafı</p>
+                <p className="text-sm font-semibold text-slate-700">Profil fotoğrafı</p>
                 <button
                   type="button"
                   className="mt-1 text-sm font-semibold text-primary hover:underline"
                 >
                   Fotoğraf değiştir
                 </button>
+                <p className="mt-0.5 text-[11px] text-slate-400">JPG, PNG · maks. 5 MB</p>
               </div>
             </div>
 
@@ -109,7 +113,7 @@ export default function ProfilePage() {
               <Field label="Uzmanlık Alanı" value={specialty} onChange={setSpecialty} />
             </div>
 
-            <div className="mt-4 flex items-center gap-2 rounded-xl bg-slate-50 px-3 py-2.5 text-sm text-slate-500">
+            <div className="mt-4 flex items-center gap-2 rounded-xl border border-slate-100 bg-slate-50 px-3.5 py-2.5 text-sm text-slate-500">
               <Mail className="h-4 w-4 shrink-0 text-slate-400" />
               {currentDoctor.email}
               <span className="ml-auto text-[10px] font-medium text-slate-400">
@@ -118,16 +122,20 @@ export default function ProfilePage() {
             </div>
           </section>
 
-          {/* Diller */}
-          <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:p-6">
+          <section className="rounded-[1.5rem] border border-white/80 bg-white/95 p-5 shadow-sm backdrop-blur-sm lg:p-6">
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-sky-400 to-sky-600 text-white">
                 <Globe className="h-4 w-4" />
               </div>
               <div>
-                <h2 className="text-sm font-semibold text-slate-900">Konuşulan Diller</h2>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
+                  Eşleştirme + çeviri
+                </p>
+                <h2 className="font-display text-xl tracking-tight text-slate-900">
+                  Konuşulan Diller
+                </h2>
                 <p className="text-xs text-slate-500">
-                  Hasta eşleştirmesinde kullanılır
+                  Hasta eşleştirmesinde ve çeviri kanalında kullanılır
                 </p>
               </div>
             </div>
@@ -141,9 +149,9 @@ export default function ProfilePage() {
                     type="button"
                     onClick={() => toggleLanguage(lang)}
                     className={cn(
-                      "flex flex-col items-start rounded-xl border px-3 py-2.5 text-left transition-all",
+                      "flex flex-col items-start rounded-2xl border px-3.5 py-3 text-left transition-all",
                       active
-                        ? "border-primary bg-primary-light/50 shadow-sm"
+                        ? "border-primary bg-primary-light/50 shadow-sm ring-1 ring-primary/20"
                         : "border-slate-200 bg-white hover:border-slate-300"
                     )}
                   >
@@ -155,18 +163,29 @@ export default function ProfilePage() {
                     >
                       {lang}
                     </span>
-                    <span className="text-[11px] text-slate-500">{LANGUAGE_LABELS[lang]}</span>
+                    <span className="text-[11px] text-slate-500">
+                      {LANGUAGE_LABELS[lang]}
+                    </span>
+                    {active && (
+                      <span className="mt-1.5 text-[10px] font-semibold text-primary">
+                        Seçili
+                      </span>
+                    )}
                   </button>
                 );
               })}
             </div>
           </section>
 
-          {/* Biyografi */}
-          <section className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:p-6">
+          <section className="rounded-[1.5rem] border border-white/80 bg-white/95 p-5 shadow-sm backdrop-blur-sm lg:p-6">
             <div className="mb-4 flex items-center justify-between">
               <div>
-                <h2 className="text-sm font-semibold text-slate-900">Biyografi</h2>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
+                  Tanıtım
+                </p>
+                <h2 className="font-display text-xl tracking-tight text-slate-900">
+                  Biyografi
+                </h2>
                 <p className="text-xs text-slate-500">Hastalara gösterilen tanıtım metni</p>
               </div>
               <span className="text-[11px] text-slate-400">{bio.length} karakter</span>
@@ -176,18 +195,20 @@ export default function ProfilePage() {
               onChange={(e) => setBio(e.target.value)}
               rows={5}
               placeholder="Deneyiminiz, uzmanlık alanlarınız ve yaklaşımınız..."
-              className="w-full rounded-xl border border-slate-200 px-3.5 py-3 text-sm leading-relaxed focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
+              className="w-full rounded-2xl border border-slate-200 bg-slate-50/40 px-3.5 py-3 text-sm leading-relaxed focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10"
             />
           </section>
 
-          {/* Sertifikalar */}
-          <section className="rounded-2xl border border-dashed border-slate-300 bg-slate-50/50 p-5 lg:p-6">
+          <section className="rounded-[1.5rem] border border-dashed border-slate-300 bg-white/70 p-5 backdrop-blur-sm lg:p-6">
             <div className="mb-4 flex items-center gap-3">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
+              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-violet-400 to-violet-600 text-white">
                 <Award className="h-4 w-4" />
               </div>
               <div>
-                <h2 className="text-sm font-semibold text-slate-900">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
+                  Belgeler
+                </p>
+                <h2 className="font-display text-xl tracking-tight text-slate-900">
                   Sertifika / Diploma
                 </h2>
                 <p className="text-xs text-slate-500">
@@ -196,7 +217,7 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            <label className="flex cursor-pointer flex-col items-center justify-center rounded-xl border border-slate-200 bg-white py-10 transition-colors hover:border-primary/30 hover:bg-primary-light/10">
+            <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white py-10 transition-colors hover:border-primary/30 hover:bg-primary-light/10">
               <Upload className="h-8 w-8 text-slate-400" />
               <span className="mt-2 text-sm font-semibold text-slate-600">
                 Dosya seç veya sürükleyin
@@ -206,7 +227,6 @@ export default function ProfilePage() {
             </label>
           </section>
 
-          {/* Kaydet — mobil */}
           <div className="flex flex-col items-end gap-2 xl:hidden">
             {error ? (
               <span className="text-sm font-medium text-red-600">{error}</span>
@@ -216,7 +236,6 @@ export default function ProfilePage() {
           </div>
         </div>
 
-        {/* Sidebar */}
         <div className="space-y-5 xl:sticky xl:top-6 xl:self-start">
           <ProfilePreviewCard
             title={title}
@@ -229,7 +248,7 @@ export default function ProfilePage() {
             reviewCount={currentDoctor.reviewCount}
           />
 
-          <div className="hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm xl:block">
+          <div className="hidden rounded-[1.5rem] border border-white/80 bg-white/95 p-4 shadow-sm backdrop-blur-sm xl:block">
             {error ? (
               <p className="mb-3 text-sm font-medium text-red-600">{error}</p>
             ) : null}
@@ -241,7 +260,7 @@ export default function ProfilePage() {
             <SaveButton onClick={handleSave} fullWidth saving={saving} />
           </div>
 
-          <div className="rounded-2xl border border-slate-100 bg-slate-50 p-4">
+          <div className="rounded-[1.5rem] border border-slate-100 bg-slate-50/80 p-4 backdrop-blur-sm">
             <p className="text-xs leading-relaxed text-slate-500">
               Profil bilgileriniz yalnızca eşleştirildiğiniz hastalar ve klinik
               yönetimi tarafından görüntülenir. KVKK kapsamında korunmaktadır.
@@ -298,7 +317,7 @@ function SaveButton({
       onClick={onClick}
       disabled={saving}
       className={cn(
-        "inline-flex items-center justify-center gap-2 rounded-xl bg-primary py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover disabled:opacity-60",
+        "inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-br from-primary to-primary-hover py-2.5 text-sm font-semibold text-white shadow-md shadow-primary/25 transition hover:brightness-110 disabled:opacity-60",
         fullWidth ? "w-full" : "px-6"
       )}
     >

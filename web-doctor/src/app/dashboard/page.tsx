@@ -1,32 +1,28 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { DashboardHero, getNextAppointment } from "@/components/dashboard/DashboardHero";
-import { QuickStats } from "@/components/dashboard/QuickStats";
-import { PatientQueue } from "@/components/dashboard/PatientQueue";
-import { RecentActivity } from "@/components/dashboard/RecentActivity";
-import { TodaySchedule } from "@/components/dashboard/TodaySchedule";
+import { OperationsBoard } from "@/components/dashboard/OperationsBoard";
 import { fetchTodayAppointments } from "@/lib/services/appointments";
 import {
   fetchQuickStats,
-  fetchQueuePatient,
   fetchRecentActivities,
 } from "@/lib/services/messages";
 import { fetchCurrentDoctor } from "@/lib/services/doctor";
-import type { Appointment, DoctorProfile } from "@/types";
+import { fetchPatients } from "@/lib/services/patients";
+import type {
+  ActivityItem,
+  Appointment,
+  DoctorProfile,
+  Patient,
+  QuickStats,
+} from "@/types";
 
 export default function DashboardPage() {
   const [appointments, setAppointments] = useState<Appointment[] | null>(null);
   const [doctor, setDoctor] = useState<DoctorProfile | null>(null);
-  const [stats, setStats] = useState<Awaited<
-    ReturnType<typeof fetchQuickStats>
-  > | null>(null);
-  const [queue, setQueue] = useState<Awaited<
-    ReturnType<typeof fetchQueuePatient>
-  > | null>(null);
-  const [activities, setActivities] = useState<
-    Awaited<ReturnType<typeof fetchRecentActivities>>
-  >([]);
+  const [stats, setStats] = useState<QuickStats | null>(null);
+  const [patients, setPatients] = useState<Patient[] | null>(null);
+  const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
@@ -34,17 +30,17 @@ export default function DashboardPage() {
     Promise.all([
       fetchTodayAppointments(),
       fetchQuickStats(),
-      fetchQueuePatient(),
-      fetchRecentActivities(),
       fetchCurrentDoctor(),
+      fetchPatients(),
+      fetchRecentActivities(),
     ])
-      .then(([appts, nextStats, nextQueue, nextActivities, nextDoctor]) => {
+      .then(([appts, nextStats, nextDoctor, nextPatients, nextActivities]) => {
         if (cancelled) return;
         setAppointments(appts);
         setStats(nextStats);
-        setQueue(nextQueue);
-        setActivities(nextActivities);
         setDoctor(nextDoctor);
+        setPatients(nextPatients);
+        setActivities(nextActivities);
       })
       .catch((err) => {
         if (!cancelled) {
@@ -64,35 +60,21 @@ export default function DashboardPage() {
     );
   }
 
-  if (!appointments || !doctor || !stats || !queue) {
+  if (!appointments || !doctor || !stats || !patients) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+      <div className="rounded-[1.5rem] border border-slate-100 bg-white p-10 text-center text-sm text-slate-400 shadow-sm">
         Yükleniyor…
       </div>
     );
   }
 
-  const nextAppointment = getNextAppointment(appointments);
-
   return (
-    <div className="flex flex-col gap-6 lg:gap-8">
-      <DashboardHero
-        doctor={doctor}
-        todayCount={appointments.length}
-        pendingMessages={stats.pendingMessageCount}
-        nextAppointment={nextAppointment}
-      />
-
-      <TodaySchedule appointments={appointments} />
-
-      <QuickStats {...stats} />
-
-      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-        <div className="xl:col-span-2">
-          <RecentActivity activities={activities.slice(0, 5)} />
-        </div>
-        <PatientQueue {...queue} />
-      </div>
-    </div>
+    <OperationsBoard
+      doctor={doctor}
+      appointments={appointments}
+      stats={stats}
+      patients={patients}
+      activities={activities}
+    />
   );
 }

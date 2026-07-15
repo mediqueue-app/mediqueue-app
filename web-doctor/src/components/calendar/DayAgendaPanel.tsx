@@ -25,12 +25,12 @@ export function DayAgendaPanel({
   const pending = countByStatus(sorted, "BEKLIYOR");
 
   return (
-    <aside className="flex flex-col rounded-2xl border border-slate-200 bg-white shadow-sm lg:sticky lg:top-6 lg:h-fit">
+    <aside className="flex flex-col rounded-[1.5rem] border border-white/80 bg-white/95 shadow-sm backdrop-blur-sm lg:sticky lg:top-6 lg:h-fit">
       <div className="border-b border-slate-100 px-5 py-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-primary">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
           Gün Özeti
         </p>
-        <h3 className="mt-1 text-lg font-semibold capitalize text-slate-900">
+        <h3 className="font-display mt-1 text-xl capitalize tracking-tight text-slate-900">
           {formatDayLong(date)}
         </h3>
       </div>

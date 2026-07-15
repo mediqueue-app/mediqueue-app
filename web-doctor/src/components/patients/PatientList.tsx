@@ -76,9 +76,9 @@ export function PatientList({
   const visible = filtered.slice(0, visibleCount);
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="animate-fade-in-up stagger-1 flex flex-col gap-4">
       {/* Toolbar */}
-      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:p-5">
+      <div className="rounded-[1.5rem] border border-white/80 bg-white/95 p-4 shadow-sm backdrop-blur-sm lg:p-5">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
           <div className="relative flex-1">
             <Search
@@ -94,7 +94,7 @@ export function PatientList({
               }}
               placeholder="İsim, tedavi veya ülke ara..."
               aria-label="Hasta ara"
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 py-2.5 pl-10 pr-4 text-sm transition-colors focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10"
+              className="w-full rounded-xl border border-slate-200 bg-slate-50/80 py-2.5 pl-10 pr-4 text-sm transition-colors focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10"
             />
           </div>
 

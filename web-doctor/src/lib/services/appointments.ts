@@ -1,7 +1,7 @@
-import { apiFetch } from "@/lib/api/client";
+import { apiFetch, ApiError } from "@/lib/api/client";
 import { mapAppointment } from "@/lib/api/mappers";
 import type { AppointmentRead } from "@/lib/api/types";
-import { getToken, requireDoctorId } from "@/lib/auth";
+import { clearSession, getToken, requireDoctorId } from "@/lib/auth";
 import {
   getCalendarAppointments,
   getTodayAppointments,
@@ -17,12 +17,20 @@ async function fetchAllAppointments(): Promise<Appointment[]> {
     return getCalendarAppointments();
   }
 
-  const doctorId = requireDoctorId();
-  const items = await apiFetch<AppointmentRead[]>(
-    `/doctors/${doctorId}/appointments`,
-    { token: getToken() }
-  );
-  return items.map(mapAppointment);
+  try {
+    const doctorId = requireDoctorId();
+    const items = await apiFetch<AppointmentRead[]>(
+      `/doctors/${doctorId}/appointments`,
+      { token: getToken() }
+    );
+    return items.map(mapAppointment);
+  } catch (err) {
+    if (err instanceof ApiError && err.status === 401) {
+      clearSession();
+    }
+    // Hybrid: API düşerse demo mock ile devam
+    return getCalendarAppointments();
+  }
 }
 
 export async function fetchTodayAppointments(): Promise<Appointment[]> {

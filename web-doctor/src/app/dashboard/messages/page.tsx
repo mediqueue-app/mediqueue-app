@@ -6,7 +6,7 @@ export default async function MessagesPage() {
   const threads = await fetchChatThreads();
 
   return (
-    <div className="flex flex-col gap-5 lg:gap-6">
+    <div className="-mx-1 flex flex-col gap-5 lg:gap-6">
       <MessagesPageHeader threads={threads} />
       <MessagesClient threads={threads} />
     </div>

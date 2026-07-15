@@ -167,8 +167,19 @@ export interface ActivityItem {
 export interface ChatMessage {
   id: string;
   sender: "doctor" | "patient";
+  /** Doktorun gördüğü metin (genelde TR çeviri veya TR yanıt) */
   content: string;
   timestamp: string;
+  /** Hasta mesajı: orijinal dil kodu (AR, DE, EN…) */
+  originalLanguage?: string;
+  /** Hasta mesajı: çeviriden önceki orijinal metin */
+  originalText?: string;
+  /** Çevrildiği dil (genelde TR) */
+  translatedTo?: string;
+  /** Doktor yanıtı: hastanın dilinde göreceği metin */
+  patientSeesText?: string;
+  /** Doktor yanıtı: hastanın dili */
+  patientLanguage?: string;
 }
 
 export interface ChatThread {
@@ -176,6 +187,8 @@ export interface ChatThread {
   patientId: string;
   patientName: string;
   countryCode: string;
+  /** Hastanın konuştuğu dil (demo çeviri) */
+  patientLanguage: string;
   lastMessage: string;
   lastMessageAt: string;
   unreadCount: number;

@@ -10,7 +10,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-screen w-full bg-background">
+      <div className="mesh-bg flex min-h-screen w-full">
         {mobileNavOpen && (
           <button
             type="button"
@@ -25,10 +25,14 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
           onNavigate={() => setMobileNavOpen(false)}
         />
 
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="relative flex min-w-0 flex-1 flex-col">
           <TopBar onMenuClick={() => setMobileNavOpen(true)} />
-          <main className="flex-1 px-6 py-6 sm:px-8 lg:py-8">
-            <div className="mx-auto w-full max-w-[1440px]">{children}</div>
+          <main className="relative flex-1 px-5 py-6 sm:px-8 lg:py-8">
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-72 overflow-hidden">
+              <div className="absolute -left-16 top-8 h-56 w-56 rounded-full bg-primary/10 blur-3xl" />
+              <div className="absolute right-0 top-0 h-64 w-64 rounded-full bg-emerald-400/10 blur-3xl" />
+            </div>
+            <div className="relative mx-auto w-full max-w-[1440px]">{children}</div>
           </main>
         </div>
       </div>
