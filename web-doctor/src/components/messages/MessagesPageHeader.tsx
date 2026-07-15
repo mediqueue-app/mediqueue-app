@@ -1,5 +1,6 @@
-import { MessageSquare, Shield } from "lucide-react";
+import { MessageSquare } from "lucide-react";
 import type { ChatThread } from "@/types";
+import { HybridSourceBadge } from "@/components/shared/HybridSourceBadge";
 import { getUnreadCount } from "@/lib/message-utils";
 
 export function MessagesPageHeader({ threads }: { threads: ChatThread[] }) {
@@ -13,11 +14,14 @@ export function MessagesPageHeader({ threads }: { threads: ChatThread[] }) {
             <MessageSquare className="h-6 w-6" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold tracking-tight text-slate-900 lg:text-2xl">
-              Mesajlar
-            </h1>
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-xl font-semibold tracking-tight text-slate-900 lg:text-2xl">
+                Mesajlar
+              </h1>
+              <HybridSourceBadge source="mock" />
+            </div>
             <p className="mt-1 text-sm text-slate-500">
-              Hastalarınızla güvenli mesajlaşma kanalı.
+              Doktor mesaj API’si Ay 2 bonus — şu an mock / Yakında.
             </p>
           </div>
         </div>
@@ -37,10 +41,6 @@ export function MessagesPageHeader({ threads }: { threads: ChatThread[] }) {
               </p>
             </div>
           )}
-          <div className="inline-flex items-center gap-1.5 rounded-xl bg-emerald-50 px-3 py-2 text-xs font-medium text-emerald-700">
-            <Shield className="h-3.5 w-3.5" />
-            KVKK uyumlu kanal
-          </div>
         </div>
       </div>
     </section>

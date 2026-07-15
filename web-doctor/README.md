@@ -2,7 +2,7 @@
 
 Doktorların günlük iş akışını yönettiği web arayüzü.
 
-**Durum (Ay 1):** Hybrid — JWT login + randevu/hasta API. Profil `/auth/me` ile kurulur (`GET /doctors/{id}` yok). Mesajlar ve takvim müsaitliği mock.
+**Durum (Ay 2 W1):** Hybrid — JWT login + randevu/hasta API + müsaitlik API. Mesajlar mock (`Mock · Yakında`).
 
 ## Teknolojiler
 
@@ -10,7 +10,13 @@ Doktorların günlük iş akışını yönettiği web arayüzü.
 
 ## Hızlı Başlangıç
 
-Backend (`:8000`) + `seed_demo_users` gerekir.
+Backend (`:8000`) + migration + `seed_demo_users` gerekir.
+
+```powershell
+cd backend
+alembic upgrade head
+python -m scripts.seed_demo_users
+```
 
 ```powershell
 cd web-doctor
@@ -33,7 +39,7 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/v1
 ## Demo akışı
 
 ```
-/login → Özet → Hastalarım → Takvim → Mesajlar → Profil → Çıkış
+/login → Özet → Hastalarım → Takvim (müsaitlik kaydet) → Mesajlar (mock) → Profil → Çıkış
 ```
 
 ## Sayfalar
@@ -43,8 +49,8 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/v1
 | `/login` | API JWT |
 | `/dashboard` | Randevular API; stats/queue mock |
 | `/dashboard/patients` | Appointments → patient map (API) |
-| `/dashboard/calendar` | Appointments API; müsaitlik mock |
-| `/dashboard/messages` | Mock |
+| `/dashboard/calendar` | Appointments API; müsaitlik `GET/PUT /doctors/{id}/availability` |
+| `/dashboard/messages` | Mock · Yakında |
 | `/dashboard/profile` | `/auth/me`; kayıt yerel cache |
 
 Randevu listesi, patient henüz `POST /appointments` yazmadıysa boş olabilir — beklenen davranış.
@@ -54,8 +60,10 @@ Randevu listesi, patient henüz `POST /appointments` yazmadıysa boş olabilir �
 ```powershell
 cd backend
 python -m scripts.smoke_ay1_doctor_match
+python -m scripts.smoke_ay1_e2e
+python -m scripts.smoke_ay2_doctor_negatives
 ```
 
-## Ay 2’ye ertelenenler
+## Ay 2’ye / sonraya ertelenenler
 
-Mesaj API, odontogram kalıcılığı, doktor self-PATCH / `GET /doctors/{id}`, cookie auth.
+Doktor mesaj API (bonus), odontogram kalıcılığı, doktor self-PATCH / `GET /doctors/{id}`, cookie auth, AI feedback DB persist (P2).

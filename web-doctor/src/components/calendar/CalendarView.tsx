@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CalendarDays,
   ChevronLeft,
@@ -13,7 +13,13 @@ import { AvailabilityEditor } from "@/components/calendar/AvailabilityEditor";
 import { DayAgendaPanel } from "@/components/calendar/DayAgendaPanel";
 import { MonthGrid } from "@/components/calendar/MonthGrid";
 import { WeekTimeGrid } from "@/components/calendar/WeekTimeGrid";
-import { getInitialAvailabilitySlots } from "@/lib/services/calendar";
+import { useDemoToast } from "@/components/ui/DemoToast";
+import {
+  fetchAvailabilitySlots,
+  getInitialAvailabilitySlots,
+  saveAvailabilitySlots,
+  type DataSource,
+} from "@/lib/services/calendar";
 import {
   countByStatus,
   formatMonthYear,
@@ -39,6 +45,7 @@ export function CalendarView({
 }) {
   const today = useMemo(() => new Date(), []);
   const todayKey = toDateKey(today);
+  const { show, Toast } = useDemoToast();
 
   const [viewMode, setViewMode] = useState<CalendarViewMode>("HAFTA");
   const [focusDate, setFocusDate] = useState(() => new Date(today));
@@ -46,6 +53,52 @@ export function CalendarView({
   const [showAvailability, setShowAvailability] = useState(false);
   const [availability, setAvailability] =
     useState<AvailabilitySlot[]>(() => getInitialAvailabilitySlots());
+  const [availabilitySource, setAvailabilitySource] =
+    useState<DataSource>("mock");
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+    fetchAvailabilitySlots()
+      .then(({ slots, source }) => {
+        if (!cancelled) {
+          setAvailability(slots);
+          setAvailabilitySource(source);
+        }
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setAvailability(getInitialAvailabilitySlots());
+          setAvailabilitySource("mock");
+        }
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function handleSaveAvailability() {
+    setSaving(true);
+    setSaveError(null);
+    try {
+      const { slots, source } = await saveAvailabilitySlots(availability);
+      setAvailability(slots);
+      setAvailabilitySource(source);
+      setShowAvailability(false);
+      show(
+        source === "api"
+          ? "Müsaitlik kalıcı olarak kaydedildi"
+          : "Mock oturum — API yokken kalıcı değil"
+      );
+    } catch (err) {
+      setSaveError(
+        err instanceof Error ? err.message : "Müsaitlik kaydedilemedi"
+      );
+    } finally {
+      setSaving(false);
+    }
+  }
 
   const appointmentsByDate = useMemo(
     () => groupAppointmentsByDate(appointments),
@@ -85,6 +138,7 @@ export function CalendarView({
 
   return (
     <div className="flex flex-col gap-5">
+      {Toast}
       {/* Üst toolbar */}
       <div className="flex flex-col gap-4 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center gap-3">
@@ -214,6 +268,9 @@ export function CalendarView({
                 </h2>
                 <p className="text-xs text-slate-500">
                   Haftalık çalışma saatlerinizi belirleyin
+                  {availabilitySource === "api"
+                    ? " · kalıcı kayıt"
+                    : " · mock oturum"}
                 </p>
               </div>
               <button
@@ -226,15 +283,29 @@ export function CalendarView({
               </button>
             </div>
             <div className="overflow-y-auto px-6 py-4">
-              <AvailabilityEditor slots={availability} onChange={setAvailability} />
+              <AvailabilityEditor
+                slots={availability}
+                onChange={setAvailability}
+                persistHint={
+                  availabilitySource === "api"
+                    ? "Kaydet sonrası sunucuda saklanır"
+                    : "Mock mod — yenilemede varsayılana döner"
+                }
+              />
+              {saveError && (
+                <p className="mt-3 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700">
+                  {saveError}
+                </p>
+              )}
             </div>
             <div className="border-t border-slate-100 px-6 py-4">
               <button
                 type="button"
-                onClick={() => setShowAvailability(false)}
-                className="w-full rounded-xl bg-primary py-2.5 text-sm font-semibold text-white hover:bg-primary-hover"
+                disabled={saving}
+                onClick={() => void handleSaveAvailability()}
+                className="w-full rounded-xl bg-primary py-2.5 text-sm font-semibold text-white hover:bg-primary-hover disabled:opacity-60"
               >
-                Kaydet
+                {saving ? "Kaydediliyor…" : "Kaydet"}
               </button>
             </div>
           </div>

@@ -1,6 +1,10 @@
+"use client";
+
 import { CalendarDays } from "lucide-react";
 import type { Appointment } from "@/types";
+import { HybridSourceBadge } from "@/components/shared/HybridSourceBadge";
 import { countByStatus } from "@/lib/calendar-utils";
+import { getToken } from "@/lib/auth";
 
 export function CalendarPageHeader({
   appointments,
@@ -9,6 +13,7 @@ export function CalendarPageHeader({
 }) {
   const thisWeek = appointments.length;
   const confirmed = countByStatus(appointments, "ONAYLANDI");
+  const source = getToken() ? "api" : "mock";
 
   return (
     <section className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
@@ -18,9 +23,12 @@ export function CalendarPageHeader({
             <CalendarDays className="h-6 w-6" />
           </div>
           <div>
-            <h1 className="text-xl font-semibold tracking-tight text-slate-900 lg:text-2xl">
-              Takvim
-            </h1>
+            <div className="flex flex-wrap items-center gap-2">
+              <h1 className="text-xl font-semibold tracking-tight text-slate-900 lg:text-2xl">
+                Takvim
+              </h1>
+              <HybridSourceBadge source={source} />
+            </div>
             <p className="mt-1 text-sm text-slate-500">
               Randevularınızı görüntüleyin ve müsaitlik durumunuzu düzenleyin.
             </p>

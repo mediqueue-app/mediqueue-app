@@ -94,6 +94,12 @@ Full Ay 1 E2E (patient book → clinic confirm → doctor sees):
 python -m scripts.smoke_ay1_e2e
 ```
 
+Ay 2 doctor negatives + availability persist (AI optional):
+
+```powershell
+python -m scripts.smoke_ay2_doctor_negatives
+```
+
 Book against the seeded demo clinic (`clinic@` → `clinic_id`), not necessarily `GET /clinics` first item (list is name-ordered).
 
 ## Run services

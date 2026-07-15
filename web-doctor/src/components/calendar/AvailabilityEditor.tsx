@@ -7,9 +7,11 @@ import { cn } from "@/lib/utils";
 export function AvailabilityEditor({
   slots,
   onChange,
+  persistHint = "Değişiklikler bu oturumda saklanır",
 }: {
   slots: AvailabilitySlot[];
   onChange: (slots: AvailabilitySlot[]) => void;
+  persistHint?: string;
 }) {
   function toggleSlot(dayIndex: number, hourIndex: number) {
     const next = slots.map((day, di) => {
@@ -49,7 +51,7 @@ export function AvailabilityEditor({
           Toplam <span className="font-semibold text-primary">{totalAvailable}</span> müsait
           slot
         </p>
-        <p className="text-xs text-slate-400">Değişiklikler bu oturumda saklanır</p>
+        <p className="text-xs text-slate-400">{persistHint}</p>
       </div>
 
       <div className="overflow-x-auto rounded-xl border border-slate-200">
