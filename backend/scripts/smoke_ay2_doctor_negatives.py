@@ -139,6 +139,16 @@ def main() -> int:
         raise RuntimeError(f"Availability not persisted: expected {flipped}, got {got}")
     print(f"N5 OK: availability persist (slot available={flipped})")
 
+    # N7 — invalid availability payload format → 422
+    _request(
+        "PUT",
+        f"/doctors/{doctor_id}/availability",
+        token=doctor_token,
+        json_body={"days": [{"day_of_week": 99, "label": "InvalidDay", "slots": []}]},
+        expect_error=422,
+    )
+    print("N7 OK: invalid availability payload -> 422")
+
     # N6 — appointments list still works without AI
     appts = _request("GET", f"/doctors/{doctor_id}/appointments", token=doctor_token)
     if not isinstance(appts, list):
