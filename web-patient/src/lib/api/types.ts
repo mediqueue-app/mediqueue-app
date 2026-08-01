@@ -1,5 +1,8 @@
 export type UserRole = "admin" | "clinic" | "doctor" | "patient";
 
+/** Bir ekrandaki verinin nereden geldiğini belirtir (HybridBadge için). */
+export type DataSource = "api" | "mock" | "hybrid";
+
 export interface Token {
   access_token: string;
   token_type: string;
@@ -81,4 +84,16 @@ export interface Appointment {
   doctor_name: string | null;
   created_at: string;
   updated_at: string;
+}
+
+/** Bir mesajın kimin tarafından gönderildiğini belirtir. */
+export type MessageSender = "patient" | "clinic";
+
+/** Hasta ↔ klinik sohbetindeki tekil mesaj. */
+export interface ChatMessage {
+  id: number;
+  appointment_id: number;
+  sender: MessageSender;
+  body: string;
+  created_at: string;
 }

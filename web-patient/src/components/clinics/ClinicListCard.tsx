@@ -7,7 +7,7 @@ import type { Clinic } from "@/lib/mock-data";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { StarRating } from "@/components/ui/StarRating";
 import { amenityIcon } from "@/components/clinics/amenity-icons";
-import { cn, formatPrice } from "@/lib/utils";
+import { clinicHref, cn, formatPrice } from "@/lib/utils";
 
 function stableInt(seed: string, min: number, max: number): number {
   let h = 0;
@@ -69,7 +69,7 @@ export function ClinicListCard({
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
             <Link
-              href={`/clinics/${clinic.id}`}
+              href={clinicHref(clinic)}
               className="truncate font-semibold text-slate-900 hover:text-[#3a6ad6]"
             >
               {clinic.name}
@@ -115,7 +115,7 @@ export function ClinicListCard({
             <p className="text-[11px] text-slate-400">&apos;den başlayan</p>
           </div>
           <Link
-            href={`/clinics/${clinic.id}`}
+            href={clinicHref(clinic)}
             className="mt-0 inline-flex items-center gap-1.5 rounded-full bg-[#3a6ad6] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#2f57b3] sm:mt-3"
           >
             Profili İncele

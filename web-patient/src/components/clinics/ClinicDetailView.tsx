@@ -16,10 +16,12 @@ import {
   type Clinic,
   type Doctor,
 } from "@/lib/mock-data";
+import type { DataSource } from "@/lib/api/types";
 import {
   fetchClinic,
   fetchClinicDoctors,
 } from "@/lib/services/clinics";
+import { HybridBadge } from "@/components/common/HybridBadge";
 import { ClinicGallery } from "@/components/clinics/ClinicGallery";
 import { ClinicTabs } from "@/components/clinics/ClinicTabs";
 import { AmenityList } from "@/components/clinics/AmenityList";
@@ -39,6 +41,7 @@ function resolveClinicApiId(clinic: Clinic, routeId: string): number | null {
 export function ClinicDetailView({ id }: { id: string }) {
   const [clinic, setClinic] = useState<Clinic | null>(null);
   const [clinicDoctors, setClinicDoctors] = useState<Doctor[]>([]);
+  const [source, setSource] = useState<DataSource>("mock");
   const [loading, setLoading] = useState(true);
   const [missing, setMissing] = useState(false);
 
@@ -52,14 +55,15 @@ export function ClinicDetailView({ id }: { id: string }) {
       const numericId = /^\d+$/.test(id) ? Number(id) : null;
 
       if (numericId !== null) {
-        const [fetchedClinic, fetchedDoctors] = await Promise.all([
+        const [clinicRes, fetchedDoctors] = await Promise.all([
           fetchClinic(numericId),
           fetchClinicDoctors(numericId),
         ]);
 
         if (!cancelled) {
-          if (fetchedClinic) {
-            setClinic(fetchedClinic);
+          if (clinicRes.data) {
+            setClinic(clinicRes.data);
+            setSource(clinicRes.source);
             setClinicDoctors(fetchedDoctors);
           } else {
             setMissing(true);
@@ -73,6 +77,7 @@ export function ClinicDetailView({ id }: { id: string }) {
       if (!cancelled) {
         if (mockClinic) {
           setClinic(mockClinic);
+          setSource("mock");
           setClinicDoctors(getMockDoctorsForClinic(mockClinic.id));
         } else {
           setMissing(true);
@@ -130,10 +135,13 @@ export function ClinicDetailView({ id }: { id: string }) {
         <div className="min-w-0 flex-1">
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
-              <span className="inline-flex items-center gap-1 rounded-full bg-[#eaf0fc] px-2.5 py-1 text-xs font-semibold text-[#3a6ad6]">
-                <BadgeCheck className="h-3.5 w-3.5" />
-                Akredite Klinik
-              </span>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="inline-flex items-center gap-1 rounded-full bg-[#eaf0fc] px-2.5 py-1 text-xs font-semibold text-[#3a6ad6]">
+                  <BadgeCheck className="h-3.5 w-3.5" />
+                  Akredite Klinik
+                </span>
+                <HybridBadge source={source} />
+              </div>
               <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
                 {clinic.name}
               </h1>

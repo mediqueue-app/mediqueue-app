@@ -11,6 +11,19 @@ export type CreateAppointmentInput = {
   notes?: string;
 };
 
+/**
+ * Giriş yapmış hastanın kendi randevularını getirir.
+ * GET /v1/patients/me/appointments (Bearer token ile).
+ */
+export async function fetchMyAppointments(): Promise<Appointment[]> {
+  const token = getToken();
+  if (!token) {
+    throw new Error("Oturum gerekli. Lütfen giriş yapın.");
+  }
+
+  return apiFetch<Appointment[]>("/patients/me/appointments", { token });
+}
+
 export async function createAppointment(
   input: CreateAppointmentInput
 ): Promise<Appointment> {

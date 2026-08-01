@@ -4,9 +4,11 @@ import { useEffect, useMemo, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { Search, MapPin, ArrowUpDown, Map, X } from "lucide-react";
 import { cities, type Clinic } from "@/lib/mock-data";
+import type { DataSource } from "@/lib/api/types";
 import { fetchClinics } from "@/lib/services/clinics";
 import { ClinicListCard } from "@/components/clinics/ClinicListCard";
 import { ClinicMap } from "@/components/clinics/ClinicMap";
+import { HybridBadge } from "@/components/common/HybridBadge";
 import { cn } from "@/lib/utils";
 
 const SPECIALTIES = [
@@ -56,6 +58,7 @@ type SortKey = (typeof SORTS)[number]["key"];
 export function ClinicsExplorer() {
   const searchParams = useSearchParams();
   const [allClinics, setAllClinics] = useState<Clinic[]>([]);
+  const [source, setSource] = useState<DataSource | null>(null);
   const [loading, setLoading] = useState(true);
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [city, setCity] = useState(searchParams.get("city") ?? "");
@@ -71,8 +74,11 @@ export function ClinicsExplorer() {
     let cancelled = false;
     setLoading(true);
     fetchClinics()
-      .then((data) => {
-        if (!cancelled) setAllClinics(data);
+      .then((res) => {
+        if (!cancelled) {
+          setAllClinics(res.data);
+          setSource(res.source);
+        }
       })
       .finally(() => {
         if (!cancelled) setLoading(false);
@@ -201,12 +207,15 @@ export function ClinicsExplorer() {
       {/* Split-screen */}
       <div className="flex min-h-0 flex-1">
         <div className="w-full overflow-y-auto px-4 py-5 sm:px-6 lg:w-[55%]">
-          <p className="mb-4 text-sm text-slate-500">
-            <span className="font-semibold text-slate-900">
-              {loading ? "…" : results.length}
-            </span>{" "}
-            klinik bulundu
-          </p>
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <p className="text-sm text-slate-500">
+              <span className="font-semibold text-slate-900">
+                {loading ? "…" : results.length}
+              </span>{" "}
+              klinik bulundu
+            </p>
+            {source ? <HybridBadge source={source} /> : null}
+          </div>
 
           {loading ? (
             <div className="flex flex-col gap-4">

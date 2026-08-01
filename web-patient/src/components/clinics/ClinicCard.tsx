@@ -1,15 +1,26 @@
 import Link from "next/link";
-import { MapPin, BadgeCheck } from "lucide-react";
+import { MapPin, BadgeCheck, Sparkles } from "lucide-react";
 import type { Clinic } from "@/lib/mock-data";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { StarRating } from "@/components/ui/StarRating";
-import { formatPrice } from "@/lib/utils";
+import { clinicHref, cn, formatPrice } from "@/lib/utils";
 
-export function ClinicCard({ clinic }: { clinic: Clinic }) {
+export function ClinicCard({
+  clinic,
+  featured = false,
+}: {
+  clinic: Clinic;
+  featured?: boolean;
+}) {
   return (
     <Link
-      href={`/clinics/${clinic.id}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all hover:-translate-y-1 hover:border-[#3a6ad6]/30 hover:shadow-xl hover:shadow-slate-200/60"
+      href={clinicHref(clinic)}
+      className={cn(
+        "group flex flex-col overflow-hidden rounded-2xl border bg-white transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/60",
+        featured
+          ? "border-[#3a6ad6]/40 ring-1 ring-[#3a6ad6]/20"
+          : "border-slate-200 hover:border-[#3a6ad6]/30"
+      )}
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         <SmartImage
@@ -21,6 +32,12 @@ export function ClinicCard({ clinic }: { clinic: Clinic }) {
           <BadgeCheck className="h-3.5 w-3.5 text-[#3a6ad6]" />
           Akredite Klinik
         </div>
+        {featured ? (
+          <div className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-[#3a6ad6] px-2.5 py-1 text-xs font-semibold text-white shadow-sm">
+            <Sparkles className="h-3.5 w-3.5" />
+            Öne Çıkan
+          </div>
+        ) : null}
       </div>
 
       <div className="flex flex-1 flex-col p-4">

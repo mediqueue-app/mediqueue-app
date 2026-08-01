@@ -457,6 +457,8 @@ export const doctors: Doctor[] = [
 export const clinics: Clinic[] = [
   {
     id: "c-1",
+    // Seed/demo klinik: backend'de ID'si 1 olan varsayılan klinikle eşleşir.
+    apiId: 1,
     name: "Anadolu Estetik & Cerrahi Merkezi",
     slug: "anadolu-estetik",
     city: "İstanbul",

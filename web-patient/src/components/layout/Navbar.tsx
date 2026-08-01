@@ -10,6 +10,7 @@ const NAV_LINKS = [
   { href: "/treatments", label: "Tedaviler" },
   { href: "/clinics", label: "Klinikler" },
   { href: "/doctors", label: "Doktorlar" },
+  { href: "/appointments", label: "Randevularım" },
   { href: "/how-it-works", label: "Nasıl Çalışır?" },
 ];
 

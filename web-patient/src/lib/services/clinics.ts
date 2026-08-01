@@ -1,5 +1,5 @@
 import { apiFetch } from "@/lib/api/client";
-import type { ClinicRead, DoctorRead } from "@/lib/api/types";
+import type { ClinicRead, DataSource, DoctorRead } from "@/lib/api/types";
 import { getToken } from "@/lib/auth";
 import { mapClinicReadToUi, mapDoctorReadToUi } from "@/lib/mappers";
 import {
@@ -26,31 +26,35 @@ function mockDoctorsByNumericClinicId(id: number): Doctor[] {
   );
 }
 
-export async function fetchClinics(): Promise<Clinic[]> {
+/** Veri ile birlikte kaynağını (api/mock) taşıyan sarmalayıcı. */
+export type Sourced<T> = { data: T; source: DataSource };
+
+export async function fetchClinics(): Promise<Sourced<Clinic[]>> {
   const token = getToken();
-  if (!token) return mockClinics;
+  if (!token) return { data: mockClinics, source: "mock" };
 
   try {
     const rows = await apiFetch<ClinicRead[]>("/clinics", { token });
-    return rows.map((row) => {
+    const data = rows.map((row) => {
       const fallback = mockClinicByNumericId(row.id);
       return mapClinicReadToUi(row, fallback);
     });
+    return { data, source: "api" };
   } catch {
-    return mockClinics;
+    return { data: mockClinics, source: "mock" };
   }
 }
 
-export async function fetchClinic(id: number): Promise<Clinic | null> {
+export async function fetchClinic(id: number): Promise<Sourced<Clinic | null>> {
   const token = getToken();
-  if (!token) return mockClinicByNumericId(id) ?? null;
+  if (!token) return { data: mockClinicByNumericId(id) ?? null, source: "mock" };
 
   try {
     const row = await apiFetch<ClinicRead>(`/clinics/${id}`, { token });
     const fallback = mockClinicByNumericId(id);
-    return mapClinicReadToUi(row, fallback);
+    return { data: mapClinicReadToUi(row, fallback), source: "api" };
   } catch {
-    return mockClinicByNumericId(id) ?? null;
+    return { data: mockClinicByNumericId(id) ?? null, source: "mock" };
   }
 }
 

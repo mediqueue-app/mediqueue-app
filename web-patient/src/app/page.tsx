@@ -7,7 +7,12 @@ import { SectionHeading } from "@/components/ui/SectionHeading";
 import { clinics, doctors } from "@/lib/mock-data";
 
 export default function HomePage() {
-  const featuredClinics = clinics.slice(0, 3);
+  // Seed/demo klinik (backend ID'si 1) her zaman öne çıksın ve ilk sırada olsun.
+  const seedClinic = clinics.find((c) => c.apiId === 1) ?? clinics[0];
+  const featuredClinics = [
+    seedClinic,
+    ...clinics.filter((c) => c.id !== seedClinic.id),
+  ].slice(0, 3);
   const featuredDoctors = doctors.slice(0, 4);
 
   return (
@@ -36,7 +41,11 @@ export default function HomePage() {
           />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featuredClinics.map((clinic) => (
-              <ClinicCard key={clinic.id} clinic={clinic} />
+              <ClinicCard
+                key={clinic.id}
+                clinic={clinic}
+                featured={clinic.id === seedClinic.id}
+              />
             ))}
           </div>
         </div>
