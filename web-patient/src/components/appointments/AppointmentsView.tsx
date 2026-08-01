@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   CalendarDays,
@@ -13,13 +13,23 @@ import {
   RefreshCw,
   ArrowRight,
   LogIn,
+  MessageSquare,
 } from "lucide-react";
 import { ApiError } from "@/lib/api/client";
 import { isAuthenticated } from "@/lib/auth";
 import { fetchMyAppointments } from "@/lib/services/appointments";
 import type { Appointment, AppointmentStatus } from "@/lib/api/types";
 import { HybridBadge } from "@/components/common/HybridBadge";
+import { AppointmentChat } from "@/components/appointments/AppointmentChat";
+import { getDemoAppointments } from "@/lib/demo/demo-script";
 import { cn, formatDate } from "@/lib/utils";
+
+/** Mesajlaşmanın açık olduğu (randevunun onaylandığı) durumlar. */
+const MESSAGEABLE_STATUSES: ReadonlySet<AppointmentStatus> = new Set([
+  "confirmed",
+  "arrived",
+  "completed",
+]);
 
 const STATUS_META: Record<
   AppointmentStatus,
@@ -74,40 +84,63 @@ export function AppointmentsView() {
   const [needAuth, setNeedAuth] = useState(false);
   const [appointments, setAppointments] = useState<Appointment[]>([]);
 
-  const load = useCallback(async () => {
-    if (!isAuthenticated()) {
-      setNeedAuth(true);
-      setLoading(false);
-      return;
-    }
+  const [reloadKey, setReloadKey] = useState(0);
 
-    setLoading(true);
-    setError(null);
-    setNeedAuth(false);
-
-    try {
-      const data = await fetchMyAppointments();
-      // En yeni randevu en üstte olsun.
-      const sorted = [...data].sort((a, b) =>
-        b.requested_date.localeCompare(a.requested_date)
-      );
-      setAppointments(sorted);
-    } catch (err) {
-      const message =
-        err instanceof ApiError
-          ? err.detail
-          : err instanceof Error
-            ? err.message
-            : "Randevular yüklenirken bir hata oluştu";
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  }, []);
-
+  // Randevuları yükle. Yeniden deneme `reloadKey` artırılarak tetiklenir;
+  // yükleyici effect içinde tanımlıdır (idiomatik async-effect deseni).
   useEffect(() => {
+    let ignore = false;
+
+    async function load() {
+      // Demo akışı — gerçek API geldiğinde bu satır kaldırılabilir (decoupled).
+      const demoAppointments = getDemoAppointments();
+
+      // Ne gerçek oturum ne de demo varsa giriş iste.
+      if (!isAuthenticated() && demoAppointments.length === 0) {
+        if (!ignore) {
+          setNeedAuth(true);
+          setLoading(false);
+        }
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+      setNeedAuth(false);
+
+      try {
+        // Oturum varsa gerçek randevuları çek; yalnızca demo ise onları göster.
+        const data = isAuthenticated() ? await fetchMyAppointments() : [];
+        if (ignore) return;
+        // En yeni randevu en üstte olsun (demo randevusu dahil).
+        const sorted = [...demoAppointments, ...data].sort((a, b) =>
+          b.requested_date.localeCompare(a.requested_date)
+        );
+        setAppointments(sorted);
+      } catch (err) {
+        if (ignore) return;
+        // Gerçek API hata verse bile demo randevusu görünmeye devam etsin.
+        if (demoAppointments.length > 0) {
+          setAppointments(demoAppointments);
+        } else {
+          const message =
+            err instanceof ApiError
+              ? err.detail
+              : err instanceof Error
+                ? err.message
+                : "Randevular yüklenirken bir hata oluştu";
+          setError(message);
+        }
+      } finally {
+        if (!ignore) setLoading(false);
+      }
+    }
+
     void load();
-  }, [load]);
+    return () => {
+      ignore = true;
+    };
+  }, [reloadKey]);
 
   return (
     <div className="min-h-[calc(100vh-4rem)] bg-slate-50">
@@ -139,7 +172,10 @@ export function AppointmentsView() {
         ) : needAuth ? (
           <AuthState />
         ) : error ? (
-          <ErrorState message={error} onRetry={() => void load()} />
+          <ErrorState
+            message={error}
+            onRetry={() => setReloadKey((k) => k + 1)}
+          />
         ) : appointments.length === 0 ? (
           <EmptyState />
         ) : (
@@ -158,6 +194,9 @@ export function AppointmentsView() {
 }
 
 function AppointmentCard({ appointment }: { appointment: Appointment }) {
+  const [chatOpen, setChatOpen] = useState(false);
+  const canMessage = MESSAGEABLE_STATUSES.has(appointment.status);
+
   return (
     <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
@@ -187,19 +226,38 @@ function AppointmentCard({ appointment }: { appointment: Appointment }) {
             Alternatif: {formatDate(appointment.alternative_date)}
           </span>
         ) : null}
-        <Link
-          href={`/clinics/${appointment.clinic_id}`}
-          className="ml-auto inline-flex items-center gap-1 text-sm font-semibold text-[#3a6ad6] hover:underline"
-        >
-          <MapPin className="h-4 w-4" />
-          Kliniği Gör
-        </Link>
+        <div className="ml-auto flex items-center gap-3">
+          {canMessage ? (
+            <button
+              type="button"
+              onClick={() => setChatOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-full bg-[#eaf0fc] px-3 py-1.5 text-xs font-semibold text-[#3a6ad6] transition-colors hover:bg-[#dbe6fb]"
+            >
+              <MessageSquare className="h-4 w-4" />
+              Mesajlaş
+            </button>
+          ) : null}
+          <Link
+            href={`/clinics/${appointment.clinic_id}`}
+            className="inline-flex items-center gap-1 text-sm font-semibold text-[#3a6ad6] hover:underline"
+          >
+            <MapPin className="h-4 w-4" />
+            Kliniği Gör
+          </Link>
+        </div>
       </div>
 
       {appointment.notes ? (
         <p className="mt-3 rounded-xl bg-slate-50 px-3 py-2 text-sm text-slate-500">
           {appointment.notes}
         </p>
+      ) : null}
+
+      {chatOpen ? (
+        <AppointmentChat
+          appointment={appointment}
+          onClose={() => setChatOpen(false)}
+        />
       ) : null}
     </article>
   );

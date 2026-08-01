@@ -175,7 +175,10 @@ export function BookingWidget({
 
   if (confirmed) {
     return (
-      <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center shadow-md">
+      <div
+        data-testid="booking-success"
+        className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center shadow-md"
+      >
         <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-500" />
         <h3 className="mt-3 text-lg font-bold text-slate-900">
           Randevu Talebiniz Alındı
@@ -273,6 +276,7 @@ export function BookingWidget({
               <button
                 key={day}
                 type="button"
+                data-testid={`booking-day-${day}`}
                 disabled={past}
                 onClick={() => {
                   setSelectedDay(day);
@@ -305,6 +309,7 @@ export function BookingWidget({
               <button
                 key={t}
                 type="button"
+                data-testid={`booking-time-${t}`}
                 onClick={() => {
                   setTime(t);
                   setError(null);
@@ -332,6 +337,7 @@ export function BookingWidget({
 
         <button
           type="button"
+          data-testid="booking-submit"
           disabled={!time || submitting}
           onClick={() => void handleSubmit()}
           className={cn(

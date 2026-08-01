@@ -71,8 +71,9 @@ export function ClinicsExplorer() {
   const sort: SortKey = SORTS[sortIndex].key;
 
   useEffect(() => {
+    // `loading` zaten true olarak başlar; effect yalnızca bir kez çalışır,
+    // bu yüzden senkron setLoading(true) gerekmez (set-state-in-effect'ten kaçınır).
     let cancelled = false;
-    setLoading(true);
     fetchClinics()
       .then((res) => {
         if (!cancelled) {
