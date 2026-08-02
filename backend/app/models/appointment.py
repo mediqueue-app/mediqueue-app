@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from datetime import date, datetime
 
-from sqlalchemy import Date, DateTime, ForeignKey, String, Text, func
+from sqlalchemy import CheckConstraint, Date, DateTime, ForeignKey, String, Text, func
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from app.db.base import Base
@@ -15,10 +15,20 @@ class AppointmentStatus:
     CANCELLED = "cancelled"
     ARRIVED = "arrived"
     COMPLETED = "completed"
+    NO_SHOW = "no_show"
 
 
 class Appointment(Base):
     __tablename__ = "appointments"
+    __table_args__ = (
+        CheckConstraint(
+            "status IN ("
+            "'pending', 'confirmed', 'alternative_date', 'cancelled', "
+            "'arrived', 'completed', 'no_show'"
+            ")",
+            name="ck_appointments_status_valid",
+        ),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True)
     patient_id: Mapped[int] = mapped_column(
@@ -62,3 +72,7 @@ class Appointment(Base):
     patient: Mapped["Patient"] = relationship(back_populates="appointments")
     clinic: Mapped["Clinic"] = relationship(back_populates="appointments")
     doctor: Mapped["Doctor | None"] = relationship(back_populates="appointments")
+    messages: Mapped[list["AppointmentMessage"]] = relationship(
+        back_populates="appointment",
+        cascade="all, delete-orphan",
+    )

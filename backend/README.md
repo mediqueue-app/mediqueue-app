@@ -7,7 +7,7 @@ FastAPI backend for authentication, clinics, and AI match proxying.
 - PostgreSQL running locally (default database: `mediqueue`)
 - Python 3.11+ recommended
 
-Current Alembic head revision: **`202607090001`**
+Current Alembic head revision: **`202608030002`**
 
 ## Setup
 
@@ -178,7 +178,12 @@ Sensitive health history is encrypted with `ENCRYPTION_KEY` and never returned d
 ## Appointments API
 
 - `POST /v1/appointments` — roles: `patient`, `clinic`, `admin`
-- `PATCH /v1/appointments/{appointment_id}/status` — roles: `clinic`, `doctor`, `admin`
+  - Blocks duplicate active bookings (same patient/clinic/doctor/date)
+  - Blocks doctor/date conflicts when `doctor_id` is set (date-level only)
+- `PATCH /v1/appointments/{appointment_id}/status` — roles: `clinic`, `doctor`, `admin`, `patient`
+  - Patients may only set `cancelled` on their own appointment
+  - Invalid transitions return `409 Conflict`
+- `POST /v1/appointments/{appointment_id}/cancel` — role: `patient` (own appointment only)
 - `GET /v1/clinics/{clinic_id}/appointments` — roles: `clinic`, `admin`
 - `GET /v1/doctors/{doctor_id}/appointments` — roles: `doctor`, `admin`
 
@@ -187,31 +192,94 @@ Status values:
 - `pending`
 - `confirmed`
 - `alternative_date`
-- `cancelled`
+- `cancelled` (clinic “reject” currently maps here — no separate `rejected` status)
 - `arrived`
 - `completed`
+- `no_show`
+
+### Status transition matrix
+
+| From | Allowed next |
+|------|----------------|
+| `pending` | `confirmed`, `alternative_date`, `cancelled` |
+| `alternative_date` | `confirmed`, `cancelled` |
+| `confirmed` | `arrived`, `cancelled`, `no_show` |
+| `arrived` | `completed`, `no_show` |
+| `completed` / `cancelled` / `no_show` | _(terminal)_ |
+
+Active statuses for duplicate/conflict checks: `pending`, `confirmed`, `alternative_date`, `arrived`.
+
+**Scheduling limitation:** conflict detection is date-level because appointments do not yet store time slots.
+
+## Appointment messaging (patient ↔ clinic)
+
+Messaging is scoped to a single appointment. Doctors cannot use these routes.
+
+- `GET /v1/appointments/{appointment_id}/messages` — roles: `patient`, `clinic`, `admin`
+- `POST /v1/appointments/{appointment_id}/messages` — roles: `patient`, `clinic`, `admin`
+
+Ownership:
+
+- Patient: JWT patient profile must own `appointment.patient_id`
+- Clinic: JWT `clinic_id` must match `appointment.clinic_id`
+- Sender identity/role always come from JWT (never from the request body)
+
+Cancelled / completed / `no_show` appointments remain readable; new messages may still be sent for coordination.
+
+Body rules: non-empty after trim, max 2000 characters.
 
 ## Tests
 
 ```powershell
 cd backend
-pytest
+pytest -q
 ```
 
-Automated coverage includes auth, clinics, doctors, reviews, match, clinic seed sync, admin RBAC, and config security checks.
+Focused suites:
+
+```powershell
+pytest -q tests/test_appointment_transitions.py tests/test_appointments_api.py
+pytest -q tests/test_appointment_messages_api.py
+```
+
+Automated coverage includes auth, clinics, doctors, reviews, match, appointments (transitions/edge cases), messaging RBAC, clinic seed sync, admin RBAC, and config security checks.
 Most unit/API tests mock DB engine interactions; real schema verification is covered by Alembic migration execution and optional CI smoke tests (`BACKEND_DB_SMOKE=1`).
+
+## Smoke scripts
+
+Prerequisites: Postgres migrated + seeded, backend on `:8000`.
+
+```powershell
+cd backend
+python -m scripts.smoke_ay1_e2e
+python -m scripts.smoke_ay2_messaging
+```
+
+Optional env overrides for messaging smoke:
+
+| Variable | Default |
+|----------|---------|
+| `MEDIQUEUE_API_BASE` | `http://127.0.0.1:8000/v1` |
+| `MEDIQUEUE_PASSWORD` | `Demo1234!` (local seed users) |
+| `MEDIQUEUE_PATIENT_EMAIL` | `patient@mediqueue.com` |
+| `MEDIQUEUE_CLINIC_EMAIL` | `clinic@mediqueue.com` |
+| `MEDIQUEUE_DOCTOR_EMAIL` | `doctor@mediqueue.com` |
+
+## Staging (Docker)
+
+See [STAGING.md](STAGING.md) for Compose + migration + seed runbook.
 
 ## Troubleshooting Alembic
 
 ### Error: `Can't locate revision identified by '202607050001'`
 
-This means the database `alembic_version` table references a revision that is **not** in this repository. The repo head is `202607090001` — do not create a fake `202607050001` migration.
+This means the database `alembic_version` table references a revision that is **not** in this repository. The repo head is `202608030002` — do not create a fake `202607050001` migration.
 
 **Option A — stamp to the repo head (keep existing data if schema already matches):**
 
 ```powershell
 cd backend
-alembic stamp 202607090001
+alembic stamp 202608030002
 alembic upgrade head
 ```
 

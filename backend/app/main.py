@@ -35,3 +35,9 @@ app.include_router(api_router, prefix=settings.API_V1_PREFIX)
 @app.get("/", tags=["health"])
 def root() -> dict[str, str]:
     return {"status": "ok", "service": settings.PROJECT_NAME}
+
+
+@app.get("/health", tags=["health"])
+def health() -> dict[str, str]:
+    """Container/load-balancer health check (no auth)."""
+    return {"status": "ok", "service": settings.PROJECT_NAME}

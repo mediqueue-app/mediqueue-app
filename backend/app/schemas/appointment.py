@@ -11,6 +11,7 @@ ALLOWED_APPOINTMENT_STATUSES = {
     AppointmentStatus.CANCELLED,
     AppointmentStatus.ARRIVED,
     AppointmentStatus.COMPLETED,
+    AppointmentStatus.NO_SHOW,
 }
 
 

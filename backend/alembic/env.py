@@ -5,7 +5,16 @@ from sqlalchemy import engine_from_config, pool
 
 from app.core.config import settings
 from app.db.base import Base
-from app.models import Appointment, Clinic, Doctor, DoctorClinic, Patient, Review, User
+from app.models import (
+    Appointment,
+    AppointmentMessage,
+    Clinic,
+    Doctor,
+    DoctorClinic,
+    Patient,
+    Review,
+    User,
+)
 
 config = context.config
 config.set_main_option("sqlalchemy.url", settings.DATABASE_URL.replace("%", "%%"))
@@ -16,7 +25,16 @@ if config.config_file_name is not None:
 target_metadata = Base.metadata
 
 # Keep imports visible for Alembic autogenerate.
-_models = (Appointment, Clinic, Doctor, DoctorClinic, Patient, Review, User)
+_models = (
+    Appointment,
+    AppointmentMessage,
+    Clinic,
+    Doctor,
+    DoctorClinic,
+    Patient,
+    Review,
+    User,
+)
 
 
 def run_migrations_offline() -> None:

@@ -64,5 +64,11 @@ jobs:
       - name: Run Alembic migrations
         run: alembic upgrade head
 
+      - name: Verify single Alembic head
+        run: |
+          python -m alembic heads
+          test "$(python -m alembic heads | wc -l)" -eq 1
+
       - name: Run backend tests
+        # Includes appointment transitions, messaging RBAC, and existing suites.
         run: pytest -q
