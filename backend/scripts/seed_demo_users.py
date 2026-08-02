@@ -105,6 +105,40 @@ def _resolve_demo_doctor_id(db: Session, *, clinic_id: int) -> int:
     return doctor_id
 
 
+def _ensure_demo_doctor_clinic_link(
+    db: Session,
+    *,
+    doctor_id: int,
+    clinic_id: int,
+) -> str:
+    """Ensure demo doctor is linked to demo clinic. Idempotent; no commit.
+
+    Returns:
+        "inserted" when a new row is created, "already_exists" otherwise.
+    """
+    existing = db.scalar(
+        select(DoctorClinic).where(
+            DoctorClinic.doctor_id == doctor_id,
+            DoctorClinic.clinic_id == clinic_id,
+        )
+    )
+    if existing is not None:
+        if not existing.is_active:
+            existing.is_active = True
+            db.flush()
+        return "already_exists"
+
+    db.add(
+        DoctorClinic(
+            doctor_id=doctor_id,
+            clinic_id=clinic_id,
+            is_active=True,
+        )
+    )
+    db.flush()
+    return "inserted"
+
+
 def _upsert_demo_user(
     db: Session,
     *,
@@ -140,16 +174,23 @@ def _upsert_demo_user(
     return "updated", user.id
 
 
-def seed_demo_users(db: Session) -> dict[str, list[str] | dict[str, int | None]]:
+def seed_demo_users(db: Session) -> dict[str, list[str] | dict[str, int | str | None]]:
     demo_clinic_id = _resolve_demo_clinic_id(db)
     demo_doctor_id = _resolve_demo_doctor_id(db, clinic_id=demo_clinic_id)
+    # Clinic/doctor JSON seeds may not link the selected pair; smoke_ay1 requires it.
+    link_action = _ensure_demo_doctor_clinic_link(
+        db,
+        doctor_id=demo_doctor_id,
+        clinic_id=demo_clinic_id,
+    )
     password_hash = get_password_hash(DEMO_PASSWORD)
 
     inserted: list[str] = []
     updated: list[str] = []
-    relationships: dict[str, int | None] = {
+    relationships: dict[str, int | str | None] = {
         "clinic_id": demo_clinic_id,
         "doctor_id": demo_doctor_id,
+        "doctor_clinic_link": link_action,
     }
 
     for spec in DEMO_USER_SPECS:
@@ -201,6 +242,16 @@ def main() -> int:
         print(f"    - {email}")
     print(f"  Demo clinic_id: {relationships['clinic_id']}")
     print(f"  Demo doctor_id: {relationships['doctor_id']}")
+    print()
+    print("Doctor-clinic relation:")
+    doctor_id = relationships["doctor_id"]
+    clinic_id = relationships["clinic_id"]
+    if relationships["doctor_clinic_link"] == "inserted":
+        print("  Inserted:")
+        print(f"  doctor_id={doctor_id} clinic_id={clinic_id}")
+    else:
+        print("  Already exists:")
+        print(f"  doctor_id={doctor_id} clinic_id={clinic_id}")
     print()
     print(f"Password for all demo accounts: {DEMO_PASSWORD}")
     print("  patient@mediqueue.com  -> web-patient :3002")

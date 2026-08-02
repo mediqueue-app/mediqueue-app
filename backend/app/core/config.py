@@ -33,9 +33,14 @@ class Settings(BaseSettings):
     MEDIQUEUE_AI_BASE_URL: str = "http://localhost:8001"
     MEDIQUEUE_AI_TIMEOUT_SECONDS: float = 5.0
 
+    # Comma-separated origins. For staging, set BACKEND_CORS_ORIGINS via env
+    # (do not use wildcard origins with credentials).
     BACKEND_CORS_ORIGINS: str = (
         "http://localhost:3000,http://localhost:3001,http://localhost:3002,"
-        "http://localhost:3003,http://localhost:5173,http://localhost:8080"
+        "http://localhost:3003,"
+        "http://127.0.0.1:3000,http://127.0.0.1:3001,http://127.0.0.1:3002,"
+        "http://127.0.0.1:3003,"
+        "http://localhost:5173,http://localhost:8080"
     )
 
     model_config = SettingsConfigDict(

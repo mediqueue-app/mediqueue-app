@@ -4,6 +4,20 @@ from pydantic import ValidationError
 from app.core.config import UNSAFE_DEV_SECRET_KEY, Settings
 
 
+class TestCorsOrigins:
+    def test_default_includes_portal_localhost_and_loopback(self) -> None:
+        settings = Settings(
+            APP_ENV="development",
+            SECRET_KEY=UNSAFE_DEV_SECRET_KEY,
+            _env_file=None,
+        )
+        origins = settings.cors_origins
+        for port in (3000, 3001, 3002, 3003):
+            assert f"http://localhost:{port}" in origins
+            assert f"http://127.0.0.1:{port}" in origins
+        assert "*" not in origins
+
+
 class TestSettingsSecurity:
     def test_allows_unsafe_secret_in_development(self) -> None:
         settings = Settings(APP_ENV="development", SECRET_KEY=UNSAFE_DEV_SECRET_KEY)
