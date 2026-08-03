@@ -31,7 +31,7 @@ def test_alembic_head_applied() -> None:
         cur.execute("SELECT version_num FROM alembic_version")
         version = cur.fetchone()
         assert version is not None
-        assert version[0] == "202607150001"
+        assert version[0] == "202608030002"
 
 
 def test_new_tables_exist() -> None:
