@@ -1,6 +1,7 @@
 import { Sparkles } from "lucide-react";
 import { DemandForecastChart } from "@/components/dashboard/growth/DemandForecastChart";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { ComingSoonOverlay } from "@/components/ui/ComingSoon";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { fetchAiInsights, fetchForecastData } from "@/lib/services/growth";
 import { cn } from "@/lib/utils";
@@ -21,7 +22,9 @@ export default async function ForecastsPage() {
 
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
         <div className="xl:col-span-2">
-          <DemandForecastChart data={forecastData} />
+          <ComingSoonOverlay description="Talep öngörü modeli canlı verilerle çok yakında hizmetinizde olacak.">
+            <DemandForecastChart data={forecastData} />
+          </ComingSoonOverlay>
         </div>
 
         <div className="flex flex-col gap-4">

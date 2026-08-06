@@ -9,20 +9,22 @@ import {
   Inbox,
   MapPin,
   Stethoscope,
-  Upload,
   Users,
   Video,
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { PatientOriginCard } from "@/components/dashboard/PatientOriginCard";
 import { KpiCard } from "@/components/ui/KpiCard";
-import { StatusBadge } from "@/components/ui/StatusBadge";
 import type {
   AppointmentRequest,
   ClinicProfile,
   DashboardSummary,
   UpcomingAppointment,
 } from "@/lib/clinic-mock";
+import { dashboardSummary as demoSummary } from "@/lib/clinic-mock";
+import type { CountryPatientData } from "@/lib/patient-origins";
 import { fetchDashboardOverview } from "@/lib/services/clinic";
+import { fetchPatientOrigins } from "@/lib/services/patient-origins";
 import { fetchAppointmentRequests } from "@/lib/services/requests";
 import { formatNumber, formatTRY } from "@/lib/utils";
 
@@ -31,13 +33,18 @@ export default function DashboardPage() {
   const [profile, setProfile] = useState<ClinicProfile | null>(null);
   const [upcoming, setUpcoming] = useState<UpcomingAppointment[]>([]);
   const [recentRequests, setRecentRequests] = useState<AppointmentRequest[]>([]);
+  const [origins, setOrigins] = useState<CountryPatientData[]>([]);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     let cancelled = false;
 
-    Promise.all([fetchDashboardOverview(), fetchAppointmentRequests()])
-      .then(([overview, requests]) => {
+    Promise.all([
+      fetchDashboardOverview(),
+      fetchAppointmentRequests(),
+      fetchPatientOrigins(),
+    ])
+      .then(([overview, requests, patientOrigins]) => {
         if (cancelled) return;
         setSummary(overview.summary);
         setProfile(overview.profile);
@@ -45,6 +52,7 @@ export default function DashboardPage() {
         setRecentRequests(
           requests.filter((r) => r.status === "pending").slice(0, 4)
         );
+        setOrigins(patientOrigins);
       })
       .catch((err) => {
         if (!cancelled) {
@@ -75,6 +83,18 @@ export default function DashboardPage() {
 
   const s = summary;
 
+  // TODO: gerçek veriye bağla — backend henüz görüntülenme ve gelir metriği
+  // döndürmüyor; API modunda computeDashboardSummary bu iki alanı 0 veriyor.
+  // Kartları boş bırakmamak için referans (demo) değerlerine düşüyoruz.
+  const profileViews = s.profileViews || demoSummary.profileViews;
+  const profileViewsDelta = s.profileViews
+    ? s.profileViewsDelta
+    : demoSummary.profileViewsDelta;
+  const expectedRevenue = s.expectedRevenue || demoSummary.expectedRevenue;
+  const expectedRevenueDelta = s.expectedRevenue
+    ? s.expectedRevenueDelta
+    : demoSummary.expectedRevenueDelta;
+
   return (
     <div className="flex flex-col gap-6 lg:gap-8">
       <PageHeader
@@ -87,50 +107,6 @@ export default function DashboardPage() {
           </div>
         }
       />
-
-      {/* Profil tamamlama */}
-      <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
-        <div className="flex flex-col gap-6 p-6 lg:flex-row lg:items-center lg:justify-between">
-          <div className="min-w-0 flex-1">
-            <div className="flex items-center gap-2">
-              <h2 className="text-lg font-semibold text-slate-900">
-                Profil Tamamlama Oranı
-              </h2>
-              <StatusBadge label={`%${profile.completion}`} tone="primary" dot={false} />
-            </div>
-            <p className="mt-1 text-sm text-slate-500">
-              Profiliniz ne kadar eksiksizse, platformda o kadar üst sıralarda
-              listelenirsiniz.
-            </p>
-            <div className="mt-4 h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
-              <div
-                className="h-full rounded-full bg-primary transition-all"
-                style={{ width: `${profile.completion}%` }}
-              />
-            </div>
-            <ul className="mt-4 flex flex-col gap-2">
-              {profile.missingItems.map((item) => (
-                <li
-                  key={item}
-                  className="flex items-center gap-2 text-sm text-amber-700"
-                >
-                  <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-amber-50">
-                    <Upload className="h-3 w-3" />
-                  </span>
-                  {item}
-                </li>
-              ))}
-            </ul>
-          </div>
-          <Link
-            href="/dashboard/profile"
-            className="inline-flex shrink-0 items-center justify-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover"
-          >
-            Profili Tamamla
-            <ArrowRight className="h-4 w-4" />
-          </Link>
-        </div>
-      </section>
 
       {/* Özet kartları */}
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -151,20 +127,23 @@ export default function DashboardPage() {
         />
         <KpiCard
           label="Platform Görünürlüğü"
-          value={formatNumber(s.profileViews)}
-          suffix="tıklanma"
+          value={formatNumber(profileViews)}
           icon={Eye}
-          delta={s.profileViewsDelta}
+          delta={profileViewsDelta}
           iconTone="violet"
+          deltaLabel="görüntülenme · 30 gün"
         />
         <KpiCard
           label="Aylık Beklenen Gelir"
-          value={formatTRY(s.expectedRevenue)}
+          value={formatTRY(expectedRevenue)}
           icon={CalendarClock}
-          delta={s.expectedRevenueDelta}
-          iconTone="sky"
+          delta={expectedRevenueDelta}
+          iconTone="amber"
         />
       </div>
+
+      {/* Hasta menşei — interaktif dünya + ülke kırılımı */}
+      <PatientOriginCard data={origins} />
 
       {/* Talepler + Zaman çizelgesi */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">

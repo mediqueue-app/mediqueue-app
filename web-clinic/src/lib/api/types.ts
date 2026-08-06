@@ -1,5 +1,8 @@
 export type UserRole = "admin" | "clinic" | "doctor" | "patient";
 
+/** Bir ekrandaki verinin kaynağını belirtir (HybridBadge için). */
+export type DataSource = "api" | "mock" | "hybrid";
+
 export interface TokenResponse {
   access_token: string;
   token_type: string;

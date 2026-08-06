@@ -1,6 +1,7 @@
 import { Clock, Eye, Star } from "lucide-react";
 import { MarketComparisonChart } from "@/components/dashboard/growth/MarketComparisonChart";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { ComingSoonOverlay } from "@/components/ui/ComingSoon";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { fetchMarketAnalysis } from "@/lib/services/growth";
 import { cn } from "@/lib/utils";
@@ -17,7 +18,9 @@ export default async function MarketAnalysisPage() {
         action={<StatusBadge label="Yapay Zeka" tone="primary" dot={false} />}
       />
 
-      <MarketComparisonChart data={priceComparison} />
+      <ComingSoonOverlay description="Pazar kıyaslama modeli canlı verilerle çok yakında hizmetinizde olacak.">
+        <MarketComparisonChart data={priceComparison} />
+      </ComingSoonOverlay>
 
       <section className="rounded-2xl border border-slate-100 bg-white shadow-sm">
         <div className="border-b border-slate-100 px-6 py-5">

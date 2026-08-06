@@ -40,7 +40,7 @@ export async function apiFetch<T>(
   path: string,
   options: RequestInit & { token?: string | null; form?: boolean } = {}
 ): Promise<T> {
-  const { token, form, headers: initHeaders, ...rest } = options;
+  const { token, form, headers: initHeaders, signal, ...rest } = options;
   const headers = new Headers(initHeaders);
 
   if (token) {
@@ -53,10 +53,30 @@ export async function apiFetch<T>(
     headers.set("Content-Type", "application/json");
   }
 
-  const response = await fetch(`${getApiBaseUrl()}${path}`, {
-    ...rest,
-    headers,
-  });
+  const timeoutMs = 12_000;
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  if (signal) {
+    if (signal.aborted) controller.abort();
+    else signal.addEventListener("abort", () => controller.abort(), { once: true });
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(`${getApiBaseUrl()}${path}`, {
+      ...rest,
+      headers,
+      signal: controller.signal,
+    });
+  } catch (err) {
+    clearTimeout(timer);
+    if (err instanceof DOMException && err.name === "AbortError") {
+      throw new ApiError(408, "İstek zaman aşımına uğradı (backend yanıt vermiyor)");
+    }
+    throw err;
+  } finally {
+    clearTimeout(timer);
+  }
 
   if (response.status === 204) {
     return undefined as T;
