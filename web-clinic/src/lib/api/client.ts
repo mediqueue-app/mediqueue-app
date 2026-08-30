@@ -73,6 +73,12 @@ export async function apiFetch<T>(
     if (err instanceof DOMException && err.name === "AbortError") {
       throw new ApiError(408, "İstek zaman aşımına uğradı (backend yanıt vermiyor)");
     }
+    if (err instanceof TypeError) {
+      throw new ApiError(
+        0,
+        `Backend'e bağlanılamadı (${getApiBaseUrl()}). API servisinin çalıştığından emin olun.`
+      );
+    }
     throw err;
   } finally {
     clearTimeout(timer);

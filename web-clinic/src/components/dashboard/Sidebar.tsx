@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight, HeartPulse, LogOut } from "lucide-react";
+import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
 import {
   GROUP_ORDER,
   NAV_ITEMS,
@@ -54,19 +55,31 @@ export function Sidebar({
           collapsed ? "justify-center px-2" : "gap-2.5 px-5"
         )}
       >
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary text-white shadow-sm shadow-primary/30">
-          <HeartPulse className="h-5 w-5" strokeWidth={2.25} />
-        </div>
-        {!collapsed && (
-          <div className="min-w-0">
-            <span className="text-[15px] font-bold tracking-tight text-white">
-              MEDI<span className="text-primary">·</span>QUEUE
-            </span>
+        <Link
+          href="/dashboard"
+          className={cn(
+            "flex min-w-0 items-center",
+            collapsed ? "justify-center" : "flex-col items-start gap-1"
+          )}
+          aria-label="MEDI·QUEUE"
+        >
+          <Image
+            src="/mediqueue-logo.png"
+            alt="MEDI·QUEUE"
+            width={208}
+            height={44}
+            className={cn(
+              "w-auto shrink-0 rounded-lg",
+              collapsed ? "h-9 max-w-[56px] object-cover object-left" : "h-11"
+            )}
+            priority
+          />
+          {!collapsed && (
             <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
               Büyüme Motoru
             </p>
-          </div>
-        )}
+          )}
+        </Link>
       </div>
 
       <nav className="flex-1 overflow-y-auto px-2 py-4" aria-label="Ana menü">

@@ -7,11 +7,6 @@ import { CountryFlag } from "@/components/ui/CountryFlag";
 import type { CountryPatientData } from "@/lib/patient-origins";
 import { cn, formatNumber } from "@/lib/utils";
 
-/**
- * Dünya WebGL kullanıyor; SSR'da `window` / canvas olmadığı için client-only
- * yükleniyor. Yüklenene kadar aynı ölçüde bir skeleton gösteriliyor ki kart
- * yüksekliği zıplamasın.
- */
 const PatientOriginGlobe = dynamic(
   () => import("./PatientOriginGlobe").then((m) => m.PatientOriginGlobe),
   {
@@ -85,9 +80,6 @@ export function PatientOriginCard({ data }: { data: CountryPatientData[] }) {
 
                   return (
                     <li key={country.countryCode}>
-                      {/* Marker'a tıklanınca ülkeye göre filtrelenmiş talep
-                          listesine yönlendirme burada eklenebilir:
-                          router.push(`/dashboard/requests?country=${country.countryCode}`) */}
                       <div
                         onMouseEnter={() => setActiveCode(country.countryCode)}
                         onMouseLeave={() => setActiveCode(null)}

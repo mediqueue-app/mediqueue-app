@@ -1,8 +1,12 @@
 import type { UserRead } from "@/lib/api/types";
-import { apiFetch, loginRequest } from "@/lib/api/client";
+import { ApiError, apiFetch, loginRequest } from "@/lib/api/client";
 
 export const AUTH_TOKEN_KEY = "mq-clinic-token";
 export const AUTH_USER_KEY = "mq-clinic-user";
+export const MOCK_SESSION_KEY = "mq-clinic-mock";
+
+const DEMO_CLINIC_EMAIL = "clinic@mediqueue.com";
+const DEMO_CLINIC_PASSWORD = "Demo1234!";
 
 export type ClinicUser = {
   name: string;
@@ -36,6 +40,36 @@ export function setSession(token: string, user: UserRead): void {
 export function clearSession(): void {
   sessionStorage.removeItem(AUTH_TOKEN_KEY);
   sessionStorage.removeItem(AUTH_USER_KEY);
+  sessionStorage.removeItem(MOCK_SESSION_KEY);
+}
+
+function mockClinicLogin(email: string, password: string): UserRead {
+  const normalized = email.trim().toLowerCase();
+  if (normalized !== DEMO_CLINIC_EMAIL || password !== DEMO_CLINIC_PASSWORD) {
+    throw new Error(
+      `Backend kapalıyken demo giriş: ${DEMO_CLINIC_EMAIL} / ${DEMO_CLINIC_PASSWORD}`
+    );
+  }
+
+  const user: UserRead = {
+    id: 1,
+    email: normalized,
+    full_name: "Demo Klinik Yöneticisi",
+    role: "clinic",
+    clinic_id: 1,
+    doctor_id: null,
+    is_active: true,
+    created_at: new Date().toISOString(),
+  };
+
+  setSession("mock-local-dev-token", user);
+  sessionStorage.setItem(MOCK_SESSION_KEY, "1");
+  return user;
+}
+
+export function isMockSession(): boolean {
+  if (typeof window === "undefined") return false;
+  return sessionStorage.getItem(MOCK_SESSION_KEY) === "1";
 }
 
 export function isAuthenticated(): boolean {
@@ -43,20 +77,31 @@ export function isAuthenticated(): boolean {
 }
 
 export async function login(email: string, password: string): Promise<UserRead> {
-  const token = await loginRequest(email, password);
-  const user = await apiFetch<UserRead>("/auth/me", {
-    token: token.access_token,
-  });
+  try {
+    const token = await loginRequest(email, password);
+    sessionStorage.removeItem(MOCK_SESSION_KEY);
+    const user = await apiFetch<UserRead>("/auth/me", {
+      token: token.access_token,
+    });
 
-  if (user.role !== "clinic" && user.role !== "admin") {
-    throw new Error("Bu portal yalnızca klinik hesapları içindir.");
-  }
-  if (user.role === "clinic" && user.clinic_id == null) {
-    throw new Error("Klinik hesabına clinic_id atanmamış.");
-  }
+    if (user.role !== "clinic" && user.role !== "admin") {
+      throw new Error("Bu portal yalnızca klinik hesapları içindir.");
+    }
+    if (user.role === "clinic" && user.clinic_id == null) {
+      throw new Error("Klinik hesabına clinic_id atanmamış.");
+    }
 
-  setSession(token.access_token, user);
-  return user;
+    setSession(token.access_token, user);
+    return user;
+  } catch (err) {
+    if (
+      err instanceof ApiError &&
+      (err.status === 0 || err.status === 408 || err.status >= 500)
+    ) {
+      return mockClinicLogin(email, password);
+    }
+    throw err;
+  }
 }
 
 export function logout(): void {

@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
-import { HeartPulse, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
 import { ApiError } from "@/lib/api/client";
 import { isAuthenticated, login } from "@/lib/auth";
 
@@ -54,18 +55,18 @@ export default function LoginPage() {
 
       <div className="relative grid w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-xl lg:grid-cols-2">
         <div className="hidden flex-col justify-between border-r border-white/10 bg-gradient-to-br from-primary to-primary-hover p-10 lg:flex">
-          <div className="flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 text-white ring-1 ring-white/20">
-              <HeartPulse className="h-5 w-5" strokeWidth={2.25} />
-            </div>
-            <div>
-              <p className="text-[15px] font-bold tracking-tight text-white">
-                MEDI<span className="text-white/70">·</span>QUEUE
-              </p>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-white/60">
-                Klinik
-              </p>
-            </div>
+          <div className="flex items-center gap-3">
+            <Image
+              src="/mediqueue-logo.png"
+              alt="MEDI·QUEUE"
+              width={248}
+              height={52}
+              className="h-[52px] w-auto rounded-lg"
+              priority
+            />
+            <p className="text-[10px] font-semibold uppercase tracking-widest text-white/60">
+              Klinik
+            </p>
           </div>
 
           <div>
@@ -93,15 +94,20 @@ export default function LoginPage() {
           </div>
 
           <p className="text-xs text-white/50">
-            © 2026 MediQueue · Yalnızca yetkili klinik hesapları
+            © 2026 MEDI·QUEUE · Yalnızca yetkili klinik hesapları
           </p>
         </div>
 
         <div className="bg-white p-8 sm:p-10">
           <div className="mb-8">
-            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white shadow-lg shadow-primary/30 lg:hidden">
-              <HeartPulse className="h-7 w-7" strokeWidth={2.5} />
-            </div>
+            <Image
+              src="/mediqueue-logo.png"
+              alt="MEDI·QUEUE"
+              width={248}
+              height={52}
+              className="mb-5 h-[52px] w-auto rounded-lg lg:hidden"
+              priority
+            />
             <h1 className="text-xl font-bold tracking-tight text-slate-900">
               Klinik Girişi
             </h1>
@@ -126,7 +132,7 @@ export default function LoginPage() {
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="yonetici@klinik.com"
+                placeholder="clinic@mediqueue.com"
                 required
                 className="mt-1.5 w-full rounded-xl border border-slate-200 px-3.5 py-2.5 text-sm transition-colors focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/10"
               />
@@ -156,10 +162,14 @@ export default function LoginPage() {
           </form>
 
           <div className="mt-6 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-xs text-slate-500">
-            <span className="font-semibold text-slate-600">Backend bağlantısı:</span>{" "}
-            Klinik hesabınızla{" "}
-            <code className="rounded bg-slate-200/60 px-1 py-0.5">/auth/login</code>{" "}
-            üzerinden JWT oturumu açılır.
+            <span className="font-semibold text-slate-600">Demo giriş:</span>{" "}
+            <code className="rounded bg-slate-200/60 px-1 py-0.5">clinic@mediqueue.com</code>{" "}
+            / <code className="rounded bg-slate-200/60 px-1 py-0.5">Demo1234!</code>
+            <br />
+            <span className="mt-2 inline-block">
+              Backend ayaktaysa gerçek JWT oturumu açılır; kapalıysa panel demo verisiyle
+              çalışır.
+            </span>
           </div>
         </div>
       </div>

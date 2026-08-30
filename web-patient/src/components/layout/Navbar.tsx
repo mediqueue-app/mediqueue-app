@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { Stethoscope, Menu, X, UserRound } from "lucide-react";
+import { Menu, X, UserRound } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const NAV_LINKS = [
@@ -21,13 +22,15 @@ export function Navbar() {
   return (
     <header className="sticky top-0 z-50 w-full border-b border-slate-200 bg-white/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#3a6ad6] text-white shadow-sm">
-            <Stethoscope className="h-5 w-5" />
-          </span>
-          <span className="text-lg font-bold tracking-tight text-slate-900">
-            Medi<span className="text-[#3a6ad6]">Queue</span>
-          </span>
+        <Link href="/" className="flex shrink-0 items-center py-1">
+          <Image
+            src="/mediqueue-logo.png"
+            alt="MEDI·QUEUE"
+            width={428}
+            height={90}
+            className="h-14 w-auto object-contain object-left sm:h-[4.25rem]"
+            priority
+          />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">

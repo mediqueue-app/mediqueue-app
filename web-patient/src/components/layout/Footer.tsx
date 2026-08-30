@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { Stethoscope, Mail, Phone, MapPin } from "lucide-react";
+import Image from "next/image";
+import { Mail, Phone, MapPin } from "lucide-react";
 
 const FOOTER_LINKS: { title: string; links: { label: string; href: string }[] }[] = [
   {
@@ -36,13 +37,14 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#3a6ad6] text-white">
-                <Stethoscope className="h-5 w-5" />
-              </span>
-              <span className="text-lg font-bold tracking-tight text-slate-900">
-                Medi<span className="text-[#3a6ad6]">Queue</span>
-              </span>
+            <Link href="/" className="inline-flex items-center">
+              <Image
+                src="/mediqueue-logo.png"
+                alt="MEDI·QUEUE"
+                width={380}
+                height={80}
+                className="h-[4.375rem] w-auto object-contain object-left sm:h-20"
+              />
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-500">
               Türkiye&apos;nin akredite klinik ve doktorlarını tek çatı altında
@@ -83,7 +85,7 @@ export function Footer() {
         </div>
 
         <div className="mt-10 border-t border-slate-200 pt-6 text-center text-sm text-slate-400">
-          © {new Date().getFullYear()} MediQueue. Tüm hakları saklıdır.
+          © {new Date().getFullYear()} MEDI·QUEUE. Tüm hakları saklıdır.
         </div>
       </div>
     </footer>
