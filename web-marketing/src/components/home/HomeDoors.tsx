@@ -17,20 +17,20 @@ const ICONS = {
 function DoorPreview({ type }: { type: "clinic" | "patient" | "doctor" }) {
   if (type === "clinic") {
     return (
-      <div className="pointer-events-none mt-6 origin-top scale-[0.92] opacity-90 transition-transform duration-500 group-hover:scale-[0.94]">
+      <div className="pointer-events-none origin-top scale-[0.95] opacity-95 transition-transform duration-500 group-hover:scale-[0.97]">
         <ClinicRequestsPreview compact />
       </div>
     );
   }
   if (type === "patient") {
     return (
-      <div className="pointer-events-none mt-6 origin-top scale-[0.92] opacity-90 transition-transform duration-500 group-hover:scale-[0.94]">
+      <div className="pointer-events-none origin-top scale-[0.95] opacity-95 transition-transform duration-500 group-hover:scale-[0.97]">
         <ComparePreview />
       </div>
     );
   }
   return (
-    <div className="pointer-events-none mt-6 origin-top scale-[0.92] opacity-90 transition-transform duration-500 group-hover:scale-[0.94]">
+    <div className="pointer-events-none origin-top scale-[0.95] opacity-95 transition-transform duration-500 group-hover:scale-[0.97]">
       <DoctorSchedulePreview />
     </div>
   );
@@ -83,7 +83,7 @@ export function HomeDoors() {
                   {door.body}
                 </p>
 
-                <div className="relative -mx-2 -mb-2 mt-auto overflow-hidden rounded-xl">
+                <div className="relative -mx-2 -mb-2 mt-6 overflow-hidden rounded-xl">
                   <DoorPreview type={door.preview} />
                 </div>
               </Link>

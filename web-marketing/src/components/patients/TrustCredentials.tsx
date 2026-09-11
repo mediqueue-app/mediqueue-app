@@ -12,7 +12,7 @@ export function TrustCredentials() {
     <section className="border-y border-border bg-white py-16 md:py-20">
       <Container>
         <FadeIn>
-          <div className="overflow-hidden rounded-2xl border border-border bg-slate-900 text-white">
+          <div className="overflow-hidden rounded-[1.75rem] border border-border bg-ink text-white">
             <div className="grid lg:grid-cols-[minmax(0,0.38fr)_1px_minmax(0,1fr)]">
               <div className="flex flex-col justify-center px-8 py-10 sm:px-12 sm:py-14">
                 <p className="font-display text-5xl font-semibold tracking-tight text-white sm:text-6xl">
@@ -30,7 +30,7 @@ export function TrustCredentials() {
               <div className="hidden bg-white/10 lg:block" aria-hidden />
 
               <div className="flex flex-col justify-center border-t border-white/10 px-8 py-10 sm:px-12 sm:py-14 lg:border-t-0">
-                <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">
+                <h2 className="font-display text-2xl tracking-tight sm:text-3xl">
                   {p.trustTitle}
                 </h2>
                 <p className="mt-5 max-w-2xl text-base leading-relaxed text-white/75">

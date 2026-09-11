@@ -41,7 +41,7 @@ export function AboutLetter() {
       <Container>
         <div className="grid gap-16 lg:grid-cols-[1fr_auto_1fr] lg:gap-0">
           <ScrollBlock className="lg:pr-14 xl:pr-20">
-            <p className="font-inter text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
               {copy.missionLabel}
             </p>
             <p className="font-display mt-6 text-2xl leading-[1.55] text-ink sm:text-[1.65rem] lg:text-[1.75rem]">
@@ -55,7 +55,7 @@ export function AboutLetter() {
           />
 
           <ScrollBlock className="lg:pl-14 xl:pl-20" delay={0.08}>
-            <p className="font-inter text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
+            <p className="text-[10px] font-semibold uppercase tracking-[0.24em] text-primary">
               {copy.visionLabel}
             </p>
             <p className="font-display mt-6 text-2xl leading-[1.55] text-ink sm:text-[1.65rem] lg:text-[1.75rem]">
@@ -65,7 +65,7 @@ export function AboutLetter() {
         </div>
 
         <ScrollBlock className="mt-16 border-t border-border/60 pt-10 md:mt-20" delay={0.12}>
-          <p className="font-inter max-w-3xl text-base leading-relaxed text-slate-500 sm:text-lg">
+          <p className="max-w-3xl text-base leading-relaxed text-slate-500 sm:text-lg">
             {copy.note}{" "}
             {copy.achievementChips.map((chip, i) => (
               <span key={chip.label}>

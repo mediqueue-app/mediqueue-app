@@ -12,54 +12,21 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/cn";
 import { BrandLogo } from "@/components/ui/BrandLogo";
-
-/** Pixel-faithful to web-clinic/src/app/dashboard/requests/page.tsx */
-const REQUESTS = [
-  {
-    id: "r1",
-    patient: "Ahmed Al-Farsi",
-    initials: "AA",
-    age: 34,
-    gender: "Erkek",
-    country: "Katar",
-    city: "Doha",
-    treatment: "Saç Ekimi (DHI)",
-    symptom:
-      "Ön saç çizgisinde belirgin dökülme, 3. seviye erkek tipi kelliğe doğru ilerliyor.",
-    requestedDate: "24 Tem 2026",
-    budget: "€2.000 - €3.500",
-    language: "Arapça, İngilizce",
-    status: "pending" as const,
-    createdAt: "2 saat önce",
-  },
-  {
-    id: "r2",
-    patient: "Sophie Laurent",
-    initials: "SL",
-    age: 29,
-    gender: "Kadın",
-    country: "Fransa",
-    city: "Lyon",
-    treatment: "Rinoplasti",
-    symptom:
-      "Burun kemeri ve nefes almada zorluk; hem estetik hem fonksiyonel düzeltme talep ediyor.",
-    requestedDate: "2 Ağu 2026",
-    budget: "€3.000 - €5.000",
-    language: "Fransızca, İngilizce",
-    status: "pending" as const,
-    createdAt: "5 saat önce",
-  },
-];
-
-const FILTERS = [
-  { key: "pending", label: "Bekleyen" },
-  { key: "approved", label: "Onaylanan" },
-  { key: "all", label: "Tümü" },
-] as const;
+import { useLocale } from "@/lib/locale";
 
 export function ClinicRequestsPreview({ compact = false }: { compact?: boolean }) {
-  const [selectedId, setSelectedId] = useState("r1");
-  const selected = REQUESTS.find((r) => r.id === selectedId) ?? REQUESTS[0];
+  const { t } = useLocale();
+  const copy = t.previews.requests;
+  const [selectedId, setSelectedId] = useState(copy.items[0]?.id ?? "r1");
+  const selected = copy.items.find((req) => req.id === selectedId) ?? copy.items[0];
+
+  if (!selected) return null;
+
+  const filters = [
+    { key: "pending", label: copy.pending, count: 2 },
+    { key: "approved", label: copy.approved, count: 1 },
+    { key: "all", label: copy.all, count: 3 },
+  ] as const;
 
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-[#f5f6f8] shadow-sm">
@@ -68,17 +35,17 @@ export function ClinicRequestsPreview({ compact = false }: { compact?: boolean }
         <span className="h-2.5 w-2.5 rounded-full bg-[#f59e0b]/80" />
         <span className="h-2.5 w-2.5 rounded-full bg-[#10b981]/80" />
         <span className="ml-2 truncate rounded-md bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-500 ring-1 ring-slate-200">
-          clinic · Randevu Talepleri
+          {copy.chromeLabel}
         </span>
       </div>
       <div className="p-4">
-        <p className="text-lg font-bold text-slate-900">Randevu Talepleri</p>
+        <p className="text-lg font-bold text-slate-900">{copy.title}</p>
         <p className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-slate-500">
           <BrandLogo size="xs" />
-          <span>pazar yerinden gelen hasta taleplerini değerlendirin, onaylayın veya reddedin.</span>
+          <span>{copy.subtitle}</span>
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
-          {FILTERS.map((f, i) => (
+          {filters.map((f, i) => (
             <span
               key={f.key}
               className={cn(
@@ -95,7 +62,7 @@ export function ClinicRequestsPreview({ compact = false }: { compact?: boolean }
                   i === 0 ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"
                 )}
               >
-                {i === 0 ? 2 : i === 1 ? 1 : 3}
+                {f.count}
               </span>
             </span>
           ))}
@@ -107,7 +74,7 @@ export function ClinicRequestsPreview({ compact = false }: { compact?: boolean }
           )}
         >
           <div className="flex flex-col gap-3 lg:col-span-2">
-            {REQUESTS.map((req) => {
+            {copy.items.map((req) => {
               const active = selected.id === req.id;
               return (
                 <button
@@ -131,7 +98,7 @@ export function ClinicRequestsPreview({ compact = false }: { compact?: boolean }
                           {req.patient}
                         </p>
                         <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
-                          Bekliyor
+                          {copy.waiting}
                         </span>
                       </div>
                       <p className="mt-0.5 flex items-center gap-1 truncate text-xs text-slate-500">
@@ -160,26 +127,26 @@ export function ClinicRequestsPreview({ compact = false }: { compact?: boolean }
                         {selected.patient}
                       </h3>
                       <p className="text-sm text-slate-500">
-                        {selected.age} yaşında · {selected.gender} · {selected.createdAt}
+                        {selected.age} {copy.yearsOld} · {selected.gender} · {selected.createdAt}
                       </p>
                     </div>
                   </div>
                   <span className="rounded-full bg-amber-50 px-2 py-0.5 text-[11px] font-semibold text-amber-700">
-                    Bekliyor
+                    {copy.waiting}
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-4 p-6">
-                  <Detail icon={<Stethoscope className="h-4 w-4" />} label="Talep Edilen Tedavi" value={selected.treatment} />
-                  <Detail icon={<CalendarDays className="h-4 w-4" />} label="İstenen Tarih" value={selected.requestedDate} />
-                  <Detail icon={<MapPin className="h-4 w-4" />} label="Şehir / Ülke" value={`${selected.city}, ${selected.country}`} />
-                  <Detail icon={<Tag className="h-4 w-4" />} label="Bütçe Aralığı" value={selected.budget} />
-                  <Detail icon={<Languages className="h-4 w-4" />} label="Konuştuğu Diller" value={selected.language} />
+                  <Detail icon={<Stethoscope className="h-4 w-4" />} label={copy.treatmentLabel} value={selected.treatment} />
+                  <Detail icon={<CalendarDays className="h-4 w-4" />} label={copy.dateLabel} value={selected.requestedDate} />
+                  <Detail icon={<MapPin className="h-4 w-4" />} label={copy.cityLabel} value={`${selected.city}, ${selected.country}`} />
+                  <Detail icon={<Tag className="h-4 w-4" />} label={copy.budgetLabel} value={selected.budget} />
+                  <Detail icon={<Languages className="h-4 w-4" />} label={copy.languagesLabel} value={selected.language} />
                 </div>
                 <div className="px-6 pb-6">
                   <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-4">
                     <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-400">
                       <MessageSquare className="h-3.5 w-3.5" />
-                      Semptom / Not
+                      {copy.notesLabel}
                     </p>
                     <p className="text-sm leading-relaxed text-slate-700">
                       {selected.symptom}
@@ -189,10 +156,10 @@ export function ClinicRequestsPreview({ compact = false }: { compact?: boolean }
                 <div className="flex flex-wrap gap-3 border-t border-slate-100 p-6">
                   <span className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white">
                     <CheckCheck className="h-4 w-4" />
-                    Onayla
+                    {copy.approve}
                   </span>
                   <span className="inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-red-600 ring-1 ring-red-100">
-                    Reddet
+                    {copy.reject}
                   </span>
                 </div>
               </div>

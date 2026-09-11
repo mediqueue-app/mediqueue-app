@@ -6,6 +6,7 @@ import { Globe2, MapPin, Minus, Plus, TrendingDown, TrendingUp } from "lucide-re
 import { CountryFlag } from "./CountryFlag";
 import type { CountryPatientData } from "./types";
 import { PLATFORM_HUB } from "./types";
+import { useLocale } from "@/lib/locale";
 
 function cn(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(" ");
@@ -94,8 +95,8 @@ export function OriginGlobe({
   revealed = true,
   reducedMotion = false,
   showZoomControls = true,
-  emptyTitle = "Henüz yurt dışı hasta kaydı yok",
-  emptyBody = "İlk uluslararası talebiniz ulaştığında hastalarınızın geldiği ülkeler burada haritalanacak.",
+  emptyTitle,
+  emptyBody,
   ariaLabel,
   className,
 }: {
@@ -111,6 +112,17 @@ export function OriginGlobe({
   ariaLabel?: string;
   className?: string;
 }) {
+  const { locale } = useLocale();
+  const resolvedEmptyTitle =
+    emptyTitle ??
+    (locale === "en"
+      ? "No international patients yet"
+      : "Henüz yurt dışı hasta kaydı yok");
+  const resolvedEmptyBody =
+    emptyBody ??
+    (locale === "en"
+      ? "When your first international request arrives, origin countries will map here."
+      : "İlk uluslararası talebiniz ulaştığında hastalarınızın geldiği ülkeler burada haritalanacak.");
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -179,8 +191,7 @@ export function OriginGlobe({
       });
 
     let size = Math.max(container.clientWidth, 1);
-    const isMobile = window.matchMedia("(max-width: 768px)").matches;
-    const dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
 
     let phi = phiForLongitude(25);
     let theta = 0.32;
@@ -195,7 +206,7 @@ export function OriginGlobe({
       theta,
       dark: 0,
       diffuse: 0.25,
-      mapSamples: isMobile ? 7000 : 14000,
+      mapSamples: 16000,
       mapBrightness: 1.6,
       baseColor: BASE_COLOR,
       markerColor: PRIMARY_MARKER,
@@ -269,10 +280,8 @@ export function OriginGlobe({
     canvas.addEventListener("pointerleave", handlePointerLeave);
 
     let frameId = 0;
-    let paused = false;
 
     const render = () => {
-      if (paused) return;
       frameId = requestAnimationFrame(render);
 
       scale += (zoomTargetRef.current - scale) * ZOOM_EASING;
@@ -392,32 +401,6 @@ export function OriginGlobe({
       }
     };
 
-    const resume = () => {
-      if (!paused) return;
-      paused = false;
-      frameId = requestAnimationFrame(render);
-    };
-
-    const pause = () => {
-      paused = true;
-      cancelAnimationFrame(frameId);
-    };
-
-    const visibilityObserver = new IntersectionObserver(
-      ([entry]) => {
-        if (entry?.isIntersecting && !document.hidden) resume();
-        else pause();
-      },
-      { threshold: 0.15 }
-    );
-    visibilityObserver.observe(container);
-
-    const onVisibility = () => {
-      if (document.hidden) pause();
-      else if (container.getBoundingClientRect().height > 0) resume();
-    };
-    document.addEventListener("visibilitychange", onVisibility);
-
     frameId = requestAnimationFrame(render);
 
     const resizeObserver = new ResizeObserver(() => {
@@ -429,9 +412,7 @@ export function OriginGlobe({
     resizeObserver.observe(container);
 
     return () => {
-      pause();
-      visibilityObserver.disconnect();
-      document.removeEventListener("visibilitychange", onVisibility);
+      cancelAnimationFrame(frameId);
       resizeObserver.disconnect();
       canvas.removeEventListener("pointerdown", handlePointerDown);
       canvas.removeEventListener("pointermove", handlePointerMove);
@@ -453,15 +434,18 @@ export function OriginGlobe({
         <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-light text-primary">
           <Globe2 className="h-6 w-6" />
         </span>
-        <p className="text-sm font-semibold text-slate-700">{emptyTitle}</p>
-        <p className="max-w-[15rem] text-xs leading-relaxed text-slate-400">{emptyBody}</p>
+        <p className="text-sm font-semibold text-slate-700">{resolvedEmptyTitle}</p>
+        <p className="max-w-[15rem] text-xs leading-relaxed text-slate-400">{resolvedEmptyBody}</p>
       </div>
     );
   }
 
   const hovered = hoveredIndex === null ? null : data[hoveredIndex];
   const label =
-    ariaLabel ?? `${data.length} ülkeyi gösteren döndürülebilir dünya`;
+    ariaLabel ??
+    (locale === "en"
+      ? `Rotatable globe showing ${data.length} countries`
+      : `${data.length} ülkeyi gösteren döndürülebilir dünya`);
 
   return (
     <div
@@ -490,7 +474,7 @@ export function OriginGlobe({
             type="button"
             onClick={() => applyZoom(ZOOM_STEP)}
             disabled={zoom >= MAX_ZOOM}
-            aria-label="Yakınlaştır"
+            aria-label={locale === "en" ? "Zoom in" : "Yakınlaştır"}
             className="flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary disabled:pointer-events-none disabled:text-slate-300"
           >
             <Plus className="h-4 w-4" strokeWidth={2.25} />
@@ -500,7 +484,7 @@ export function OriginGlobe({
             type="button"
             onClick={() => applyZoom(1 / ZOOM_STEP)}
             disabled={zoom <= MIN_ZOOM}
-            aria-label="Uzaklaştır"
+            aria-label={locale === "en" ? "Zoom out" : "Uzaklaştır"}
             className="flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary disabled:pointer-events-none disabled:text-slate-300"
           >
             <Minus className="h-4 w-4" strokeWidth={2.25} />
@@ -525,7 +509,8 @@ export function OriginGlobe({
             </div>
             <div className="mt-1 flex items-center gap-2 whitespace-nowrap">
               <span className="text-xs font-medium text-slate-600">
-                {hovered.patientCount} hasta
+                {hovered.patientCount}{" "}
+                {locale === "en" ? "patients" : "hasta"}
               </span>
               {hovered.trendPercent !== undefined && (
                 <span
@@ -546,7 +531,7 @@ export function OriginGlobe({
             {hovered.topCity && (
               <p className="mt-0.5 flex items-center gap-1 whitespace-nowrap text-[11px] text-slate-500">
                 <MapPin className="h-3 w-3" />
-                En çok: {hovered.topCity}
+                {locale === "en" ? "Most from" : "En çok"}: {hovered.topCity}
               </p>
             )}
           </div>

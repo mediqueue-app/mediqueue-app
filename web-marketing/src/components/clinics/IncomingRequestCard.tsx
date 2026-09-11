@@ -34,7 +34,7 @@ export function IncomingRequestCard() {
           </div>
           <div>
             <p className="text-sm font-semibold text-slate-700">Sophie Laurent</p>
-            <p className="text-xs text-slate-400">Lyon · Rinoplasti</p>
+            <p className="text-xs text-slate-400">{t.previews.incomingRhinoplasty}</p>
           </div>
         </div>
       </motion.div>
@@ -72,7 +72,7 @@ export function IncomingRequestCard() {
               </p>
               <p className="mt-0.5 flex items-center gap-1 text-sm text-slate-500">
                 <MapPin className="h-3.5 w-3.5" aria-hidden />
-                Doha, Katar · 34
+                {t.previews.incomingCityAge}
               </p>
             </div>
           </div>
@@ -83,7 +83,7 @@ export function IncomingRequestCard() {
                 {c.requestTreatment}
               </dt>
               <dd className="text-sm font-semibold text-slate-900">
-                Saç Ekimi (DHI)
+                {t.previews.incomingTreatment}
               </dd>
             </div>
             <div className="flex items-center justify-between gap-4">
@@ -100,7 +100,7 @@ export function IncomingRequestCard() {
                 {c.requestLanguage}
               </dt>
               <dd className="text-sm font-medium text-slate-700">
-                Arapça, İngilizce
+                {t.previews.incomingLanguages}
               </dd>
             </div>
           </dl>

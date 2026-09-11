@@ -8,11 +8,9 @@ import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 import { useLocale } from "@/lib/locale";
-import { useLeadCapture } from "@/lib/lead-capture";
 
 export function Navbar() {
   const { t, locale, setLocale } = useLocale();
-  const { openLead } = useLeadCapture();
   const pathname = usePathname();
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
@@ -35,8 +33,6 @@ export function Navbar() {
     };
   }, [open]);
 
-  const primaryIsClinic = locale === "tr";
-
   return (
     <header
       className={cn(
@@ -47,11 +43,11 @@ export function Navbar() {
       )}
     >
       <nav
-        className="mx-auto flex min-h-[4.25rem] max-w-7xl items-center justify-between px-4 py-2 sm:px-6 lg:min-h-[5.25rem] lg:px-8"
+        className="mx-auto flex min-h-[4.75rem] max-w-7xl items-center justify-between gap-6 px-4 py-3 sm:px-6 lg:min-h-[5.5rem] lg:px-8"
         aria-label="Primary"
       >
         <Logo />
-        <ul className="hidden items-center gap-6 lg:flex">
+        <ul className="hidden items-center gap-6 lg:flex xl:gap-9">
           {t.nav.links.map((link) => {
             const active =
               link.href === "/"
@@ -62,8 +58,8 @@ export function Navbar() {
                 <Link
                   href={link.href}
                   className={cn(
-                    "text-sm font-medium transition-colors",
-                    active ? "text-primary" : "text-slate-600 hover:text-slate-900"
+                    "whitespace-nowrap text-[0.95rem] font-bold transition-colors xl:text-[1.05rem]",
+                    active ? "text-primary" : "text-slate-900 hover:text-primary"
                   )}
                   aria-current={active ? "page" : undefined}
                 >
@@ -73,13 +69,11 @@ export function Navbar() {
             );
           })}
         </ul>
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-3.5 lg:flex">
           <LocaleToggle locale={locale} setLocale={setLocale} t={t} />
-          {primaryIsClinic ? (
-            <Button onClick={() => openLead("clinic")}>{t.nav.clinicCta}</Button>
-          ) : (
-            <Button onClick={() => openLead("patient")}>{t.nav.patientCta}</Button>
-          )}
+          <Button href="/clinics" className="whitespace-nowrap px-5 py-2.5 text-sm font-bold xl:px-6 xl:text-[0.95rem]">
+            {t.nav.clinicCta}
+          </Button>
         </div>
         <button
           type="button"
@@ -92,7 +86,7 @@ export function Navbar() {
         </button>
       </nav>
       {open && (
-        <div className="fixed inset-0 top-[4.25rem] z-40 bg-white sm:top-[4.75rem] lg:top-[5.25rem] lg:hidden">
+        <div className="fixed inset-0 top-16 z-40 bg-white lg:top-[4.25rem] lg:hidden">
           <div className="flex h-full flex-col px-6 py-8">
             <ul className="flex flex-col gap-1">
               {t.nav.links.map((link) => (
@@ -108,26 +102,8 @@ export function Navbar() {
             </ul>
             <div className="mt-8 flex flex-col gap-3">
               <LocaleToggle locale={locale} setLocale={setLocale} t={t} />
-              <Button
-                size="lg"
-                className="w-full"
-                onClick={() => {
-                  setOpen(false);
-                  openLead(primaryIsClinic ? "clinic" : "patient");
-                }}
-              >
-                {primaryIsClinic ? t.nav.clinicCta : t.nav.patientCta}
-              </Button>
-              <Button
-                size="lg"
-                variant="ink"
-                className="w-full"
-                onClick={() => {
-                  setOpen(false);
-                  openLead(primaryIsClinic ? "patient" : "clinic");
-                }}
-              >
-                {primaryIsClinic ? t.nav.patientCta : t.nav.clinicCta}
+              <Button href="/clinics" size="lg" className="w-full">
+                {t.nav.clinicCta}
               </Button>
             </div>
           </div>
@@ -144,38 +120,35 @@ function LocaleToggle({
 }: {
   locale: "en" | "tr";
   setLocale: (l: "en" | "tr") => void;
-  t: { nav: { localeEn: string; localeTr: string; localeLabel: string } };
+  t: { nav: { localeEn: string; localeTr: string } };
 }) {
   return (
     <div
-      className="inline-flex items-center gap-1 rounded-full border-2 border-ink/15 bg-white p-1 shadow-sm"
+      className="inline-flex rounded-full border border-border p-0.5 text-xs font-semibold"
       role="group"
-      aria-label={t.nav.localeLabel}
+      aria-label="Language"
     >
-      <span className="hidden pl-2 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400 sm:inline">
-        {t.nav.localeLabel}
-      </span>
       <button
         type="button"
         className={cn(
-          "min-h-9 rounded-full px-3 text-xs font-bold",
-          locale === "en" ? "bg-ink text-white" : "text-slate-500 hover:text-slate-800"
-        )}
-        onClick={() => setLocale("en")}
-        aria-pressed={locale === "en"}
-      >
-        {t.nav.localeEn}
-      </button>
-      <button
-        type="button"
-        className={cn(
-          "min-h-9 rounded-full px-3 text-xs font-bold",
-          locale === "tr" ? "bg-ink text-white" : "text-slate-500 hover:text-slate-800"
+          "min-h-8 rounded-full px-2.5",
+          locale === "tr" ? "bg-ink text-white" : "text-slate-500"
         )}
         onClick={() => setLocale("tr")}
         aria-pressed={locale === "tr"}
       >
         {t.nav.localeTr}
+      </button>
+      <button
+        type="button"
+        className={cn(
+          "min-h-8 rounded-full px-2.5",
+          locale === "en" ? "bg-ink text-white" : "text-slate-500"
+        )}
+        onClick={() => setLocale("en")}
+        aria-pressed={locale === "en"}
+      >
+        {t.nav.localeEn}
       </button>
     </div>
   );

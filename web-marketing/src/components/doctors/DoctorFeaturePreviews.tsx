@@ -1,13 +1,10 @@
+"use client";
+
 import type { ReactNode } from "react";
 import { ArrowRight, Clock, Star } from "lucide-react";
+import { useLocale } from "@/lib/locale";
 
-const PATIENTS = [
-  { name: "Ahmed Al-Farsi", treatment: "Saç Ekimi (DHI)", stage: "Randevu onaylandı" },
-  { name: "Sophie Laurent", treatment: "Rinoplasti", stage: "Teklif gönderildi" },
-  { name: "James Whitfield", treatment: "Diş İmplantı", stage: "Yeni talep" },
-];
-
-const DAYS = ["Pzt", "Sal", "Çar", "Per", "Cum"];
+const NAMES = ["Ahmed Al-Farsi", "Sophie Laurent", "James Whitfield"] as const;
 const HOURS = ["09:00", "11:00", "14:00", "16:00"];
 
 function PreviewShell({
@@ -36,14 +33,18 @@ function PreviewShell({
 }
 
 export function DoctorOverviewPreview() {
+  const { t } = useLocale();
+  const d = t.previews.doctor;
+  const stats = [
+    { n: "3", l: d.statAppointments },
+    { n: "2", l: d.statMessages },
+    { n: "1", l: d.statNew },
+  ];
+
   return (
-    <PreviewShell label="Günlük akış" title="Özet">
+    <PreviewShell label={d.overviewKicker} title={d.overviewTitle}>
       <div className="grid grid-cols-3 gap-3 px-4 py-4">
-        {[
-          { n: "3", l: "Randevu" },
-          { n: "2", l: "Mesaj" },
-          { n: "1", l: "Yeni talep" },
-        ].map((s) => (
+        {stats.map((s) => (
           <div
             key={s.l}
             className="rounded-xl border border-slate-100 bg-slate-50/80 px-3 py-3 text-center"
@@ -54,10 +55,10 @@ export function DoctorOverviewPreview() {
         ))}
       </div>
       <ul className="border-t border-slate-100 px-4 py-3">
-        {PATIENTS.slice(0, 2).map((p) => (
-          <li key={p.name} className="flex items-center justify-between py-2 text-sm">
-            <span className="font-medium text-slate-800">{p.name}</span>
-            <span className="text-xs text-slate-500">{p.stage}</span>
+        {NAMES.slice(0, 2).map((name, i) => (
+          <li key={name} className="flex items-center justify-between py-2 text-sm">
+            <span className="font-medium text-slate-800">{name}</span>
+            <span className="text-xs text-slate-500">{d.stages[i]}</span>
           </li>
         ))}
       </ul>
@@ -66,20 +67,23 @@ export function DoctorOverviewPreview() {
 }
 
 export function DoctorPatientsPreview() {
+  const { t } = useLocale();
+  const d = t.previews.doctor;
+
   return (
-    <PreviewShell label="Hasta listesi" title="Hastalarım">
+    <PreviewShell label={d.patientsKicker} title={d.patientsTitle}>
       <ul className="divide-y divide-slate-100 px-4 py-2">
-        {PATIENTS.map((p) => (
-          <li key={p.name} className="flex items-center gap-3 py-3">
+        {NAMES.map((name, i) => (
+          <li key={name} className="flex items-center gap-3 py-3">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary-light text-[10px] font-bold text-primary">
-              {p.name.split(" ").map((w) => w[0]).join("").slice(0, 2)}
+              {name.split(" ").map((w) => w[0]).join("").slice(0, 2)}
             </span>
             <div className="min-w-0 flex-1">
-              <p className="truncate text-sm font-semibold text-slate-900">{p.name}</p>
-              <p className="truncate text-xs text-slate-500">{p.treatment}</p>
+              <p className="truncate text-sm font-semibold text-slate-900">{name}</p>
+              <p className="truncate text-xs text-slate-500">{d.treatments[i]}</p>
             </div>
             <span className="shrink-0 rounded-full bg-emerald-50 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
-              {p.stage}
+              {d.stages[i]}
             </span>
           </li>
         ))}
@@ -89,11 +93,14 @@ export function DoctorPatientsPreview() {
 }
 
 export function DoctorCalendarPreview() {
+  const { t } = useLocale();
+  const d = t.previews.doctor;
+
   return (
-    <PreviewShell label="Müsaitlik" title="Takvim">
+    <PreviewShell label={d.calendarKicker} title={d.calendarTitle}>
       <div className="px-4 py-4">
         <div className="grid grid-cols-5 gap-1.5">
-          {DAYS.map((day) => (
+          {d.days.map((day) => (
             <div key={day} className="text-center text-[10px] font-semibold text-slate-400">
               {day}
             </div>
@@ -128,26 +135,23 @@ export function DoctorCalendarPreview() {
 }
 
 export function DoctorMessagesPreview() {
+  const { t } = useLocale();
+  const d = t.previews.doctor;
+
   return (
-    <PreviewShell label="Hasta iletişimi" title="Mesajlar">
+    <PreviewShell label={d.messagesKicker} title={d.messagesTitle}>
       <div className="space-y-3 px-4 py-4">
         <div className="rounded-xl bg-slate-100 px-3 py-2">
           <p className="text-[10px] font-semibold text-slate-500">Ahmed Al-Farsi</p>
-          <p className="mt-1 text-xs text-slate-700">
-            Merhaba doktor, DHI saç ekimi için uygun tarihleriniz neler?
-          </p>
+          <p className="mt-1 text-xs text-slate-700">{d.patientMsg1}</p>
         </div>
         <div className="ml-6 rounded-xl bg-primary-light px-3 py-2">
-          <p className="text-[10px] font-semibold text-primary">Siz</p>
-          <p className="mt-1 text-xs text-slate-800">
-            Hello Ahmed — I have slots on Tuesday and Thursday next week.
-          </p>
+          <p className="text-[10px] font-semibold text-primary">{d.you}</p>
+          <p className="mt-1 text-xs text-slate-800">{d.doctorMsg1}</p>
         </div>
         <div className="rounded-xl bg-slate-100 px-3 py-2">
           <p className="text-[10px] font-semibold text-slate-500">Sophie Laurent</p>
-          <p className="mt-1 text-xs text-slate-700">
-            Could you share the rhinoplasty recovery timeline?
-          </p>
+          <p className="mt-1 text-xs text-slate-700">{d.patientMsg2}</p>
         </div>
       </div>
     </PreviewShell>
@@ -155,29 +159,30 @@ export function DoctorMessagesPreview() {
 }
 
 export function DoctorProfilePreview() {
+  const { t } = useLocale();
+  const d = t.previews.doctor;
+
   return (
-    <PreviewShell label="Hasta görünümü" title="Profil">
+    <PreviewShell label={d.profileKicker} title={d.profileTitle}>
       <div className="px-5 py-5">
         <div className="flex items-start gap-4">
           <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary-light text-lg font-bold text-primary">
             Dr
           </span>
           <div>
-            <p className="text-base font-bold text-slate-900">Dr. Ayşe Yılmaz</p>
-            <p className="text-xs text-slate-500">Plastik Cerrahi · 12 yıl deneyim</p>
+            <p className="text-base font-bold text-slate-900">{d.profileName}</p>
+            <p className="text-xs text-slate-500">{d.profileMeta}</p>
             <div className="mt-2 flex items-center gap-1 text-amber-500">
               {Array.from({ length: 5 }).map((_, i) => (
                 <Star key={i} className="h-3 w-3 fill-current" />
               ))}
-              <span className="ml-1 text-xs text-slate-500">4.9 (128)</span>
+              <span className="ml-1 text-xs text-slate-500">{d.reviewsCount}</span>
             </div>
           </div>
         </div>
-        <p className="mt-4 text-xs leading-relaxed text-slate-600">
-          Saç ekimi, rinoplasti ve estetik cerrahi alanlarında uluslararası hasta deneyimi.
-        </p>
+        <p className="mt-4 text-xs leading-relaxed text-slate-600">{d.profileBio}</p>
         <span className="mt-4 inline-flex items-center gap-1 text-xs font-semibold text-primary">
-          Profili düzenle
+          {d.editProfile}
           <ArrowRight className="h-3 w-3" />
         </span>
       </div>
@@ -186,14 +191,14 @@ export function DoctorProfilePreview() {
 }
 
 export function DoctorSchedulePreviewMini() {
+  const { t } = useLocale();
+  const d = t.previews.doctor;
+  const items = t.previews.schedule.items;
+
   return (
-    <PreviewShell label="Günlük akış" title="Bugünün Programı">
+    <PreviewShell label={d.scheduleKicker} title={d.scheduleTitle}>
       <ul className="px-4 py-3">
-        {[
-          { time: "09:30", name: "Ahmed Al-Farsi", treatment: "Saç Ekimi (DHI)" },
-          { time: "11:00", name: "Sophie Laurent", treatment: "Rinoplasti" },
-          { time: "14:15", name: "James Whitfield", treatment: "Diş İmplantı" },
-        ].map((apt) => (
+        {items.map((apt) => (
           <li key={apt.time} className="flex items-center gap-3 border-b border-slate-100 py-2.5 last:border-0">
             <span className="text-xs font-bold text-primary">{apt.time}</span>
             <div className="min-w-0">

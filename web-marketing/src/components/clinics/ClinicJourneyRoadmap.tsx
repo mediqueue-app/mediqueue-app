@@ -2,7 +2,14 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Building2 } from "lucide-react";
+import {
+  Building2,
+  CheckCircle2,
+  ShieldCheck,
+  Calendar,
+  BadgePercent,
+  Sparkles,
+} from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import { ClinicPerformancePreview } from "@/components/clinics/ClinicPerformancePreview";
@@ -12,27 +19,142 @@ import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
 
-function RoadmapPreview({
-  step,
-  hint,
-}: {
-  step: number;
-  hint?: string;
-}) {
-  if (step === 2) {
-    return <ClinicRequestsPreview />;
+function StepCustomPreview({ step }: { step: number }) {
+  if (step === 0) {
+    return (
+      <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white shadow-sm">
+        <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/70 px-5 py-3.5">
+          <div className="flex items-center gap-2">
+            <ShieldCheck className="h-4 w-4 text-emerald-600" />
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-800">
+              Akreditasyon & Güvenlik Denetimi
+            </span>
+          </div>
+          <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700">
+            Onaylı Katılımcı
+          </span>
+        </div>
+        <div className="grid gap-3 p-5 sm:grid-cols-3">
+          <div className="rounded-xl border border-slate-100 bg-slate-50/60 p-4">
+            <p className="text-xs font-medium text-slate-500">JCI Akreditasyonu</p>
+            <p className="mt-1 flex items-center gap-1.5 text-sm font-bold text-emerald-600">
+              <CheckCircle2 className="h-4 w-4 shrink-0" /> Doğrulandı
+            </p>
+          </div>
+          <div className="rounded-xl border border-slate-100 bg-slate-50/60 p-4">
+            <p className="text-xs font-medium text-slate-500">Sağlık Turizmi Sertifikası</p>
+            <p className="mt-1 flex items-center gap-1.5 text-sm font-bold text-emerald-600">
+              <CheckCircle2 className="h-4 w-4 shrink-0" /> Aktif Lisanslı
+            </p>
+          </div>
+          <div className="rounded-xl border border-slate-100 bg-slate-50/60 p-4">
+            <p className="text-xs font-medium text-slate-500">GDPR & Hasta Gizliliği</p>
+            <p className="mt-1 flex items-center gap-1.5 text-sm font-bold text-emerald-600">
+              <CheckCircle2 className="h-4 w-4 shrink-0" /> Şifreli Altyapı
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   }
+
+  if (step === 1) {
+    return (
+      <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm">
+        <div className="flex items-start gap-4">
+          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-light text-primary">
+            <Building2 className="h-6 w-6" />
+          </div>
+          <div className="min-w-0 flex-1">
+            <div className="flex items-center justify-between gap-2">
+              <h4 className="truncate text-base font-bold text-slate-900">
+                Anadolu Estetik & Cerrahi Merkezi
+              </h4>
+              <span className="rounded-full bg-emerald-50 px-2.5 py-0.5 text-xs font-bold text-emerald-700">
+                Profil Yayında
+              </span>
+            </div>
+            <p className="mt-1 text-xs text-slate-500">
+              Estetik & Plastik Cerrahi · Saç Ekimi · Rinoplasti
+            </p>
+            <div className="mt-3 flex flex-wrap gap-2 text-xs">
+              <span className="rounded-md bg-slate-100 px-2.5 py-1 font-medium text-slate-700">
+                TR · EN · AR
+              </span>
+              <span className="rounded-md bg-slate-100 px-2.5 py-1 font-medium text-slate-700">
+                ₺12.000 – ₺45.000
+              </span>
+              <span className="rounded-md bg-emerald-50 px-2.5 py-1 font-bold text-emerald-700">
+                4.9 ★ (128 Değerlendirme)
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (step === 2) {
+    return <ClinicRequestsPreview compact />;
+  }
+
   if (step === 3) {
     return <BilingualChatPreview />;
   }
-  if (!hint) {
-    return null;
+
+  if (step === 4) {
+    return (
+      <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm">
+        <div className="flex items-center justify-between border-b border-slate-100 pb-3.5">
+          <div className="flex items-center gap-2">
+            <Calendar className="h-4.5 w-4.5 text-primary" />
+            <span className="text-sm font-bold text-slate-900">
+              Randevu Onaylandı & Seyahat Planı
+            </span>
+          </div>
+          <span className="rounded-full bg-primary-light px-3 py-1 text-xs font-bold text-primary">
+            24 Temmuz 2026
+          </span>
+        </div>
+        <div className="mt-4 grid gap-3 text-xs sm:grid-cols-2">
+          <div className="rounded-xl bg-slate-50/70 p-3.5">
+            <p className="font-medium text-slate-400">Hasta & Ülke</p>
+            <p className="mt-0.5 text-sm font-bold text-slate-800">
+              Ahmed Al-Farsi (Doha, Katar)
+            </p>
+          </div>
+          <div className="rounded-xl bg-slate-50/70 p-3.5">
+            <p className="font-medium text-slate-400">Seyahat Koordinasyonu</p>
+            <p className="mt-0.5 text-sm font-bold text-slate-800">
+              Uçuş & Otel Hazır (Klinik Sıfır Operasyon Yükü)
+            </p>
+          </div>
+        </div>
+      </div>
+    );
   }
-  return (
-    <div className="flex min-h-[220px] items-center justify-center rounded-xl border border-dashed border-border bg-white/60 px-6 text-center">
-      <p className="max-w-sm text-sm leading-relaxed text-slate-500">{hint}</p>
-    </div>
-  );
+
+  if (step === 5) {
+    return (
+      <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm text-center">
+        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-50 text-emerald-600">
+          <BadgePercent className="h-6 w-6" />
+        </div>
+        <h4 className="text-base font-bold text-slate-900">
+          Gerçekleşen Tedaviye Dayalı Komisyon
+        </h4>
+        <p className="mx-auto mt-1.5 max-w-md text-xs leading-relaxed text-slate-500">
+          Hasta fiilen kliniğinize gelip tedavisi başlayana kadar hiçbir komisyon yansıtılmaz. Ön ödeme riski ve kayıp talep maliyeti sıfırdır.
+        </p>
+      </div>
+    );
+  }
+
+  if (step === 6) {
+    return <ClinicPerformancePreview />;
+  }
+
+  return null;
 }
 
 export function ClinicJourneyRoadmap() {
@@ -45,21 +167,26 @@ export function ClinicJourneyRoadmap() {
   const step = steps[active];
 
   return (
-    <section id="yol-haritasi" className="scroll-mt-24 bg-white py-16 md:py-20">
+    <section id="yol-haritasi" className="scroll-mt-24 bg-[#f8fafc] py-20 md:py-24">
       <Container>
-        <FadeIn>
-          <h2 className="max-w-2xl text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+        <FadeIn className="max-w-2xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary">
+            <Sparkles className="h-4 w-4" />
+            <span>Adım Adım Büyüme Rehberi</span>
+          </div>
+          <h2 className="font-display mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-[2.5rem]">
             {c.roadmapTitle}
           </h2>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600">
+          <p className="mt-3 text-base leading-relaxed text-slate-600">
             {c.roadmapIntro}
           </p>
         </FadeIn>
 
+        {/* Timeline Desktop Navigation */}
         <div className="mt-12 hidden xl:block">
           <div className="relative">
             <div
-              className="absolute left-0 right-0 top-5 h-px bg-border"
+              className="absolute left-0 right-0 top-5 h-px bg-slate-200"
               aria-hidden
             />
             <motion.div
@@ -81,7 +208,7 @@ export function ClinicJourneyRoadmap() {
                       type="button"
                       onClick={() => setActive(i)}
                       className={cn(
-                        "group w-full text-left transition-colors",
+                        "group w-full text-left transition-colors focus-visible:outline-none",
                         current
                           ? "text-primary"
                           : "text-slate-400 hover:text-slate-700"
@@ -89,15 +216,15 @@ export function ClinicJourneyRoadmap() {
                     >
                       <span
                         className={cn(
-                          "mb-3 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white text-sm font-bold transition-colors",
+                          "mb-3 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white text-sm font-bold transition-all shadow-sm",
                           current
-                            ? "border-primary text-primary"
-                            : "border-border text-slate-400 group-hover:border-slate-300"
+                            ? "border-primary text-primary ring-4 ring-primary/10"
+                            : "border-slate-200 text-slate-400 group-hover:border-slate-300"
                         )}
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <span className="block pr-1 text-xs font-semibold leading-snug text-slate-900 sm:text-sm">
+                      <span className="block pr-1 text-xs font-bold leading-snug text-slate-900 sm:text-sm">
                         {s.title}
                       </span>
                     </button>
@@ -108,6 +235,7 @@ export function ClinicJourneyRoadmap() {
           </div>
         </div>
 
+        {/* Mobile Horizontal Pill Scroll */}
         <div className="mt-10 flex gap-2 overflow-x-auto pb-2 xl:hidden">
           {steps.map((s, i) => (
             <button
@@ -117,8 +245,8 @@ export function ClinicJourneyRoadmap() {
               className={cn(
                 "shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
                 i === active
-                  ? "border-primary bg-primary text-white"
-                  : "border-border bg-white text-slate-600"
+                  ? "border-primary bg-primary text-white shadow-sm"
+                  : "border-slate-200 bg-white text-slate-600"
               )}
             >
               {String(i + 1).padStart(2, "0")} · {s.title}
@@ -126,6 +254,7 @@ export function ClinicJourneyRoadmap() {
           ))}
         </div>
 
+        {/* Active Step Content */}
         <AnimatePresence mode="wait">
           <motion.div
             key={active}
@@ -135,48 +264,58 @@ export function ClinicJourneyRoadmap() {
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="mt-10"
           >
-            <p className="font-display text-6xl font-semibold leading-none text-slate-100">
-              {String(active + 1).padStart(2, "0")}
-            </p>
-            <h3 className="-mt-8 text-2xl font-bold tracking-tight text-slate-900">
-              {step?.title}
-            </h3>
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white text-base font-bold shadow-md shadow-primary/25">
+                0{active + 1}
+              </span>
+              <h3 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                {step?.title}
+              </h3>
+            </div>
 
-            <div className="mt-8 grid gap-6 lg:grid-cols-2">
-              <div className="rounded-2xl border border-border bg-band/50 p-5 sm:p-6">
-                <div className="mb-4 flex items-center gap-2.5">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white text-slate-600 shadow-sm ring-1 ring-border">
-                    <Building2 className="h-4 w-4" strokeWidth={1.75} />
+            {/* Clinic vs MediQueue Action Cards */}
+            <div className="mt-6 grid gap-6 lg:grid-cols-2">
+              <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm">
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
+                      <Building2 className="h-4.5 w-4.5" strokeWidth={1.75} />
+                    </span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                      {c.roadmapClinicLabel}
+                    </span>
+                  </div>
+                  <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-semibold text-slate-600">
+                    Sizin Adımınız
                   </span>
-                  <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-                    {c.roadmapClinicLabel}
-                  </p>
                 </div>
-                <p className="text-[15px] leading-relaxed text-slate-700">
+                <p className="text-[15px] leading-relaxed font-medium text-slate-800">
                   {step?.clinic}
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-primary/15 bg-primary-light/50 p-5 sm:p-6">
-                <div className="mb-4 flex flex-wrap items-center gap-2.5">
-                  <BrandLogo size="xs" />
-                  <p className="text-sm font-semibold uppercase tracking-wide text-primary">
-                    {c.roadmapMqLabel}
-                  </p>
+              <div className="rounded-2xl border border-primary/30 bg-primary-light/50 p-6 shadow-sm ring-1 ring-primary/10">
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <BrandLogo size="xs" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-primary">
+                      {c.roadmapMqLabel}
+                    </span>
+                  </div>
+                  <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-bold text-primary">
+                    Otomatik Destek
+                  </span>
                 </div>
-                <p className="text-[15px] leading-relaxed text-slate-800">
+                <p className="text-[15px] leading-relaxed font-semibold text-slate-900">
                   {step?.mediQueue}
                 </p>
               </div>
             </div>
 
-            {active === 6 ? (
-              <ClinicPerformancePreview />
-            ) : step?.previewHint || active === 2 || active === 3 ? (
-              <div className="mt-8 rounded-2xl border border-border bg-band p-3 sm:p-4">
-                <RoadmapPreview step={active} hint={step?.previewHint} />
-              </div>
-            ) : null}
+            {/* Live Interactive UI Mock Preview */}
+            <div className="mt-6">
+              <StepCustomPreview step={active} />
+            </div>
           </motion.div>
         </AnimatePresence>
       </Container>

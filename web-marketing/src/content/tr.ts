@@ -1,10 +1,11 @@
 import type { SiteContent } from "./types";
+import { trPreviews } from "./previews";
 
 export const tr: SiteContent = {
   seo: {
-    title: "MEDIQUEUE — Gelen hasta için ödeyin",
+    title: "MEDIQUEUE — Şeffaf, aracısız sağlık turizmi",
     description:
-      "MEDIQUEUE, uluslararası hastaları Türkiye'deki kliniklerle buluşturur. Klinikler yalnızca gerçek bir talep geldiğinde öder — abonelik yok.",
+      "Akredite klinikleri kıyaslayın, doğrudan yazışın, ön ödeme olmadan talep gönderin. Klinikler yalnızca gelen hasta için öder — abonelik yok.",
   },
   nav: {
     links: [
@@ -12,11 +13,10 @@ export const tr: SiteContent = {
       { href: "/clinics", label: "Klinikler için" },
       { href: "/patients", label: "Hastalar için" },
       { href: "/doctors", label: "Doktorlar için" },
+      { href: "/how-it-works", label: "Nasıl çalışır" },
       { href: "/team", label: "Hakkımızda" },
     ],
-    clinicCta: "Klinik ön kayıt",
-    patientCta: "Hasta bekleme listesi",
-    localeLabel: "Dil",
+    clinicCta: "Kliniğim için",
     openMenu: "Menüyü aç",
     closeMenu: "Menüyü kapat",
     localeEn: "EN",
@@ -32,7 +32,7 @@ export const tr: SiteContent = {
       headline: "Şeffaflığa",
       headlineAccent: "emanet edin.",
       subcopy:
-        "Akredite klinikleri yan yana kıyaslayın, doğrudan yazışın. Şeffaf £100 Sabit Güvence Kaporası ile randevunuzu garantiye alın — gizli acente komisyonu yok, Stripe Koruması altında.",
+        "Akredite klinikleri yan yana kıyaslayın, doğrudan yazışın, ön ödeme yapmadan talep gönderin. Karar sizde — süreç görünür.",
       primaryCta: "Klinikleri Keşfedin",
       secondaryCta: "Hakkımızda",
       previewCaption: "Hasta uygulaması · klinik keşfi ve kıyaslama · demo veri",
@@ -75,7 +75,7 @@ export const tr: SiteContent = {
         href: "/patients",
         eyebrow: "Hastalar",
         title: "Kıyaslayın, sonra talep edin",
-        body: "Klinik ve doktorları filtreleyin. Randevu, şeffaf £100 Sabit Güvence Kaporası ve Stripe Koruması ile güvence altına alınır.",
+        body: "Klinik ve doktorları filtreleyin. Talebi göndermek için ön ödeme yok.",
         preview: "patient",
       },
       {
@@ -87,12 +87,12 @@ export const tr: SiteContent = {
       },
     ],
     trust: [
-      { label: "JCI akreditasyonu", detail: "Yalnızca doğrulanmış klinikler" },
-      { label: "301 girişim · 1.", detail: "Kapsül ön kuluçka programı" },
-      { label: "Hasta gizliliği", detail: "Kimlik koruma ilk ilke" },
-      { label: "Sıfır aracı", detail: "Doğrudan klinik–hasta iletişimi" },
+      { label: "Doğrudan İletişim", detail: "Aracı yok, gizli komisyon yok" },
+      { label: "Akredite Klinikler", detail: "JCI ve uluslararası sertifikalı sağlık kuruluşları" },
+      { label: "Şeffaf Fiyatlandırma", detail: "Sürpriz ücret yok, net teklifler" },
+      { label: "Hasta Mahremiyeti", detail: "Uçtan uca şifreli ve güvenli iletişim" },
     ],
-    trustStripLabel: "Güven",
+    trustStripLabel: "Güven ve Şeffaflık",
     globalReach: {
       eyebrow: "Klinik panelinizden bir önizleme",
       title: "Dünyanın Dört Bir Yanından Hastalar",
@@ -108,7 +108,7 @@ export const tr: SiteContent = {
     },
     finalPatientTitle: "Tedavi yolculuğunuza siz karar verin",
     finalPatientBody:
-      "Şeffaf £100 Sabit Güvence Kaporası ile randevunuzu garantiye alın — gizli acente komisyonu yok.",
+      "Klinikleri kıyaslayın, doğrudan yazışın, ön ödeme olmadan talep gönderin.",
     finalPatientCta: "Klinikleri Keşfedin",
     finalClinicTitle: "Uluslararası hastaları sıfır riskle karşılayın",
     finalClinicBody:
@@ -120,7 +120,7 @@ export const tr: SiteContent = {
     heroTag:
       "Reklamlara Servet Ödemeyi Bırakın. Sadece Dönüşen Hasta İçin Ödeyin.",
     heroSub:
-      "Tıklamalara veya umutlara değil, gerçek sonuçlara yatırım yapın. MEDIQUEUE ile uluslararası sağlık turizminde sıfır risk, yüksek dönüşüm. Panel aboneliği yok — yalnızca gelen ve tedavisi onaylanan hasta için ödersiniz.",
+      "Tıklamalara veya umutlara değil, gerçek sonuçlara yatırım yapın. MEDIQUEUE ile uluslararası sağlık turizminde sıfır risk, yüksek dönüşüm. Ön ödeme yok, panel aboneliği yok.",
     primaryCta: "Kliniğinizi Ücretsiz Ekleyin",
     secondaryCta: "Sistem Nasıl Çalışır?",
     requestLabel: "Yeni Randevu Talebi",
@@ -141,7 +141,7 @@ export const tr: SiteContent = {
         before:
           "Yüksek reklam bütçesi, sonucu garanti edilmeyen tıklamalar",
         after:
-          "Panel aboneliği yok — yalnızca gelen ve tedavisi onaylanan hastadan ücretlendirme",
+          "Sıfır peşin maliyet — yalnızca gelen ve tedavisi onaylanan hastadan ücretlendirme",
       },
       {
         title: "Hasta Kalitesi",
@@ -223,7 +223,7 @@ export const tr: SiteContent = {
         clinic:
           "Tedaviyi gerçekleştirirsiniz; MediQueue komisyonu yalnızca bu aşamada, gerçekleşen tedavi üzerinden kesilir.",
         mediQueue:
-          "Sahte veya kayıp talep riski MediQueue'dedir — klinik yalnızca gerçekleşen tedavi üzerinden çalışır.",
+          "Ön ödeme riski ve sahte/kayıp talep riski tamamen MediQueue'nin taşıdığı risk — klinik sıfır riskle çalışır.",
         previewHint:
           "Tedavi gerçekleştiğinde komisyon kesilir — öncesinde sıfır maliyet riski.",
       },
@@ -341,7 +341,7 @@ export const tr: SiteContent = {
       },
       {
         title: "Talep gönderin",
-        body: "Şeffaf £100 Sabit Güvence Kaporası ile randevunuzu garantiye alın — gizli acente komisyonu yok. Karar sizin, baskı yok.",
+        body: "Ön ödeme yapmadan randevu talebinde bulunun. Karar sizin, baskı yok.",
       },
       {
         title: "Doğrudan görüşün",
@@ -516,7 +516,7 @@ export const tr: SiteContent = {
       },
       {
         title: "Randevu Alın",
-        body: "Uygun tarih ve saati seçin; randevunuz şeffaf £100 Sabit Güvence Kaporası ve Stripe Koruması ile güvence altına alınır.",
+        body: "Uygun tarih ve saati seçin, ön ödemesiz randevu talebi oluşturun.",
       },
       {
         title: "Tedavi Olun",
@@ -531,11 +531,36 @@ export const tr: SiteContent = {
       { title: "Skorla", body: "Kalan, belirlenen tercihlere göre skorlanır." },
       { title: "Sırala", body: "Kıyaslanacak bir liste. Karar insanda." },
     ],
+    faqEyebrow: "Sıkça Sorulan Sorular",
+    faqTitle: "Merak Edilen Her Şey",
+    faqSubtitle: "MediQueue platformu, güvenlik, akreditasyon ve süreçler hakkında en çok sorulan sorular.",
+    faqItems: [
+      {
+        q: "MediQueue hastalar için ücretsiz mi?",
+        a: "Evet, MediQueue hastalar için tamamen ücretsizdir. Klinikleri özgürce kıyaslayabilir, şeffaf teklifleri inceleyebilir ve hiçbir aracı ücreti ödemeden doğrudan iletişim kurabilirsiniz.",
+      },
+      {
+        q: "Platformdaki klinikler nasıl denetleniyor?",
+        a: "Yalnızca JCI (Joint Commission International) akreditasyonuna sahip veya T.C. Sağlık Bakanlığı onaylı Uluslararası Sağlık Turizmi Yetki Belgesi bulunan akredite sağlık kuruluşları kabul edilir.",
+      },
+      {
+        q: "Klinikler için ödeme ve komisyon modeli nasıl çalışıyor?",
+        a: "MediQueue'da gizli komisyon veya hasta başı aracı payı yoktur. Klinikler yalnızca onaylanan randevu talepleri ve şeffaf platform modelimiz üzerinden güvenle işlem yapar.",
+      },
+      {
+        q: "Hasta verilerimin ve tıbbi belgelerimin gizliliği nasıl korunuyor?",
+        a: "Kişisel verileriniz ve tıbbi görselleriniz GDPR ve KVKK standartlarında uçtan uca şifrelenir. Siz seçtiğiniz kliniğe talep gönderene kadar kimlik bilgileriniz gizli tutulur.",
+      },
+      {
+        q: "Uçuş ve konaklama organizasyonu kimin sorumluluğunda?",
+        a: "MediQueue doğrudan klinik-hasta iletişimini sağlar. Konaklama, havalimanı transferi ve seyahat lojistiği isteğe bağlı olarak seçtiğiniz kliniğin paket kapsamına göre koordine edilir.",
+      },
+    ],
   },
   team: {
     seoTitle: "Hakkımızda",
     heroEyebrow: "Hakkımızda",
-    heroLeadBold: "Üç kurucu ortak.",
+    heroLeadBold: "Dört kurucu.",
     heroLeadLight: "İçeride inşa ediyoruz.",
     heroIntro:
       "Biz sadece bir pazar yeri inşa etmiyoruz; hastaların körü körüne yönlendirildiği, kliniklerin boş reklamlara bütçe yaktığı o eski, kapalı ekosistemi yıkıyoruz. MEDIQUEUE; güvenin, doğrudan iletişimin ve teknolojinin buluştuğu yeni standarttır.",
@@ -560,40 +585,44 @@ export const tr: SiteContent = {
         detail: "Erken aşama büyüme programı",
       },
     ],
-    foundersEyebrow: "Ekip",
-    foundersTitle: "Kurucu ortaklar ve ekip",
+    foundersEyebrow: "Kurucu ekip",
+    foundersTitle: "Değişimin mimarları",
     members: [
       {
         name: "Furkan Közkaya",
-        roleTitle: "Kurucu Ortak · CPO",
-        bio: "Ürün deneyimini uçtan uca kuruyor; çapraz platform mobil ve web stratejisini yönetiyor.",
-        image: "/team/furkan-kozkaya.svg",
-        accent: "#c084fc",
+        roleTitle: "CPO / Mobil + Web",
+        bio: "Ürün deneyimini uçtan uca kuruyor; çapraz platform mobil stratejisini yönetiyor.",
+        image:
+          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
+        accent: "#3a6ad6",
         linkedin: "https://linkedin.com/in/furkan-kozkaya",
       },
       {
         name: "Azra İrem Derin",
-        roleTitle: "Kurucu Ortak · CTO",
+        roleTitle: "CTO / Yapay Zeka",
         bio: "Yapay zeka destekli eşleştirme algoritmalarını ve veri mimarisini geliştiriyor.",
-        image: "/team/azra-irem-derin.svg",
-        accent: "#e879f9",
+        image:
+          "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
+        accent: "#0d9488",
         linkedin: "https://linkedin.com/in/azra-irem-derin",
       },
       {
         name: "Sinem Özdemir",
-        roleTitle: "Kurucu Ortak · CFO",
+        roleTitle: "CFO / Web",
         bio: "Sürdürülebilir finansal altyapıyı kuruyor; web platform entegrasyonlarını yönetiyor.",
-        image: "/team/sinem-ozdemir.svg",
-        accent: "#38bdf8",
+        image:
+          "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=800&q=80",
+        accent: "#2f57b3",
         linkedin: "https://linkedin.com/in/sinem-ozdemir",
       },
       {
-        name: "Kasım",
-        roleTitle: "Backend Developer",
-        bio: "Backend servislerini, API katmanını ve veri akışlarını geliştiriyor.",
-        image: "/team/kasim.svg",
-        accent: "#a78bfa",
-        linkedin: "https://linkedin.com/company/mediqueue",
+        name: "Kevser Eken",
+        roleTitle: "CMO / Operasyon",
+        bio: "Uluslararası klinik ağını genişletiyor; operasyonel kusursuzluğu sahada yönetiyor.",
+        image:
+          "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=800&q=80",
+        accent: "#1e3a5f",
+        linkedin: "https://linkedin.com/in/kevser-eken",
       },
     ],
     socialTitle: "Bizi takip edin",
@@ -610,176 +639,53 @@ export const tr: SiteContent = {
         hint: "Klinik hikayeleri ve kulis",
         href: "https://instagram.com/mediqueue",
       },
+      {
+        platform: "x",
+        label: "X",
+        hint: "Kısa güncellemeler",
+        href: "https://x.com/mediqueue",
+      },
     ],
   },
   footer: {
-    tagline: "Klinikler hasta geldiğinde öder. Hastalar kıyaslar, sonra sorar.",
+    tagline:
+      "Hastaların özgürce kıyasladığı, akredite kliniklerin doğrudan hasta ile buluştuğu şeffaf pazar yeri platformu.",
     groups: [
       {
-        title: "Platform",
+        title: "Kurumsal",
         links: [
-          { href: "/clinics", label: "Klinikler için" },
-          { href: "/patients", label: "Hastalar için" },
-          { href: "/doctors", label: "Doktorlar için" },
           { href: "/team", label: "Hakkımızda" },
+          { href: "/how-it-works", label: "Nasıl Çalışır" },
+          { href: "/team#contact", label: "İletişim" },
         ],
       },
       {
-        title: "Şirket",
+        title: "Hastalar İçin",
         links: [
-          { href: "/team", label: "Hakkımızda" },
-          { href: "/privacy", label: "Gizlilik ve KVKK" },
-          { href: "/terms", label: "Kullanım Koşulları" },
-          { href: "/disclaimer", label: "Tıbbi Sorumluluk Reddi" },
+          { href: "/patients", label: "Akredite Klinikler" },
+          { href: "/patients#compare", label: "Klinik Kıyaslama" },
+          { href: "/patients", label: "Tedavi Rehberi" },
+        ],
+      },
+      {
+        title: "Klinikler & Doktorlar",
+        links: [
+          { href: "/clinics", label: "Klinik Portalı" },
+          { href: "/clinics#requests", label: "Hasta Talepleri" },
+          { href: "/doctors", label: "Doktor Paneli" },
+        ],
+      },
+      {
+        title: "Yasal & Destek",
+        links: [
+          { href: "/how-it-works#faq", label: "SSS" },
+          { href: "/patients#privacy", label: "Gizlilik Politikası" },
+          { href: "/patients#kvkk", label: "KVKK & GDPR" },
         ],
       },
     ],
-    copyright: "MEDIQUEUE. Tüm hakları saklıdır.",
-    privacyNote: "Hasta gizliliği ilk ilke olarak ele alınır. GDPR ve KVKK uyumlu.",
-    medicalDisclaimer:
-      "MediQueue bir sağlık kuruluşu veya seyahat acentesi değildir; kliniklerle hastaları buluşturan dijital yazılım altyapı sağlayıcısıdır. Tüm tıbbi teşhis, tedavi ve operasyonel sorumluluk anlaşmalı kliniğe aittir.",
+    copyright: "MediQueue. Tüm hakları saklıdır.",
+    privacyNote: "Hasta gizliliği ve veri güvenliği ilk ilkemizdir.",
   },
-  faq: {
-    eyebrow: "SSS",
-    title: "£100 güvence kaporası ve iade politikası",
-    items: [
-      {
-        question: "£100 Sabit Güvence Kaporası nedir?",
-        answer:
-          "Randevunuzu rezervasyon anında güvence altına alan şeffaf, sabit bir depozitodur. Gizli acente komisyonu yoktur. Ödeme Stripe Koruması altındadır.",
-      },
-      {
-        question: "Kapora ne zaman iade edilir?",
-        answer:
-          "Ziyaretinizden 14 gün veya daha önce iptal ederseniz kapora %100 iade edilir. Son 7 günde no-show ve geç iptallere karşı depozito koruması uygulanır.",
-      },
-      {
-        question: "Stripe Koruması ne anlama gelir?",
-        answer:
-          "Kapora, kart bilgilerinizi MediQueue'nun saklamadığı Stripe altyapısı üzerinden tahsil edilir. İade haklarınız ödeme kaydında şeffaf şekilde görünür.",
-      },
-      {
-        question: "Gizli komisyon var mı?",
-        answer:
-          "Hayır. Hastadan alınan tek platform ücreti şeffaf £100 sabit kaporadır. Klinik tarafında ücretlendirme yalnızca gelen ve tedavisi onaylanan hasta üzerinden yapılır.",
-      },
-    ],
-  },
-  lead: {
-    close: "Kapat",
-    patientTab: "UK Hasta Bekleme Listesi",
-    clinicTab: "Klinik Ön Kayıt",
-    patientTitle: "UK hasta bekleme listesine katılın",
-    patientBody:
-      "Akredite klinikleri keşfetmek ve £100 şeffaf güvence kaporası ile randevunuzu planlamak için listenize kaydolun.",
-    clinicTitle: "Kliniğinizi ön kayda alın",
-    clinicBody:
-      "Türkiye'deki akredite klinikler için B2B ön kayıt. Panel aboneliği yoktur; yalnızca gelen hasta için ödersiniz.",
-    name: "Ad soyad",
-    email: "E-posta",
-    phone: "Telefon (isteğe bağlı)",
-    country: "Ülke",
-    treatment: "İlgilendiğiniz tedavi",
-    treatmentOptions: [
-      "Saç ekimi",
-      "Diş tedavisi",
-      "Estetik cerrahi",
-      "Göz lazer",
-      "Diğer",
-    ],
-    clinicName: "Klinik adı",
-    city: "Şehir",
-    website: "Web sitesi (isteğe bağlı)",
-    role: "Rolünüz",
-    roleClinic: "Klinik yöneticisi / operasyon",
-    roleDoctor: "Doktor",
-    message: "Notunuz (isteğe bağlı)",
-    consent:
-      "KVKK/GDPR aydınlatma metnini okudum; ön kayıt için iletişim bilgilerimin işlenmesini kabul ediyorum.",
-    submit: "Ön kaydı gönder",
-    submitting: "Gönderiliyor…",
-    successTitle: "Kaydınız alındı",
-    successBody:
-      "Teşekkürler. Ekibimiz sizinle e-posta üzerinden iletişime geçecek.",
-    error: "Gönderim başarısız. Lütfen tekrar deneyin.",
-    required: "Bu alan zorunludur.",
-  },
-  legal: {
-    privacyLink: "Gizlilik",
-    termsLink: "Koşullar",
-    disclaimerLink: "Sorumluluk reddi",
-    updatedLabel: "Son güncelleme",
-    privacy: {
-      title: "Gizlilik, KVKK ve GDPR Aydınlatma Metni",
-      updated: "11 Eylül 2026",
-      intro:
-        "MediQueue, İngiltere ve AB hastaları ile Türkiye'deki akredite klinikleri buluşturan bir yazılım altyapısıdır. Bu metin, 6698 sayılı KVKK ve AB Genel Veri Koruma Tüzüğü (GDPR) kapsamında kişisel verilerinizin nasıl işlendiğini açıklar.",
-      sections: [
-        {
-          heading: "Veri sorumlusu",
-          body: "Kişisel verileriniz MediQueue tarafından, ön kayıt, bekleme listesi, klinik eşleştirme ve yasal yükümlülüklerin yerine getirilmesi amaçlarıyla işlenir. İletişim: privacy@mediqueue.com",
-        },
-        {
-          heading: "Toplanan veriler",
-          body: "Ad soyad, e-posta, telefon, ülke, ilgilendiğiniz tedavi, klinik adı, şehir ve gönüllü olarak paylaştığınız notlar. Kart verileri MediQueue sunucularında saklanmaz; kapora tahsilatı Stripe üzerinden yapılır.",
-        },
-        {
-          heading: "Hukuki dayanak",
-          body: "Ön kayıt ve bekleme listesi için açık rızanız; sözleşmenin kurulması ve ifası; meşru menfaat (güvenlik, kötüye kullanımın önlenmesi); ve yasal yükümlülükler.",
-        },
-        {
-          heading: "Paylaşım",
-          body: "Verileriniz, yalnızca randevu sürecinin ilerlemesi için ilgili anlaşmalı klinik ve zorunlu hizmet sağlayıcılarla (barındırma, e-posta, Stripe) paylaşılabilir. Verileriniz satılmaz.",
-        },
-        {
-          heading: "Saklama ve haklarınız",
-          body: "Veriler, amacın gerektirdiği süre ve yasal zamanaşımı boyunca saklanır. Erişim, düzeltme, silme, itiraz ve (GDPR kapsamında) taşınabilirlik haklarınız için privacy@mediqueue.com adresine yazabilirsiniz.",
-        },
-      ],
-    },
-    terms: {
-      title: "Kullanım Koşulları",
-      updated: "11 Eylül 2026",
-      intro:
-        "Bu siteyi ve ön kayıt formlarını kullanarak aşağıdaki koşulları kabul etmiş olursunuz.",
-      sections: [
-        {
-          heading: "Hizmetin niteliği",
-          body: "MediQueue bir sağlık kuruluşu veya seyahat acentesi değildir. Platform, hastaları akredite kliniklerle buluşturan dijital yazılım altyapısıdır.",
-        },
-        {
-          heading: "£100 güvence kaporası",
-          body: "Hasta randevusu, şeffaf £100 sabit güvence kaporası ile rezervasyon altına alınır. Ziyaretten 14 gün veya daha önce yapılan iptallerde kapora %100 iade edilir. Son 7 günde no-show ve geç iptale karşı depozito koruması uygulanır. Tahsilat Stripe Koruması altındadır.",
-        },
-        {
-          heading: "Klinikler",
-          body: "Klinikler panel aboneliği ödemez. Platform ücreti, gelen ve tedavisi onaylanan hasta üzerinden alınır.",
-        },
-        {
-          heading: "Ön kayıt",
-          body: "Bekleme listesi ve klinik ön kayıt, canlı randevu veya tedavi taahhüdü değildir. Ekip, uygunluk kontrolünden sonra sizinle iletişime geçer.",
-        },
-      ],
-    },
-    disclaimer: {
-      title: "Tıbbi Sorumluluk Reddi",
-      updated: "11 Eylül 2026",
-      intro:
-        "MediQueue tıbbi tavsiye, teşhis veya tedavi sunmaz. Aşağıdaki metin site genelinde geçerlidir.",
-      sections: [
-        {
-          heading: "Rolümüz",
-          body: "MediQueue bir sağlık kuruluşu veya seyahat acentesi değildir; kliniklerle hastaları buluşturan dijital yazılım altyapı sağlayıcısıdır. Tüm tıbbi teşhis, tedavi ve operasyonel sorumluluk anlaşmalı kliniğe aittir.",
-        },
-        {
-          heading: "Klinik bağımsızlığı",
-          body: "Tedavi planı, fiyat teklifi, endikasyon ve komplikasyon yönetimi ilgili kliniğin ve hekimin sorumluluğundadır. Platformdaki örnek veya demo veriler pazarlama amaçlıdır.",
-        },
-        {
-          heading: "Kararınız",
-          body: "Herhangi bir tedaviye karar vermeden önce bağımsız tıbbi görüş almanızı öneririz. Acil sağlık durumunda yerel acil servise başvurun.",
-        },
-      ],
-    },
-  },
+  previews: trPreviews,
 };

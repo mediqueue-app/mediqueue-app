@@ -7,7 +7,7 @@ import { AboutSocial } from "@/components/about/AboutSocial";
 
 export function TeamPage() {
   return (
-    <div className="font-inter overflow-x-hidden bg-white">
+    <div className="overflow-x-hidden bg-white">
       <AboutHero />
       <AboutLetter />
       <AboutFounders />

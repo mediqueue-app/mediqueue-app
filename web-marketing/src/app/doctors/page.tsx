@@ -1,10 +1,7 @@
-import type { Metadata } from "next";
+import { localizedMetadata } from "@/lib/seo";
 import { DoctorsPage } from "@/components/pages/DoctorsPage";
-import { content } from "@/content";
 
-export const metadata: Metadata = {
-  title: content.en.doctors.seoTitle,
-};
+export const generateMetadata = () => localizedMetadata("doctors");
 
 export default function Page() {
   return <DoctorsPage />;

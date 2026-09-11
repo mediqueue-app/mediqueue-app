@@ -28,7 +28,7 @@ export function AboutHero() {
       <Container className="relative flex min-h-[78vh] flex-col justify-center py-24 md:py-32 lg:py-36">
         <motion.p
           {...line(0)}
-          className="font-inter text-[11px] font-semibold uppercase tracking-[0.22em] text-primary"
+          className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary"
         >
           {copy.heroEyebrow}
         </motion.p>
@@ -36,7 +36,7 @@ export function AboutHero() {
         <h1 className="mt-8 max-w-5xl">
           <motion.span
             {...line(0.1)}
-            className="block font-inter text-[2.75rem] font-bold leading-[1.02] tracking-[-0.04em] text-ink sm:text-6xl lg:text-[4.5rem] xl:text-[5.25rem]"
+            className="block font-display text-[2.75rem] font-semibold leading-[1.06] tracking-[-0.03em] text-ink sm:text-6xl lg:text-[4.25rem] xl:text-[4.75rem]"
           >
             {copy.heroLeadBold}
           </motion.span>
@@ -50,7 +50,7 @@ export function AboutHero() {
 
         <motion.p
           {...line(0.38)}
-          className="font-inter mt-10 max-w-2xl text-lg leading-[1.75] text-slate-600 sm:text-xl sm:leading-[1.8]"
+          className="mt-10 max-w-2xl text-lg leading-[1.75] text-slate-600 sm:text-xl sm:leading-[1.8]"
         >
           {copy.heroIntro}
         </motion.p>

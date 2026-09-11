@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Stethoscope } from "lucide-react";
+import { Stethoscope, Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { BrandLogo } from "@/components/ui/BrandLogo";
 import { DoctorSchedulePreview } from "@/components/product/DoctorSchedulePreview";
@@ -16,21 +16,18 @@ import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
 
-function RoadmapPreview({
-  step,
-  hint,
-}: {
-  step: number;
-  hint?: string;
-}) {
+function StepCustomPreview({ step }: { step: number }) {
   if (step === 0) {
+    return <DoctorProfilePreview />;
+  }
+  if (step === 1) {
     return <DoctorProfilePreview />;
   }
   if (step === 2) {
     return <DoctorCalendarPreview />;
   }
   if (step === 3) {
-    return <ClinicRequestsPreview />;
+    return <ClinicRequestsPreview compact />;
   }
   if (step === 4) {
     return <BilingualChatPreview />;
@@ -38,14 +35,7 @@ function RoadmapPreview({
   if (step === 5) {
     return <DoctorSchedulePreview />;
   }
-  if (!hint) {
-    return null;
-  }
-  return (
-    <div className="flex min-h-[220px] items-center justify-center rounded-xl border border-dashed border-border bg-white/60 px-6 text-center">
-      <p className="max-w-sm text-sm leading-relaxed text-slate-500">{hint}</p>
-    </div>
-  );
+  return null;
 }
 
 export function DoctorJourneyRoadmap() {
@@ -58,20 +48,25 @@ export function DoctorJourneyRoadmap() {
   const step = steps[active];
 
   return (
-    <section id="yol-haritasi" className="scroll-mt-24 bg-band py-16 md:py-20">
+    <section id="yol-haritasi" className="scroll-mt-24 bg-[#f8fafc] py-20 md:py-24">
       <Container>
-        <FadeIn>
-          <h2 className="max-w-2xl text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+        <FadeIn className="max-w-2xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary">
+            <Sparkles className="h-4 w-4" />
+            <span>Doktor Çalışma Akışı</span>
+          </div>
+          <h2 className="font-display mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-[2.5rem]">
             {d.roadmapTitle}
           </h2>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600">
+          <p className="mt-3 text-base leading-relaxed text-slate-600">
             {d.roadmapIntro}
           </p>
         </FadeIn>
 
+        {/* Timeline Desktop Navigation */}
         <div className="mt-12 hidden lg:block">
           <div className="relative">
-            <div className="absolute left-0 right-0 top-5 h-px bg-border" aria-hidden />
+            <div className="absolute left-0 right-0 top-5 h-px bg-slate-200" aria-hidden />
             <motion.div
               className="absolute left-0 top-5 h-px bg-primary"
               aria-hidden
@@ -91,21 +86,21 @@ export function DoctorJourneyRoadmap() {
                       type="button"
                       onClick={() => setActive(i)}
                       className={cn(
-                        "group w-full text-left transition-colors",
+                        "group w-full text-left transition-colors focus-visible:outline-none",
                         current ? "text-primary" : "text-slate-400 hover:text-slate-700"
                       )}
                     >
                       <span
                         className={cn(
-                          "mb-3 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white text-sm font-bold transition-colors",
+                          "mb-3 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white text-sm font-bold transition-all shadow-sm",
                           current
-                            ? "border-primary text-primary"
-                            : "border-border text-slate-400 group-hover:border-slate-300"
+                            ? "border-primary text-primary ring-4 ring-primary/10"
+                            : "border-slate-200 text-slate-400 group-hover:border-slate-300"
                         )}
                       >
                         {String(i + 1).padStart(2, "0")}
                       </span>
-                      <span className="block pr-1 text-xs font-semibold leading-snug text-slate-900 sm:text-sm">
+                      <span className="block pr-1 text-xs font-bold leading-snug text-slate-900 sm:text-sm">
                         {s.title}
                       </span>
                     </button>
@@ -116,6 +111,7 @@ export function DoctorJourneyRoadmap() {
           </div>
         </div>
 
+        {/* Mobile Horizontal Scroll */}
         <div className="mt-10 flex gap-2 overflow-x-auto pb-2 lg:hidden">
           {steps.map((s, i) => (
             <button
@@ -125,8 +121,8 @@ export function DoctorJourneyRoadmap() {
               className={cn(
                 "shrink-0 rounded-full border px-4 py-2 text-sm font-semibold transition-colors",
                 i === active
-                  ? "border-primary bg-primary text-white"
-                  : "border-border bg-white text-slate-600"
+                  ? "border-primary bg-primary text-white shadow-sm"
+                  : "border-slate-200 bg-white text-slate-600"
               )}
             >
               {String(i + 1).padStart(2, "0")} · {s.title}
@@ -134,6 +130,7 @@ export function DoctorJourneyRoadmap() {
           ))}
         </div>
 
+        {/* Active Step Content */}
         <AnimatePresence mode="wait">
           <motion.div
             key={active}
@@ -143,44 +140,58 @@ export function DoctorJourneyRoadmap() {
             transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="mt-10"
           >
-            <p className="font-display text-6xl font-semibold leading-none text-slate-200">
-              {String(active + 1).padStart(2, "0")}
-            </p>
-            <h3 className="-mt-8 text-2xl font-bold tracking-tight text-slate-900">
-              {step?.title}
-            </h3>
+            <div className="flex items-center gap-3">
+              <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary text-white text-base font-bold shadow-md shadow-primary/25">
+                0{active + 1}
+              </span>
+              <h3 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                {step?.title}
+              </h3>
+            </div>
 
-            <div className="mt-8 grid gap-6 lg:grid-cols-2">
-              <div className="rounded-2xl border border-border bg-white p-5 sm:p-6">
-                <div className="mb-4 flex items-center gap-2.5">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-band text-slate-600 shadow-sm ring-1 ring-border">
-                    <Stethoscope className="h-4 w-4" strokeWidth={1.75} />
+            {/* Doctor vs MediQueue Action Cards */}
+            <div className="mt-6 grid gap-6 lg:grid-cols-2">
+              <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm">
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
+                      <Stethoscope className="h-4.5 w-4.5" strokeWidth={1.75} />
+                    </span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                      {d.roadmapDoctorLabel}
+                    </span>
+                  </div>
+                  <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-semibold text-slate-600">
+                    Hekim Adımı
                   </span>
-                  <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
-                    {d.roadmapDoctorLabel}
-                  </p>
                 </div>
-                <p className="text-[15px] leading-relaxed text-slate-700">{step?.doctor}</p>
+                <p className="text-[15px] leading-relaxed font-medium text-slate-800">
+                  {step?.doctor}
+                </p>
               </div>
 
-              <div className="rounded-2xl border border-primary/15 bg-primary-light/50 p-5 sm:p-6">
-                <div className="mb-4 flex flex-wrap items-center gap-2.5">
-                  <BrandLogo size="xs" />
-                  <p className="text-sm font-semibold uppercase tracking-wide text-primary">
-                    {d.roadmapMqLabel}
-                  </p>
+              <div className="rounded-2xl border border-primary/30 bg-primary-light/50 p-6 shadow-sm ring-1 ring-primary/10">
+                <div className="mb-4 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5">
+                    <BrandLogo size="xs" />
+                    <span className="text-xs font-bold uppercase tracking-wider text-primary">
+                      {d.roadmapMqLabel}
+                    </span>
+                  </div>
+                  <span className="rounded-full bg-primary/10 px-2.5 py-0.5 text-[11px] font-bold text-primary">
+                    Otomatik Panelleşme
+                  </span>
                 </div>
-                <p className="text-[15px] leading-relaxed text-slate-800">
+                <p className="text-[15px] leading-relaxed font-semibold text-slate-900">
                   {step?.mediQueue}
                 </p>
               </div>
             </div>
 
-            {step?.previewHint || [0, 2, 3, 4, 5].includes(active) ? (
-              <div className="mt-8 rounded-2xl border border-border bg-white p-3 sm:p-4">
-                <RoadmapPreview step={active} hint={step?.previewHint} />
-              </div>
-            ) : null}
+            {/* Live Interactive UI Mock Preview */}
+            <div className="mt-6">
+              <StepCustomPreview step={active} />
+            </div>
           </motion.div>
         </AnimatePresence>
       </Container>

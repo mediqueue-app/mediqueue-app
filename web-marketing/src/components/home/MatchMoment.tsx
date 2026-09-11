@@ -107,7 +107,7 @@ export function MatchMoment() {
                 <p className="text-sm font-semibold text-white/90">{m.patientLabel}</p>
               </div>
               <div className="space-y-2">
-                <p className="text-sm font-medium text-white/80">Demo Hasta · #P-4821</p>
+                <p className="text-sm font-medium text-white/80">{t.previews.matchPatientDemo}</p>
                 <div className="flex flex-wrap gap-2">
                   {m.patientTags.map((tag, i) => (
                     <motion.span
@@ -165,7 +165,7 @@ export function MatchMoment() {
               </div>
               <div className="space-y-2">
                 <div className="flex flex-wrap items-center gap-2">
-                  <p className="text-sm font-medium text-white/80">Klinik #A1B2</p>
+                  <p className="text-sm font-medium text-white/80">{t.previews.clinicCode}</p>
                   <span className="inline-flex items-center gap-1 rounded-full bg-primary/20 px-2 py-0.5 text-[10px] font-semibold text-primary-light">
                     <BadgeCheck className="h-3 w-3" />
                     JCI

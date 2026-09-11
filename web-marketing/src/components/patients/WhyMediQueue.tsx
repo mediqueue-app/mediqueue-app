@@ -1,99 +1,78 @@
 "use client";
 
-import type { ReactNode } from "react";
-import { Check, X } from "lucide-react";
+import { Check, X, ShieldCheck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { CompareBrandHeader } from "@/components/ui/CompareBrandHeader";
 import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
-import { cn } from "@/lib/cn";
 
 export function WhyMediQueue() {
   const { t } = useLocale();
   const p = t.patients;
 
   return (
-    <section id="neden" className="scroll-mt-24 bg-band py-16 md:py-20">
+    <section id="neden" className="scroll-mt-24 bg-[#f8fafc] py-20 md:py-24">
       <Container>
-        <FadeIn>
-          <p className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
+        <FadeIn className="max-w-2xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary">
+            <ShieldCheck className="h-4 w-4" />
             <span>{p.whyEyebrow}</span>
-            <CompareBrandHeader className="normal-case tracking-normal" />
-          </p>
-          <h2 className="mt-3 max-w-xl text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+          </div>
+          <h2 className="font-display mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-[2.5rem]">
             {p.whyTitle}
           </h2>
+          <p className="mt-3 text-base leading-relaxed text-slate-600">
+            Komisyoncuların yönlendirmeleri yerine, akredite klinikleri şeffafça kıyaslayabileceğiniz özgür bir tedavi platformu.
+          </p>
         </FadeIn>
 
         <FadeIn delay={0.08} className="mt-12">
-          {/* Desktop / tablet table */}
-          <div className="hidden overflow-hidden rounded-2xl border border-border bg-white md:block">
-            <div className="-mx-0 overflow-x-auto">
-              <table className="w-full min-w-[640px] border-collapse text-left">
-                <thead>
-                  <tr className="border-b border-border bg-band/80">
-                    <th className="px-5 py-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-slate-500">
-                      {p.whyCriteriaLabel}
-                    </th>
-                    <th className="px-5 py-4 text-[11px] font-semibold uppercase tracking-[0.14em] text-red-400/90">
-                      {p.whyBeforeLabel}
-                    </th>
-                    <th className="bg-primary-light/50 px-5 py-4 text-primary">
-                      <CompareBrandHeader suffix={p.whyAfterLabel} />
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {p.whyRows.map((row) => (
-                    <tr
-                      key={row.title}
-                      className="border-b border-border last:border-b-0 transition-colors hover:bg-slate-50/80"
-                    >
-                      <td className="px-5 py-4 text-sm font-semibold text-slate-900">
-                        {row.title}
-                      </td>
-                      <td className="px-5 py-4">
-                        <Cell negative>{row.before}</Cell>
-                      </td>
-                      <td className="bg-primary-light/35 px-5 py-4">
-                        <Cell positive>{row.after}</Cell>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </div>
-
-          {/* Mobile stacked cards */}
-          <div className="space-y-4 md:hidden">
-            {p.whyRows.map((row) => (
+          <div className="grid gap-5">
+            {p.whyRows.map((row, index) => (
               <article
                 key={row.title}
-                className="overflow-hidden rounded-2xl border border-border bg-white"
+                className="group relative overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm transition-all duration-300 hover:border-slate-300 hover:shadow-md sm:p-6"
               >
-                <div className="border-b border-border px-4 py-3">
-                  <h3 className="text-sm font-semibold text-slate-900">
+                {/* Header row with criteria title */}
+                <div className="flex items-center gap-2.5 border-b border-slate-100 pb-4">
+                  <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary-light text-xs font-bold text-primary">
+                    0{index + 1}
+                  </span>
+                  <h3 className="text-base font-bold tracking-tight text-slate-900 sm:text-lg">
                     {row.title}
                   </h3>
                 </div>
-                <div className="space-y-0 divide-y divide-border">
-                  <div className="px-4 py-3">
-                    <p className="text-[10px] font-semibold uppercase tracking-wide text-red-400/90">
-                      {p.whyBeforeLabel}
-                    </p>
-                    <Cell negative className="mt-2">
+
+                {/* Grid Comparison Columns */}
+                <div className="mt-4 grid gap-4 md:grid-cols-2">
+                  {/* Before / Traditional */}
+                  <div className="rounded-xl border border-rose-100 bg-rose-50/40 p-4 transition-colors">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-rose-100 text-rose-600">
+                        <X className="h-3 w-3 stroke-[2.5]" />
+                      </span>
+                      <span className="text-xs font-bold uppercase tracking-wider text-rose-700">
+                        {p.whyBeforeLabel}
+                      </span>
+                    </div>
+                    <p className="mt-2.5 text-sm leading-relaxed text-slate-600">
                       {row.before}
-                    </Cell>
+                    </p>
                   </div>
-                  <div className="bg-primary-light/35 px-4 py-3">
-                    <CompareBrandHeader
-                      suffix={p.whyAfterLabel}
-                      className="text-primary"
-                    />
-                    <Cell positive className="mt-2">
+
+                  {/* After / MediQueue */}
+                  <div className="rounded-xl border border-primary/20 bg-primary-light/40 p-4 shadow-sm transition-colors">
+                    <div className="flex items-center gap-2">
+                      <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-primary text-white shadow-sm shadow-primary/30">
+                        <Check className="h-3 w-3 stroke-[3]" />
+                      </span>
+                      <span className="text-xs font-bold uppercase tracking-wider text-primary">
+                        <CompareBrandHeader suffix={p.whyAfterLabel} />
+                      </span>
+                    </div>
+                    <p className="mt-2.5 text-sm font-semibold leading-relaxed text-slate-900">
                       {row.after}
-                    </Cell>
+                    </p>
                   </div>
                 </div>
               </article>
@@ -102,44 +81,5 @@ export function WhyMediQueue() {
         </FadeIn>
       </Container>
     </section>
-  );
-}
-
-function Cell({
-  children,
-  negative,
-  positive,
-  className,
-}: {
-  children: ReactNode;
-  negative?: boolean;
-  positive?: boolean;
-  className?: string;
-}) {
-  return (
-    <div className={cn("flex gap-2.5", className)}>
-      <span
-        className={cn(
-          "mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full",
-          negative && "bg-red-50 text-red-500",
-          positive && "bg-primary/10 text-primary"
-        )}
-      >
-        {negative ? (
-          <X className="h-3 w-3" strokeWidth={2.5} />
-        ) : (
-          <Check className="h-3 w-3" strokeWidth={2.5} />
-        )}
-      </span>
-      <p
-        className={cn(
-          "text-[14px] leading-relaxed",
-          negative && "text-slate-500",
-          positive && "text-slate-800"
-        )}
-      >
-        {children}
-      </p>
-    </div>
   );
 }

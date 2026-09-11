@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, Source_Serif_4 } from "next/font/google";
 import { content } from "@/content";
 import { SITE_URL } from "@/lib/site";
+import { getRequestLocale } from "@/lib/locale-server";
+import { localizedMetadata } from "@/lib/seo";
 import { SiteChrome } from "@/components/SiteChrome";
 import "./globals.css";
 
@@ -24,45 +26,39 @@ const inter = Inter({
   display: "swap",
 });
 
-const seo = content.en.seo;
+export async function generateMetadata(): Promise<Metadata> {
+  const localeMeta = await localizedMetadata("home");
+  const locale = await getRequestLocale();
+  const seo = content[locale].seo;
 
-export const metadata: Metadata = {
-  metadataBase: new URL(SITE_URL),
-  title: {
-    default: seo.title,
-    template: "%s · MEDIQUEUE",
-  },
-  description: seo.description,
-  alternates: {
-    canonical: "/",
-    languages: {
-      en: "/en",
-      tr: "/tr",
-      "x-default": "/en",
+  return {
+    metadataBase: new URL(SITE_URL),
+    ...localeMeta,
+    alternates: { canonical: "/" },
+    openGraph: {
+      type: "website",
+      url: SITE_URL,
+      siteName: "MEDIQUEUE",
+      ...localeMeta.openGraph,
+      title: seo.title,
+      description: seo.description,
     },
-  },
-  openGraph: {
-    type: "website",
-    locale: "en_GB",
-    alternateLocale: ["tr_TR"],
-    url: SITE_URL,
-    siteName: "MEDIQUEUE",
-    title: seo.title,
-    description: seo.description,
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: seo.title,
-    description: seo.description,
-  },
-  robots: { index: true, follow: true },
-};
+    twitter: {
+      card: "summary_large_image",
+      title: seo.title,
+      description: seo.description,
+    },
+    robots: { index: true, follow: true },
+  };
+}
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getRequestLocale();
+  const seo = content[locale].seo;
   const organization = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -73,20 +69,16 @@ export default function RootLayout({
 
   return (
     <html
-      lang="en"
+      lang={locale}
+      suppressHydrationWarning
       className={`${jakarta.variable} ${display.variable} ${inter.variable} h-full antialiased`}
     >
-      <head>
-        <link rel="alternate" hrefLang="en" href={`${SITE_URL}/en`} />
-        <link rel="alternate" hrefLang="tr" href={`${SITE_URL}/tr`} />
-        <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}/en`} />
-      </head>
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }}
         />
-        <SiteChrome>{children}</SiteChrome>
+        <SiteChrome initialLocale={locale}>{children}</SiteChrome>
       </body>
     </html>
   );

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -41,15 +42,16 @@ function FounderPortraitCard({
       <article
         className={cn(
           "relative aspect-[3/4] overflow-hidden rounded-[1.75rem]",
-          "border border-violet-500/20 shadow-[0_24px_60px_-24px_rgba(0,0,0,0.75)]",
+          "border border-white/10",
           "transition-transform duration-500 group-hover/card:scale-[1.015]"
         )}
       >
-        {/* Local SVG avatars — not remote stock photography */}
-        <img
+        <Image
           src={member.image}
           alt={member.name}
-          className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 group-hover/card:scale-105"
+          fill
+          sizes="(max-width: 1024px) 70vw, 20vw"
+          className="object-cover object-top transition-transform duration-700 group-hover/card:scale-105"
         />
 
         <div
@@ -64,7 +66,7 @@ function FounderPortraitCard({
           className={cn(
             "absolute right-4 top-4 inline-flex items-center gap-2 rounded-full",
             "border border-white/10 bg-black/45 px-3 py-1.5 backdrop-blur-md",
-            "font-inter text-[11px] font-medium text-white/90 opacity-0 transition-all duration-300",
+            "font-medium text-white/90 opacity-0 transition-all duration-300",
             "group-hover/card:opacity-100 hover:border-white/25 hover:bg-black/65",
             "focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
           )}
@@ -77,15 +79,15 @@ function FounderPortraitCard({
 
         <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
           <p
-            className="font-inter text-[10px] font-semibold uppercase tracking-[0.18em]"
+            className="text-[10px] font-semibold uppercase tracking-[0.18em]"
             style={{ color: member.accent }}
           >
             {member.roleTitle}
           </p>
-          <h3 className="font-inter mt-2 text-xl font-bold leading-tight tracking-tight text-white sm:text-[1.35rem]">
+          <h3 className="mt-2 text-xl font-semibold leading-tight tracking-tight text-white sm:text-[1.35rem]">
             {member.name}
           </h3>
-          <p className="font-inter mt-1.5 line-clamp-2 text-sm leading-snug text-white/55">
+          <p className="mt-1.5 line-clamp-2 text-sm leading-snug text-white/55">
             {member.bio}
           </p>
           <div
@@ -104,7 +106,7 @@ export function AboutFounders() {
   const reduced = useReducedMotion();
 
   return (
-    <section className="bg-[#08080f] py-20 md:py-28">
+    <section className="bg-ink py-20 md:py-28">
       <Container>
         <motion.header
           initial={reduced ? false : { opacity: 0, y: 20 }}
@@ -113,10 +115,10 @@ export function AboutFounders() {
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
           className="mb-12 md:mb-14"
         >
-          <p className="font-inter text-[11px] font-semibold uppercase tracking-[0.2em] text-violet-300/80">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent-light">
             {copy.foundersEyebrow}
           </p>
-          <h2 className="font-inter mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+          <h2 className="font-display mt-3 text-3xl tracking-tight text-white sm:text-4xl">
             {copy.foundersTitle}
           </h2>
         </motion.header>

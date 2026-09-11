@@ -44,7 +44,7 @@ export function PatientJourneyFlow() {
     <section id="yolculuk" className="scroll-mt-24 bg-white py-16 md:py-20">
       <Container>
         <FadeIn>
-          <h2 className="max-w-2xl text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+          <h2 className="font-display max-w-2xl text-3xl tracking-tight text-ink sm:text-4xl">
             {p.journeyTitle}
           </h2>
           <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600">

@@ -8,8 +8,8 @@ import { Container } from "@/components/ui/Container";
 import { ClinicRequestsPreview } from "@/components/product/ClinicRequestsPreview";
 import { ComparePreview } from "@/components/patients/journey/ComparePreview";
 import { useLocale } from "@/lib/locale";
-import { useLeadCapture } from "@/lib/lead-capture";
 import { cn } from "@/lib/cn";
+import { HeroBackdrop } from "@/components/ui/HeroBackdrop";
 
 type Mode = "patient" | "clinic";
 const STORAGE_KEY = "mediqueue-home-mode";
@@ -17,25 +17,20 @@ const STORAGE_KEY = "mediqueue-home-mode";
 const spring = { type: "spring" as const, stiffness: 380, damping: 32 };
 
 export function HomeHero() {
-  const { t, locale } = useLocale();
-  const { openLead } = useLeadCapture();
+  const { t } = useLocale();
   const h = t.home;
   const reduced = useReducedMotion();
-  const [mode, setMode] = useState<Mode>(locale === "tr" ? "clinic" : "patient");
+  const [mode, setMode] = useState<Mode>("patient");
   const copy = mode === "patient" ? h.patient : h.clinic;
 
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved === "patient" || saved === "clinic") {
-        setMode(saved);
-        return;
-      }
+      if (saved === "patient" || saved === "clinic") setMode(saved);
     } catch {
       /* ignore */
     }
-    setMode(locale === "tr" ? "clinic" : "patient");
-  }, [locale]);
+  }, []);
 
   function select(next: Mode) {
     setMode(next);
@@ -48,25 +43,14 @@ export function HomeHero() {
 
   return (
     <section className="relative overflow-hidden border-b border-border">
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(58,106,214,0.14),transparent_55%),linear-gradient(180deg,var(--color-mist)_0%,#ffffff_72%)]"
-        aria-hidden
-      />
-      <div
-        className="pointer-events-none absolute -right-24 top-20 h-72 w-72 rounded-full bg-accent/10 blur-3xl"
-        aria-hidden
-      />
+      <HeroBackdrop />
 
-      <Container className="relative py-14 md:py-20 lg:py-24">
+      <Container className="relative pt-4 pb-12 sm:pt-6 sm:pb-16 lg:pt-8 lg:pb-20">
         <div className="mx-auto max-w-3xl text-center">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
-            {h.platformEyebrow}
-          </p>
-
           <div
-            className="mt-8 inline-flex rounded-full border border-border bg-white p-1 shadow-sm"
+            className="inline-flex rounded-full border border-border bg-white p-1 shadow-sm"
             role="tablist"
-            aria-label={h.platformEyebrow}
+            aria-label="Mode switcher"
           >
             {(["patient", "clinic"] as const).map((key) => (
               <button
@@ -116,15 +100,15 @@ export function HomeHero() {
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <Button
+                  href={mode === "patient" ? "/patients" : "/clinics"}
                   size="lg"
                   className="shadow-[0_14px_36px_-10px_rgba(58,106,214,0.45)]"
-                  onClick={() => openLead(mode)}
                 >
                   {copy.primaryCta}
                   <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
                 </Button>
                 <Button
-                  href={mode === "patient" ? "/team" : "/clinics#yol-haritasi"}
+                  href="/how-it-works"
                   variant="ink"
                   size="lg"
                 >

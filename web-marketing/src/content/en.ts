@@ -1,10 +1,11 @@
 import type { SiteContent } from "./types";
+import { enPreviews } from "./previews";
 
 export const en: SiteContent = {
   seo: {
-    title: "MEDIQUEUE — Pay for the patient who shows up",
+    title: "MEDIQUEUE — Transparent health travel, no middleman",
     description:
-      "MEDIQUEUE connects international patients with Turkish clinics. Clinics pay only when a real request arrives — no subscription.",
+      "Compare accredited clinics, message directly, and send a request with no upfront payment. Clinics pay only when a patient arrives — no subscription.",
   },
   nav: {
     links: [
@@ -12,11 +13,10 @@ export const en: SiteContent = {
       { href: "/clinics", label: "For clinics" },
       { href: "/patients", label: "For patients" },
       { href: "/doctors", label: "For doctors" },
+      { href: "/how-it-works", label: "How it works" },
       { href: "/team", label: "About us" },
     ],
-    clinicCta: "Clinic pre-register",
-    patientCta: "Patient waitlist",
-    localeLabel: "Language",
+    clinicCta: "For my clinic",
     openMenu: "Open menu",
     closeMenu: "Close menu",
     localeEn: "EN",
@@ -32,7 +32,7 @@ export const en: SiteContent = {
       headline: "Entrust your care",
       headlineAccent: "to transparency.",
       subcopy:
-        "Compare accredited clinics side by side and message directly. Secure your appointment with a transparent £100 deposit — 100% refundable up to 14 days before your visit. Stripe Secured. No hidden agency commission.",
+        "Compare accredited clinics side by side, message directly, and send a request with no upfront payment. You decide — the process stays visible.",
       primaryCta: "Explore clinics",
       secondaryCta: "About us",
       previewCaption: "Patient app · clinic discovery & compare · demo data",
@@ -67,7 +67,7 @@ export const en: SiteContent = {
       {
         href: "/clinics",
         eyebrow: "Clinics",
-        title: "Randevu Talepleri on your desk",
+        title: "Appointment requests on your desk",
         body: "Approve, quote, message — you pay when the patient arrives.",
         preview: "clinic",
       },
@@ -75,24 +75,24 @@ export const en: SiteContent = {
         href: "/patients",
         eyebrow: "Patients",
         title: "Compare, then request",
-        body: "Filter clinics and doctors. Appointments are secured with a transparent £100 deposit guarantee (Stripe Secured).",
+        body: "Filter clinics and doctors. No prepayment to send the ask.",
         preview: "patient",
       },
       {
         href: "/doctors",
         eyebrow: "Doctors",
-        title: "Bugünün Programı",
-        body: "Hastalarım, Takvim, Mesajlar, Profil — the clinical day in one place.",
+        title: "Today's schedule",
+        body: "My patients, Calendar, Messages, Profile — the clinical day in one place.",
         preview: "doctor",
       },
     ],
     trust: [
-      { label: "JCI accreditation", detail: "Verified clinics only" },
-      { label: "301 startups · 1st", detail: "Kapsül pre-incubation" },
-      { label: "Patient privacy", detail: "Identity protection first" },
-      { label: "Zero middleman", detail: "Direct clinic–patient contact" },
+      { label: "Direct Communication", detail: "No middlemen, zero hidden fees" },
+      { label: "Accredited Clinics", detail: "JCI and international certified healthcare institutions" },
+      { label: "Transparent Pricing", detail: "Clear quotes, no unexpected charges" },
+      { label: "Patient Privacy", detail: "End-to-end encrypted and secure communication" },
     ],
-    trustStripLabel: "Trust",
+    trustStripLabel: "Trust & Transparency",
     globalReach: {
       eyebrow: "A preview from your clinic panel",
       title: "Patients from every corner of the world",
@@ -109,7 +109,7 @@ export const en: SiteContent = {
     },
     finalPatientTitle: "You decide your treatment journey",
     finalPatientBody:
-      "Secure your appointment with a transparent £100 deposit — 100% refundable up to 14 days before your visit.",
+      "Compare clinics, message directly, send a request with no upfront payment.",
     finalPatientCta: "Explore clinics",
     finalClinicTitle: "Welcome international patients at zero risk",
     finalClinicBody:
@@ -121,7 +121,7 @@ export const en: SiteContent = {
     heroTag:
       "Stop pouring a fortune into ads. Pay only for the patient who converts.",
     heroSub:
-      "Invest in outcomes, not clicks or hope. Zero risk, high conversion in international health travel. No panel subscription — you pay only when the patient arrives and treatment is confirmed.",
+      "Invest in outcomes, not clicks or hope. Zero risk, high conversion in international health travel. No upfront fee. No panel subscription.",
     primaryCta: "Add your clinic — free",
     secondaryCta: "How the system works",
     requestLabel: "New appointment request",
@@ -141,7 +141,7 @@ export const en: SiteContent = {
         title: "Marketing cost",
         before: "High ad spend with clicks that do not guarantee outcomes",
         after:
-          "No panel subscription — you are charged only when a patient arrives and treatment is confirmed",
+          "Zero upfront cost — you are charged only when a patient arrives and treatment is confirmed",
       },
       {
         title: "Patient quality",
@@ -223,7 +223,7 @@ export const en: SiteContent = {
         clinic:
           "Deliver treatment; MediQueue commission is deducted only at this stage, on completed treatment.",
         mediQueue:
-          "Fake or lost-request risk sits with MediQueue — the clinic is charged only on completed treatment.",
+          "Upfront payment risk and fake/lost-lead risk sit entirely with MediQueue — the clinic operates at zero risk.",
         previewHint:
           "Commission applies when treatment is delivered — zero cost risk beforehand.",
       },
@@ -340,7 +340,7 @@ export const en: SiteContent = {
       },
       {
         title: "Send a request",
-        body: "Secure your appointment with a transparent £100 deposit — 100% refundable up to 14 days before your visit. The decision stays yours.",
+        body: "Request an appointment with no upfront payment. The decision stays yours.",
       },
       {
         title: "Speak directly",
@@ -510,15 +510,15 @@ export const en: SiteContent = {
     steps: [
       {
         title: "Search & compare",
-        body: "Filter clinics and doctors by need, city, and date — and see transparent pricing.",
+        body: "Filter clinics and doctors by symptom, city, and date — and see transparent prices.",
       },
       {
-        title: "Book your appointment",
-        body: "Choose a date and time. Your booking is secured with a transparent £100 deposit guarantee (Stripe Secured), 100% refundable up to 14 days before your visit.",
+        title: "Request an appointment",
+        body: "Pick a date and time, then send a request with no upfront payment.",
       },
       {
-        title: "Receive treatment",
-        body: "Travel to the clinic, meet your specialist, and complete payment for care on site.",
+        title: "Get treated",
+        body: "Go to the clinic, meet your specialist, and pay on site.",
       },
     ],
     techTitle: "Rule-based filtering. Not a recommendation engine.",
@@ -529,11 +529,36 @@ export const en: SiteContent = {
       { title: "Score", body: "Survivors are scored on the preferences set." },
       { title: "Rank", body: "A list to compare. The person decides." },
     ],
+    faqEyebrow: "Frequently Asked Questions",
+    faqTitle: "Everything You Need to Know",
+    faqSubtitle: "Common questions about the MediQueue platform, safety, accreditation, and how it works.",
+    faqItems: [
+      {
+        q: "Is MediQueue free for patients?",
+        a: "Yes, MediQueue is completely free for patients. You can freely compare accredited clinics, review transparent offers, and communicate directly with zero middleman fees.",
+      },
+      {
+        q: "How are clinics verified on the platform?",
+        a: "We only partner with healthcare providers that hold JCI (Joint Commission International) accreditation or official International Health Tourism Certification from health authorities.",
+      },
+      {
+        q: "How does the pricing and clinic fee model work?",
+        a: "There are zero middleman markups or hidden commissions on MediQueue. Clinics operate on a transparent, direct platform model with clear terms.",
+      },
+      {
+        q: "How is my personal data and medical privacy protected?",
+        a: "Your personal data and medical documents are end-to-end encrypted under GDPR and privacy standards. Your identity remains private until you explicitly submit a request to a clinic.",
+      },
+      {
+        q: "Who handles flight and accommodation arrangements?",
+        a: "MediQueue facilitates direct clinic-patient communication. Accommodation, airport transfers, and travel logistics are coordinated as part of your chosen clinic's optional package.",
+      },
+    ],
   },
   team: {
     seoTitle: "About us",
     heroEyebrow: "About us",
-    heroLeadBold: "Three co-founders.",
+    heroLeadBold: "Four founders.",
     heroLeadLight: "Building from the inside.",
     heroIntro:
       "We are not just building a marketplace — we are dismantling the closed ecosystem where patients are steered blindly and clinics burn budgets on empty ads. MEDIQUEUE is the new standard where trust, direct contact, and technology meet.",
@@ -558,40 +583,44 @@ export const en: SiteContent = {
         detail: "Early-stage growth program",
       },
     ],
-    foundersEyebrow: "The team",
-    foundersTitle: "Co-founders and team",
+    foundersEyebrow: "Founding team",
+    foundersTitle: "Architects of change",
     members: [
       {
         name: "Furkan Közkaya",
-        roleTitle: "Co-founder · CPO",
-        bio: "Builds the product experience end to end; leads cross-platform mobile and web strategy.",
-        image: "/team/furkan-kozkaya.svg",
-        accent: "#c084fc",
+        roleTitle: "CPO / Mobile + Web",
+        bio: "Builds the product experience end to end; leads cross-platform mobile strategy.",
+        image:
+          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
+        accent: "#3a6ad6",
         linkedin: "https://linkedin.com/in/furkan-kozkaya",
       },
       {
         name: "Azra İrem Derin",
-        roleTitle: "Co-founder · CTO",
+        roleTitle: "CTO / AI",
         bio: "Develops AI-powered matching algorithms and the platform data architecture.",
-        image: "/team/azra-irem-derin.svg",
-        accent: "#e879f9",
+        image:
+          "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
+        accent: "#0d9488",
         linkedin: "https://linkedin.com/in/azra-irem-derin",
       },
       {
         name: "Sinem Özdemir",
-        roleTitle: "Co-founder · CFO",
+        roleTitle: "CFO / Web",
         bio: "Builds sustainable financial infrastructure and manages web platform integrations.",
-        image: "/team/sinem-ozdemir.svg",
-        accent: "#38bdf8",
+        image:
+          "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=800&q=80",
+        accent: "#2f57b3",
         linkedin: "https://linkedin.com/in/sinem-ozdemir",
       },
       {
-        name: "Kasım",
-        roleTitle: "Backend Developer",
-        bio: "Builds backend services, the API layer, and data flows.",
-        image: "/team/kasim.svg",
-        accent: "#a78bfa",
-        linkedin: "https://linkedin.com/company/mediqueue",
+        name: "Kevser Eken",
+        roleTitle: "CMO / Operations",
+        bio: "Expands the international clinic network and leads operational excellence in the field.",
+        image:
+          "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=800&q=80",
+        accent: "#1e3a5f",
+        linkedin: "https://linkedin.com/in/kevser-eken",
       },
     ],
     socialTitle: "Follow us",
@@ -608,175 +637,53 @@ export const en: SiteContent = {
         hint: "Clinic stories and behind the scenes",
         href: "https://instagram.com/mediqueue",
       },
+      {
+        platform: "x",
+        label: "X",
+        hint: "Short updates",
+        href: "https://x.com/mediqueue",
+      },
     ],
   },
   footer: {
-    tagline: "Clinics pay when a patient arrives. Patients compare, then ask.",
+    tagline:
+      "The transparent marketplace platform where patients compare freely and accredited clinics connect directly.",
     groups: [
-      {
-        title: "Platform",
-        links: [
-          { href: "/clinics", label: "For clinics" },
-          { href: "/patients", label: "For patients" },
-          { href: "/doctors", label: "For doctors" },
-          { href: "/team", label: "About us" },
-        ],
-      },
       {
         title: "Company",
         links: [
-          { href: "/team", label: "About us" },
-          { href: "/privacy", label: "Privacy & GDPR" },
-          { href: "/terms", label: "Terms of use" },
-          { href: "/disclaimer", label: "Medical disclaimer" },
+          { href: "/team", label: "About Us" },
+          { href: "/how-it-works", label: "How It Works" },
+          { href: "/team#contact", label: "Contact" },
+        ],
+      },
+      {
+        title: "For Patients",
+        links: [
+          { href: "/patients", label: "Accredited Clinics" },
+          { href: "/patients#compare", label: "Clinic Comparison" },
+          { href: "/patients", label: "Treatment Guide" },
+        ],
+      },
+      {
+        title: "Clinics & Doctors",
+        links: [
+          { href: "/clinics", label: "Clinic Portal" },
+          { href: "/clinics#requests", label: "Patient Requests" },
+          { href: "/doctors", label: "Doctor Panel" },
+        ],
+      },
+      {
+        title: "Legal & Support",
+        links: [
+          { href: "/how-it-works#faq", label: "FAQ" },
+          { href: "/patients#privacy", label: "Privacy Policy" },
+          { href: "/patients#kvkk", label: "GDPR & Privacy" },
         ],
       },
     ],
-    copyright: "MEDIQUEUE. All rights reserved.",
-    privacyNote: "Patient privacy first. GDPR and KVKK aligned.",
-    medicalDisclaimer:
-      "MediQueue is not a healthcare provider or travel agency; it is a digital software infrastructure that connects patients with clinics. All medical diagnosis, treatment, and operational responsibility belongs to the partner clinic.",
+    copyright: "MediQueue. All rights reserved.",
+    privacyNote: "Built with patient privacy as a core principle.",
   },
-  faq: {
-    eyebrow: "FAQ",
-    title: "£100 deposit guarantee and refund policy",
-    items: [
-      {
-        question: "What is the transparent £100 deposit guarantee?",
-        answer:
-          "It is a fixed, disclosed deposit that secures your appointment. There is no hidden agency commission. Payment is Stripe Secured.",
-      },
-      {
-        question: "When is the deposit refundable?",
-        answer:
-          "Cancel 14 days or more before your visit and the deposit is 100% refundable. In the final 7 days, deposit protection applies against no-shows and late cancellations.",
-      },
-      {
-        question: "What does Stripe Secured mean?",
-        answer:
-          "The deposit is collected through Stripe. MediQueue does not store your full card details. Your refund rights remain visible on the payment record.",
-      },
-      {
-        question: "Are there hidden commissions?",
-        answer:
-          "No. The only patient-side platform charge is the transparent £100 deposit. Clinics are billed only when a patient arrives and treatment is confirmed.",
-      },
-    ],
-  },
-  lead: {
-    close: "Close",
-    patientTab: "UK Patient Waitlist",
-    clinicTab: "Clinic Pre-Register",
-    patientTitle: "Join the UK patient waitlist",
-    patientBody:
-      "Register to discover accredited clinics and plan your visit with a transparent £100 deposit guarantee.",
-    clinicTitle: "Pre-register your clinic",
-    clinicBody:
-      "B2B pre-registration for accredited clinics in Turkey. No panel subscription — you pay only for arriving patients.",
-    name: "Full name",
-    email: "Email",
-    phone: "Phone (optional)",
-    country: "Country",
-    treatment: "Treatment of interest",
-    treatmentOptions: [
-      "Hair transplant",
-      "Dental",
-      "Cosmetic surgery",
-      "Eye laser",
-      "Other",
-    ],
-    clinicName: "Clinic name",
-    city: "City",
-    website: "Website (optional)",
-    role: "Your role",
-    roleClinic: "Clinic manager / operations",
-    roleDoctor: "Doctor",
-    message: "Note (optional)",
-    consent:
-      "I have read the privacy notice and agree to my details being processed for this pre-registration.",
-    submit: "Submit pre-registration",
-    submitting: "Sending…",
-    successTitle: "You are on the list",
-    successBody: "Thank you. Our team will contact you by email.",
-    error: "Something went wrong. Please try again.",
-    required: "This field is required.",
-  },
-  legal: {
-    privacyLink: "Privacy",
-    termsLink: "Terms",
-    disclaimerLink: "Disclaimer",
-    updatedLabel: "Last updated",
-    privacy: {
-      title: "Privacy Notice — GDPR & KVKK",
-      updated: "11 September 2026",
-      intro:
-        "MediQueue is software infrastructure that connects UK and EU patients with accredited clinics in Turkey. This notice explains how we process personal data under the UK/EU GDPR and Turkey’s KVKK.",
-      sections: [
-        {
-          heading: "Controller",
-          body: "MediQueue processes your data for waitlist and clinic pre-registration, matching, and legal compliance. Contact: privacy@mediqueue.com",
-        },
-        {
-          heading: "Data we collect",
-          body: "Name, email, phone, country, treatment of interest, clinic name, city, and any note you choose to share. Card data is not stored on MediQueue servers; deposits are collected via Stripe.",
-        },
-        {
-          heading: "Legal basis",
-          body: "Your consent for waitlist/pre-registration; steps prior to a contract; legitimate interests (security and abuse prevention); and legal obligations.",
-        },
-        {
-          heading: "Sharing",
-          body: "We may share data with the relevant partner clinic once a booking process starts, and with essential processors (hosting, email, Stripe). We do not sell personal data.",
-        },
-        {
-          heading: "Retention and rights",
-          body: "We keep data only as long as needed for the purpose and applicable limitation periods. You may request access, correction, erasure, objection, and (under GDPR) portability at privacy@mediqueue.com.",
-        },
-      ],
-    },
-    terms: {
-      title: "Terms of use",
-      updated: "11 September 2026",
-      intro:
-        "By using this site and its pre-registration forms you agree to these terms.",
-      sections: [
-        {
-          heading: "What MediQueue is",
-          body: "MediQueue is not a healthcare provider or travel agency. It is digital software infrastructure that connects patients with accredited clinics.",
-        },
-        {
-          heading: "£100 deposit guarantee",
-          body: "Patient appointments are secured with a transparent £100 fixed deposit. Cancellations 14 days or more before the visit are 100% refundable. Deposit protection applies in the final 7 days against no-shows and late cancellations. Payments are Stripe Secured.",
-        },
-        {
-          heading: "Clinics",
-          body: "Clinics do not pay a panel subscription. Platform fees apply only when a patient arrives and treatment is confirmed.",
-        },
-        {
-          heading: "Pre-registration",
-          body: "Waitlist and clinic pre-registration are not a confirmed appointment or treatment. The team contacts you after an eligibility review.",
-        },
-      ],
-    },
-    disclaimer: {
-      title: "Medical disclaimer",
-      updated: "11 September 2026",
-      intro:
-        "MediQueue does not provide medical advice, diagnosis, or treatment. The following applies across the site.",
-      sections: [
-        {
-          heading: "Our role",
-          body: "MediQueue is not a healthcare provider or travel agency; it is a digital software infrastructure that connects patients with clinics. All medical diagnosis, treatment, and operational responsibility belongs to the partner clinic.",
-        },
-        {
-          heading: "Clinic independence",
-          body: "Treatment plans, quotes, indications, and complication management sit with the clinic and its clinicians. Sample or demo data on this site is for marketing illustration only.",
-        },
-        {
-          heading: "Your decision",
-          body: "Seek independent medical advice before any treatment. In an emergency, contact local emergency services.",
-        },
-      ],
-    },
-  },
+  previews: enPreviews,
 };

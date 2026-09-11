@@ -6,10 +6,11 @@ import {
   useContext,
   useEffect,
   useMemo,
-  useSyncExternalStore,
+  useState,
   type ReactNode,
 } from "react";
 import { content, type Locale, type SiteContent } from "@/content";
+import { LOCALE_STORAGE_KEY, localeCookieString } from "@/lib/locale-cookie";
 
 type LocaleContextValue = {
   locale: Locale;
@@ -18,71 +19,38 @@ type LocaleContextValue = {
 };
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
-const STORAGE_KEY = "mq-locale";
 
-const listeners = new Set<() => void>();
+export function LocaleProvider({
+  children,
+  initialLocale,
+}: {
+  children: ReactNode;
+  initialLocale: Locale;
+}) {
+  const [locale, setLocaleState] = useState<Locale>(initialLocale);
 
-function emit() {
-  listeners.forEach((listener) => listener());
-}
+  useEffect(() => {
+    setLocaleState(initialLocale);
+  }, [initialLocale]);
 
-function subscribe(onStoreChange: () => void) {
-  listeners.add(onStoreChange);
-  return () => listeners.delete(onStoreChange);
-}
-
-function localeFromPath(pathname: string): Locale | null {
-  if (pathname === "/en" || pathname.startsWith("/en/")) return "en";
-  if (pathname === "/tr" || pathname.startsWith("/tr/")) return "tr";
-  return null;
-}
-
-function localeFromSearch(search: string): Locale | null {
-  const params = new URLSearchParams(search);
-  const value = params.get("lang") ?? params.get("locale");
-  if (value === "en" || value === "tr") return value;
-  return null;
-}
-
-function localeFromBrowser(): Locale | null {
-  const languages = [
-    window.navigator.language,
-    ...(window.navigator.languages ?? []),
-  ]
-    .filter(Boolean)
-    .map((item) => item.toLowerCase());
-  if (languages.some((item) => item === "tr" || item.startsWith("tr-"))) {
-    return "tr";
-  }
-  return null;
-}
-
-function readLocale(): Locale {
-  if (typeof window === "undefined") return "en";
-
-  const fromUrl =
-    localeFromPath(window.location.pathname) ??
-    localeFromSearch(window.location.search);
-  if (fromUrl) {
-    window.localStorage.setItem(STORAGE_KEY, fromUrl);
-    return fromUrl;
-  }
-
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  if (stored === "en" || stored === "tr") return stored;
-
-  return localeFromBrowser() ?? "en";
-}
-
-export function LocaleProvider({ children }: { children: ReactNode }) {
-  const locale = useSyncExternalStore(subscribe, readLocale, (): Locale => "en");
+  useEffect(() => {
+    const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
+    if (stored !== "en" && stored !== "tr") return;
+    if (stored === initialLocale) return;
+    const hasCookie = /(?:^|; )mq-locale=(en|tr)/.test(document.cookie);
+    if (hasCookie) {
+      window.localStorage.setItem(LOCALE_STORAGE_KEY, initialLocale);
+      return;
+    }
+    document.cookie = localeCookieString(stored);
+    setLocaleState(stored);
+  }, [initialLocale]);
 
   const setLocale = useCallback((next: Locale) => {
-    window.localStorage.setItem(STORAGE_KEY, next);
-    const url = new URL(window.location.href);
-    url.searchParams.set("lang", next);
-    window.history.replaceState({}, "", url);
-    emit();
+    window.localStorage.setItem(LOCALE_STORAGE_KEY, next);
+    document.cookie = localeCookieString(next);
+    setLocaleState(next);
+    document.documentElement.lang = next;
   }, []);
 
   useEffect(() => {

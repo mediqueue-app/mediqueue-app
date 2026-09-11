@@ -5,16 +5,11 @@ import { BadgeCheck, Building2, ChevronRight, MapPin, Search } from "lucide-reac
 import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
 
-const CLINICS = [
-  { code: "Klinik #A1B2", specialty: "Saç Ekimi (DHI)", region: "Avrupa" },
-  { code: "Klinik #C3D4", specialty: "Saç Ekimi (FUE)", region: "Orta Doğu" },
-  { code: "Klinik #E5F6", specialty: "Saç Ekimi (Sapphire)", region: "Avrupa" },
-] as const;
-
 export function DiscoverPreview() {
   const { t, locale } = useLocale();
   const tr = locale === "tr";
   const note = t.patients.discoverPrivacyNote;
+  const clinics = t.previews.compareClinics;
 
   return (
     <div>
@@ -33,7 +28,7 @@ export function DiscoverPreview() {
       </div>
 
       <div className="flex items-stretch gap-3 overflow-x-auto pb-1">
-        {CLINICS.map((c) => (
+        {clinics.map((c) => (
           <article
             key={c.code}
             className="w-[9.5rem] shrink-0 overflow-hidden rounded-xl border border-border bg-white sm:w-auto sm:min-w-0 sm:flex-1"

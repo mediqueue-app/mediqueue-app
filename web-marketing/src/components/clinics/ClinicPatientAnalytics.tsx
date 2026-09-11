@@ -14,7 +14,7 @@ import {
 const HIGHLIGHT_ICONS = [Globe2, TrendingUp, Inbox];
 
 export function ClinicPatientAnalytics() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const a = t.clinics.analytics;
 
   const panelSubtitle = useMemo(() => {
@@ -24,9 +24,9 @@ export function ClinicPatientAnalytics() {
     );
     const countries = previewClinicOriginCountries.length;
     return a.panelSubtitle
-      .replace("{patients}", formatNumber(total))
+      .replace("{patients}", formatNumber(total, locale))
       .replace("{countries}", String(countries));
-  }, [a.panelSubtitle]);
+  }, [a.panelSubtitle, locale]);
 
   return (
     <section
@@ -41,7 +41,7 @@ export function ClinicPatientAnalytics() {
           </p>
           <h2
             id="clinic-analytics-title"
-            className="mt-3 max-w-3xl text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl"
+            className="font-display mt-3 max-w-3xl text-3xl tracking-tight text-ink sm:text-4xl"
           >
             {a.title}
           </h2>

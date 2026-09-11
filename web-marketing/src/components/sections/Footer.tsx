@@ -1,51 +1,54 @@
 "use client";
 
+import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 import { useLocale } from "@/lib/locale";
-import Link from "next/link";
 
 export function Footer() {
   const { t } = useLocale();
   const year = new Date().getFullYear();
 
   return (
-    <footer className="border-t border-border bg-band">
-      <Container className="py-12">
-        <div className="grid gap-10 md:grid-cols-[minmax(0,1.4fr)_repeat(2,minmax(0,0.8fr))]">
-          <div>
+    <footer className="border-t border-slate-200/70 bg-[#f8fafc] text-slate-700">
+      <Container className="py-12 sm:py-14">
+        <div className="grid gap-10 lg:grid-cols-12 lg:gap-8">
+          {/* Left Column: Brand & Tagline */}
+          <div className="lg:col-span-4">
             <Logo size="footer" />
-            <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-600">
+            <p className="mt-4 max-w-xs text-xs sm:text-sm leading-relaxed text-slate-500">
               {t.footer.tagline}
             </p>
-            <p className="mt-3 text-xs text-slate-500">{t.footer.privacyNote}</p>
           </div>
-          {t.footer.groups.map((group) => (
-            <div key={group.title}>
-              <p className="text-[11px] font-semibold uppercase tracking-widest text-slate-500">
-                {group.title}
-              </p>
-              <ul className="mt-4 space-y-2">
-                {group.links.map((link) => (
-                  <li key={link.href + link.label}>
-                    <Link
-                      href={link.href}
-                      className="text-sm text-slate-700 hover:text-primary"
-                    >
-                      {link.label}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          ))}
+
+          {/* Right Columns: 4 Organized Navigation Groups */}
+          <div className="grid grid-cols-2 gap-8 sm:grid-cols-4 lg:col-span-8">
+            {t.footer.groups.map((group) => (
+              <div key={group.title}>
+                <h3 className="text-sm font-bold tracking-tight text-slate-900">
+                  {group.title}
+                </h3>
+                <ul className="mt-4 space-y-2.5">
+                  {group.links.map((link) => (
+                    <li key={link.href + link.label}>
+                      <Link
+                        href={link.href}
+                        className="text-xs sm:text-sm text-slate-500 transition-colors hover:text-slate-900"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
         </div>
-        <p className="mt-10 max-w-3xl text-xs leading-relaxed text-slate-500">
-          {t.footer.medicalDisclaimer}
-        </p>
-        <p className="mt-6 border-t border-border pt-6 text-xs text-slate-500">
+
+        {/* Centered Copyright Line */}
+        <div className="mt-12 border-t border-slate-200/70 pt-6 text-center text-xs text-slate-400">
           © {year} {t.footer.copyright}
-        </p>
+        </div>
       </Container>
     </footer>
   );

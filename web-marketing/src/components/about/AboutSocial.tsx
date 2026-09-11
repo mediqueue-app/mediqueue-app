@@ -21,6 +21,14 @@ function InstagramIcon({ className }: { className?: string }) {
   );
 }
 
+function XIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
 const PLATFORM = {
   linkedin: {
     icon: LinkedinIcon,
@@ -32,6 +40,11 @@ const PLATFORM = {
     hoverText: "group-hover:text-[#c13584]",
     underline:
       "group-hover:bg-gradient-to-r group-hover:from-[#f09433] group-hover:via-[#dc2743] group-hover:to-[#bc1888]",
+  },
+  x: {
+    icon: XIcon,
+    hoverText: "group-hover:text-ink",
+    underline: "group-hover:bg-ink",
   },
 } as const;
 
@@ -49,7 +62,7 @@ export function AboutSocial() {
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
-          <p className="font-inter text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
             {s.socialTitle}
           </p>
 
@@ -79,10 +92,10 @@ export function AboutSocial() {
                   >
                     <Icon className="h-5 w-5 shrink-0 transition-colors duration-300" />
                     <span className="min-w-0">
-                      <span className="font-inter block text-sm font-semibold text-inherit">
+                      <span className="block text-sm font-semibold text-inherit">
                         {link.label}
                       </span>
-                      <span className="font-inter mt-0.5 block text-xs text-slate-400 transition-colors duration-300 group-hover:text-inherit/70">
+                      <span className="mt-0.5 block text-xs text-slate-400 transition-colors duration-300 group-hover:text-inherit/70">
                         {link.hint}
                       </span>
                       <span

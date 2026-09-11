@@ -1,10 +1,7 @@
-import type { Metadata } from "next";
+import { localizedMetadata } from "@/lib/seo";
 import { HowPage } from "@/components/pages/HowPage";
-import { content } from "@/content";
 
-export const metadata: Metadata = {
-  title: content.en.how.seoTitle,
-};
+export const generateMetadata = () => localizedMetadata("how");
 
 export default function Page() {
   return <HowPage />;

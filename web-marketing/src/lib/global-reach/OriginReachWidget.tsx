@@ -4,9 +4,10 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import dynamic from "next/dynamic";
 import { ChevronDown, ChevronUp, Globe2 } from "lucide-react";
 import { CountryFlag } from "./CountryFlag";
-import { formatNumber } from "./format";
+import { cityLabel, countryLabel, formatNumber } from "./format";
 import type { CountryPatientData, OriginReachScope } from "./types";
 import { PLATFORM_HUB } from "./types";
+import { useLocale } from "@/lib/locale";
 
 function cn(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(" ");
@@ -55,6 +56,7 @@ export function OriginReachWidget({
   className,
   showListScrollControls = false,
 }: OriginReachWidgetProps) {
+  const { locale } = useLocale();
   const [activeCode, setActiveCode] = useState<string | null>(null);
   const [revealed, setRevealed] = useState(!revealOnScroll);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -92,12 +94,18 @@ export function OriginReachWidget({
   }, [revealOnScroll, reducedMotion]);
 
   const { sorted, total } = useMemo(() => {
-    const sorted = [...data].sort((a, b) => b.patientCount - a.patientCount);
+    const sorted = [...data]
+      .sort((a, b) => b.patientCount - a.patientCount)
+      .map((country) => ({
+        ...country,
+        countryName: countryLabel(country.countryCode, country.countryName, locale),
+        topCity: cityLabel(country.topCity, locale),
+      }));
     return {
       sorted,
       total: sorted.reduce((sum, country) => sum + country.patientCount, 0),
     };
-  }, [data]);
+  }, [data, locale]);
 
   const maxCount = sorted[0]?.patientCount ?? 0;
 
@@ -132,7 +140,7 @@ export function OriginReachWidget({
       <div className="grid grid-cols-1 items-center gap-6 p-5 sm:p-6 lg:grid-cols-5 lg:gap-8">
         <div className="flex justify-center lg:col-span-3">
           <OriginGlobe
-            data={data}
+            data={sorted}
             origin={origin}
             highlightedCode={activeCode}
             onHoverCountry={setActiveCode}
@@ -141,7 +149,9 @@ export function OriginReachWidget({
             showZoomControls
             ariaLabel={
               scope === "preview"
-                ? `Örnek klinik panelinde ${sorted.length} ülkeyi gösteren demo dünya haritası`
+                ? locale === "en"
+                  ? `Demo globe showing ${sorted.length} countries in a sample clinic panel`
+                  : `Örnek klinik panelinde ${sorted.length} ülkeyi gösteren demo dünya haritası`
                 : undefined
             }
           />
@@ -165,7 +175,9 @@ export function OriginReachWidget({
                       <button
                         type="button"
                         onClick={() => scrollList("up")}
-                        aria-label="Listeyi yukarı kaydır"
+                        aria-label={
+                          locale === "en" ? "Scroll list up" : "Listeyi yukarı kaydır"
+                        }
                         className="flex h-6 w-6 items-center justify-center text-slate-400 transition-colors hover:bg-slate-50 hover:text-primary"
                       >
                         <ChevronUp className="h-3.5 w-3.5" strokeWidth={2.25} />
@@ -174,7 +186,9 @@ export function OriginReachWidget({
                       <button
                         type="button"
                         onClick={() => scrollList("down")}
-                        aria-label="Listeyi aşağı kaydır"
+                        aria-label={
+                          locale === "en" ? "Scroll list down" : "Listeyi aşağı kaydır"
+                        }
                         className="flex h-6 w-6 items-center justify-center text-slate-400 transition-colors hover:bg-slate-50 hover:text-primary"
                       >
                         <ChevronDown className="h-3.5 w-3.5" strokeWidth={2.25} />
@@ -212,7 +226,7 @@ export function OriginReachWidget({
                               {country.countryName}
                             </p>
                             <p className="shrink-0 text-sm font-semibold tabular-nums text-slate-900">
-                              {formatNumber(country.patientCount)}
+                              {formatNumber(country.patientCount, locale)}
                             </p>
                           </div>
                           <div className="mt-1.5 flex items-center gap-2">

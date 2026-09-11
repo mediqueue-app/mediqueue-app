@@ -1,3 +1,5 @@
+import type { PreviewsContent } from "./previews";
+
 export type Locale = "en" | "tr";
 
 export type NavLink = { href: string; label: string };
@@ -7,8 +9,6 @@ export type SiteContent = {
   nav: {
     links: NavLink[];
     clinicCta: string;
-    patientCta: string;
-    localeLabel: string;
     openMenu: string;
     closeMenu: string;
     localeEn: string;
@@ -198,6 +198,10 @@ export type SiteContent = {
     techTitle: string;
     techBody: string;
     pipeline: { title: string; body: string }[];
+    faqEyebrow: string;
+    faqTitle: string;
+    faqSubtitle: string;
+    faqItems: { q: string; a: string }[];
   };
   team: {
     seoTitle: string;
@@ -223,7 +227,7 @@ export type SiteContent = {
     }[];
     socialTitle: string;
     socialLinks: {
-      platform: "linkedin" | "instagram";
+      platform: "linkedin" | "instagram" | "x";
       label: string;
       hint: string;
       href: string;
@@ -234,64 +238,6 @@ export type SiteContent = {
     groups: { title: string; links: NavLink[] }[];
     copyright: string;
     privacyNote: string;
-    medicalDisclaimer: string;
   };
-  faq: {
-    eyebrow: string;
-    title: string;
-    items: { question: string; answer: string }[];
-  };
-  lead: {
-    close: string;
-    patientTab: string;
-    clinicTab: string;
-    patientTitle: string;
-    patientBody: string;
-    clinicTitle: string;
-    clinicBody: string;
-    name: string;
-    email: string;
-    phone: string;
-    country: string;
-    treatment: string;
-    treatmentOptions: string[];
-    clinicName: string;
-    city: string;
-    website: string;
-    role: string;
-    roleClinic: string;
-    roleDoctor: string;
-    message: string;
-    consent: string;
-    submit: string;
-    submitting: string;
-    successTitle: string;
-    successBody: string;
-    error: string;
-    required: string;
-  };
-  legal: {
-    privacyLink: string;
-    termsLink: string;
-    disclaimerLink: string;
-    updatedLabel: string;
-    privacy: {
-      title: string;
-      updated: string;
-      intro: string;
-      sections: { heading: string; body: string }[];
-    };
-    terms: {
-      title: string;
-      updated: string;
-      intro: string;
-      sections: { heading: string; body: string }[];
-    };
-    disclaimer: {
-      title: string;
-      updated: string;
-      intro: string;
-      sections: { heading: string; body: string }[];
-    };
-  };
+  previews: PreviewsContent;
 };

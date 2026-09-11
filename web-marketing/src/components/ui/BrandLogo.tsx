@@ -9,14 +9,14 @@ const SIZES = {
   lg: { width: 333, height: 70, className: "h-[4.375rem] w-auto" },
   xl: { width: 380, height: 80, className: "h-20 w-auto" },
   nav: {
-    width: 428,
-    height: 90,
-    className: "h-14 w-auto sm:h-[4.25rem] lg:h-[5.125rem]",
+    width: 360,
+    height: 80,
+    className: "h-14 w-auto sm:h-16 lg:h-[4.5rem]",
   },
   footer: {
-    width: 380,
-    height: 80,
-    className: "h-[4.375rem] w-auto sm:h-20",
+    width: 280,
+    height: 60,
+    className: "h-11 w-auto sm:h-13 lg:h-[3.5rem]",
   },
 } as const;
 
@@ -38,6 +38,7 @@ export function BrandLogo({
       width={dim.width}
       height={dim.height}
       className={cn("object-contain object-left", dim.className, className)}
+      style={{ width: "auto" }}
       priority={priority}
     />
   );

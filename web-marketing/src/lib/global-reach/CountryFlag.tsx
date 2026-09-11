@@ -38,7 +38,7 @@ export function CountryFlag({
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={`https://flagcdn.com/w40/${code.toLowerCase()}.png`}
-      alt={`${countryName} bayrağı`}
+      alt={`${countryName}`}
       width={24}
       height={16}
       loading="lazy"
