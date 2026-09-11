@@ -6,9 +6,11 @@ import { Container } from "@/components/ui/Container";
 import { DoctorSchedulePreview } from "@/components/product/DoctorSchedulePreview";
 import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
+import { useLeadCapture } from "@/lib/lead-capture";
 
 export function DoctorsHero() {
   const { t } = useLocale();
+  const { openLead } = useLeadCapture();
   const d = t.doctors;
 
   return (
@@ -30,9 +32,9 @@ export function DoctorsHero() {
           </p>
           <div className="mt-10 flex flex-col gap-3 sm:flex-row">
             <Button
-              href="#basla"
               size="lg"
               className="shadow-[0_14px_36px_-10px_rgba(58,106,214,0.55)]"
+              onClick={() => openLead("clinic", "doctor")}
             >
               {d.primaryCta}
               <ArrowRight className="ml-2 h-4 w-4" aria-hidden />

@@ -18,6 +18,7 @@ type LocaleContextValue = {
 };
 
 const LocaleContext = createContext<LocaleContextValue | null>(null);
+const STORAGE_KEY = "mq-locale";
 
 const listeners = new Set<() => void>();
 
@@ -30,17 +31,57 @@ function subscribe(onStoreChange: () => void) {
   return () => listeners.delete(onStoreChange);
 }
 
+function localeFromPath(pathname: string): Locale | null {
+  if (pathname === "/en" || pathname.startsWith("/en/")) return "en";
+  if (pathname === "/tr" || pathname.startsWith("/tr/")) return "tr";
+  return null;
+}
+
+function localeFromSearch(search: string): Locale | null {
+  const params = new URLSearchParams(search);
+  const value = params.get("lang") ?? params.get("locale");
+  if (value === "en" || value === "tr") return value;
+  return null;
+}
+
+function localeFromBrowser(): Locale | null {
+  const languages = [
+    window.navigator.language,
+    ...(window.navigator.languages ?? []),
+  ]
+    .filter(Boolean)
+    .map((item) => item.toLowerCase());
+  if (languages.some((item) => item === "tr" || item.startsWith("tr-"))) {
+    return "tr";
+  }
+  return null;
+}
+
 function readLocale(): Locale {
-  const stored = window.localStorage.getItem("mq-locale");
+  if (typeof window === "undefined") return "en";
+
+  const fromUrl =
+    localeFromPath(window.location.pathname) ??
+    localeFromSearch(window.location.search);
+  if (fromUrl) {
+    window.localStorage.setItem(STORAGE_KEY, fromUrl);
+    return fromUrl;
+  }
+
+  const stored = window.localStorage.getItem(STORAGE_KEY);
   if (stored === "en" || stored === "tr") return stored;
-  return "tr";
+
+  return localeFromBrowser() ?? "en";
 }
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
-  const locale = useSyncExternalStore(subscribe, readLocale, (): Locale => "tr");
+  const locale = useSyncExternalStore(subscribe, readLocale, (): Locale => "en");
 
   const setLocale = useCallback((next: Locale) => {
-    window.localStorage.setItem("mq-locale", next);
+    window.localStorage.setItem(STORAGE_KEY, next);
+    const url = new URL(window.location.href);
+    url.searchParams.set("lang", next);
+    window.history.replaceState({}, "", url);
     emit();
   }, []);
 

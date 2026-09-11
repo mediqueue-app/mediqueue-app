@@ -179,7 +179,8 @@ export function OriginGlobe({
       });
 
     let size = Math.max(container.clientWidth, 1);
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    const isMobile = window.matchMedia("(max-width: 768px)").matches;
+    const dpr = isMobile ? 1 : Math.min(window.devicePixelRatio || 1, 1.5);
 
     let phi = phiForLongitude(25);
     let theta = 0.32;
@@ -194,7 +195,7 @@ export function OriginGlobe({
       theta,
       dark: 0,
       diffuse: 0.25,
-      mapSamples: 16000,
+      mapSamples: isMobile ? 7000 : 14000,
       mapBrightness: 1.6,
       baseColor: BASE_COLOR,
       markerColor: PRIMARY_MARKER,
@@ -268,8 +269,10 @@ export function OriginGlobe({
     canvas.addEventListener("pointerleave", handlePointerLeave);
 
     let frameId = 0;
+    let paused = false;
 
     const render = () => {
+      if (paused) return;
       frameId = requestAnimationFrame(render);
 
       scale += (zoomTargetRef.current - scale) * ZOOM_EASING;
@@ -389,6 +392,32 @@ export function OriginGlobe({
       }
     };
 
+    const resume = () => {
+      if (!paused) return;
+      paused = false;
+      frameId = requestAnimationFrame(render);
+    };
+
+    const pause = () => {
+      paused = true;
+      cancelAnimationFrame(frameId);
+    };
+
+    const visibilityObserver = new IntersectionObserver(
+      ([entry]) => {
+        if (entry?.isIntersecting && !document.hidden) resume();
+        else pause();
+      },
+      { threshold: 0.15 }
+    );
+    visibilityObserver.observe(container);
+
+    const onVisibility = () => {
+      if (document.hidden) pause();
+      else if (container.getBoundingClientRect().height > 0) resume();
+    };
+    document.addEventListener("visibilitychange", onVisibility);
+
     frameId = requestAnimationFrame(render);
 
     const resizeObserver = new ResizeObserver(() => {
@@ -400,7 +429,9 @@ export function OriginGlobe({
     resizeObserver.observe(container);
 
     return () => {
-      cancelAnimationFrame(frameId);
+      pause();
+      visibilityObserver.disconnect();
+      document.removeEventListener("visibilitychange", onVisibility);
       resizeObserver.disconnect();
       canvas.removeEventListener("pointerdown", handlePointerDown);
       canvas.removeEventListener("pointermove", handlePointerMove);

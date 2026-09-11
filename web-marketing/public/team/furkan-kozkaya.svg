@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 520" role="img" aria-label="Furkan Közkaya">
+  <rect width="400" height="520" fill="#161024"/>
+  <circle cx="200" cy="188" r="78" fill="#35204d"/>
+  <circle cx="200" cy="168" r="42" fill="#e9d5ff"/>
+  <path d="M122 360c8-62 48-96 78-96s70 34 78 96v80H122z" fill="#e9d5ff"/>
+  <rect x="0" y="400" width="400" height="120" fill="#241536"/>
+  <text x="200" y="458" text-anchor="middle" fill="#c084fc" font-family="Georgia, serif" font-size="42" font-weight="700">FK</text>
+  <text x="200" y="490" text-anchor="middle" fill="#e9d5ff" font-family="system-ui, sans-serif" font-size="16" letter-spacing="3">CPO</text>
+</svg>

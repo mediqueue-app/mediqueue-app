@@ -24,7 +24,7 @@ const inter = Inter({
   display: "swap",
 });
 
-const seo = content.tr.seo;
+const seo = content.en.seo;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -33,11 +33,18 @@ export const metadata: Metadata = {
     template: "%s · MEDIQUEUE",
   },
   description: seo.description,
-  alternates: { canonical: "/" },
+  alternates: {
+    canonical: "/",
+    languages: {
+      en: "/en",
+      tr: "/tr",
+      "x-default": "/en",
+    },
+  },
   openGraph: {
     type: "website",
-    locale: "tr_TR",
-    alternateLocale: "en_US",
+    locale: "en_GB",
+    alternateLocale: ["tr_TR"],
     url: SITE_URL,
     siteName: "MEDIQUEUE",
     title: seo.title,
@@ -66,9 +73,14 @@ export default function RootLayout({
 
   return (
     <html
-      lang="tr"
+      lang="en"
       className={`${jakarta.variable} ${display.variable} ${inter.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="alternate" hrefLang="en" href={`${SITE_URL}/en`} />
+        <link rel="alternate" hrefLang="tr" href={`${SITE_URL}/tr`} />
+        <link rel="alternate" hrefLang="x-default" href={`${SITE_URL}/en`} />
+      </head>
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
         <script
           type="application/ld+json"

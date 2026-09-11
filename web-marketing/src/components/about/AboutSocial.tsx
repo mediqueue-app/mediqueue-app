@@ -21,14 +21,6 @@ function InstagramIcon({ className }: { className?: string }) {
   );
 }
 
-function XIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-  );
-}
-
 const PLATFORM = {
   linkedin: {
     icon: LinkedinIcon,
@@ -40,11 +32,6 @@ const PLATFORM = {
     hoverText: "group-hover:text-[#c13584]",
     underline:
       "group-hover:bg-gradient-to-r group-hover:from-[#f09433] group-hover:via-[#dc2743] group-hover:to-[#bc1888]",
-  },
-  x: {
-    icon: XIcon,
-    hoverText: "group-hover:text-slate-900",
-    underline: "group-hover:bg-slate-900",
   },
 } as const;
 

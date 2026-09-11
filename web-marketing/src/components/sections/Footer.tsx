@@ -40,7 +40,10 @@ export function Footer() {
             </div>
           ))}
         </div>
-        <p className="mt-10 border-t border-border pt-6 text-xs text-slate-500">
+        <p className="mt-10 max-w-3xl text-xs leading-relaxed text-slate-500">
+          {t.footer.medicalDisclaimer}
+        </p>
+        <p className="mt-6 border-t border-border pt-6 text-xs text-slate-500">
           © {year} {t.footer.copyright}
         </p>
       </Container>

@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
+import { useLeadCapture } from "@/lib/lead-capture";
 
 export function PatientsHero() {
   const { t } = useLocale();
+  const { openLead } = useLeadCapture();
   const p = t.patients;
 
   return (
@@ -21,7 +23,7 @@ export function PatientsHero() {
             {p.heroSub}
           </p>
           <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <Button href="#yolculuk" size="lg">
+            <Button size="lg" onClick={() => openLead("patient")}>
               {p.primaryCta}
               <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
             </Button>

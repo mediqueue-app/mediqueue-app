@@ -4,9 +4,11 @@ import { ArrowRight } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { useLocale } from "@/lib/locale";
+import { useLeadCapture } from "@/lib/lead-capture";
 
 export function HomeFinalCta() {
   const { t } = useLocale();
+  const { openLead } = useLeadCapture();
   const h = t.home;
 
   return (
@@ -23,7 +25,11 @@ export function HomeFinalCta() {
             <p className="mt-4 flex-1 text-base leading-relaxed text-slate-600">
               {h.finalPatientBody}
             </p>
-            <Button href="/patients" size="lg" className="mt-8 w-full sm:w-auto">
+            <Button
+              size="lg"
+              className="mt-8 w-full sm:w-auto"
+              onClick={() => openLead("patient")}
+            >
               {h.finalPatientCta}
               <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
             </Button>
@@ -44,9 +50,9 @@ export function HomeFinalCta() {
               {h.finalClinicBody}
             </p>
             <Button
-              href="/clinics#basla"
               size="lg"
               className="relative mt-8 w-full bg-white text-ink hover:bg-white/90 sm:w-auto"
+              onClick={() => openLead("clinic")}
             >
               {h.finalClinicCta}
               <ArrowRight className="ml-2 h-4 w-4" aria-hidden />

@@ -3,12 +3,16 @@
 import { type ReactNode } from "react";
 import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
+import { LeadCaptureModal } from "@/components/modals/LeadCaptureModal";
+import { LeadCaptureProvider } from "@/lib/lead-capture";
 import { LocaleProvider, useLocale } from "@/lib/locale";
 
 export function SiteChrome({ children }: { children: ReactNode }) {
   return (
     <LocaleProvider>
-      <ChromeInner>{children}</ChromeInner>
+      <LeadCaptureProvider>
+        <ChromeInner>{children}</ChromeInner>
+      </LeadCaptureProvider>
     </LocaleProvider>
   );
 }
@@ -28,6 +32,7 @@ function ChromeInner({ children }: { children: ReactNode }) {
         {children}
       </main>
       <Footer />
+      <LeadCaptureModal />
     </div>
   );
 }

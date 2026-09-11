@@ -3,6 +3,7 @@
 import { Search, CalendarCheck, Stethoscope } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { useLocale } from "@/lib/locale";
+import { FaqSection } from "@/components/sections/FaqSection";
 
 const ICONS = [Search, CalendarCheck, Stethoscope];
 
@@ -62,6 +63,7 @@ export function HowPage() {
           ))}
         </div>
       </section>
+      <FaqSection className="px-0 pt-16" />
     </Container>
   );
 }

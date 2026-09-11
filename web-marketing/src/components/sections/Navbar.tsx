@@ -8,9 +8,11 @@ import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 import { useLocale } from "@/lib/locale";
+import { useLeadCapture } from "@/lib/lead-capture";
 
 export function Navbar() {
   const { t, locale, setLocale } = useLocale();
+  const { openLead } = useLeadCapture();
   const pathname = usePathname();
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
@@ -32,6 +34,8 @@ export function Navbar() {
       document.body.style.overflow = "";
     };
   }, [open]);
+
+  const primaryIsClinic = locale === "tr";
 
   return (
     <header
@@ -71,7 +75,11 @@ export function Navbar() {
         </ul>
         <div className="hidden items-center gap-3 lg:flex">
           <LocaleToggle locale={locale} setLocale={setLocale} t={t} />
-          <Button href="/clinics">{t.nav.clinicCta}</Button>
+          {primaryIsClinic ? (
+            <Button onClick={() => openLead("clinic")}>{t.nav.clinicCta}</Button>
+          ) : (
+            <Button onClick={() => openLead("patient")}>{t.nav.patientCta}</Button>
+          )}
         </div>
         <button
           type="button"
@@ -100,8 +108,26 @@ export function Navbar() {
             </ul>
             <div className="mt-8 flex flex-col gap-3">
               <LocaleToggle locale={locale} setLocale={setLocale} t={t} />
-              <Button href="/clinics" size="lg" className="w-full">
-                {t.nav.clinicCta}
+              <Button
+                size="lg"
+                className="w-full"
+                onClick={() => {
+                  setOpen(false);
+                  openLead(primaryIsClinic ? "clinic" : "patient");
+                }}
+              >
+                {primaryIsClinic ? t.nav.clinicCta : t.nav.patientCta}
+              </Button>
+              <Button
+                size="lg"
+                variant="ink"
+                className="w-full"
+                onClick={() => {
+                  setOpen(false);
+                  openLead(primaryIsClinic ? "patient" : "clinic");
+                }}
+              >
+                {primaryIsClinic ? t.nav.patientCta : t.nav.clinicCta}
               </Button>
             </div>
           </div>
@@ -118,35 +144,38 @@ function LocaleToggle({
 }: {
   locale: "en" | "tr";
   setLocale: (l: "en" | "tr") => void;
-  t: { nav: { localeEn: string; localeTr: string } };
+  t: { nav: { localeEn: string; localeTr: string; localeLabel: string } };
 }) {
   return (
     <div
-      className="inline-flex rounded-full border border-border p-0.5 text-xs font-semibold"
+      className="inline-flex items-center gap-1 rounded-full border-2 border-ink/15 bg-white p-1 shadow-sm"
       role="group"
-      aria-label="Language"
+      aria-label={t.nav.localeLabel}
     >
+      <span className="hidden pl-2 text-[10px] font-bold uppercase tracking-[0.14em] text-slate-400 sm:inline">
+        {t.nav.localeLabel}
+      </span>
       <button
         type="button"
         className={cn(
-          "min-h-8 rounded-full px-2.5",
-          locale === "tr" ? "bg-slate-900 text-white" : "text-slate-500"
-        )}
-        onClick={() => setLocale("tr")}
-        aria-pressed={locale === "tr"}
-      >
-        {t.nav.localeTr}
-      </button>
-      <button
-        type="button"
-        className={cn(
-          "min-h-8 rounded-full px-2.5",
-          locale === "en" ? "bg-slate-900 text-white" : "text-slate-500"
+          "min-h-9 rounded-full px-3 text-xs font-bold",
+          locale === "en" ? "bg-ink text-white" : "text-slate-500 hover:text-slate-800"
         )}
         onClick={() => setLocale("en")}
         aria-pressed={locale === "en"}
       >
         {t.nav.localeEn}
+      </button>
+      <button
+        type="button"
+        className={cn(
+          "min-h-9 rounded-full px-3 text-xs font-bold",
+          locale === "tr" ? "bg-ink text-white" : "text-slate-500 hover:text-slate-800"
+        )}
+        onClick={() => setLocale("tr")}
+        aria-pressed={locale === "tr"}
+      >
+        {t.nav.localeTr}
       </button>
     </div>
   );

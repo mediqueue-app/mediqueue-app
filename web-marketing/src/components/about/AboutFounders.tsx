@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
 import { Container } from "@/components/ui/Container";
@@ -46,12 +45,11 @@ function FounderPortraitCard({
           "transition-transform duration-500 group-hover/card:scale-[1.015]"
         )}
       >
-        <Image
+        {/* Local SVG avatars — not remote stock photography */}
+        <img
           src={member.image}
           alt={member.name}
-          fill
-          sizes="(max-width: 1024px) 70vw, 20vw"
-          className="object-cover object-top transition-transform duration-700 group-hover/card:scale-105"
+          className="absolute inset-0 h-full w-full object-cover object-top transition-transform duration-700 group-hover/card:scale-105"
         />
 
         <div

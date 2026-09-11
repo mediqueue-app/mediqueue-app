@@ -3,8 +3,8 @@ import { PatientsPage } from "@/components/pages/PatientsPage";
 import { content } from "@/content";
 
 export const metadata: Metadata = {
-  title: content.tr.patients.seoTitle,
-  description: content.tr.patients.heroSub,
+  title: content.en.patients.seoTitle,
+  description: content.en.patients.heroSub,
 };
 
 export default function Page() {

@@ -5,9 +5,11 @@ import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
+import { useLeadCapture } from "@/lib/lead-capture";
 
 export function PatientsFinalCta() {
   const { t } = useLocale();
+  const { openLead } = useLeadCapture();
   const p = t.patients;
 
   return (
@@ -22,7 +24,7 @@ export function PatientsFinalCta() {
               {p.finalBody}
             </p>
             <div className="mt-9">
-              <Button href="/patients" size="lg">
+              <Button size="lg" onClick={() => openLead("patient")}>
                 {p.finalCta}
                 <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
               </Button>

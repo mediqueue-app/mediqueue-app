@@ -6,6 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { IncomingRequestCard } from "@/components/clinics/IncomingRequestCard";
 import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
+import { useLeadCapture } from "@/lib/lead-capture";
 
 function splitHook(tag: string) {
   const i = tag.indexOf(". ");
@@ -15,6 +16,7 @@ function splitHook(tag: string) {
 
 export function ClinicsHero() {
   const { t } = useLocale();
+  const { openLead } = useLeadCapture();
   const c = t.clinics;
   const { lead, rest } = splitHook(c.heroTag);
 
@@ -41,9 +43,9 @@ export function ClinicsHero() {
           </p>
           <div className="mt-11 flex flex-col gap-3 sm:flex-row">
             <Button
-              href="#basla"
               size="lg"
               className="shadow-[0_14px_36px_-10px_rgba(58,106,214,0.55)]"
+              onClick={() => openLead("clinic")}
             >
               {c.primaryCta}
               <ArrowRight className="ml-2 h-4 w-4" aria-hidden />

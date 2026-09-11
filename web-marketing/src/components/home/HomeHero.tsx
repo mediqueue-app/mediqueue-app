@@ -8,6 +8,7 @@ import { Container } from "@/components/ui/Container";
 import { ClinicRequestsPreview } from "@/components/product/ClinicRequestsPreview";
 import { ComparePreview } from "@/components/patients/journey/ComparePreview";
 import { useLocale } from "@/lib/locale";
+import { useLeadCapture } from "@/lib/lead-capture";
 import { cn } from "@/lib/cn";
 
 type Mode = "patient" | "clinic";
@@ -16,20 +17,25 @@ const STORAGE_KEY = "mediqueue-home-mode";
 const spring = { type: "spring" as const, stiffness: 380, damping: 32 };
 
 export function HomeHero() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const { openLead } = useLeadCapture();
   const h = t.home;
   const reduced = useReducedMotion();
-  const [mode, setMode] = useState<Mode>("patient");
+  const [mode, setMode] = useState<Mode>(locale === "tr" ? "clinic" : "patient");
   const copy = mode === "patient" ? h.patient : h.clinic;
 
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved === "patient" || saved === "clinic") setMode(saved);
+      if (saved === "patient" || saved === "clinic") {
+        setMode(saved);
+        return;
+      }
     } catch {
       /* ignore */
     }
-  }, []);
+    setMode(locale === "tr" ? "clinic" : "patient");
+  }, [locale]);
 
   function select(next: Mode) {
     setMode(next);
@@ -110,9 +116,9 @@ export function HomeHero() {
               </p>
               <div className="mt-9 flex flex-col gap-3 sm:flex-row">
                 <Button
-                  href={mode === "patient" ? "/patients" : "/clinics"}
                   size="lg"
                   className="shadow-[0_14px_36px_-10px_rgba(58,106,214,0.45)]"
+                  onClick={() => openLead(mode)}
                 >
                   {copy.primaryCta}
                   <ArrowRight className="ml-2 h-4 w-4" aria-hidden />

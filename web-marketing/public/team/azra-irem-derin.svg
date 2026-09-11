@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 520" role="img" aria-label="Azra 0rem Derin">
+  <rect width="400" height="520" fill="#1a1024"/>
+  <circle cx="200" cy="188" r="78" fill="#3b2048"/>
+  <circle cx="200" cy="168" r="42" fill="#f5d0fe"/>
+  <path d="M122 360c8-62 48-96 78-96s70 34 78 96v80H122z" fill="#f5d0fe"/>
+  <rect x="0" y="400" width="400" height="120" fill="#2a1636"/>
+  <text x="200" y="458" text-anchor="middle" fill="#e879f9" font-family="Georgia, serif" font-size="42" font-weight="700">AID</text>
+  <text x="200" y="490" text-anchor="middle" fill="#f5d0fe" font-family="system-ui, sans-serif" font-size="16" letter-spacing="3">CTO</text>
+</svg>

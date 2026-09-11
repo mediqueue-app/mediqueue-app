@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 520" role="img" aria-label="Kas1m">
+  <rect width="400" height="520" fill="#14122a"/>
+  <circle cx="200" cy="188" r="78" fill="#2c2654"/>
+  <circle cx="200" cy="168" r="42" fill="#ddd6fe"/>
+  <path d="M122 360c8-62 48-96 78-96s70 34 78 96v80H122z" fill="#ddd6fe"/>
+  <rect x="0" y="400" width="400" height="120" fill="#1d1a3a"/>
+  <text x="200" y="458" text-anchor="middle" fill="#a78bfa" font-family="Georgia, serif" font-size="42" font-weight="700">K</text>
+  <text x="200" y="490" text-anchor="middle" fill="#ddd6fe" font-family="system-ui, sans-serif" font-size="16" letter-spacing="3">BE</text>
+</svg>
