@@ -8,7 +8,6 @@ import {
   ArrowRight,
   ChevronDown,
   HelpCircle,
-  Sparkles,
   ShieldCheck,
   CheckCircle2,
   Filter,
@@ -99,8 +98,7 @@ export function HowPage() {
         <HeroBackdrop withGrid />
         <Container className="relative pt-20 pb-8 sm:pt-24 sm:pb-10 lg:pt-28 lg:pb-12">
           <FadeIn className="max-w-3xl">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary">
-              <Sparkles className="h-4 w-4" />
+            <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary">
               <span>{h.eyebrow}</span>
             </div>
             <h1 className="font-display mt-4 text-[2.35rem] leading-[1.12] tracking-[-0.03em] text-ink sm:text-5xl lg:text-[3.2rem]">

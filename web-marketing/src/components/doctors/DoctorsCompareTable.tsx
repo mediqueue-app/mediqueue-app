@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, X, ShieldCheck, Sparkles } from "lucide-react";
+import { Check, X, ShieldCheck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
@@ -61,15 +61,14 @@ export function DoctorsCompareTable() {
 
               <div className="mt-8 flex min-h-[3.25rem] items-center justify-center rounded-2xl border border-slate-200/70 bg-slate-100/80 p-4 text-center text-xs font-semibold text-slate-700">
                 {locale === "tr"
-                  ? "⚠️ Süreç karmaşası ve verimsiz randevu takibi yaşanır."
-                  : "⚠️ Process chaos and inefficient appointment tracking."}
+                  ? "Süreç karmaşası ve verimsiz randevu takibi yaşanır."
+                  : "Process chaos and inefficient appointment tracking."}
               </div>
             </div>
 
             {/* Right Card — MediQueue Model */}
             <div className="relative flex h-full flex-col justify-between rounded-3xl border-2 border-emerald-500/90 bg-white p-7 sm:p-9 shadow-xl shadow-emerald-950/5 ring-4 ring-emerald-500/10">
-              <div className="pointer-events-none absolute -top-4 right-8 inline-flex items-center gap-1.5 rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-bold text-white shadow-lg shadow-emerald-600/30">
-                <Sparkles className="h-3.5 w-3.5" />
+              <div className="pointer-events-none absolute -top-4 right-8 inline-flex items-center rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-bold text-white shadow-lg shadow-emerald-600/30">
                 {locale === "tr" ? "Öne Çıkan Doktor Paneli" : "Featured Doctor Panel"}
               </div>
 
@@ -106,8 +105,8 @@ export function DoctorsCompareTable() {
 
               <div className="mt-8 flex min-h-[3.25rem] items-center justify-center rounded-2xl bg-emerald-600 p-4 text-center text-xs font-bold text-white shadow-md shadow-emerald-600/25">
                 {locale === "tr"
-                  ? "✨ Tüm hastalar, takvim ve tıbbi notlar tek ekranda organize."
-                  : "✨ All patients, calendar, and medical notes organized on one screen."}
+                  ? "Tüm hastalar, takvim ve tıbbi notlar tek ekranda organize."
+                  : "All patients, calendar, and medical notes organized on one screen."}
               </div>
             </div>
           </div>

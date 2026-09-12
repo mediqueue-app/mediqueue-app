@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, Languages, MapPin, Sparkles } from "lucide-react";
+import { ArrowUpRight, Languages, MapPin } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
@@ -61,7 +61,6 @@ export function IncomingRequestCard() {
               </span>
               {c.requestLabel}
             </span>
-            <Sparkles className="h-4 w-4 text-primary" aria-hidden />
           </div>
 
           <div className="mt-5 flex items-start gap-3">

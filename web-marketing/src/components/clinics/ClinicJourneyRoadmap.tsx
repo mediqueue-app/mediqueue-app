@@ -1,12 +1,12 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   Building2,
   CheckCircle2,
   ShieldCheck,
-  Sparkles,
 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { ClinicPerformancePreview } from "@/components/clinics/ClinicPerformancePreview";
@@ -87,8 +87,7 @@ export function ClinicJourneyRoadmap() {
     <section id="yol-haritasi" className="scroll-mt-28 bg-[#f8fafc] pt-6 md:pt-8 pb-20 md:pb-28 lg:pb-32">
       <Container>
         <FadeIn className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary">
-            <Sparkles className="h-4 w-4" />
+          <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary">
             <span>{tr ? "Adım Adım Büyüme Rehberi" : "Step-by-Step Growth Guide"}</span>
           </div>
           <h2 className="font-display mt-5 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-[2.5rem]">
@@ -217,9 +216,13 @@ export function ClinicJourneyRoadmap() {
               <div className="rounded-2xl border border-emerald-300/80 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/40 p-6 shadow-sm ring-1 ring-emerald-500/10">
                 <div className="mb-4 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-emerald-100 text-emerald-800">
-                      <Sparkles className="h-4.5 w-4.5 text-emerald-700" strokeWidth={1.75} />
-                    </span>
+                    <Image
+                      src="/mediqueue-icon.png"
+                      alt="MediQueue"
+                      width={36}
+                      height={36}
+                      className="h-9 w-9 rounded-xl object-cover shadow-sm ring-1 ring-emerald-500/15"
+                    />
                     <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
                       {c.roadmapMqLabel}
                     </span>

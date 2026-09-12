@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { Sparkles, ShieldCheck, HeartPulse } from "lucide-react";
+import { ShieldCheck, HeartPulse } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { HeroBackdrop } from "@/components/ui/HeroBackdrop";
 import { useLocale } from "@/lib/locale";
@@ -26,8 +26,7 @@ export function AboutHero() {
 
       <Container className="relative">
         <motion.div {...anim(0)} className="max-w-4xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light/80 px-4 py-1.5 text-xs font-bold text-primary mb-6 shadow-2xs">
-            <Sparkles className="h-4 w-4" />
+          <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light/80 px-4 py-1.5 text-xs font-bold text-primary mb-6 shadow-2xs">
             <span>{copy.heroEyebrow}</span>
           </div>
 

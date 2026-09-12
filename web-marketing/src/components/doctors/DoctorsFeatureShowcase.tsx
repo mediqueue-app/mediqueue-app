@@ -7,7 +7,6 @@ import {
   Calendar,
   MessageSquare,
   UserCircle,
-  Sparkles,
   type LucideIcon,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
@@ -52,8 +51,7 @@ export function DoctorsFeatureShowcase() {
     <section id="ozellikler" className="scroll-mt-28 bg-white pt-6 md:pt-8 pb-16 md:pb-24">
       <Container>
         <FadeIn>
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-5">
-            <Sparkles className="h-4 w-4" />
+          <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-5">
             <span>
               {locale === "tr"
                 ? "Panel Ekranları & Özellikler"

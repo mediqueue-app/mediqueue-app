@@ -24,8 +24,7 @@ export function AboutValues() {
     <section className="bg-slate-50/50 py-20 md:py-28 border-b border-slate-200/80">
       <Container>
         <FadeIn className="max-w-2xl mb-14 lg:mb-18">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-3">
-            <Sparkles className="h-4 w-4" />
+          <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-3">
             <span>{copy.valuesEyebrow || (tr ? "Değerlerimiz ve Prensiplerimiz" : "Our Core Principles")}</span>
           </div>
           <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { UserCheck, Sparkles, CheckCircle2 } from "lucide-react";
+import { UserCheck, CheckCircle2 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { BilingualChatPreview } from "@/components/patients/journey/BilingualChatPreview";
 import { DiscoverPreview } from "@/components/patients/journey/DiscoverPreview";
@@ -85,8 +85,7 @@ export function PatientJourneyFlow() {
     <section id="yolculuk" className="scroll-mt-28 bg-white pt-6 md:pt-8 pb-20 md:pb-28 lg:pb-32">
       <Container>
         <FadeIn>
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-5">
-            <Sparkles className="h-4 w-4" />
+          <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-5">
             <span>{tr ? "Adım Adım Hasta Rehberi" : "Step-by-Step Patient Guide"}</span>
           </div>
           <h2 className="font-display max-w-2xl text-3xl font-bold tracking-tight text-ink sm:text-4xl">
@@ -216,7 +215,7 @@ export function PatientJourneyFlow() {
                 <div className="rounded-2xl border border-teal-200 bg-teal-50/50 p-5 shadow-2xs">
                   <div className="mb-2.5 flex items-center gap-2">
                     <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-teal-100 text-teal-800">
-                      <Sparkles className="h-4 w-4 text-teal-700" />
+                      <CheckCircle2 className="h-4 w-4 text-teal-700" />
                     </span>
                     <span className="text-xs font-bold uppercase tracking-wider text-teal-800">
                       {currentDetail.mqRole}

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
-import { Stethoscope, Sparkles, ShieldCheck, CheckCircle2 } from "lucide-react";
+import { Stethoscope, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { BilingualChatPreview } from "@/components/patients/journey/BilingualChatPreview";
 import {
@@ -80,8 +81,7 @@ export function DoctorJourneyRoadmap() {
     <section id="yol-haritasi" className="scroll-mt-28 bg-[#f8fafc] pt-6 md:pt-8 pb-20 md:pb-28 lg:pb-32">
       <Container>
         <FadeIn className="max-w-2xl">
-          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary">
-            <Sparkles className="h-4 w-4" />
+          <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary">
             <span>
               {tr ? "Hekim Yol Haritası & Güvence" : "Doctor Roadmap & Support"}
             </span>
@@ -212,9 +212,13 @@ export function DoctorJourneyRoadmap() {
               <div className="rounded-2xl border border-primary/30 bg-primary-light/50 p-6 shadow-sm ring-1 ring-primary/10">
                 <div className="mb-4 flex items-center justify-between">
                   <div className="flex items-center gap-2.5">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary-light text-primary">
-                      <Sparkles className="h-4.5 w-4.5" strokeWidth={1.75} />
-                    </span>
+                    <Image
+                      src="/mediqueue-icon.png"
+                      alt="MediQueue"
+                      width={36}
+                      height={36}
+                      className="h-9 w-9 rounded-xl object-cover shadow-sm ring-1 ring-primary/15"
+                    />
                     <span className="text-xs font-bold uppercase tracking-wider text-primary">
                       {d.roadmapMqLabel}
                     </span>

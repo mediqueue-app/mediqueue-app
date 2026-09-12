@@ -1,6 +1,6 @@
 "use client";
 
-import { ArrowUpRight, BadgeCheck, Building2, MapPin, Sparkles, Star } from "lucide-react";
+import { ArrowUpRight, BadgeCheck, Building2, MapPin, Star } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
@@ -64,7 +64,6 @@ export function PatientDiscoveryCard() {
               </span>
               {tr ? "Canlı Klinik Kıyaslama" : "Live Clinic Discovery"}
             </span>
-            <Sparkles className="h-4 w-4 text-primary" aria-hidden />
           </div>
 
           <div className="mt-5 flex items-start gap-3">

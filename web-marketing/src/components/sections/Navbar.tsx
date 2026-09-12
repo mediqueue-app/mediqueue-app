@@ -10,7 +10,6 @@ import {
   Building2,
   Users,
   Stethoscope,
-  Sparkles,
 } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
@@ -166,10 +165,6 @@ export function Navbar() {
             {dropdownOpen && (
               <div className="absolute left-1/2 top-full pt-2 -translate-x-1/2 w-80">
                 <div className="overflow-hidden rounded-2xl border border-slate-200/90 bg-white p-2.5 shadow-xl shadow-slate-900/10 ring-1 ring-slate-900/5">
-                  <div className="px-3 py-2 text-[10px] font-bold uppercase tracking-wider text-slate-400 border-b border-slate-100 flex items-center gap-1.5 mb-1">
-                    <Sparkles className="h-3.5 w-3.5 text-primary" />
-                    <span>{tr ? "Platform Çözümleri" : "Platform Solutions"}</span>
-                  </div>
                   <div className="space-y-1.5">
                     {solutions.map((item, idx) => {
                       const Icon = SOLUTION_ICONS[idx] ?? Building2;

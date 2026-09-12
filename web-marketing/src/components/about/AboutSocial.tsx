@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
-import { ArrowRight, ArrowUpRight, Sparkles } from "lucide-react";
+import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { useLocale } from "@/lib/locale";
@@ -30,7 +30,7 @@ const PLATFORM_CONFIG = {
     iconBg: "bg-[#0a66c2]/10 text-[#0a66c2] ring-1 ring-[#0a66c2]/20",
     hoverBorder: "hover:border-[#0a66c2]/40 hover:shadow-lg hover:shadow-[#0a66c2]/5",
     badgeBg: "bg-[#0a66c2]/10 text-[#0a66c2]",
-    handle: "@medyqueue",
+    handle: "@mediqueue",
   },
   instagram: {
     icon: InstagramIcon,
@@ -60,8 +60,7 @@ export function AboutSocial() {
           className="border-b border-slate-200/80 pb-20"
         >
           <div className="mx-auto max-w-2xl text-center mb-12">
-            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-3">
-              <Sparkles className="h-4 w-4" />
+            <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-3">
               <span>{tr ? "Topluluk & İletişim" : "Community & Social"}</span>
             </div>
             <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">

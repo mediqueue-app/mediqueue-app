@@ -1,6 +1,6 @@
 "use client";
 
-import { Trophy, Award, ShieldCheck, Sparkles } from "lucide-react";
+import { Trophy, Award, ShieldCheck } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
@@ -41,8 +41,7 @@ export function AboutAchievements() {
                   </h2>
                 </div>
 
-                <div className="hidden lg:flex items-center gap-2 text-xs font-semibold text-white/50">
-                  <Sparkles className="h-4 w-4 text-amber-400" />
+                <div className="hidden lg:flex items-center text-xs font-semibold text-white/50">
                   <span>Tescilli Başarılar</span>
                 </div>
               </div>
