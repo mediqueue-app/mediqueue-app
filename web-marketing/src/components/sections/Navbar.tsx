@@ -123,7 +123,7 @@ export function Navbar() {
         <Logo />
 
         {/* Desktop Navigation Links */}
-        <ul className="hidden items-center gap-7 lg:flex xl:gap-9">
+        <ul className="hidden items-center gap-9 lg:flex xl:gap-12">
           {/* Home Link */}
           <li>
             <Link
