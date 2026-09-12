@@ -117,13 +117,13 @@ export function Navbar() {
       )}
     >
       <nav
-        className="mx-auto flex min-h-[4.5rem] max-w-7xl items-center justify-between gap-6 px-4 py-2 sm:px-6 lg:min-h-[5.25rem] lg:px-8 lg:py-2.5"
+        className="mx-auto flex min-h-[4.25rem] max-w-7xl items-center justify-between gap-6 px-4 py-2 sm:px-6 lg:min-h-[4.75rem] lg:px-8 lg:py-2"
         aria-label="Primary"
       >
         <Logo />
 
         {/* Desktop Navigation Links */}
-        <ul className="hidden items-center gap-12 lg:flex xl:gap-16">
+        <ul className="hidden items-center gap-7 lg:flex xl:gap-9">
           {/* Home Link */}
           <li>
             <Link
