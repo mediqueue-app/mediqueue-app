@@ -14,9 +14,9 @@ const SIZES = {
     className: "h-8.5 w-auto sm:h-9.5 lg:h-11 xl:h-12",
   },
   footer: {
-    width: 280,
-    height: 60,
-    className: "h-11 w-auto sm:h-13 lg:h-[3.5rem]",
+    width: 180,
+    height: 42,
+    className: "h-6.5 w-auto sm:h-7.5 lg:h-8",
   },
 } as const;
 
