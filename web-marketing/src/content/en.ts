@@ -538,7 +538,7 @@ export const en: SiteContent = {
     heroIntro:
       "We are setting a new global standard where middleman commissions, hidden pricing, and uncertain medical travel are replaced by complete transparency. MediQueue is an independent healthcare marketplace connecting international patients directly with accredited clinics and doctors.",
     stats: [
-      { value: "301/1", label: "1st Place Winner", hint: "Düzce Teknopark Entrepreneurship Champion" },
+      { value: "301/1", label: "1st Place Winner", hint: "Entrepreneurship Marathon Champion" },
       { value: "AI-Powered", label: "Smart Matching", hint: "Proprietary algorithm & AI architecture" },
       { value: "100%", label: "Transparent Platform", hint: "Zero broker markup & direct doctor chat" },
       { value: "JCI", label: "Verified Quality", hint: "Only audited & accredited healthcare institutions" },

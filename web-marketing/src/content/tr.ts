@@ -542,7 +542,7 @@ export const tr: SiteContent = {
     heroIntro:
       "Aracı acenta komisyonlarının, gizli fiyatların ve belirsiz tedavi süreçlerinin sona erdiği yeni bir standart kuruyoruz. MediQueue; uluslararası hastalar ile akredite klinik ve hekimleri doğrudan, güvenli ve yapay zeka destekli altyapısıyla buluşturan bağımsız bir pazar yeridir.",
     stats: [
-      { value: "301/1", label: "Teknopark Birincisi", hint: "Düzce Teknopark Maraton Şampiyonu" },
+      { value: "301/1", label: "Teknopark Birincisi", hint: "Girişimcilik Maratonu Şampiyonu" },
       { value: "AI Destekli", label: "Akıllı Eşleşme", hint: "Özgün yapay zeka & algoritma mimarisi" },
       { value: "%100", label: "Şeffaf Pazar Yeri", hint: "Sıfır aracı komisyonu & doğrudan hekim mesajlaşması" },
       { value: "JCI", label: "Lisanslı Güvence", hint: "Yalnızca denetimden geçmiş akredite klinikler" },
