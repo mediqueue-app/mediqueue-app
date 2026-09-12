@@ -70,7 +70,7 @@ export function ContactPage() {
       {/* Hero Section */}
       <section className="relative overflow-hidden border-b border-border bg-slate-50/50">
         <HeroBackdrop withGrid />
-        <Container className="relative pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24">
+        <Container className="relative pt-16 pb-8 sm:pt-20 sm:pb-10 lg:pt-24 lg:pb-12">
           <FadeIn className="max-w-3xl">
             <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary">
               <Sparkles className="h-4 w-4" />
