@@ -9,9 +9,9 @@ const SIZES = {
   lg: { width: 333, height: 70, className: "h-[4.375rem] w-auto" },
   xl: { width: 380, height: 80, className: "h-20 w-auto" },
   nav: {
-    width: 450,
-    height: 96,
-    className: "h-14 w-auto sm:h-16 lg:h-[5.25rem] xl:h-[5.75rem]",
+    width: 320,
+    height: 68,
+    className: "h-11 w-auto sm:h-12 lg:h-14 xl:h-[3.75rem]",
   },
   footer: {
     width: 280,
