@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, Source_Serif_4 } from "next/font/google";
+import Script from "next/script";
 import { content } from "@/content";
 import { SITE_URL } from "@/lib/site";
 import { getRequestLocale } from "@/lib/locale-server";
@@ -59,12 +60,31 @@ export default async function RootLayout({
 }>) {
   const locale = await getRequestLocale();
   const seo = content[locale].seo;
-  const organization = {
+  const jsonLdGraph = {
     "@context": "https://schema.org",
-    "@type": "Organization",
-    name: "MEDIQUEUE",
-    url: SITE_URL,
-    description: seo.description,
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${SITE_URL}/#organization`,
+        name: "MEDIQUEUE",
+        url: SITE_URL,
+        logo: `${SITE_URL}/mediqueue-logo.png`,
+        description: seo.description,
+        sameAs: [
+          "https://www.instagram.com/mediqueue/",
+          "https://www.linkedin.com/company/medyqueue",
+        ],
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/#website`,
+        url: SITE_URL,
+        name: "MEDIQUEUE",
+        description: seo.description,
+        publisher: { "@id": `${SITE_URL}/#organization` },
+        inLanguage: [locale === "tr" ? "tr-TR" : "en-US"],
+      },
+    ],
   };
 
   return (
@@ -74,9 +94,31 @@ export default async function RootLayout({
       className={`${jakarta.variable} ${display.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
+        {process.env.NEXT_PUBLIC_GA_ID && (
+          <>
+            <Script
+              strategy="afterInteractive"
+              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
+            />
+            <Script
+              id="google-analytics"
+              strategy="afterInteractive"
+              dangerouslySetInnerHTML={{
+                __html: `
+                  window.dataLayer = window.dataLayer || [];
+                  function gtag(){dataLayer.push(arguments);}
+                  gtag('js', new Date());
+                  gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', {
+                    page_path: window.location.pathname,
+                  });
+                `,
+              }}
+            />
+          </>
+        )}
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGraph) }}
         />
         <SiteChrome initialLocale={locale}>{children}</SiteChrome>
       </body>

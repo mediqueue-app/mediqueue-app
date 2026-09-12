@@ -21,7 +21,7 @@ export function LegalPage({ kind }: { kind: LegalKey }) {
         {doc.intro}
       </p>
       <div className="mt-12 max-w-3xl space-y-8">
-        {doc.sections.map((section) => (
+        {doc.sections.map((section: any) => (
           <section key={section.heading}>
             <h2 className="text-xl font-semibold text-ink">{section.heading}</h2>
             <p className="mt-3 text-sm leading-relaxed text-slate-600 sm:text-base">

@@ -1,8 +1,11 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { ArrowRight, ArrowUpRight, Sparkles } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { Button } from "@/components/ui/Button";
 import { useLocale } from "@/lib/locale";
+import { useLeadCapture } from "@/lib/lead-capture";
 import { cn } from "@/lib/cn";
 
 function LinkedinIcon({ className }: { className?: string }) {
@@ -21,95 +24,146 @@ function InstagramIcon({ className }: { className?: string }) {
   );
 }
 
-function XIcon({ className }: { className?: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden>
-      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
-    </svg>
-  );
-}
-
-const PLATFORM = {
+const PLATFORM_CONFIG = {
   linkedin: {
     icon: LinkedinIcon,
-    hoverText: "group-hover:text-[#0a66c2]",
-    underline: "group-hover:bg-[#0a66c2]",
+    iconBg: "bg-[#0a66c2]/10 text-[#0a66c2] ring-1 ring-[#0a66c2]/20",
+    hoverBorder: "hover:border-[#0a66c2]/40 hover:shadow-lg hover:shadow-[#0a66c2]/5",
+    badgeBg: "bg-[#0a66c2]/10 text-[#0a66c2]",
+    handle: "@medyqueue",
   },
   instagram: {
     icon: InstagramIcon,
-    hoverText: "group-hover:text-[#c13584]",
-    underline:
-      "group-hover:bg-gradient-to-r group-hover:from-[#f09433] group-hover:via-[#dc2743] group-hover:to-[#bc1888]",
-  },
-  x: {
-    icon: XIcon,
-    hoverText: "group-hover:text-ink",
-    underline: "group-hover:bg-ink",
+    iconBg: "bg-gradient-to-tr from-[#f09433]/15 via-[#e6683c]/15 to-[#bc1888]/15 text-[#c13584] ring-1 ring-[#c13584]/20",
+    hoverBorder: "hover:border-[#c13584]/40 hover:shadow-lg hover:shadow-[#c13584]/5",
+    badgeBg: "bg-[#c13584]/10 text-[#c13584]",
+    handle: "@mediqueue",
   },
 } as const;
 
 export function AboutSocial() {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
+  const tr = locale === "tr";
   const s = t.team;
+  const { openLead } = useLeadCapture();
   const reduced = useReducedMotion();
 
   return (
-    <section className="border-t border-border bg-white py-16 md:py-20">
+    <section className="bg-slate-50/60 py-24 md:py-32">
       <Container>
+        {/* Social Links Cards */}
         <motion.div
           initial={reduced ? false : { opacity: 0, y: 16 }}
           whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-60px" }}
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="border-b border-slate-200/80 pb-20"
         >
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
-            {s.socialTitle}
-          </p>
+          <div className="mx-auto max-w-2xl text-center mb-12">
+            <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-3">
+              <Sparkles className="h-4 w-4" />
+              <span>{tr ? "Topluluk & İletişim" : "Community & Social"}</span>
+            </div>
+            <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
+              {s.socialTitle}
+            </h2>
+            <p className="mt-3 text-base text-slate-600">
+              {tr
+                ? "Resmi duyurularımızı, klinik başarı hikayelerini ve haberleri anlık takip edin."
+                : "Follow our official announcements, clinic success stories, and healthcare updates."}
+            </p>
+          </div>
 
-          <div className="mt-8 flex flex-col gap-8 sm:flex-row sm:items-center sm:gap-0">
-            {s.socialLinks.map((link, i) => {
-              const cfg = PLATFORM[link.platform];
+          <div className="mx-auto max-w-4xl grid gap-6 sm:grid-cols-2">
+            {s.socialLinks.map((link) => {
+              const cfg = PLATFORM_CONFIG[link.platform as keyof typeof PLATFORM_CONFIG] || PLATFORM_CONFIG.linkedin;
               const Icon = cfg.icon;
 
               return (
-                <div key={link.platform} className="flex items-center sm:flex-1">
-                  {i > 0 && (
-                    <div
-                      className="mx-8 hidden h-10 w-px bg-border sm:block"
-                      aria-hidden
-                    />
+                <a
+                  key={link.platform}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={cn(
+                    "group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-slate-200/90 bg-white p-7 shadow-xs transition-all duration-300 hover:-translate-y-1",
+                    cfg.hoverBorder
                   )}
+                >
+                  <div>
+                    <div className="flex items-center justify-between">
+                      <div className={cn("flex h-12 w-12 items-center justify-center rounded-2xl transition-transform duration-300 group-hover:scale-105", cfg.iconBg)}>
+                        <Icon className="h-6 w-6" />
+                      </div>
+                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-slate-100 text-slate-400 transition-colors group-hover:bg-primary group-hover:text-white">
+                        <ArrowUpRight className="h-4.5 w-4.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                      </span>
+                    </div>
 
-                  <a
-                    href={link.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className={cn(
-                      "group flex min-w-0 flex-1 items-center gap-4 text-slate-500 transition-colors duration-300",
-                      cfg.hoverText,
-                      "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-                    )}
-                  >
-                    <Icon className="h-5 w-5 shrink-0 transition-colors duration-300" />
-                    <span className="min-w-0">
-                      <span className="block text-sm font-semibold text-inherit">
+                    <div className="mt-6 flex items-center gap-2.5">
+                      <h3 className="font-display text-xl font-bold text-slate-900">
                         {link.label}
+                      </h3>
+                      <span className={cn("rounded-full px-2.5 py-0.5 text-[11px] font-semibold", cfg.badgeBg)}>
+                        {cfg.handle}
                       </span>
-                      <span className="mt-0.5 block text-xs text-slate-400 transition-colors duration-300 group-hover:text-inherit/70">
-                        {link.hint}
-                      </span>
-                      <span
-                        className={cn(
-                          "mt-2 block h-px w-0 max-w-full bg-transparent transition-all duration-300 group-hover:w-full",
-                          cfg.underline
-                        )}
-                        aria-hidden
-                      />
-                    </span>
-                  </a>
-                </div>
+                    </div>
+
+                    <p className="mt-2.5 text-sm leading-relaxed text-slate-600">
+                      {link.hint}
+                    </p>
+                  </div>
+
+                  <div className="mt-8 flex items-center gap-1.5 border-t border-slate-100 pt-4 text-xs font-bold text-primary">
+                    <span>{tr ? "Sayfayı Ziyaret Et" : "Visit Page"}</span>
+                    <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
+                  </div>
+                </a>
               );
             })}
+          </div>
+        </motion.div>
+
+        {/* Final CTA Banner */}
+        <motion.div
+          initial={reduced ? false : { opacity: 0, y: 24 }}
+          whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-60px" }}
+          transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+          className="mt-16"
+        >
+          <div className="mx-auto max-w-6xl">
+            <div className="relative overflow-hidden rounded-[2.25rem] bg-ink px-8 py-12 text-center sm:px-14 sm:py-16 shadow-2xl">
+              <div
+                className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(58,106,214,0.35),_transparent_55%),radial-gradient(ellipse_at_bottom_right,_rgba(16,185,129,0.2),_transparent_46%)]"
+                aria-hidden
+              />
+
+              <div className="relative z-10 mx-auto max-w-2xl text-center">
+                <h2 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-[2.65rem] leading-tight">
+                  {s.finalCtaTitle || (tr ? "Geleceğin Sağlık Ekosistemine Adım Atın" : "Step Into the Future of Healthcare")}
+                </h2>
+
+                <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
+                  {s.finalCtaBody || (tr ? "İster uluslararası tedavi arayan bir hasta, ister şeffaf büyümek isteyen bir klinik olun; MediQueue güvencesiyle hemen başlayın." : "Get started with MediQueue today.")}
+                </p>
+
+                <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
+                  <Button onClick={() => openLead("patient")} size="lg">
+                    {tr ? "Hasta Olarak Keşfedin" : "Explore as Patient"}
+                    <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+                  </Button>
+                  <Button
+                    onClick={() => openLead("clinic", "clinic")}
+                    size="lg"
+                    className="border-0 bg-white text-ink hover:bg-white/90"
+                  >
+                    {tr ? "Kliniğinizi Ekleyin — Ücretsiz" : "Add Your Clinic — Free"}
+                    <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
+                  </Button>
+                </div>
+              </div>
+            </div>
           </div>
         </motion.div>
       </Container>

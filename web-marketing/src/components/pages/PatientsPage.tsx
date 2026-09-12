@@ -2,6 +2,7 @@
 
 import { PatientsHero } from "@/components/patients/PatientsHero";
 import { WhyMediQueue } from "@/components/patients/WhyMediQueue";
+import { PatientsFeatureShowcase } from "@/components/patients/PatientsFeatureShowcase";
 import { PatientJourneyFlow } from "@/components/patients/PatientJourneyFlow";
 import { TrustCredentials } from "@/components/patients/TrustCredentials";
 import { PatientsFinalCta } from "@/components/patients/PatientsFinalCta";
@@ -11,6 +12,7 @@ export function PatientsPage() {
     <div className="overflow-x-hidden bg-white">
       <PatientsHero />
       <WhyMediQueue />
+      <PatientsFeatureShowcase />
       <PatientJourneyFlow />
       <TrustCredentials />
       <PatientsFinalCta />

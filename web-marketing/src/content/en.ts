@@ -10,18 +10,46 @@ export const en: SiteContent = {
   nav: {
     links: [
       { href: "/", label: "Home" },
-      { href: "/clinics", label: "For clinics" },
-      { href: "/patients", label: "For patients" },
-      { href: "/doctors", label: "For doctors" },
-      { href: "/how-it-works", label: "How it works" },
-      { href: "/team", label: "About us" },
+      { href: "/how-it-works", label: "How It Works" },
+      { href: "/team", label: "About Us" },
+      { href: "/contact", label: "Contact" },
     ],
-    clinicCta: "For my clinic",
+    solutionsLabel: "Solutions",
+    solutions: [
+      { href: "/clinics", label: "For Clinics", desc: "Risk-free patient lead management" },
+      { href: "/patients", label: "For Patients", desc: "Transparent clinic comparison & direct chat" },
+      { href: "/doctors", label: "For Doctors", desc: "Daily schedule & single-screen workflow" },
+    ],
+    clinicCta: "Add Your Clinic",
     openMenu: "Open menu",
     closeMenu: "Close menu",
     localeEn: "EN",
     localeTr: "TR",
     skip: "Skip to content",
+  },
+  contact: {
+    seoTitle: "Contact Us — Get in Touch",
+    eyebrow: "24/7 Dedicated Support",
+    title: "Leave Your Contact Details, We'll Reach Out",
+    intro:
+      "Whether you are a patient seeking treatment or a clinic/doctor looking to join our network — fill in your details and our team will respond within 15 minutes.",
+    patientTab: "Patient & Care Inquiry",
+    clinicTab: "Clinic & Doctor Onboarding",
+    name: "Full Name",
+    email: "Email Address",
+    phone: "Phone / WhatsApp Number",
+    topic: "Subject / Treatment Needed",
+    message: "Message or Additional Requirements",
+    submit: "Send Contact Request",
+    submitting: "Sending Request...",
+    successTitle: "Contact Request Received!",
+    successBody:
+      "Your details have reached our team. We will get in touch with you shortly (average 15 minutes) via your preferred contact channel.",
+    phoneTitle: "Phone & WhatsApp",
+    emailTitle: "Email Addresses",
+    addressTitle: "Headquarters",
+    privacyNote:
+      "Your information is protected with 256-Bit SSL encryption and GDPR compliance. Never shared with third parties.",
   },
   home: {
     platformEyebrow:
@@ -33,18 +61,18 @@ export const en: SiteContent = {
       headlineAccent: "to transparency.",
       subcopy:
         "Compare accredited clinics side by side, message directly, and send a request with no upfront payment. You decide — the process stays visible.",
-      primaryCta: "Explore clinics",
-      secondaryCta: "About us",
-      previewCaption: "Patient app · clinic discovery & compare · demo data",
+      primaryCta: "Explore Clinics",
+      secondaryCta: "How It Works",
+      previewCaption: "Live Demo — Patient App & Clinic Comparison Screen",
     },
     clinic: {
       headline: "Pay for the patient",
       headlineAccent: "who shows up.",
       subcopy:
         "Stop burning ad budget. You are charged only when a real request lands in your panel and the patient arrives — no subscription.",
-      primaryCta: "For my clinic",
-      secondaryCta: "See the flow",
-      previewCaption: "Clinic panel · appointment requests · demo data",
+      primaryCta: "Join as a Clinic",
+      secondaryCta: "See the Process",
+      previewCaption: "Live Demo — Clinic Management Panel & Appointment Requests",
     },
     proof: [
       { kicker: "Competition", title: "1st among 301 startups" },
@@ -129,109 +157,81 @@ export const en: SiteContent = {
     requestTreatment: "Treatment",
     requestLanguage: "Language",
     requestReview: "Review request",
-    metricCaption: "Clinic panel view · sample data",
+    metricCaption: "Live Demo — Clinic Management Panel & Appointment Requests",
     panelLabel: "Clinic panel",
-    compareEyebrow: "Why",
-    compareTitle: "Leave the old playbook. Take your margin back.",
-    compareBeforeLabel: "Traditional approach",
-    compareAfterLabel: "with",
+    compareEyebrow: "Traditional vs. MediQueue",
+    compareTitle: "Zero Ad Risk. Pay Only for Patients Who Show Up.",
+    compareBeforeLabel: "Traditional Methods",
+    compareAfterLabel: "Risk-Free Model",
     compareCriteriaLabel: "Criterion",
     compareRows: [
       {
-        title: "Marketing cost",
-        before: "High ad spend with clicks that do not guarantee outcomes",
+        title: "Marketing Budget",
+        before: "High ad spend with clicks that do not guarantee outcomes or real patients",
         after:
-          "Zero upfront cost — you are charged only when a patient arrives and treatment is confirmed",
+          "Zero upfront cost — charged only when a patient arrives at your clinic and treatment begins",
       },
       {
-        title: "Patient quality",
-        before: "Unfiltered requests with unclear intent",
+        title: "Patient Intent & Quality",
+        before: "Unfiltered requests and leads with unverified budgets or intent",
         after:
-          "Patients whose budget, language, and treatment need are already clarified",
+          "High-intent patient candidates with verified budget, language, and treatment needs",
       },
       {
-        title: "Drop-off / wasted investment",
-        before:
-          "Time and budget spent on consultation, quotes, and communication are lost entirely when the patient walks away at the last minute",
+        title: "Drop-off & Risk Management",
+        before: "Time and budget spent on consultation and quotes are lost when patients walk away",
         after:
-          "Payment is taken only when the patient actually arrives — no pre-approval cost risk; drop-off does not hit your budget",
+          "Payment occurs only upon patient arrival — drop-off risk is fully absorbed by MediQueue",
         highlight: true,
       },
       {
-        title: "Operational load",
-        before:
-          "Request tracking, translation, and coordination scattered across email, WhatsApp, and phone",
+        title: "Operational Load",
+        before: "Tracking, translation, and travel logistics scattered across multiple unorganized channels",
         after:
-          "One panel for requests, quotes, messaging, and approval",
-      },
-      {
-        title: "International reach",
-        before: "Limited flow, often dependent on a single market",
-        after:
-          "Access to a global pool of patients actively seeking accredited care",
+          "All-in-one panel for request management, bilingual chat, appointment confirmation, and tracking",
       },
     ],
-    roadmapTitle: "Your clinic roadmap",
+    roadmapTitle: "Your Clinic Roadmap",
     roadmapIntro:
       "Step by step after you join MediQueue — minimum effort for the clinic, maximum load carried by the platform.",
-    roadmapClinicLabel: "Clinic",
-    roadmapMqLabel: "handles",
+    roadmapClinicLabel: "Clinic Role",
+    roadmapMqLabel: "MediQueue Guarantee",
     roadmapSteps: [
       {
-        title: "Application & review",
+        title: "Free Joining & Profile",
         clinic:
-          "Upload accreditation documents (JCI or equivalent) and pass a short approval process.",
+          "Upload your accreditation documents and define your medical specialties and pricing ranges.",
         mediQueue:
-          "Trust building, marketing asset preparation, and international compliance checks are handled by MediQueue.",
+          "Multilingual profile optimization, institution verification, and presentation are prepared at zero cost.",
         previewHint:
           "Accreditation documents are uploaded in the digital panel; approval status is tracked in real time.",
       },
       {
-        title: "Profile live",
+        title: "Filtered Patient Leads",
         clinic:
-          "Define your specialties, price ranges, and availability.",
+          "Review qualified patient applications with verified budgets, language, and treatment requirements.",
         mediQueue:
-          "Visual/copy optimization, multilingual presentation, SEO, and marketing — the clinic writes no ad copy.",
+          "Automated lead verification and spam filtering ensure only genuine patients reach your clinic.",
         previewHint:
-          "Profile, pricing, and availability — multilingual presentation is prepared automatically.",
+          "Qualified international patient requests are delivered directly to your clinic panel.",
       },
       {
-        title: "Qualified request arrives",
+        title: "Direct Chat & Quotes",
         clinic:
-          "See a patient request in your panel with budget, language, and need already filtered.",
+          "Communicate directly with patients on-platform and deliver customized treatment plans.",
         mediQueue:
-          "Lead filtering, language/budget matching, and spam removal are automatic — you only see real candidates.",
-      },
-      {
-        title: "Direct contact & quote",
-        clinic:
-          "Speak with the patient on-platform (bilingual/auto-translated when needed) and submit your offer.",
-        mediQueue:
-          "Translation infrastructure, secure messaging, and process tracking — the clinic focuses on medical expertise.",
-      },
-      {
-        title: "Patient approval & travel",
-        clinic:
-          "Confirm the treatment date and prepare internally.",
-        mediQueue:
-          "Flight/accommodation coordination and travel logistics are not the clinic's responsibility — the patient arrives ready.",
+          "Bilingual real-time translation and secure messaging infrastructure power direct communication.",
         previewHint:
-          "Treatment date is confirmed; travel logistics are coordinated on the patient side.",
+          "Clinic doctors and patients communicate directly through multilingual messaging.",
       },
       {
-        title: "Payment when patient arrives",
+        title: "Treatment & Settlement",
         clinic:
-          "Deliver treatment; MediQueue commission is deducted only at this stage, on completed treatment.",
+          "Welcome the patient and deliver treatment — zero upfront financial risk until patient arrives.",
         mediQueue:
-          "Upfront payment risk and fake/lost-lead risk sit entirely with MediQueue — the clinic operates at zero risk.",
+          "Service fee is collected only on delivered treatment; drop-off risk is fully backed by MediQueue.",
         previewHint:
-          "Commission applies when treatment is delivered — zero cost risk beforehand.",
-      },
-      {
-        title: "Post-treatment follow-up",
-        clinic: "Plan required medical check-ups.",
-        mediQueue:
-          "Recovery tracking, reminders, and satisfaction management run through the digital assistant — less operational follow-up for the clinic.",
+          "Payment is processed when treatment begins; zero upfront risk beforehand.",
       },
     ],
     performanceTitle: "This month's performance",
@@ -291,68 +291,61 @@ export const en: SiteContent = {
       "Hidden agency commissions, opaque prices, and processes you cannot see are over. MEDIQUEUE puts accredited clinics around the world, real references, and direct communication on one platform. Be the architect of your own treatment journey.",
     primaryCta: "Explore clinics",
     secondaryCta: "Why MEDIQUEUE?",
-    whyEyebrow: "Why",
-    whyTitle: "How we differ from the old way",
-    whyBeforeLabel: "Old way",
-    whyAfterLabel: "with",
-    whyCriteriaLabel: "Feature / criterion",
+    caption: "Live Demo — Patient App & Clinic Comparison",
+    whyEyebrow: "Traditional vs. MediQueue",
+    whyTitle: "Forget Intermediary Agencies. Receive Care with Full Transparency.",
+    whyBeforeLabel: "Traditional Agency Method",
+    whyAfterLabel: "MediQueue Transparent Marketplace",
+    whyCriteriaLabel: "Criterion",
     whyRows: [
       {
-        title: "The dark agency model is over",
+        title: "Transparent Pricing",
         before:
-          "Hidden commissions, opaque prices, and one-sided options pushed by an intermediary.",
+          "Hidden commissions, high agency markups, and surprise last-minute costs",
         after:
-          "A transparent, auditable marketplace. See every approved clinic side by side, without hidden costs.",
+          "View clear all-inclusive treatment packages and prices side by side with zero hidden fees",
       },
       {
-        title: "Matching beyond borders",
+        title: "Accredited Clinic Selection",
         before:
-          "One or two clinics offered to you — no real filtering by language, budget, or need.",
+          "One or two unilateral clinic options pushed by agencies without real filtering",
         after:
-          "Filter in seconds by language, budget, and medical need. Only accredited, relevant options remain.",
+          "Compare hundreds of JCI-accredited clinics freely by specialty, language, and budget",
       },
       {
-        title: "Direct communication, no middleman",
+        title: "Direct Doctor Communication",
         before:
-          "A wall between you and the clinic; no clear conversation with your doctor before treatment.",
+          "No direct contact with doctors; all questions filtered through agency reps",
         after:
-          "Message the clinic directly on the platform. Discuss your plan in advance and remove uncertainty early.",
+          "Message clinic doctors directly with automatic translation and plan your care together",
       },
       {
-        title: "End-to-end assistance",
+        title: "Zero Upfront Payment Risk",
         before:
-          "Scattered coordination abroad; risk of feeling alone with unclear next steps.",
+          "Upfront fees charged for consultation and bookings with financial loss upon cancellation",
         after:
-          "Your digital assistant stays with you from the clinic door until you return home well. You focus on recovery.",
+          "Creating a request is 100% free; payment occurs only when you arrive and treatment begins",
       },
     ],
-    journeyTitle: "Your journey: from app to treatment",
+    journeyTitle: "How Your Treatment Journey Works in 4 Steps",
     journeyIntro:
-      "The real steps from opening MediQueue to completing treatment and returning home — chronological, clear, and predictable.",
+      "The entire journey from search to recovery — transparent, secure, and under your control.",
     journeySteps: [
       {
-        title: "Discover",
-        body: "Search by treatment, city, and date. See only accredited clinics and doctors.",
+        title: "Discover & Compare Clinics",
+        body: "Search by treatment, location, and budget. Inspect success rates and package prices of JCI-accredited clinics.",
       },
       {
-        title: "Compare",
-        body: "Filter by specialty, language, and budget. Compare structured profiles side by side.",
+        title: "Free No-Upfront Request",
+        body: "Send requests to your preferred clinics in one click. Gather quotes with zero upfront fees or obligation.",
       },
       {
-        title: "Send a request",
-        body: "Request an appointment with no upfront payment. The decision stays yours.",
+        title: "Direct Doctor Consult",
+        body: "Chat directly with your clinic doctor using auto-translated messaging; get medical answers first-hand.",
       },
       {
-        title: "Speak directly",
-        body: "Message your chosen clinic on the platform and clarify the treatment plan.",
-      },
-      {
-        title: "Travel and receive care",
-        body: "Go to the clinic and meet your specialist. Optionally, you can request flight and accommodation coordination through the platform if you wish.",
-      },
-      {
-        title: "We stay through recovery",
-        body: "Your digital assistant remains with you after treatment; coordination continues.",
+        title: "Treatment & Recovery Follow-up",
+        body: "Travel to your chosen clinic. Your digital assistant stays by your side throughout treatment and recovery.",
       },
     ],
     discoverPrivacyNote:
@@ -375,11 +368,11 @@ export const en: SiteContent = {
       "Overview, My Patients, Calendar, Messages, Profile — one panel. Run your day from a single screen instead of scattered channels.",
     primaryCta: "Create My Doctor Profile",
     secondaryCta: "Preview the Panel",
-    caption: "Doctor panel — Today's Schedule preview. Demo appointments.",
+    caption: "Live Demo — Doctor Panel & Daily Schedule",
     compareEyebrow: "Compare",
     compareTitle: "Leave the Old Routine. Run Your Day from One Screen.",
     compareBeforeLabel: "Traditional setup",
-    compareAfterLabel: "with",
+    compareAfterLabel: "MediQueue Model",
     compareCriteriaLabel: "Criteria",
     compareRows: [
       {
@@ -415,9 +408,9 @@ export const en: SiteContent = {
         after: 'The "Overview" screen summarizes your day and patient status at a glance',
       },
     ],
-    featuresTitle: "Your panel, step by step",
+    featuresTitle: "Doctor Panel Screens",
     featuresIntro:
-      "Each screen focuses on one job — designed so you can run your day without scatter.",
+      "Each screen focuses on a single job — manage your entire day without scatter.",
     features: [
       {
         id: "overview",
@@ -445,54 +438,36 @@ export const en: SiteContent = {
         body: "This is exactly what patients see when they compare: specialty, experience, clinics you work with, and patient reviews.",
       },
     ],
-    roadmapTitle: "From signup to your first appointment.",
+    roadmapTitle: "Doctor Roadmap: From Signup to First Appointment",
     roadmapIntro:
-      "From creating your profile to your first patient appointment — clear split between what you do and what MediQueue handles.",
+      "Step-by-step from profile creation to your first patient — clear split between doctor's role and MediQueue's support.",
     roadmapDoctorLabel: "Doctor",
     roadmapMqLabel: "MediQueue",
     roadmapSteps: [
       {
-        title: "Create profile",
+        title: "Profile & Specialty",
         doctor:
-          "Enter specialty, experience, and clinic(s) you work with.",
+          "Define your medical specialties, years of experience, and affiliated clinic(s) in your profile.",
         mediQueue:
-          "Profile presentation on the patient side, translation and localization.",
-        previewHint:
-          "Specialty, years of experience, and clinic affiliation defined in the profile form.",
+          "Multilingual profile presentation, photo optimization, and patient visibility are prepared automatically.",
       },
       {
-        title: "Verification",
-        doctor: "Upload license and specialty credentials.",
+        title: "Credential Verification",
+        doctor: "Upload your medical license and specialty certifications to your digital panel.",
         mediQueue:
-          "Verification process and trust badges patients can rely on.",
-        previewHint:
-          "Document upload and approval status tracked from the panel.",
+          "Fast document verification, JCI Accredited Doctor badge approval, and verified profile status.",
       },
       {
-        title: "Set calendar",
-        doctor: "Mark your availability hours in the panel.",
-        mediQueue: "Conflict detection and automatic reminders.",
-        previewHint:
-          "Weekly availability grid — conflicting slots flagged automatically.",
-      },
-      {
-        title: "Patient request arrives",
-        doctor:
-          'See and review the new request in "My Patients".',
+        title: "Calendar & Schedule",
+        doctor: "Set your weekly availability grid and consultation time slots in the panel.",
         mediQueue:
-          "Request arrives filtered, with language and need already clarified.",
+          "Automated conflict prevention, timezone conversion, and patient appointment reminders.",
       },
       {
-        title: "Direct communication",
-        doctor:
-          "Talk to the patient via Messages (bilingual when needed).",
-        mediQueue: "Translation infrastructure and message security.",
-      },
-      {
-        title: "Appointment day",
-        doctor: 'Run the day from the "Today\'s Schedule" screen.',
+        title: "Patient Request & Care",
+        doctor: "Review filtered patient applications and consult directly using auto-translated chat.",
         mediQueue:
-          "Appointment coordination and reminders on the patient side.",
+          "Bilingual real-time chat infrastructure, request tracking, and appointment confirmation system.",
       },
     ],
     trustMessage:
@@ -502,32 +477,32 @@ export const en: SiteContent = {
     finalCta: "Create My Doctor Profile",
   },
   how: {
-    seoTitle: "How it works",
-    eyebrow: "The loop",
-    title: "From first search to care on site.",
+    seoTitle: "How It Works",
+    eyebrow: "Transparent Platform Mechanics",
+    title: "From First Search to Care: How the Process Works",
     intro:
-      "The patient product’s three steps, then the filtering service as it actually runs — not a recommendation engine.",
+      "Free comparison and direct requests for patients; zero upfront risk for clinics. MEDIQUEUE keeps the entire health travel journey transparent, secure, and under your control.",
     steps: [
       {
-        title: "Search & compare",
-        body: "Filter clinics and doctors by symptom, city, and date — and see transparent prices.",
+        title: "Discover & Compare",
+        body: "Filter accredited clinics by treatment, city, and budget; inspect transparent package prices and JCI certifications.",
       },
       {
-        title: "Request an appointment",
-        body: "Pick a date and time, then send a request with no upfront payment.",
+        title: "Free No-Upfront Request",
+        body: "Send requests to your preferred clinics in one click. Gather quotes with zero upfront payment or binding risk.",
       },
       {
-        title: "Get treated",
-        body: "Go to the clinic, meet your specialist, and pay on site.",
+        title: "Direct Consult & Care",
+        body: "Consult directly with clinic doctors via auto-translated messaging. Confirm your care plan and pay upon arrival at the clinic.",
       },
     ],
-    techTitle: "Rule-based filtering. Not a recommendation engine.",
+    techTitle: "Transparent Matching & Smart Filtering Engine",
     techBody:
-      "A Python microservice applies hard filters, then scores and ranks what remains — specialty, language, budget. No machine learning in this version. The list is for a person to compare.",
+      "No hidden agency commissions or behind-the-scenes markups. MEDIQUEUE's smart filtering engine delivers qualified patient requests based on budget, language, and treatment directly to the right clinic.",
     pipeline: [
-      { title: "Filter", body: "Hard rules first. What does not fit is out." },
-      { title: "Score", body: "Survivors are scored on the preferences set." },
-      { title: "Rank", body: "A list to compare. The person decides." },
+      { title: "Criteria & Need Filter", body: "Patient applications are verified and filtered by language, budget, and medical need." },
+      { title: "Accredited Clinic Match", body: "JCI and officially certified healthcare institutions are listed transparently." },
+      { title: "Direct Doctor Communication", body: "Message clinic doctors directly without intermediaries and receive clear quotes." },
     ],
     faqEyebrow: "Frequently Asked Questions",
     faqTitle: "Everything You Need to Know",
@@ -556,94 +531,110 @@ export const en: SiteContent = {
     ],
   },
   team: {
-    seoTitle: "About us",
-    heroEyebrow: "About us",
-    heroLeadBold: "Four founders.",
-    heroLeadLight: "Building from the inside.",
+    seoTitle: "About Us — MediQueue",
+    heroEyebrow: "About Us & Story",
+    heroLeadBold: "Transparency in Healthcare.",
+    heroLeadLight: "Broker-Free Future with Tech.",
     heroIntro:
-      "We are not just building a marketplace — we are dismantling the closed ecosystem where patients are steered blindly and clinics burn budgets on empty ads. MEDIQUEUE is the new standard where trust, direct contact, and technology meet.",
-    missionLabel: "Our mission",
+      "We are setting a new global standard where middleman commissions, hidden pricing, and uncertain medical travel are replaced by complete transparency. MediQueue is an independent healthcare marketplace connecting international patients directly with accredited clinics and doctors.",
+    stats: [
+      { value: "301/1", label: "1st Place Winner", hint: "Düzce Teknopark Entrepreneurship Champion" },
+      { value: "AI-Powered", label: "Smart Matching", hint: "Proprietary algorithm & AI architecture" },
+      { value: "100%", label: "Transparent Platform", hint: "Zero broker markup & direct doctor chat" },
+      { value: "JCI", label: "Verified Quality", hint: "Only audited & accredited healthcare institutions" },
+    ],
+    missionLabel: "Our Mission",
     missionBody:
-      "Leave behind the broker and hidden-commission model in health travel. Patients should connect directly and transparently with accredited clinics worldwide — in their own language, without intermediaries.",
-    visionLabel: "Our vision",
+      "Completely eliminate middleman brokers and hidden commissions from healthcare travel. Enable patients worldwide to connect directly, transparently, and safely with accredited clinics in their native language.",
+    visionLabel: "Our Vision",
     visionBody:
-      "Free clinics from ad agencies selling hope — a risk-free growth model that wins only when matched with real, treatment-ready patients. A sector where transparency is the default, globally.",
-    note: "This is what we are building today. The goal is deeper coordination — as direction, not as a dated roadmap.",
-    achievementChips: [
+      "Free clinics from ad agencies selling unverified leads; empower them with a risk-free growth engine that wins only when matching treatment-ready patients, setting global transparency as the industry default.",
+    valuesEyebrow: "Our Core Principles",
+    valuesTitle: "4 Pillars Defining MediQueue Standards",
+    values: [
       {
-        label: "1st among 301 ventures",
-        detail: "Düzce Teknopark Entrepreneurship Marathon · May 2026",
+        title: "Uncompromising Transparency",
+        body: "No hidden agency markups. All treatment packages, clinic credentials, and doctor licenses are 100% visible to every user.",
+        icon: "ShieldCheck",
       },
       {
-        label: "Patent award",
-        detail: "Proprietary matching algorithm · broker-free business model",
+        title: "Direct Doctor Connection",
+        body: "No sales rep filters. Communicate directly with attending physicians using real-time automated translation.",
+        icon: "Stethoscope",
       },
       {
-        label: "Capsule pre-incubator",
-        detail: "Early-stage growth program",
+        title: "AI-Powered Matching",
+        body: "Fair, unbiased algorithms matching patient budget, language, and specific medical needs with ideal accredited clinics in seconds.",
+        icon: "Sparkles",
+      },
+      {
+        title: "Zero Upfront Risk",
+        body: "Free request creation for patients. Risk-free, sustainable growth for clinics with zero upfront ad waste.",
+        icon: "CheckCircle2",
       },
     ],
-    foundersEyebrow: "Founding team",
-    foundersTitle: "Architects of change",
-    members: [
+    note: "MediQueue is a dynamic ecosystem continuously advancing international healthtech and AI innovation.",
+    achievementsEyebrow: "Awards & Recognition",
+    achievementsTitle: "Our Position in the Tech & Startup Ecosystem",
+    achievementChips: [
       {
-        name: "Furkan Közkaya",
-        roleTitle: "CPO / Mobile + Web",
-        bio: "Builds the product experience end to end; leads cross-platform mobile strategy.",
-        image:
-          "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80",
-        accent: "#3a6ad6",
-        linkedin: "https://linkedin.com/in/furkan-kozkaya",
+        label: "1st Place Winner Among 301 Ventures",
+        detail: "Düzce Teknopark Entrepreneurship Marathon Championship · 2026",
       },
       {
+        label: "Proprietary AI Matching Architecture",
+        detail: "Proprietary AI algorithm & broker-free marketplace model",
+      },
+      {
+        label: "Capsule Pre-Incubator Program",
+        detail: "Early-stage strategic acceleration & mentorship program",
+      },
+    ],
+    foundersEyebrow: "Founding Team",
+    foundersTitle: "Architects of Healthcare Transformation",
+    members: [
+      {
         name: "Azra İrem Derin",
-        roleTitle: "CTO / AI",
-        bio: "Develops AI-powered matching algorithms and the platform data architecture.",
-        image:
-          "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
+        roleTitle: "CTO / AI, Data & Web Engineering",
+        bio: "Developing AI-powered matching algorithms, web platform architecture, and end-to-end data infrastructure.",
+        image: "/team/azra-irem-derin.jpg",
         accent: "#0d9488",
-        linkedin: "https://linkedin.com/in/azra-irem-derin",
+        linkedin: "https://www.linkedin.com/in/azraderin/",
+      },
+      {
+        name: "Furkan Közkaya",
+        roleTitle: "CPO / Product & Mobile Strategy",
+        bio: "Designing end-to-end user experience, managing mobile product strategy and interface architecture.",
+        image: "/team/furkan-kozkaya.jpg",
+        accent: "#3a6ad6",
+        linkedin: "https://www.linkedin.com/in/furkankozkaya/",
       },
       {
         name: "Sinem Özdemir",
-        roleTitle: "CFO / Web",
-        bio: "Builds sustainable financial infrastructure and manages web platform integrations.",
-        image:
-          "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=800&q=80",
+        roleTitle: "CFO / Finance & Business Development",
+        bio: "Establishing sustainable financial structures and managing strategic growth and business development.",
+        image: "/team/sinem-ozdemir.jpg",
         accent: "#2f57b3",
-        linkedin: "https://linkedin.com/in/sinem-ozdemir",
-      },
-      {
-        name: "Kevser Eken",
-        roleTitle: "CMO / Operations",
-        bio: "Expands the international clinic network and leads operational excellence in the field.",
-        image:
-          "https://images.unsplash.com/photo-1594744803329-e58b31de8bf5?auto=format&fit=crop&w=800&q=80",
-        accent: "#1e3a5f",
-        linkedin: "https://linkedin.com/in/kevser-eken",
+        linkedin: "https://www.linkedin.com/in/sinem-ozdemir-/",
       },
     ],
-    socialTitle: "Follow us",
+    socialTitle: "Follow Us on Social Media",
     socialLinks: [
       {
         platform: "linkedin",
         label: "LinkedIn",
-        hint: "Founding team and company updates",
-        href: "https://linkedin.com/company/mediqueue",
+        hint: "Founding team & official company updates",
+        href: "https://www.linkedin.com/company/medyqueue",
       },
       {
         platform: "instagram",
         label: "Instagram",
-        hint: "Clinic stories and behind the scenes",
-        href: "https://instagram.com/mediqueue",
-      },
-      {
-        platform: "x",
-        label: "X",
-        hint: "Short updates",
-        href: "https://x.com/mediqueue",
+        hint: "Clinic stories & patient guide insights",
+        href: "https://www.instagram.com/mediqueue/",
       },
     ],
+    finalCtaTitle: "Step Into the Future of Healthcare",
+    finalCtaBody: "Whether you are a patient seeking transparent treatment or a clinic scaling without broker risks, get started with MediQueue today.",
   },
   footer: {
     tagline:
@@ -654,22 +645,22 @@ export const en: SiteContent = {
         links: [
           { href: "/team", label: "About Us" },
           { href: "/how-it-works", label: "How It Works" },
-          { href: "/team#contact", label: "Contact" },
+          { href: "/contact", label: "Contact" },
         ],
       },
       {
         title: "For Patients",
         links: [
           { href: "/patients", label: "Accredited Clinics" },
-          { href: "/patients#compare", label: "Clinic Comparison" },
-          { href: "/patients", label: "Treatment Guide" },
+          { href: "/patients#ozellikler", label: "Clinic Comparison" },
+          { href: "/patients#yolculuk", label: "Treatment Guide" },
         ],
       },
       {
         title: "Clinics & Doctors",
         links: [
           { href: "/clinics", label: "Clinic Portal" },
-          { href: "/clinics#requests", label: "Patient Requests" },
+          { href: "/clinics#ozellikler", label: "Patient Requests" },
           { href: "/doctors", label: "Doctor Panel" },
         ],
       },
@@ -677,13 +668,74 @@ export const en: SiteContent = {
         title: "Legal & Support",
         links: [
           { href: "/how-it-works#faq", label: "FAQ" },
-          { href: "/patients#privacy", label: "Privacy Policy" },
-          { href: "/patients#kvkk", label: "GDPR & Privacy" },
+          { href: "/privacy", label: "Privacy Policy" },
+          { href: "/terms", label: "GDPR & Privacy" },
         ],
       },
     ],
     copyright: "MediQueue. All rights reserved.",
     privacyNote: "Built with patient privacy as a core principle.",
+    medicalDisclaimer: "MediQueue is a healthcare marketplace platform. All content is for informational purposes only and does not constitute professional medical advice.",
+  },
+  legal: {
+    updatedLabel: "Last Updated",
+    privacy: {
+      title: "Privacy Policy",
+      intro: "At MediQueue, protecting patient privacy and medical data confidentiality is our utmost priority.",
+      updated: "September 12, 2026",
+      sections: [
+        {
+          heading: "1. Data Collection & Use",
+          body: "Treatment requests and medical forms submitted through MediQueue are shared strictly with accredited clinics and physicians you explicitly approve, via encrypted protocols. Your personal contact information is never sold to third parties.",
+        },
+        {
+          heading: "2. GDPR & HIPAA Compliance",
+          body: "In accordance with European General Data Protection Regulation (GDPR) and HIPAA standards, your medical data is stored on high-security servers. You retain the right to request full data deletion at any time.",
+        },
+        {
+          heading: "3. Cookies & Analytics",
+          body: "The platform utilizes anonymous performance cookies to enhance navigation efficiency. You can manage or disable cookie preferences at any time via your browser settings.",
+        },
+      ],
+    },
+    terms: {
+      title: "Terms of Service & Platform Agreement",
+      intro: "Terms and conditions governing the use of MediQueue for patients, accredited clinics, and healthcare specialists.",
+      updated: "September 12, 2026",
+      sections: [
+        {
+          heading: "1. Scope of Service & Marketplace Model",
+          body: "MediQueue is a transparent marketplace connecting international patients directly with accredited healthcare providers without agent markups or hidden broker fees.",
+        },
+        {
+          heading: "2. User Obligations",
+          body: "Users agree to provide accurate information when requesting treatment options. Participating clinics and doctors are responsible for maintaining up-to-date credentials and transparent package pricing.",
+        },
+        {
+          heading: "3. Zero Upfront Payment Policy",
+          body: "Patients can request non-binding treatment quotes with zero upfront deposits or mandatory credit card registration.",
+        },
+      ],
+    },
+    disclaimer: {
+      title: "Medical Disclaimer",
+      intro: "Important legal notification regarding content and informational materials on MediQueue.",
+      updated: "September 12, 2026",
+      sections: [
+        {
+          heading: "1. No Direct Medical Services",
+          body: "MediQueue is not a medical facility, hospital, or diagnostic center. MediQueue does not diagnose or treat medical conditions. All healthcare decisions and procedures are the sole responsibility of licensed physicians and accredited clinics.",
+        },
+        {
+          heading: "2. Informational Purpose Only",
+          body: "Treatment guides, price estimates, and clinic profiles available on the platform serve informational purposes only and do not replace professional medical advice.",
+        },
+        {
+          heading: "3. Emergency Notice",
+          body: "If you are experiencing a medical emergency, please immediately call your local emergency services (112 / 911) or visit the nearest emergency care facility.",
+        },
+      ],
+    },
   },
   previews: enPreviews,
 };

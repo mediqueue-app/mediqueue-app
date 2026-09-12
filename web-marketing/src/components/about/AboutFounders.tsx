@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { ExternalLink } from "lucide-react";
@@ -18,7 +19,7 @@ function LinkedinIcon({ className }: { className?: string }) {
   );
 }
 
-function FounderPortraitCard({
+function FounderCard({
   member,
   index,
   reduced,
@@ -27,9 +28,17 @@ function FounderPortraitCard({
   index: number;
   reduced: boolean | null;
 }) {
+  const [imgError, setImgError] = useState(false);
+
+  const initials = member.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .substring(0, 2);
+
   return (
-    <motion.li
-      initial={reduced ? false : { opacity: 0, y: 32 }}
+    <motion.div
+      initial={reduced ? false : { opacity: 0, y: 24 }}
       whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
       viewport={{ once: true, margin: "-40px" }}
       transition={{
@@ -37,66 +46,57 @@ function FounderPortraitCard({
         delay: index * 0.08,
         ease: [0.22, 1, 0.36, 1],
       }}
-      className="group/card min-w-[15.5rem] flex-1 snap-start sm:min-w-[17rem] lg:min-w-0"
+      className="group flex flex-col"
     >
-      <article
-        className={cn(
-          "relative aspect-[3/4] overflow-hidden rounded-[1.75rem]",
-          "border border-white/10",
-          "transition-transform duration-500 group-hover/card:scale-[1.015]"
+      {/* Portrait Photo Container */}
+      <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-slate-100 shadow-sm transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-md">
+        {!imgError ? (
+          <Image
+            src={member.image}
+            alt={member.name}
+            fill
+            sizes="(max-width: 1024px) 50vw, 25vw"
+            onError={() => setImgError(true)}
+            className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+          />
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-slate-200 p-6 text-center text-slate-700">
+            <span className="flex h-16 w-16 items-center justify-center rounded-full bg-primary/10 text-xl font-bold text-primary mb-2">
+              {initials}
+            </span>
+            <span className="text-xs font-semibold">{member.name}</span>
+          </div>
         )}
-      >
-        <Image
-          src={member.image}
-          alt={member.name}
-          fill
-          sizes="(max-width: 1024px) 70vw, 20vw"
-          className="object-cover object-top transition-transform duration-700 group-hover/card:scale-105"
-        />
-
-        <div
-          className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/95 via-black/35 to-black/10"
-          aria-hidden
-        />
 
         <a
           href={member.linkedin}
           target="_blank"
           rel="noopener noreferrer"
-          className={cn(
-            "absolute right-4 top-4 inline-flex items-center gap-2 rounded-full",
-            "border border-white/10 bg-black/45 px-3 py-1.5 backdrop-blur-md",
-            "font-medium text-white/90 opacity-0 transition-all duration-300",
-            "group-hover/card:opacity-100 hover:border-white/25 hover:bg-black/65",
-            "focus-visible:opacity-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white/50"
-          )}
+          className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-slate-900/80 px-3 py-1 text-[11px] font-bold text-white backdrop-blur-md transition-all duration-300 hover:bg-primary"
           aria-label={`LinkedIn — ${member.name}`}
         >
-          <LinkedinIcon className="h-3.5 w-3.5" />
-          LinkedIn
-          <ExternalLink className="h-3 w-3 opacity-70" strokeWidth={2} />
+          <LinkedinIcon className="h-3 w-3" />
+          <span>LinkedIn</span>
+          <ExternalLink className="h-2.5 w-2.5 opacity-70" />
         </a>
+      </div>
 
-        <div className="absolute inset-x-0 bottom-0 p-5 sm:p-6">
-          <p
-            className="text-[10px] font-semibold uppercase tracking-[0.18em]"
-            style={{ color: member.accent }}
-          >
-            {member.roleTitle}
-          </p>
-          <h3 className="mt-2 text-xl font-semibold leading-tight tracking-tight text-white sm:text-[1.35rem]">
-            {member.name}
-          </h3>
-          <p className="mt-1.5 line-clamp-2 text-sm leading-snug text-white/55">
-            {member.bio}
-          </p>
-          <div
-            className="mt-4 h-px w-10 bg-white/20 transition-all duration-300 group-hover/card:w-16"
-            aria-hidden
-          />
-        </div>
-      </article>
-    </motion.li>
+      {/* Info Below Image */}
+      <div className="mt-4 flex flex-col">
+        <span
+          className="text-[11px] font-bold uppercase tracking-wider text-primary"
+          style={{ color: member.accent }}
+        >
+          {member.roleTitle}
+        </span>
+        <h3 className="mt-1 text-lg font-bold text-slate-900">
+          {member.name}
+        </h3>
+        <p className="mt-1.5 text-xs leading-relaxed text-slate-600">
+          {member.bio}
+        </p>
+      </div>
+    </motion.div>
   );
 }
 
@@ -106,39 +106,33 @@ export function AboutFounders() {
   const reduced = useReducedMotion();
 
   return (
-    <section className="bg-ink py-20 md:py-28">
+    <section className="bg-white py-20 md:py-28 border-b border-slate-200/80">
       <Container>
         <motion.header
           initial={reduced ? false : { opacity: 0, y: 20 }}
           whileInView={reduced ? undefined : { opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-80px" }}
           transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-          className="mb-12 md:mb-14"
+          className="mb-14 lg:mb-18 max-w-2xl text-center mx-auto"
         >
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-accent-light">
+          <span className="text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
             {copy.foundersEyebrow}
-          </p>
-          <h2 className="font-display mt-3 text-3xl tracking-tight text-white sm:text-4xl">
+          </span>
+          <h2 className="font-display mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
             {copy.foundersTitle}
           </h2>
         </motion.header>
 
-        <ul
-          className={cn(
-            "flex gap-4 overflow-x-auto pb-2",
-            "snap-x snap-mandatory [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden",
-            "lg:grid lg:grid-cols-4 lg:overflow-visible lg:pb-0"
-          )}
-        >
+        <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3 lg:gap-10 max-w-5xl mx-auto">
           {copy.members.map((member, i) => (
-            <FounderPortraitCard
+            <FounderCard
               key={member.name}
               member={member}
               index={i}
               reduced={reduced}
             />
           ))}
-        </ul>
+        </div>
       </Container>
     </section>
   );

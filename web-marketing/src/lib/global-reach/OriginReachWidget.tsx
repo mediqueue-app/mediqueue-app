@@ -8,6 +8,7 @@ import { cityLabel, countryLabel, formatNumber } from "./format";
 import type { CountryPatientData, OriginReachScope } from "./types";
 import { PLATFORM_HUB } from "./types";
 import { useLocale } from "@/lib/locale";
+import { DemoCaptionPill } from "@/components/ui/DemoCaptionPill";
 
 function cn(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(" ");
@@ -261,9 +262,9 @@ export function OriginReachWidget({
       </div>
 
       {demoCaption && (
-        <p className="border-t border-slate-100 px-5 py-3 text-center text-xs text-slate-400 sm:px-6">
-          {demoCaption}
-        </p>
+        <div className="border-t border-slate-100/80 px-5 py-3.5 sm:px-6">
+          <DemoCaptionPill className="mt-0">{demoCaption}</DemoCaptionPill>
+        </div>
       )}
     </div>
   );

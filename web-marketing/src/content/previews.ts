@@ -103,8 +103,8 @@ export type PreviewsContent = {
 
 export const trPreviews: PreviewsContent = {
   reviews: "değerlendirme",
-  matchPatientDemo: "Demo Hasta · #P-4821",
-  clinicCode: "Klinik #A1B2",
+  matchPatientDemo: "Thomas M. · Münih, Almanya",
+  clinicCode: "Anadolu Sağlık Merkezi",
   incomingCityAge: "Doha, Katar · 34",
   incomingTreatment: "Saç Ekimi (DHI)",
   incomingLanguages: "Arapça, İngilizce",
@@ -171,9 +171,9 @@ export const trPreviews: PreviewsContent = {
     ],
   },
   compareClinics: [
-    { code: "Klinik #A1B2", specialty: "Saç Ekimi (DHI)", rating: 4.8, reviews: 128, region: "Avrupa" },
-    { code: "Klinik #C3D4", specialty: "Saç Ekimi (FUE)", rating: 4.6, reviews: 94, region: "Orta Doğu" },
-    { code: "Klinik #E5F6", specialty: "Saç Ekimi (Sapphire)", rating: 4.9, reviews: 211, region: "Avrupa" },
+    { code: "Anadolu Estetik Merkezi", specialty: "Saç Ekimi (DHI)", rating: 4.9, reviews: 128, region: "İstanbul" },
+    { code: "Memorial Sağlık Grubu", specialty: "Saç Ekimi (FUE)", rating: 4.8, reviews: 94, region: "İstanbul" },
+    { code: "Acıbadem Health", specialty: "Saç Ekimi (Sapphire)", rating: 4.9, reviews: 211, region: "Ankara" },
   ],
   schedule: {
     kicker: "Günlük akış",
@@ -299,9 +299,9 @@ export const enPreviews: PreviewsContent = {
     ],
   },
   compareClinics: [
-    { code: "Clinic #A1B2", specialty: "Hair transplant (DHI)", rating: 4.8, reviews: 128, region: "Europe" },
-    { code: "Clinic #C3D4", specialty: "Hair transplant (FUE)", rating: 4.6, reviews: 94, region: "Middle East" },
-    { code: "Clinic #E5F6", specialty: "Hair transplant (Sapphire)", rating: 4.9, reviews: 211, region: "Europe" },
+    { code: "Anadolu Aesthetic Center", specialty: "Hair Transplant (DHI)", rating: 4.9, reviews: 128, region: "Istanbul" },
+    { code: "Memorial Health Group", specialty: "Hair Transplant (FUE)", rating: 4.8, reviews: 94, region: "Istanbul" },
+    { code: "Acibadem Health", specialty: "Hair Transplant (Sapphire)", rating: 4.9, reviews: 211, region: "Ankara" },
   ],
   schedule: {
     kicker: "Daily flow",

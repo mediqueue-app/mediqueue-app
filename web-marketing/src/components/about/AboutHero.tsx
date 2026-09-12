@@ -1,7 +1,9 @@
 "use client";
 
 import { motion, useReducedMotion } from "framer-motion";
+import { Sparkles, ShieldCheck, HeartPulse } from "lucide-react";
 import { Container } from "@/components/ui/Container";
+import { HeroBackdrop } from "@/components/ui/HeroBackdrop";
 import { useLocale } from "@/lib/locale";
 
 export function AboutHero() {
@@ -9,51 +11,48 @@ export function AboutHero() {
   const copy = t.team;
   const reduced = useReducedMotion();
 
-  const line = (delay: number) =>
+  const anim = (delay: number) =>
     reduced
       ? {}
       : {
-          initial: { opacity: 0, y: 32 },
+          initial: { opacity: 0, y: 24 },
           animate: { opacity: 1, y: 0 },
-          transition: { duration: 0.95, delay, ease: [0.22, 1, 0.36, 1] as const },
+          transition: { duration: 0.85, delay, ease: [0.22, 1, 0.36, 1] as const },
         };
 
   return (
-    <section className="relative overflow-hidden bg-white">
-      <div
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_80%_55%_at_20%_-5%,rgba(58,106,214,0.07),transparent_55%)]"
-        aria-hidden
-      />
+    <section className="relative overflow-hidden bg-slate-50/40 border-b border-slate-200/80 pt-28 pb-16 sm:pt-32 sm:pb-20 lg:pt-36 lg:pb-24">
+      <HeroBackdrop withGrid />
 
-      <Container className="relative flex min-h-[78vh] flex-col justify-center py-24 md:py-32 lg:py-36">
-        <motion.p
-          {...line(0)}
-          className="text-[11px] font-semibold uppercase tracking-[0.22em] text-primary"
-        >
-          {copy.heroEyebrow}
-        </motion.p>
+      <Container className="relative">
+        <motion.div {...anim(0)} className="max-w-4xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light/80 px-4 py-1.5 text-xs font-bold text-primary mb-6 shadow-2xs">
+            <Sparkles className="h-4 w-4" />
+            <span>{copy.heroEyebrow}</span>
+          </div>
 
-        <h1 className="mt-8 max-w-5xl">
-          <motion.span
-            {...line(0.1)}
-            className="block font-display text-[2.75rem] font-semibold leading-[1.06] tracking-[-0.03em] text-ink sm:text-6xl lg:text-[4.25rem] xl:text-[4.75rem]"
-          >
-            {copy.heroLeadBold}
-          </motion.span>
-          <motion.span
-            {...line(0.22)}
-            className="mt-1 block font-display text-[2.5rem] font-normal italic leading-[1.06] tracking-[-0.02em] text-slate-600 sm:mt-2 sm:text-[3.25rem] lg:text-[4rem] xl:text-[4.75rem]"
-          >
-            {copy.heroLeadLight}
-          </motion.span>
-        </h1>
+          <h1 className="font-display text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-[4rem] leading-[1.1]">
+            {copy.heroLeadBold}{" "}
+            <span className="bg-gradient-to-r from-primary via-primary-dark to-slate-900 bg-clip-text text-transparent font-semibold italic">
+              {copy.heroLeadLight}
+            </span>
+          </h1>
 
-        <motion.p
-          {...line(0.38)}
-          className="mt-10 max-w-2xl text-lg leading-[1.75] text-slate-600 sm:text-xl sm:leading-[1.8]"
-        >
-          {copy.heroIntro}
-        </motion.p>
+          <p className="mt-6 max-w-3xl text-lg leading-relaxed text-slate-600 sm:text-xl sm:leading-relaxed">
+            {copy.heroIntro}
+          </p>
+
+          <div className="mt-10 flex flex-wrap items-center gap-6 border-t border-slate-200/80 pt-6 text-xs font-semibold text-slate-500">
+            <span className="flex items-center gap-2 text-slate-800">
+              <ShieldCheck className="h-4 w-4 text-emerald-600" />
+              %100 Doğrulanmış Sağlık Ağı
+            </span>
+            <span className="flex items-center gap-2 text-slate-800">
+              <HeartPulse className="h-4 w-4 text-primary" />
+              Sıfır Komisyonlu İletişim
+            </span>
+          </div>
+        </motion.div>
       </Container>
     </section>
   );

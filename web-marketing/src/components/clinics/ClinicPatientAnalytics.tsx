@@ -31,7 +31,7 @@ export function ClinicPatientAnalytics() {
   return (
     <section
       id="hasta-analitigi"
-      className="scroll-mt-24 border-t border-border bg-band py-16 md:py-20"
+      className="scroll-mt-28 border-t border-border bg-band pt-6 md:pt-8 pb-16 md:pb-20"
       aria-labelledby="clinic-analytics-title"
     >
       <Container>

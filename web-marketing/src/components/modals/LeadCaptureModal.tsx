@@ -34,9 +34,47 @@ const emptyForm = (role: "clinic" | "doctor"): FormState => ({
   consent: false,
 });
 
+const defaultLeadCopy = {
+  close: "Kapat",
+  patientTab: "Hasta Talebi",
+  clinicTab: "Klinik / Doktor Kaydı",
+  patientTitle: "Ücretsiz Sağlık & Tedavi Talebi Oluşturun",
+  clinicTitle: "Kliniğinizi MediQueue'ye Ekleyin",
+  patientBody: "Talep kriterlerinizi girin, akredite klinikler sizden ön ödeme almadan teklif versin.",
+  clinicBody: "Abonelik ücreti ödemeyin. Yalnızca panelinize düşen gerçek talepler için işlem yapın.",
+  successTitle: "Talebiniz Başarıyla Alındı!",
+  successBody: "Ekibimiz ve akredite klinikler talebinizi inceleyip en kısa sürede sizinle iletişime geçecektir.",
+  name: "Ad Soyad",
+  email: "E-posta Adresi",
+  phone: "Telefon Numarası",
+  country: "İkamet Ettiğiniz Ülke",
+  treatment: "Talep Edilen Tedavi",
+  treatmentOptions: [
+    "Saç Ekimi (DHI / FUE)",
+    "Estetik & Plastik Cerrahi",
+    "Göz Cerrahisi & LASIK",
+    "Diş Tedavisi & Gülüş Tasarımı",
+    "Obezite & Bariatrik Cerrahi",
+    "Ortopedi & Fizik Tedavi",
+    "Diğer",
+  ],
+  clinicName: "Klinik / Hastane Adı",
+  city: "Şehir / Ülke",
+  website: "Web Sitesi (Opsiyonel)",
+  role: "Rolünüz",
+  roleClinic: "Klinik Yöneticisi / Temsilcisi",
+  roleDoctor: "Hekim / Doktor",
+  message: "Semptomlar veya Özel İstekleriniz",
+  consent: "Kişisel verilerimin işlenmesini ve gizlilik politikasını kabul ediyorum.",
+  privacyLink: "Gizlilik Politikası",
+  error: "Bir hata oluştu. Lütfen tüm alanları doldurup tekrar deneyin.",
+  submitting: "Gönderiliyor...",
+  submit: "Talebi Gönder",
+};
+
 export function LeadCaptureModal() {
   const { t } = useLocale();
-  const copy = t.lead;
+  const copy = { ...defaultLeadCopy, ...(t?.lead || {}) };
   const { open, mode, role, openLead, closeLead } = useLeadCapture();
   const titleId = useId();
   const [form, setForm] = useState<FormState>(() => emptyForm(role));
@@ -99,6 +137,8 @@ export function LeadCaptureModal() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           mode,
+          source: "Modal Formu (Lead Modal)",
+          formType: mode === "patient" ? "Hasta Talebi Formu" : "Klinik / Doktor Kaydı Formu",
           ...form,
           locale: t.seo.title,
         }),
@@ -221,7 +261,7 @@ export function LeadCaptureModal() {
                     className={inputClass(Boolean(errors.treatment))}
                   >
                     <option value="" />
-                    {copy.treatmentOptions.map((option) => (
+                    {copy.treatmentOptions.map((option: string) => (
                       <option key={option} value={option}>
                         {option}
                       </option>
@@ -294,7 +334,7 @@ export function LeadCaptureModal() {
               <span>
                 {copy.consent}{" "}
                 <a href="/privacy" className="font-medium text-primary underline">
-                  {t.legal.privacyLink}
+                  {t?.legal?.privacyLink || copy.privacyLink}
                 </a>
               </span>
             </label>
@@ -314,7 +354,7 @@ export function LeadCaptureModal() {
             </button>
 
             <p className="text-[11px] leading-relaxed text-slate-500">
-              {t.footer.medicalDisclaimer}
+              {t?.footer?.medicalDisclaimer || "Hasta gizliliği ve veri güvenliği temel ilkemizdir."}
             </p>
           </form>
         )}

@@ -11,7 +11,7 @@ export function FaqSection({ className }: { className?: string }) {
   const [open, setOpen] = useState(0);
 
   return (
-    <section id="sss" className={cn("bg-white py-16 md:py-20", className)}>
+    <section id="sss" className={cn("scroll-mt-28 bg-white pt-6 md:pt-8 pb-16 md:pb-20", className)}>
       <Container className="max-w-3xl">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
           {t.faq.eyebrow}
@@ -20,7 +20,7 @@ export function FaqSection({ className }: { className?: string }) {
           {t.faq.title}
         </h2>
         <ul className="mt-8 divide-y divide-border rounded-2xl border border-border bg-white">
-          {t.faq.items.map((item, index) => {
+          {t.how.faqItems.map((item: any, index: number) => {
             const expanded = open === index;
             return (
               <li key={item.question}>

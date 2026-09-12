@@ -5,13 +5,15 @@ import { Button } from "@/components/ui/Button";
 import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
+import { useLeadCapture } from "@/lib/lead-capture";
 
 export function PatientsFinalCta() {
   const { t } = useLocale();
   const p = t.patients;
+  const { openLead } = useLeadCapture();
 
   return (
-    <section className="scroll-mt-24 pb-28 pt-8">
+    <section className="scroll-mt-28 pt-4 pb-20">
       <Container>
         <FadeIn>
           <div className="relative overflow-hidden rounded-[1.75rem] bg-ink px-8 py-20 text-center sm:px-16 sm:py-24">
@@ -27,7 +29,7 @@ export function PatientsFinalCta() {
                 {p.finalBody}
               </p>
               <div className="mt-10">
-                <Button href="/patients#yolculuk" size="lg">
+                <Button onClick={() => openLead("patient")} size="lg">
                   {p.finalCta}
                   <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
                 </Button>

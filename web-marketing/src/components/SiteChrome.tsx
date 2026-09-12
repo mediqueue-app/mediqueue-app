@@ -5,6 +5,8 @@ import { Navbar } from "@/components/sections/Navbar";
 import { Footer } from "@/components/sections/Footer";
 import { DocumentTitle } from "@/components/DocumentTitle";
 import { LocaleProvider, useLocale } from "@/lib/locale";
+import { LeadCaptureProvider } from "@/lib/lead-capture";
+import { LeadCaptureModal } from "@/components/modals/LeadCaptureModal";
 import type { Locale } from "@/content";
 
 export function SiteChrome({
@@ -16,7 +18,10 @@ export function SiteChrome({
 }) {
   return (
     <LocaleProvider initialLocale={initialLocale}>
-      <ChromeInner>{children}</ChromeInner>
+      <LeadCaptureProvider>
+        <ChromeInner>{children}</ChromeInner>
+        <LeadCaptureModal />
+      </LeadCaptureProvider>
     </LocaleProvider>
   );
 }

@@ -2,13 +2,12 @@
 
 import { useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { UserCheck, Sparkles, CheckCircle2 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { BilingualChatPreview } from "@/components/patients/journey/BilingualChatPreview";
-import { ComparePreview } from "@/components/patients/journey/ComparePreview";
 import { DiscoverPreview } from "@/components/patients/journey/DiscoverPreview";
 import { RecoveryPreview } from "@/components/patients/journey/RecoveryPreview";
 import { RequestFormPreview } from "@/components/patients/journey/RequestFormPreview";
-import { TravelPreview } from "@/components/patients/journey/TravelPreview";
 import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
@@ -18,14 +17,10 @@ function JourneyPreview({ step }: { step: number }) {
     case 0:
       return <DiscoverPreview />;
     case 1:
-      return <ComparePreview />;
-    case 2:
       return <RequestFormPreview />;
-    case 3:
+    case 2:
       return <BilingualChatPreview />;
-    case 4:
-      return <TravelPreview />;
-    case 5:
+    case 3:
       return <RecoveryPreview />;
     default:
       return <DiscoverPreview />;
@@ -33,69 +28,132 @@ function JourneyPreview({ step }: { step: number }) {
 }
 
 export function PatientJourneyFlow() {
-  const { t } = useLocale();
+  const { locale, t } = useLocale();
+  const tr = locale === "tr";
   const p = t.patients;
   const reduced = useReducedMotion();
   const [active, setActive] = useState(0);
   const steps = p.journeySteps;
   const progress = ((active + 1) / steps.length) * 100;
 
+  const stepDetails = [
+    {
+      patientRole: tr ? "Özgür Seçim" : "Free Selection",
+      patientText: tr
+        ? "Acenta yönlendirmesi olmadan, bütçe ve konumunuza uygun JCI akredite klinikleri özgürce kıyaslayın."
+        : "Compare JCI-accredited clinics freely by budget and location without agency bias.",
+      mqRole: tr ? "MediQueue Şeffaflığı" : "MediQueue Transparency",
+      mqText: tr
+        ? "Gerçek hasta değerlendirmeleri, onaylı lisanslar ve gizli maliyetsiz net paket fiyatları sunulur."
+        : "Verified patient reviews, certified licenses, and clear all-inclusive package prices.",
+    },
+    {
+      patientRole: tr ? "Sıfır Riskli Başvuru" : "Zero-Risk Request",
+      patientText: tr
+        ? "Kredi kartı veya ön ödeme gerekmeden beğendiğiniz kliniklere tek tıkla resmi talep iletin."
+        : "Submit official requests to preferred clinics in one click with zero upfront fees or deposits.",
+      mqRole: tr ? "Veri Gizliliği & Güvenlik" : "Data Privacy & Safety",
+      mqText: tr
+        ? "Siz onay verene kadar kişisel iletişim bilgileriniz gizli tutulur; yalnızca doğrulanmış teklifler toplanır."
+        : "Personal contact info stays private until you approve; only verified offers are collected.",
+    },
+    {
+      patientRole: tr ? "Aracısız Doğrudan Mesajlaşma" : "Direct Doctor Chat",
+      patientText: tr
+        ? "Tedavi planınızı doğrudan sorumlu hekiminizle konuşun, aklınızdaki tüm soruları ilk elden yanıtlayın."
+        : "Discuss your treatment plan directly with your doctor and get first-hand medical answers.",
+      mqRole: tr ? "Anlık Otomatik Çeviri" : "Instant Auto-Translation",
+      mqText: tr
+        ? "Çift yönlü otomatik çeviri altyapısı sayesinde yabancı dildeki doktorlarla dil engeli yaşamadan yazışın."
+        : "Bilingual auto-translation enables seamless messaging with international doctors without language barriers.",
+    },
+    {
+      patientRole: tr ? "Güvenli Tedavi & Seyahat" : "Safe Care & Travel",
+      patientText: tr
+        ? "Klinik kapısında karşılanın, tedavinizi tamamlayıp huzurla eve dönün."
+        : "Receive warm arrival welcome, complete treatment, and return home with full peace of mind.",
+      mqRole: tr ? "Kesintisiz İyileşme Takibi" : "Continuous Recovery Support",
+      mqText: tr
+        ? "Operasyon sonrasında da iyileşme kontrolleri ve hatırlatmalar dijital asistan üzerinden devam eder."
+        : "Post-op check-ups and recovery reminders continue through your digital assistant even after returning home.",
+    },
+  ];
+
+  const currentDetail = stepDetails[active] || stepDetails[0];
+
   return (
-    <section id="yolculuk" className="scroll-mt-24 bg-white py-16 md:py-20">
+    <section id="yolculuk" className="scroll-mt-28 bg-white pt-6 md:pt-8 pb-20 md:pb-28 lg:pb-32">
       <Container>
         <FadeIn>
-          <h2 className="font-display max-w-2xl text-3xl tracking-tight text-ink sm:text-4xl">
+          <div className="inline-flex items-center gap-2 rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-5">
+            <Sparkles className="h-4 w-4" />
+            <span>{tr ? "Adım Adım Hasta Rehberi" : "Step-by-Step Patient Guide"}</span>
+          </div>
+          <h2 className="font-display max-w-2xl text-3xl font-bold tracking-tight text-ink sm:text-4xl">
             {p.journeyTitle}
           </h2>
-          <p className="mt-4 max-w-2xl text-lg leading-relaxed text-slate-600">
+          <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
             {p.journeyIntro}
           </p>
         </FadeIn>
 
-        <div className="mt-12 hidden lg:block">
-          <div className="relative">
-            <div className="absolute left-0 right-0 top-5 h-px bg-border" aria-hidden />
-            <motion.div
-              className="absolute left-0 top-5 h-px bg-primary"
-              aria-hidden
-              initial={false}
-              animate={{ width: `${progress}%` }}
-              transition={{ duration: reduced ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
+        {/* Timeline Desktop Navigation */}
+        <div className="relative mt-16 lg:mt-20 hidden lg:block">
+          {/* Continuous background track line behind circle centers */}
+          <div
+            className="absolute top-5 left-[12.5%] right-[12.5%] h-0.5 -translate-y-1/2 bg-slate-200"
+            aria-hidden
+          />
+          {/* Continuous active progress blue line */}
+          <div
+            className="absolute top-5 left-[12.5%] right-[12.5%] h-0.5 -translate-y-1/2 pointer-events-none"
+            aria-hidden
+          >
+            <div
+              className="h-full bg-primary transition-all duration-500 ease-out"
+              style={{ width: `${(active / (steps.length - 1)) * 100}%` }}
             />
-            <ol className="relative grid grid-cols-6 gap-2">
-              {steps.map((step, i) => {
-                const current = i === active;
-                return (
-                  <li key={step.title}>
-                    <button
-                      type="button"
-                      onClick={() => setActive(i)}
+          </div>
+
+          <ol className="relative grid grid-cols-4 gap-4">
+            {steps.map((step, i) => {
+              const current = i === active;
+              const isPast = i < active;
+              return (
+                <li key={step.title} className="relative">
+                  <button
+                    type="button"
+                    onClick={() => setActive(i)}
+                    className={cn(
+                      "group relative z-10 flex w-full flex-col items-center text-center transition-colors focus-visible:outline-none",
+                      current
+                        ? "text-primary"
+                        : "text-slate-500 hover:text-slate-800"
+                    )}
+                  >
+                    <span
                       className={cn(
-                        "group w-full text-left transition-colors",
-                        current ? "text-primary" : "text-slate-400 hover:text-slate-700"
+                        "mb-3 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white text-sm font-bold transition-all shadow-xs",
+                        current
+                          ? "border-primary text-primary ring-4 ring-primary/10"
+                          : isPast
+                          ? "border-primary bg-primary-light text-primary"
+                          : "border-slate-300 text-slate-400 group-hover:border-slate-400"
                       )}
                     >
-                      <span
-                        className={cn(
-                          "mb-4 flex h-10 w-10 items-center justify-center rounded-full border-2 bg-white text-sm font-bold transition-colors",
-                          current
-                            ? "border-primary text-primary"
-                            : "border-border text-slate-400 group-hover:border-slate-300"
-                        )}
-                      >
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className="block text-sm font-semibold leading-snug text-slate-900">
-                        {step.title}
-                      </span>
-                    </button>
-                  </li>
-                );
-              })}
-            </ol>
-          </div>
+                      {String(i + 1).padStart(2, "0")}
+                    </span>
+                    <span className="block text-sm font-semibold leading-snug text-slate-900 text-center max-w-[180px]">
+                      {step.title}
+                    </span>
+                  </button>
+                </li>
+              );
+            })}
+          </ol>
         </div>
 
+        {/* Mobile Horizontal Pill Scroll */}
         <div className="mt-10 flex gap-2 overflow-x-auto pb-2 lg:hidden">
           {steps.map((step, i) => (
             <button
@@ -114,7 +172,8 @@ export function PatientJourneyFlow() {
           ))}
         </div>
 
-        <div className="mt-10 grid items-start gap-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-14">
+        {/* Main Content Grid (Balanced Heights) */}
+        <div className="mt-14 lg:mt-18 grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-14">
           <AnimatePresence mode="wait">
             <motion.div
               key={active}
@@ -122,16 +181,65 @@ export function PatientJourneyFlow() {
               animate={{ opacity: 1, y: 0 }}
               exit={reduced ? undefined : { opacity: 0, y: -8 }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              className="flex flex-col justify-between"
             >
-              <p className="font-display text-6xl font-semibold leading-none text-slate-100">
-                {String(active + 1).padStart(2, "0")}
-              </p>
-              <h3 className="-mt-8 text-2xl font-bold tracking-tight text-slate-900">
-                {steps[active]?.title}
-              </h3>
-              <p className="mt-4 text-[15px] leading-relaxed text-slate-600">
-                {steps[active]?.body}
-              </p>
+              <div>
+                <div className="flex items-center gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-white text-base font-bold shadow-md shadow-primary/25">
+                    0{active + 1}
+                  </span>
+                  <h3 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                    {steps[active]?.title}
+                  </h3>
+                </div>
+                <p className="mt-4 text-[15px] leading-relaxed text-slate-600">
+                  {steps[active]?.body}
+                </p>
+              </div>
+
+              {/* Action & Guarantee Detail Cards */}
+              <div className="mt-6 grid gap-4 sm:grid-cols-2">
+                <div className="rounded-2xl border border-slate-200/90 bg-slate-50/70 p-5 shadow-2xs">
+                  <div className="mb-2.5 flex items-center gap-2">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-200/80 text-slate-700">
+                      <UserCheck className="h-4 w-4" />
+                    </span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                      {currentDetail.patientRole}
+                    </span>
+                  </div>
+                  <p className="text-xs leading-relaxed text-slate-600 font-medium">
+                    {currentDetail.patientText}
+                  </p>
+                </div>
+
+                <div className="rounded-2xl border border-teal-200 bg-teal-50/50 p-5 shadow-2xs">
+                  <div className="mb-2.5 flex items-center gap-2">
+                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-teal-100 text-teal-800">
+                      <Sparkles className="h-4 w-4 text-teal-700" />
+                    </span>
+                    <span className="text-xs font-bold uppercase tracking-wider text-teal-800">
+                      {currentDetail.mqRole}
+                    </span>
+                  </div>
+                  <p className="text-xs leading-relaxed text-slate-700 font-semibold">
+                    {currentDetail.mqText}
+                  </p>
+                </div>
+              </div>
+
+              {/* Key Benefit Highlights */}
+              <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50/50 p-4">
+                <p className="flex items-center gap-2 text-xs font-bold text-slate-800">
+                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+                  {tr ? "Öne Çıkan Güven Unsuru" : "Key Safety Highlight"}
+                </p>
+                <p className="mt-1 text-xs text-slate-600 leading-relaxed">
+                  {tr
+                    ? "Tüm tıbbi görüşmeler ve teklifler KVKK/GDPR uyumlu şifreli altyapı üzerinden yürütülür."
+                    : "All medical consultations and quotes are handled via HIPAA/GDPR encrypted infrastructure."}
+                </p>
+              </div>
             </motion.div>
           </AnimatePresence>
 
@@ -142,7 +250,7 @@ export function PatientJourneyFlow() {
               animate={{ opacity: 1, y: 0 }}
               exit={reduced ? undefined : { opacity: 0 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="rounded-2xl border border-border bg-band p-3 sm:p-4"
+              className="rounded-2xl border border-slate-200 bg-[#f8fafc] p-3.5 sm:p-5 shadow-sm"
             >
               <JourneyPreview step={active} />
             </motion.div>

@@ -2,6 +2,7 @@
 
 import { FileText, Users, Wallet } from "lucide-react";
 import { useLocale } from "@/lib/locale";
+import { DemoCaptionPill } from "@/components/ui/DemoCaptionPill";
 
 const ICONS = [Users, FileText, Wallet];
 
@@ -46,7 +47,7 @@ export function ClinicPerformancePreview() {
           );
         })}
       </div>
-      <p className="mt-4 text-center text-xs text-slate-400">{c.metricCaption}</p>
+      <DemoCaptionPill className="mt-4">{c.metricCaption}</DemoCaptionPill>
     </div>
   );
 }

@@ -8,12 +8,35 @@ export type SiteContent = {
   seo: { title: string; description: string };
   nav: {
     links: NavLink[];
+    solutionsLabel?: string;
+    solutions?: { href: string; label: string; desc: string }[];
     clinicCta: string;
     openMenu: string;
     closeMenu: string;
     localeEn: string;
     localeTr: string;
     skip: string;
+  };
+  contact: {
+    seoTitle: string;
+    eyebrow: string;
+    title: string;
+    intro: string;
+    patientTab: string;
+    clinicTab: string;
+    name: string;
+    email: string;
+    phone: string;
+    topic: string;
+    message: string;
+    submit: string;
+    submitting: string;
+    successTitle: string;
+    successBody: string;
+    phoneTitle: string;
+    emailTitle: string;
+    addressTitle: string;
+    privacyNote: string;
   };
   home: {
     platformEyebrow: string;
@@ -134,6 +157,7 @@ export type SiteContent = {
     heroSub: string;
     primaryCta: string;
     secondaryCta: string;
+    caption: string;
     whyEyebrow: string;
     whyTitle: string;
     whyBeforeLabel: string;
@@ -232,12 +256,24 @@ export type SiteContent = {
       hint: string;
       href: string;
     }[];
+    stats?: { label: string; value: string; hint: string }[];
+    valuesEyebrow?: string;
+    valuesTitle?: string;
+    values?: { title: string; body: string; icon: string }[];
+    achievementsEyebrow?: string;
+    achievementsTitle?: string;
+    finalCtaTitle?: string;
+    finalCtaBody?: string;
   };
   footer: {
     tagline: string;
     groups: { title: string; links: NavLink[] }[];
     copyright: string;
     privacyNote: string;
+    medicalDisclaimer?: string;
   };
+  legal?: any;
+  faq?: any;
+  lead?: any;
   previews: PreviewsContent;
 };

@@ -8,6 +8,7 @@ import { Container } from "@/components/ui/Container";
 import { ClinicRequestsPreview } from "@/components/product/ClinicRequestsPreview";
 import { ComparePreview } from "@/components/patients/journey/ComparePreview";
 import { useLocale } from "@/lib/locale";
+import { useLeadCapture } from "@/lib/lead-capture";
 import { cn } from "@/lib/cn";
 import { HeroBackdrop } from "@/components/ui/HeroBackdrop";
 
@@ -18,6 +19,7 @@ const spring = { type: "spring" as const, stiffness: 380, damping: 32 };
 
 export function HomeHero() {
   const { t } = useLocale();
+  const { openLead } = useLeadCapture();
   const h = t.home;
   const reduced = useReducedMotion();
   const [mode, setMode] = useState<Mode>("patient");
@@ -81,7 +83,7 @@ export function HomeHero() {
           </div>
         </div>
 
-        <div className="mt-12 grid items-center gap-12 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)] lg:gap-16">
+        <div className="mt-8 grid gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16 lg:items-center">
           <AnimatePresence mode="wait">
             <motion.div
               key={mode}
@@ -89,18 +91,20 @@ export function HomeHero() {
               animate={{ opacity: 1, x: 0 }}
               exit={reduced ? undefined : { opacity: 0, x: mode === "patient" ? 16 : -16 }}
               transition={{ duration: reduced ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="max-w-xl lg:mx-0"
+              className="max-w-xl my-auto py-2"
             >
-              <h1 className="font-display text-[2.35rem] leading-[1.06] tracking-[-0.03em] text-ink sm:text-5xl lg:text-[3.2rem]">
-                {copy.headline}
-                <span className="mt-1 block text-primary">{copy.headlineAccent}</span>
-              </h1>
-              <p className="mt-6 text-lg leading-relaxed text-slate-600">
-                {copy.subcopy}
-              </p>
-              <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <div>
+                <h1 className="font-display text-[2.35rem] leading-[1.06] tracking-[-0.03em] text-ink sm:text-5xl lg:text-[3.2rem]">
+                  {copy.headline}
+                  <span className="mt-1 block text-primary">{copy.headlineAccent}</span>
+                </h1>
+                <p className="mt-5 text-lg leading-relaxed text-slate-600">
+                  {copy.subcopy}
+                </p>
+              </div>
+              <div className="mt-8 flex flex-col gap-3.5 sm:flex-row">
                 <Button
-                  href={mode === "patient" ? "/patients" : "/clinics"}
+                  onClick={() => openLead(mode === "patient" ? "patient" : "clinic", mode === "clinic" ? "clinic" : undefined)}
                   size="lg"
                   className="shadow-[0_14px_36px_-10px_rgba(58,106,214,0.45)]"
                 >
@@ -115,17 +119,6 @@ export function HomeHero() {
                   {copy.secondaryCta}
                 </Button>
               </div>
-              <ul className="mt-8 flex flex-wrap gap-2">
-                {h.proof.map((item) => (
-                  <li
-                    key={item.title}
-                    className="rounded-full border border-border bg-white/80 px-3.5 py-1.5 text-xs text-slate-600 backdrop-blur-sm"
-                  >
-                    <span className="font-semibold text-accent">{item.kicker}</span>
-                    <span className="ml-2">{item.title}</span>
-                  </li>
-                ))}
-              </ul>
             </motion.div>
           </AnimatePresence>
 
@@ -136,7 +129,7 @@ export function HomeHero() {
               animate={{ opacity: 1, y: 0 }}
               exit={reduced ? undefined : { opacity: 0, y: -12 }}
               transition={{ duration: reduced ? 0 : 0.4, ease: [0.22, 1, 0.36, 1] }}
-              className="relative"
+              className="relative min-h-[460px]"
             >
               <div
                 className="pointer-events-none absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-primary/10 via-transparent to-accent/10 blur-2xl"
@@ -149,9 +142,15 @@ export function HomeHero() {
                   <ClinicRequestsPreview compact />
                 )}
               </div>
-              <p className="mt-3 text-center text-xs text-slate-500 lg:text-left">
-                {copy.previewCaption}
-              </p>
+              <div className="mt-4 flex items-center justify-center">
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200/90 bg-white/90 px-4 py-1.5 text-xs font-semibold text-slate-700 shadow-xs backdrop-blur-xs">
+                  <span className="relative flex h-2 w-2 shrink-0">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+                  </span>
+                  <span>{copy.previewCaption}</span>
+                </div>
+              </div>
             </motion.div>
           </AnimatePresence>
         </div>

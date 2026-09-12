@@ -4,6 +4,7 @@ import { ArrowUpRight, Languages, MapPin, Sparkles } from "lucide-react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
+import { DemoCaptionPill } from "@/components/ui/DemoCaptionPill";
 
 export function IncomingRequestCard() {
   const { t } = useLocale();
@@ -11,7 +12,7 @@ export function IncomingRequestCard() {
   const reduced = useReducedMotion();
 
   return (
-    <div className="relative mx-auto w-full max-w-[26rem] lg:mx-0 lg:ml-auto">
+    <div className="relative mx-auto w-full max-w-[26rem]">
       <div
         className="pointer-events-none absolute -right-10 -top-10 h-56 w-56 rounded-full bg-primary/20 blur-3xl"
         aria-hidden
@@ -21,31 +22,32 @@ export function IncomingRequestCard() {
         aria-hidden
       />
 
+      {/* Floating Back Card - peeks cleanly above the top edge without ghost text overlap */}
       <motion.div
-        className="absolute inset-x-6 top-8 -z-0 rounded-[1.5rem] border border-slate-200/80 bg-white/70 p-5 shadow-[0_20px_50px_-28px_rgba(15,23,42,0.22)] backdrop-blur-md"
+        className="absolute inset-x-6 -top-5 -z-0 rounded-[1.5rem] border border-slate-200/80 bg-slate-50 p-4 shadow-sm"
         aria-hidden
-        initial={reduced ? false : { opacity: 0, y: 16, rotate: -4 }}
-        animate={reduced ? undefined : { opacity: 1, y: 0, rotate: -3 }}
+        initial={reduced ? false : { opacity: 0, y: 12, rotate: -3 }}
+        animate={reduced ? undefined : { opacity: 1, y: 0, rotate: -2 }}
         transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
       >
-        <div className="flex items-center gap-3 opacity-70">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-xs font-bold text-slate-500">
+        <div className="flex items-center gap-3 opacity-60">
+          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-200 text-xs font-bold text-slate-600">
             SL
           </div>
           <div>
-            <p className="text-sm font-semibold text-slate-700">Sophie Laurent</p>
-            <p className="text-xs text-slate-400">{t.previews.incomingRhinoplasty}</p>
+            <p className="text-xs font-semibold text-slate-700">Sophie Laurent</p>
           </div>
         </div>
       </motion.div>
 
+      {/* Main Foreground Card - solid bg-white so no ghost text bleeds through */}
       <motion.article
-        className="relative z-10 mt-14 w-full"
-        initial={reduced ? false : { opacity: 0, y: 28, rotate: 3 }}
-        animate={reduced ? undefined : { opacity: 1, y: 0, rotate: 1.25 }}
+        className="relative z-10 mt-6 w-full"
+        initial={reduced ? false : { opacity: 0, y: 20 }}
+        animate={reduced ? undefined : { opacity: 1, y: 0 }}
         transition={{ duration: 0.75, ease: [0.22, 1, 0.36, 1], delay: 0.18 }}
       >
-        <div className="rounded-[1.6rem] border border-white/80 bg-white/85 p-6 shadow-[0_40px_90px_-28px_rgba(15,23,42,0.38)] backdrop-blur-xl">
+        <div className="rounded-[1.6rem] border border-slate-200/80 bg-white p-6 shadow-[0_28px_70px_-20px_rgba(15,23,42,0.18)]">
           <div className="flex items-center justify-between gap-3">
             <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-2.5 py-1 text-[11px] font-semibold text-emerald-700 ring-1 ring-emerald-100">
               <span className="relative flex h-1.5 w-1.5">
@@ -113,6 +115,8 @@ export function IncomingRequestCard() {
           </div>
         </div>
       </motion.article>
+
+      <DemoCaptionPill className="mt-5">{c.metricCaption}</DemoCaptionPill>
     </div>
   );
 }
