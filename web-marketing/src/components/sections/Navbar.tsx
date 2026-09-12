@@ -117,7 +117,7 @@ export function Navbar() {
       )}
     >
       <nav
-        className="mx-auto flex min-h-[5.25rem] max-w-7xl items-center justify-between gap-8 px-4 py-3 sm:px-6 lg:min-h-[6.5rem] lg:px-8"
+        className="mx-auto flex min-h-[4.25rem] max-w-7xl items-center justify-between gap-6 px-4 py-1.5 sm:px-6 lg:min-h-[5rem] lg:px-8 lg:py-2"
         aria-label="Primary"
       >
         <Logo />
