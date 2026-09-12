@@ -21,7 +21,7 @@ export function AboutHero() {
         };
 
   return (
-    <section className="relative overflow-hidden bg-slate-50/40 border-b border-slate-200/80 pt-16 pb-8 sm:pt-20 sm:pb-10 lg:pt-24 lg:pb-12">
+    <section className="relative overflow-hidden bg-slate-50/40 border-b border-slate-200/80 pt-20 pb-8 sm:pt-24 sm:pb-10 lg:pt-28 lg:pb-12">
       <HeroBackdrop withGrid />
 
       <Container className="relative">

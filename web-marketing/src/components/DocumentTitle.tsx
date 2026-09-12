@@ -11,6 +11,7 @@ export function DocumentTitle() {
 
   useEffect(() => {
     document.title = documentTitleForPath(locale, pathname);
+    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
   }, [locale, pathname]);
 
   return null;
