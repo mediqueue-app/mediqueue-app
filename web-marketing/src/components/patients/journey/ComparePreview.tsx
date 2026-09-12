@@ -29,8 +29,7 @@ export function ComparePreview() {
 
       <div className="p-4">
         <p className="text-lg font-bold text-slate-900">{p.compareTitle}</p>
-        <p className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-slate-500">
-          <BrandLogo size="xs" />
+        <p className="mt-0.5 text-sm text-slate-500">
           <span>{p.compareSubtitle}</span>
         </p>
 

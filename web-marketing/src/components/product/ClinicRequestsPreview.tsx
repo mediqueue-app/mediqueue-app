@@ -40,8 +40,7 @@ export function ClinicRequestsPreview({ compact = false }: { compact?: boolean }
       </div>
       <div className="p-4">
         <p className="text-lg font-bold text-slate-900">{copy.title}</p>
-        <p className="mt-0.5 flex flex-wrap items-center gap-x-1.5 gap-y-1 text-sm text-slate-500">
-          <BrandLogo size="xs" />
+        <p className="mt-0.5 text-sm text-slate-500">
           <span>{copy.subtitle}</span>
         </p>
         <div className="mt-4 flex flex-wrap gap-2">
