@@ -197,7 +197,7 @@ export const tr: SiteContent = {
     roadmapIntro:
       "MediQueue'ye katıldıktan sonra süreç adım adım nasıl işler — kliniğin yaptığı minimum, platformun üstlendiği maksimum.",
     roadmapClinicLabel: "Kliniğin Rolü",
-    roadmapMqLabel: "MediQueue Güvencesi",
+    roadmapMqLabel: "MEDIQUEUE Güvencesi",
     roadmapSteps: [
       {
         title: "Katılım & Profil",
@@ -446,7 +446,7 @@ export const tr: SiteContent = {
     roadmapIntro:
       "Profil oluşturmaktan ilk hasta kabulünüze kadar geçen 4 adımlı süreç — hekimin rolü ve MediQueue desteği.",
     roadmapDoctorLabel: "Doktor",
-    roadmapMqLabel: "MediQueue",
+    roadmapMqLabel: "MEDIQUEUE",
     roadmapSteps: [
       {
         title: "Profil & Uzmanlık",

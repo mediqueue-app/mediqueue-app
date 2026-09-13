@@ -29,28 +29,24 @@ export function ClinicPatientAnalytics() {
   }, [a.panelSubtitle, locale]);
 
   return (
-    <section
-      id="hasta-analitigi"
-      className="scroll-mt-28 border-b border-slate-200/80 bg-white py-12 md:py-16"
-      aria-labelledby="clinic-analytics-title"
-    >
-      <Container>
+    <div className="w-full bg-white py-1 sm:py-2" id="hasta-analitigi">
+      <div className="w-full">
         <FadeIn>
           <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
             {a.eyebrow}
           </p>
           <h2
             id="clinic-analytics-title"
-            className="font-display mt-2 max-w-2xl text-2xl font-bold tracking-tight text-ink sm:text-3xl"
+            className="font-display mt-1.5 max-w-2xl text-xl font-bold tracking-tight text-ink sm:text-2xl"
           >
             {a.title}
           </h2>
-          <p className="mt-3 max-w-2xl text-base text-slate-600">
+          <p className="mt-2 max-w-2xl text-sm text-slate-600 leading-relaxed">
             {a.body}
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.08} className="mt-8">
+        <FadeIn delay={0.08} className="mt-4 sm:mt-5">
           <OriginReachWidget
             scope="clinic"
             data={previewClinicOriginCountries}
@@ -59,27 +55,26 @@ export function ClinicPatientAnalytics() {
             countryColumnLabel={a.countryColumn}
             patientColumnLabel={a.patientColumn}
             emptyListText={a.emptyList}
-            demoCaption={a.demoCaption}
             revealOnScroll
             variant="section"
             showListScrollControls
           />
         </FadeIn>
 
-        <FadeIn delay={0.12} className="mt-8">
-          <ul className="grid gap-6 sm:grid-cols-3">
+        <FadeIn delay={0.12} className="mt-4 sm:mt-5">
+          <ul className="grid gap-4 sm:grid-cols-3">
             {a.highlights.map((item, i) => {
               const Icon = HIGHLIGHT_ICONS[i] ?? Globe2;
               return (
-                <li key={item.title} className="flex gap-3 items-start">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-primary shadow-sm ring-1 ring-border mt-0.5">
-                    <Icon className="h-4 w-4" strokeWidth={1.75} />
+                <li key={item.title} className="flex gap-2.5 items-start">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-white text-primary shadow-xs ring-1 ring-border mt-0.5">
+                    <Icon className="h-3.5 w-3.5" strokeWidth={1.75} />
                   </span>
                   <div>
-                    <p className="text-sm font-semibold text-slate-900">
+                    <p className="text-xs font-semibold text-slate-900">
                       {item.title}
                     </p>
-                    <p className="mt-1 text-xs text-slate-600 leading-relaxed">
+                    <p className="mt-0.5 text-[11px] text-slate-600 leading-relaxed">
                       {item.body}
                     </p>
                   </div>
@@ -88,7 +83,7 @@ export function ClinicPatientAnalytics() {
             })}
           </ul>
         </FadeIn>
-      </Container>
-    </section>
+      </div>
+    </div>
   );
 }
