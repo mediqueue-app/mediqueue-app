@@ -179,7 +179,7 @@ export function ContactPage() {
                             required
                             value={form.email}
                             onChange={(e) => setForm({ ...form, email: e.target.value })}
-                            placeholder="ornek@email.com"
+                            placeholder={tr ? "ornek@email.com" : "example@email.com"}
                             className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
                           />
                         </div>
@@ -191,7 +191,7 @@ export function ContactPage() {
                             type="tel"
                             value={form.phone}
                             onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                            placeholder="+90 5XX XXX XX XX"
+                            placeholder={tr ? "+90 5XX XXX XX XX" : "+44 7XXX XXXXXX"}
                             className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
                           />
                         </div>

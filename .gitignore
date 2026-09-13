@@ -52,11 +52,20 @@ build/
 !.vscode/extensions.json
 !.vscode/settings.json
 
+# Logs & Build artifacts
+*.log
+logs/
+build-*.log
+*.tsbuildinfo
+
+# Temporary & Local Scripts
+*.ps1
+scripts/
+**/scripts/
+tsconfig.scripts.json
+**/tsconfig.scripts.json
+
 # OS
 .DS_Store
 Thumbs.db
 desktop.ini
-
-# Logs
-*.log
-logs/

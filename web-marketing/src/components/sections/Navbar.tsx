@@ -10,6 +10,7 @@ import {
   Building2,
   Users,
   Stethoscope,
+  ArrowLeft,
 } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
@@ -267,80 +268,115 @@ export function Navbar() {
       {/* Offset for fixed header */}
       <div className="h-[3.75rem] lg:h-[4.25rem]" aria-hidden />
 
-      {/* Mobile menu — sibling fixed layer, not nested under sticky */}
+      {/* Mobile menu — full-screen modal drawer */}
       {open && (
         <div
-          className="fixed inset-0 z-40 bg-white lg:hidden"
+          className="fixed inset-0 z-[150] flex flex-col bg-white lg:hidden"
           role="dialog"
           aria-modal="true"
           aria-label={tr ? "Menü" : "Menu"}
         >
-          {/* Match header height so content starts below the real nav bar */}
-          <div className="h-[3.75rem]" aria-hidden />
-          <div className="h-[calc(100dvh-3.75rem)] overflow-y-auto overscroll-contain px-6 py-6 pb-10">
-            <div className="border-b border-slate-100 pb-4 mb-4">
-              <p className="mb-2 px-3 text-xs font-bold uppercase tracking-wider text-slate-400">
+          {/* Top Header Bar inside drawer */}
+          <div className="flex h-[3.75rem] shrink-0 items-center justify-between border-b border-slate-200/80 px-4 sm:px-6">
+            <div className="flex items-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => setOpen(false)}
+                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200/90 bg-slate-100/90 px-3 py-1.5 text-xs font-bold text-slate-700 transition-colors hover:bg-slate-200 active:scale-95"
+                aria-label={tr ? "Geri Dön" : "Go Back"}
+              >
+                <ArrowLeft className="h-4 w-4" />
+                <span>{tr ? "Geri" : "Back"}</span>
+              </button>
+              <Logo size="nav" />
+            </div>
+            <button
+              type="button"
+              onClick={() => setOpen(false)}
+              className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
+              aria-label={t.nav.closeMenu}
+            >
+              <X className="h-5 w-5" />
+            </button>
+          </div>
+
+          {/* Scrollable Content Area */}
+          <div className="flex-1 overflow-y-auto px-4 py-5 sm:px-6 space-y-6">
+            {/* Solutions Section */}
+            <div>
+              <p className="mb-2.5 px-1 text-xs font-bold uppercase tracking-wider text-slate-400">
                 {solutionsLabel}
               </p>
-              <ul className="space-y-1">
+              <div className="space-y-2">
                 {solutions.map((item, idx) => {
                   const Icon = SOLUTION_ICONS[idx] ?? Building2;
                   return (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        onClick={() => setOpen(false)}
-                        className="flex items-center gap-3 rounded-xl px-3 py-2.5 text-base font-bold text-slate-900 hover:bg-slate-50"
-                      >
-                        <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary-light text-primary">
-                          <Icon className="h-4 w-4" />
-                        </span>
-                        {item.label}
-                      </Link>
-                    </li>
+                    <Link
+                      key={item.href}
+                      href={item.href}
+                      onClick={() => setOpen(false)}
+                      className="flex items-center gap-3.5 rounded-2xl border border-slate-200/70 bg-slate-50/60 p-3 transition-all hover:border-slate-300 hover:bg-slate-100/70 active:scale-[0.99]"
+                    >
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-primary shadow-xs ring-1 ring-slate-200/80">
+                        <Icon className="h-5 w-5" />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-sm font-bold text-slate-900">{item.label}</p>
+                        <p className="text-xs text-slate-500 line-clamp-1">{item.desc}</p>
+                      </div>
+                    </Link>
                   );
                 })}
-              </ul>
+              </div>
             </div>
 
-            <ul className="mb-4 flex flex-col gap-1 border-b border-slate-100 pb-4">
-              <li>
+            {/* Quick Navigation Links */}
+            <div className="border-t border-slate-100 pt-5">
+              <p className="mb-2.5 px-1 text-xs font-bold uppercase tracking-wider text-slate-400">
+                {tr ? "SAYFALAR" : "PAGES"}
+              </p>
+              <div className="grid grid-cols-2 gap-2">
                 <Link
                   href="/"
                   onClick={() => setOpen(false)}
-                  className="block rounded-xl px-3 py-2.5 text-base font-bold text-slate-900 hover:bg-slate-50"
+                  className="flex items-center justify-center rounded-xl border border-slate-200/60 bg-slate-50/50 py-3 text-sm font-bold text-slate-900 transition-colors hover:bg-slate-100"
                 >
                   {tr ? "Ana Sayfa" : "Home"}
                 </Link>
-              </li>
-              {t.nav.links
-                .filter((l) => l.href !== "/")
-                .map((link) => (
-                  <li key={link.href}>
+                {t.nav.links
+                  .filter((l) => l.href !== "/")
+                  .map((link) => (
                     <Link
+                      key={link.href}
                       href={link.href}
                       onClick={() => setOpen(false)}
-                      className="block rounded-xl px-3 py-2.5 text-base font-bold text-slate-900 hover:bg-slate-50"
+                      className="flex items-center justify-center rounded-xl border border-slate-200/60 bg-slate-50/50 py-3 text-sm font-bold text-slate-900 transition-colors hover:bg-slate-100"
                     >
                       {link.label}
                     </Link>
-                  </li>
-                ))}
-            </ul>
-
-            <div className="flex flex-col items-start gap-4">
-              <LocaleToggle locale={locale} setLocale={setLocale} t={t} compact />
-              <Button
-                size="lg"
-                onClick={() => {
-                  setOpen(false);
-                  openLead("patient");
-                }}
-                className="w-full justify-center shadow-xs shadow-primary/20"
-              >
-                {tr ? "Hemen Başlayın" : "Get Started"}
-              </Button>
+                  ))}
+              </div>
             </div>
+          </div>
+
+          {/* Bottom Fixed Bar (Language + Action CTA) */}
+          <div className="shrink-0 border-t border-slate-200/80 bg-white p-4 sm:p-5 space-y-3">
+            <div className="flex items-center justify-between px-1">
+              <span className="text-xs font-bold text-slate-600">
+                {tr ? "Dil Seçimi" : "Language"}
+              </span>
+              <LocaleToggle locale={locale} setLocale={setLocale} t={t} compact />
+            </div>
+            <Button
+              size="lg"
+              onClick={() => {
+                setOpen(false);
+                openLead("patient");
+              }}
+              className="w-full justify-center shadow-md shadow-primary/20"
+            >
+              {tr ? "Hemen Başlayın" : "Get Started"}
+            </Button>
           </div>
         </div>
       )}

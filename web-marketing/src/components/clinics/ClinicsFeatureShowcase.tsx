@@ -123,14 +123,14 @@ export function ClinicsFeatureShowcase() {
             </ul>
           </FadeIn>
 
-          <FadeIn delay={0.12} className="lg:sticky lg:top-28">
+          <FadeIn delay={0.12}>
             <AnimatePresence mode="wait">
               <motion.div
                 key={currentFeature.id}
-                initial={reduced ? false : { opacity: 0, y: 4 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={reduced ? undefined : { opacity: 0, y: -4 }}
-                transition={{ duration: 0.2, ease: "easeOut" }}
+                initial={reduced ? false : { opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={reduced ? undefined : { opacity: 0 }}
+                transition={{ duration: 0.15, ease: "easeOut" }}
               >
                 <div className="mb-3 flex items-center gap-2 lg:hidden">
                   <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-white">

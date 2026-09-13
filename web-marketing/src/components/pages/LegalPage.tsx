@@ -1,16 +1,25 @@
 "use client";
 
+import Link from "next/link";
+import { ArrowLeft } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { useLocale } from "@/lib/locale";
 
 type LegalKey = "privacy" | "terms" | "disclaimer";
 
 export function LegalPage({ kind }: { kind: LegalKey }) {
-  const { t } = useLocale();
+  const { t, locale } = useLocale();
   const doc = t.legal[kind];
 
   return (
-    <Container className="py-14 md:py-20">
+    <Container className="py-10 md:py-16">
+      <Link
+        href="/"
+        className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs font-bold text-slate-700 shadow-xs transition-colors hover:bg-slate-50 mb-6"
+      >
+        <ArrowLeft className="h-4 w-4 text-primary" />
+        <span>{locale === "tr" ? "Ana Sayfa'ya Dön" : "Back to Home"}</span>
+      </Link>
       <p className="text-xs text-slate-500">
         {t.legal.updatedLabel}: {doc.updated}
       </p>

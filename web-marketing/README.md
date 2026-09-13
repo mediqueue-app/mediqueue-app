@@ -2,7 +2,7 @@
 
 Uluslararası sağlık turizmi odaklı **MediQueue** platformunun modern pazarlama web sitesi ve müşteri edinme (lead capture) uygulaması.
 
-Next.js 14 App Router, Tailwind CSS, TypeScript ve Framer Motion kullanılarak geliştirilmiştir.
+Next.js 16 App Router (Turbopack), Tailwind CSS, TypeScript ve Framer Motion kullanılarak geliştirilmiştir.
 
 ---
 
