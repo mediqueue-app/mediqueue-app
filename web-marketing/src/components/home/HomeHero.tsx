@@ -83,17 +83,17 @@ export function HomeHero() {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16 lg:items-center">
+        <div className="mt-8 grid gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16 lg:items-start">
           <AnimatePresence mode="wait">
             <motion.div
               key={mode}
-              initial={reduced ? false : { opacity: 0, x: mode === "patient" ? -16 : 16 }}
-              animate={{ opacity: 1, x: 0 }}
-              exit={reduced ? undefined : { opacity: 0, x: mode === "patient" ? 16 : -16 }}
-              transition={{ duration: reduced ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="max-w-xl my-auto py-2"
+              initial={reduced ? false : { opacity: 0, y: 6 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={reduced ? undefined : { opacity: 0, y: -6 }}
+              transition={{ duration: reduced ? 0 : 0.25, ease: [0.22, 1, 0.36, 1] }}
+              className="max-w-xl py-2"
             >
-              <div>
+              <div className="min-h-[160px] sm:min-h-[175px]">
                 <h1 className="font-display text-[2.35rem] leading-[1.06] tracking-[-0.03em] text-ink sm:text-5xl lg:text-[3.2rem]">
                   {copy.headline}
                   <span className="mt-1 block text-primary">{copy.headlineAccent}</span>
@@ -125,10 +125,10 @@ export function HomeHero() {
           <AnimatePresence mode="wait">
             <motion.div
               key={`preview-${mode}`}
-              initial={reduced ? false : { opacity: 0, y: 20 }}
+              initial={reduced ? false : { opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={reduced ? undefined : { opacity: 0, y: -12 }}
-              transition={{ duration: reduced ? 0 : 0.4, ease: [0.22, 1, 0.36, 1] }}
+              exit={reduced ? undefined : { opacity: 0, y: -10 }}
+              transition={{ duration: reduced ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="relative min-h-[460px]"
             >
               <div

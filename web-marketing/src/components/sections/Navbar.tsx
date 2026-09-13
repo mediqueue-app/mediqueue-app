@@ -127,14 +127,14 @@ export function Navbar() {
       {/* Fixed bar — sticky + nested fixed drawer broke mobile taps after scroll */}
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-[110] transition-[background-color,border-color,box-shadow,backdrop-filter] duration-200",
+          "fixed inset-x-0 top-0 z-40 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-200",
           solid || open
             ? "border-b border-border bg-white/95 backdrop-blur-md shadow-sm"
             : "border-b border-transparent bg-white/80 backdrop-blur-sm"
         )}
       >
         <nav
-          className="relative z-[120] mx-auto flex min-h-[3.75rem] max-w-7xl items-center justify-between gap-6 px-4 py-1.5 sm:px-6 lg:min-h-[4.25rem] lg:px-8 lg:py-2"
+          className="relative z-10 mx-auto flex min-h-[3.75rem] max-w-7xl items-center justify-between gap-6 px-4 py-1.5 sm:px-6 lg:min-h-[4.25rem] lg:px-8 lg:py-2"
           aria-label="Primary"
         >
           <Logo />
@@ -270,7 +270,7 @@ export function Navbar() {
       {/* Mobile menu — sibling fixed layer, not nested under sticky */}
       {open && (
         <div
-          className="fixed inset-0 z-[105] bg-white lg:hidden"
+          className="fixed inset-0 z-40 bg-white lg:hidden"
           role="dialog"
           aria-modal="true"
           aria-label={tr ? "Menü" : "Menu"}

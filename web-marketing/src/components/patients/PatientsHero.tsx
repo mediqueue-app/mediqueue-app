@@ -27,7 +27,7 @@ export function PatientsHero() {
     <section className="relative overflow-hidden border-b border-border">
       <HeroBackdrop />
       <Container className="relative grid gap-12 pt-8 pb-8 sm:pt-10 sm:pb-10 lg:pt-12 lg:pb-12 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)] lg:gap-16 lg:items-center">
-        <FadeIn className="my-auto py-2">
+        <FadeIn className="my-auto self-center py-2">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
             {p.seoTitle}
           </p>
@@ -50,7 +50,7 @@ export function PatientsHero() {
             </Button>
           </div>
         </FadeIn>
-        <FadeIn delay={0.1}>
+        <FadeIn delay={0.1} className="self-center">
           <PatientDiscoveryCard />
         </FadeIn>
       </Container>

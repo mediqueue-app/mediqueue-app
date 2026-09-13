@@ -16,13 +16,23 @@ export function TravelPreview() {
   const tr = locale === "tr";
 
   return (
-    <div className="space-y-3">
-      <p className="text-xs text-slate-500">
-        {tr
-          ? "Aşağıdaki hizmetler isteğe bağlıdır — dilediğinizi seçebilirsiniz."
-          : "The services below are optional — choose what you need."}
-      </p>
-      <div className="grid gap-3 sm:grid-cols-2">
+    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-[#f5f6f8] shadow-sm">
+      <div className="flex items-center gap-2 border-b border-slate-200 bg-white px-4 py-2.5">
+        <span className="h-2.5 w-2.5 rounded-full bg-[#ef4444]/80" />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#f59e0b]/80" />
+        <span className="h-2.5 w-2.5 rounded-full bg-[#10b981]/80" />
+        <span className="ml-2 truncate rounded-md bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-500 ring-1 ring-slate-200">
+          patient · {tr ? "Seyahat & Transfer Koordinasyonu" : "Travel & Transfer Coordination"}
+        </span>
+      </div>
+
+      <div className="p-4 space-y-3">
+        <p className="text-xs text-slate-500">
+          {tr
+            ? "Aşağıdaki hizmetler isteğe bağlıdır — dilediğinizi seçebilirsiniz."
+            : "The services below are optional — choose what you need."}
+        </p>
+        <div className="grid gap-3 sm:grid-cols-2">
         <OptionalCard
           selected
           label={tr ? "Uçuş koordinasyonu" : "Flight coordination"}
@@ -110,6 +120,7 @@ export function TravelPreview() {
         </OptionalCard>
       </div>
     </div>
+  </div>
   );
 }
 

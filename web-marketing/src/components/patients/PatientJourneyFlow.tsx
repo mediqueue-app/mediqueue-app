@@ -172,7 +172,7 @@ export function PatientJourneyFlow() {
         </div>
 
         {/* Main Content Grid (Balanced Heights) */}
-        <div className="mt-14 grid w-full min-w-0 items-start gap-10 lg:mt-18 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-14">
+        <div className="mt-14 grid w-full min-w-0 lg:items-center gap-10 lg:mt-18 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-14">
           <AnimatePresence mode="wait">
             <motion.div
               key={active}

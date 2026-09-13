@@ -66,8 +66,8 @@ export function DoctorsFeatureShowcase() {
           </p>
         </FadeIn>
 
-        <div className="mt-14 lg:mt-18 grid gap-8 lg:grid-cols-[minmax(0,0.44fr)_minmax(0,1fr)] lg:gap-12 lg:items-start">
-          <FadeIn delay={0.06}>
+        <div className="mt-14 lg:mt-18 grid gap-8 lg:grid-cols-[minmax(0,0.44fr)_minmax(0,1fr)] lg:gap-12 lg:items-center">
+          <FadeIn delay={0.06} className="self-center">
             <ul className="space-y-2.5">
               {d.features.map((f, i) => {
                 const FIcon = ICONS[f.id] ?? LayoutDashboard;
