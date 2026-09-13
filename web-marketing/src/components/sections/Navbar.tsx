@@ -7,10 +7,10 @@ import {
   Menu,
   X,
   ChevronDown,
+  ChevronRight,
   Building2,
   Users,
   Stethoscope,
-  ArrowLeft,
 } from "lucide-react";
 import { Logo } from "@/components/ui/Logo";
 import { Button } from "@/components/ui/Button";
@@ -268,7 +268,7 @@ export function Navbar() {
       {/* Offset for fixed header */}
       <div className="h-[3.75rem] lg:h-[4.25rem]" aria-hidden />
 
-      {/* Mobile menu — full-screen modal drawer */}
+      {/* Mobile menu — Industry Standard full-screen modal drawer */}
       {open && (
         <div
           className="fixed inset-0 z-[150] flex flex-col bg-white lg:hidden"
@@ -276,38 +276,27 @@ export function Navbar() {
           aria-modal="true"
           aria-label={tr ? "Menü" : "Menu"}
         >
-          {/* Top Header Bar inside drawer */}
-          <div className="flex h-[3.75rem] shrink-0 items-center justify-between border-b border-slate-200/80 px-4 sm:px-6">
-            <div className="flex items-center gap-2.5">
-              <button
-                type="button"
-                onClick={() => setOpen(false)}
-                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200/90 bg-slate-100/90 px-3 py-1.5 text-xs font-bold text-slate-700 transition-colors hover:bg-slate-200 active:scale-95"
-                aria-label={tr ? "Geri Dön" : "Go Back"}
-              >
-                <ArrowLeft className="h-4 w-4" />
-                <span>{tr ? "Geri" : "Back"}</span>
-              </button>
-              <Logo size="nav" />
-            </div>
+          {/* Industry Standard Top Header: Logo on left, X close on right */}
+          <div className="flex h-16 shrink-0 items-center justify-between border-b border-slate-100 px-5">
+            <Logo size="nav" />
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="flex h-10 w-10 items-center justify-center rounded-xl bg-slate-100 text-slate-700 hover:bg-slate-200 transition-colors"
+              className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100/80 text-slate-700 transition-colors hover:bg-slate-200 active:scale-95"
               aria-label={t.nav.closeMenu}
             >
               <X className="h-5 w-5" />
             </button>
           </div>
 
-          {/* Scrollable Content Area */}
-          <div className="flex-1 overflow-y-auto px-4 py-5 sm:px-6 space-y-6">
+          {/* Scrollable Clean List Menu */}
+          <div className="flex-1 overflow-y-auto px-5 py-6 space-y-6">
             {/* Solutions Section */}
             <div>
-              <p className="mb-2.5 px-1 text-xs font-bold uppercase tracking-wider text-slate-400">
+              <p className="mb-3 text-[11px] font-extrabold uppercase tracking-widest text-slate-400">
                 {solutionsLabel}
               </p>
-              <div className="space-y-2">
+              <div className="space-y-1">
                 {solutions.map((item, idx) => {
                   const Icon = SOLUTION_ICONS[idx] ?? Building2;
                   return (
@@ -315,33 +304,37 @@ export function Navbar() {
                       key={item.href}
                       href={item.href}
                       onClick={() => setOpen(false)}
-                      className="flex items-center gap-3.5 rounded-2xl border border-slate-200/70 bg-slate-50/60 p-3 transition-all hover:border-slate-300 hover:bg-slate-100/70 active:scale-[0.99]"
+                      className="group flex items-center justify-between rounded-xl px-3 py-3 transition-colors hover:bg-slate-50 active:bg-slate-100"
                     >
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-primary shadow-xs ring-1 ring-slate-200/80">
-                        <Icon className="h-5 w-5" />
-                      </span>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-sm font-bold text-slate-900">{item.label}</p>
-                        <p className="text-xs text-slate-500 line-clamp-1">{item.desc}</p>
+                      <div className="flex items-center gap-3.5">
+                        <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-light text-primary transition-transform group-hover:scale-105">
+                          <Icon className="h-4 w-4" />
+                        </span>
+                        <div>
+                          <p className="text-base font-semibold text-slate-900">{item.label}</p>
+                          <p className="text-xs text-slate-500">{item.desc}</p>
+                        </div>
                       </div>
+                      <ChevronRight className="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-0.5" />
                     </Link>
                   );
                 })}
               </div>
             </div>
 
-            {/* Quick Navigation Links */}
-            <div className="border-t border-slate-100 pt-5">
-              <p className="mb-2.5 px-1 text-xs font-bold uppercase tracking-wider text-slate-400">
+            {/* Main Navigation Pages */}
+            <div className="border-t border-slate-100 pt-6">
+              <p className="mb-3 text-[11px] font-extrabold uppercase tracking-widest text-slate-400">
                 {tr ? "SAYFALAR" : "PAGES"}
               </p>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="space-y-1">
                 <Link
                   href="/"
                   onClick={() => setOpen(false)}
-                  className="flex items-center justify-center rounded-xl border border-slate-200/60 bg-slate-50/50 py-3 text-sm font-bold text-slate-900 transition-colors hover:bg-slate-100"
+                  className="flex items-center justify-between rounded-xl px-3 py-3 text-base font-semibold text-slate-900 transition-colors hover:bg-slate-50"
                 >
-                  {tr ? "Ana Sayfa" : "Home"}
+                  <span>{tr ? "Ana Sayfa" : "Home"}</span>
+                  <ChevronRight className="h-4 w-4 text-slate-400" />
                 </Link>
                 {t.nav.links
                   .filter((l) => l.href !== "/")
@@ -350,19 +343,20 @@ export function Navbar() {
                       key={link.href}
                       href={link.href}
                       onClick={() => setOpen(false)}
-                      className="flex items-center justify-center rounded-xl border border-slate-200/60 bg-slate-50/50 py-3 text-sm font-bold text-slate-900 transition-colors hover:bg-slate-100"
+                      className="flex items-center justify-between rounded-xl px-3 py-3 text-base font-semibold text-slate-900 transition-colors hover:bg-slate-50"
                     >
-                      {link.label}
+                      <span>{link.label}</span>
+                      <ChevronRight className="h-4 w-4 text-slate-400" />
                     </Link>
                   ))}
               </div>
             </div>
           </div>
 
-          {/* Bottom Fixed Bar (Language + Action CTA) */}
-          <div className="shrink-0 border-t border-slate-200/80 bg-white p-4 sm:p-5 space-y-3">
-            <div className="flex items-center justify-between px-1">
-              <span className="text-xs font-bold text-slate-600">
+          {/* Industry Standard Bottom Action Footer */}
+          <div className="shrink-0 border-t border-slate-100 bg-white p-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <span className="text-sm font-semibold text-slate-600">
                 {tr ? "Dil Seçimi" : "Language"}
               </span>
               <LocaleToggle locale={locale} setLocale={setLocale} t={t} compact />
@@ -373,7 +367,7 @@ export function Navbar() {
                 setOpen(false);
                 openLead("patient");
               }}
-              className="w-full justify-center shadow-md shadow-primary/20"
+              className="w-full justify-center shadow-lg shadow-primary/25 text-base font-bold py-3.5"
             >
               {tr ? "Hemen Başlayın" : "Get Started"}
             </Button>
