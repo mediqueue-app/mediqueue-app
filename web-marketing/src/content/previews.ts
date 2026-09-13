@@ -104,15 +104,15 @@ export type PreviewsContent = {
 export const trPreviews: PreviewsContent = {
   reviews: "değerlendirme",
   matchPatientDemo: "Thomas M. · Münih, Almanya",
-  clinicCode: "Anadolu Sağlık Merkezi",
+  clinicCode: "Örnek Klinik A",
   incomingCityAge: "Doha, Katar · 34",
   incomingTreatment: "Saç Ekimi (DHI)",
   incomingLanguages: "Arapça, İngilizce",
   incomingRhinoplasty: "Lyon · Rinoplasti",
   clinicCard: {
-    alt: "Anadolu Estetik & Cerrahi Merkezi — hasta uygulaması kapak görseli",
+    alt: "Örnek Klinik B — hasta uygulaması kapak görseli",
     badge: "Akredite",
-    name: "Anadolu Estetik & Cerrahi Merkezi",
+    name: "Örnek Klinik B",
     location: "Şişli, İstanbul",
     specialty: "Estetik & Plastik Cerrahi · Saç Ekimi",
     price: "₺12.000 – ₺45.000",
@@ -171,9 +171,9 @@ export const trPreviews: PreviewsContent = {
     ],
   },
   compareClinics: [
-    { code: "Anadolu Estetik Merkezi", specialty: "Saç Ekimi (DHI)", rating: 4.9, reviews: 128, region: "İstanbul" },
-    { code: "Memorial Sağlık Grubu", specialty: "Saç Ekimi (FUE)", rating: 4.8, reviews: 94, region: "İstanbul" },
-    { code: "Acıbadem Health", specialty: "Saç Ekimi (Sapphire)", rating: 4.9, reviews: 211, region: "Ankara" },
+    { code: "Örnek Klinik B", specialty: "Saç Ekimi (DHI)", rating: 4.9, reviews: 128, region: "İstanbul" },
+    { code: "Örnek Klinik C", specialty: "Saç Ekimi (FUE)", rating: 4.8, reviews: 94, region: "İstanbul" },
+    { code: "XYZ Klinik", specialty: "Saç Ekimi (Sapphire)", rating: 4.9, reviews: 211, region: "Ankara" },
   ],
   schedule: {
     kicker: "Günlük akış",
@@ -239,9 +239,9 @@ export const enPreviews: PreviewsContent = {
   incomingLanguages: "Arabic, English",
   incomingRhinoplasty: "Lyon · Rhinoplasty",
   clinicCard: {
-    alt: "Anadolu Estetik & Cerrahi Merkezi — clinic cover from the patient app mock",
+    alt: "Sample Clinic B — clinic cover from the patient app mock",
     badge: "Accredited",
-    name: "Anadolu Estetik & Cerrahi Merkezi",
+    name: "Sample Clinic B",
     location: "Şişli, Istanbul",
     specialty: "Aesthetic & plastic surgery · Hair transplant",
     price: "₺12,000 – ₺45,000",
@@ -299,9 +299,9 @@ export const enPreviews: PreviewsContent = {
     ],
   },
   compareClinics: [
-    { code: "Anadolu Aesthetic Center", specialty: "Hair Transplant (DHI)", rating: 4.9, reviews: 128, region: "Istanbul" },
-    { code: "Memorial Health Group", specialty: "Hair Transplant (FUE)", rating: 4.8, reviews: 94, region: "Istanbul" },
-    { code: "Acibadem Health", specialty: "Hair Transplant (Sapphire)", rating: 4.9, reviews: 211, region: "Ankara" },
+    { code: "Sample Clinic B", specialty: "Hair Transplant (DHI)", rating: 4.9, reviews: 128, region: "Istanbul" },
+    { code: "Sample Clinic C", specialty: "Hair Transplant (FUE)", rating: 4.8, reviews: 94, region: "Istanbul" },
+    { code: "XYZ Clinic", specialty: "Hair Transplant (Sapphire)", rating: 4.9, reviews: 211, region: "Ankara" },
   ],
   schedule: {
     kicker: "Daily flow",

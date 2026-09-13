@@ -37,7 +37,7 @@ export function PatientDiscoveryCard() {
           </div>
           <div>
             <p className="text-xs font-semibold text-slate-700">
-              {tr ? "Memorial Sağlık Grubu" : "Memorial Healthcare Group"}
+              {tr ? "Örnek Klinik C" : "Sample Clinic C"}
             </p>
           </div>
         </div>
@@ -73,7 +73,7 @@ export function PatientDiscoveryCard() {
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5">
                 <p className="truncate text-base font-semibold tracking-tight text-slate-900">
-                  {tr ? "Anadolu Sağlık Merkezi" : "Anadolu Medical Center"}
+                  {tr ? "Örnek Klinik A" : "Sample Clinic A"}
                 </p>
                 <BadgeCheck className="h-4 w-4 shrink-0 text-primary" />
               </div>

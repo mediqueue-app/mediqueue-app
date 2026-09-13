@@ -193,14 +193,14 @@ export function ClinicJourneyRoadmap() {
             </div>
 
             {/* Clinic vs MediQueue Action Cards */}
-            <div className="mt-6 grid gap-6 lg:grid-cols-2">
-              <div className="rounded-2xl border border-slate-200/90 bg-white p-6 shadow-sm">
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
-                      <Building2 className="h-4.5 w-4.5" strokeWidth={1.75} />
+            <div className="mt-6 grid min-w-0 gap-6 lg:grid-cols-2">
+              <div className="min-w-0 rounded-2xl border border-slate-200/90 bg-white p-5 shadow-sm sm:p-6">
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex min-w-0 items-center gap-2.5">
+                    <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-700">
+                      <Building2 className="h-[18px] w-[18px]" strokeWidth={1.75} />
                     </span>
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                    <span className="min-w-0 text-xs font-bold uppercase tracking-wider text-slate-700">
                       {c.roadmapClinicLabel}
                     </span>
                   </div>
@@ -208,22 +208,22 @@ export function ClinicJourneyRoadmap() {
                     {tr ? "Sizin Adımınız" : "Your Action"}
                   </span>
                 </div>
-                <p className="text-[15px] leading-relaxed font-medium text-slate-800">
+                <p className="break-words text-[15px] font-medium leading-relaxed text-slate-800">
                   {step?.clinic}
                 </p>
               </div>
 
-              <div className="rounded-2xl border border-emerald-300/80 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/40 p-6 shadow-sm ring-1 ring-emerald-500/10">
-                <div className="mb-4 flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
+              <div className="min-w-0 rounded-2xl border border-emerald-300/80 bg-gradient-to-br from-emerald-50/70 via-white to-teal-50/40 p-5 shadow-sm ring-1 ring-emerald-500/10 sm:p-6">
+                <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
+                  <div className="flex min-w-0 items-center gap-2.5">
                     <Image
                       src="/mediqueue-icon.png"
                       alt="MediQueue"
                       width={36}
                       height={36}
-                      className="h-9 w-9 rounded-xl object-cover shadow-sm ring-1 ring-emerald-500/15"
+                      className="h-9 w-9 shrink-0 rounded-xl object-cover shadow-sm ring-1 ring-emerald-500/15"
                     />
-                    <span className="text-xs font-bold uppercase tracking-wider text-emerald-800">
+                    <span className="min-w-0 text-xs font-bold uppercase tracking-wider text-emerald-800">
                       {c.roadmapMqLabel}
                     </span>
                   </div>
@@ -231,7 +231,7 @@ export function ClinicJourneyRoadmap() {
                     {tr ? "Sistem Güvencesi" : "Platform Automation"}
                   </span>
                 </div>
-                <p className="text-[15px] leading-relaxed font-semibold text-slate-900">
+                <p className="break-words text-[15px] font-semibold leading-relaxed text-slate-900">
                   {step?.mediQueue}
                 </p>
               </div>

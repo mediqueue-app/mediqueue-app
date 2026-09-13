@@ -172,7 +172,7 @@ export function PatientJourneyFlow() {
         </div>
 
         {/* Main Content Grid (Balanced Heights) */}
-        <div className="mt-14 lg:mt-18 grid items-start gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-14">
+        <div className="mt-14 grid w-full min-w-0 items-start gap-10 lg:mt-18 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.05fr)] lg:gap-14">
           <AnimatePresence mode="wait">
             <motion.div
               key={active}
@@ -180,14 +180,14 @@ export function PatientJourneyFlow() {
               animate={{ opacity: 1, y: 0 }}
               exit={reduced ? undefined : { opacity: 0, y: -8 }}
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="flex flex-col justify-between"
+              className="flex min-w-0 flex-col justify-between"
             >
-              <div>
-                <div className="flex items-center gap-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-white text-base font-bold shadow-md shadow-primary/25">
+              <div className="min-w-0">
+                <div className="flex items-start gap-3">
+                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-base font-bold text-white shadow-md shadow-primary/25">
                     0{active + 1}
                   </span>
-                  <h3 className="text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
+                  <h3 className="min-w-0 text-2xl font-bold tracking-tight text-slate-900 sm:text-3xl">
                     {steps[active]?.title}
                   </h3>
                 </div>
@@ -197,43 +197,45 @@ export function PatientJourneyFlow() {
               </div>
 
               {/* Action & Guarantee Detail Cards */}
-              <div className="mt-6 grid gap-4 sm:grid-cols-2">
-                <div className="rounded-2xl border border-slate-200/90 bg-slate-50/70 p-5 shadow-2xs">
-                  <div className="mb-2.5 flex items-center gap-2">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-slate-200/80 text-slate-700">
+              <div className="mt-6 grid w-full min-w-0 grid-cols-1 gap-4 sm:grid-cols-2">
+                <div className="w-full min-w-0 rounded-2xl border border-slate-200/90 bg-slate-50/70 p-4 shadow-2xs sm:p-5">
+                  <div className="mb-2.5 flex items-start gap-2">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-slate-200/80 text-slate-700">
                       <UserCheck className="h-4 w-4" />
                     </span>
-                    <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                    <span className="min-w-0 flex-1 text-xs font-bold uppercase tracking-wider text-slate-700">
                       {currentDetail.patientRole}
                     </span>
                   </div>
-                  <p className="text-xs leading-relaxed text-slate-600 font-medium">
+                  <p className="w-full whitespace-normal break-words text-xs font-medium leading-relaxed text-slate-600 [overflow-wrap:anywhere]">
                     {currentDetail.patientText}
                   </p>
                 </div>
 
-                <div className="rounded-2xl border border-teal-200 bg-teal-50/50 p-5 shadow-2xs">
-                  <div className="mb-2.5 flex items-center gap-2">
-                    <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-teal-100 text-teal-800">
+                <div className="w-full min-w-0 rounded-2xl border border-teal-200 bg-teal-50/50 p-4 shadow-2xs sm:p-5">
+                  <div className="mb-2.5 flex items-start gap-2">
+                    <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-teal-100 text-teal-800">
                       <CheckCircle2 className="h-4 w-4 text-teal-700" />
                     </span>
-                    <span className="text-xs font-bold uppercase tracking-wider text-teal-800">
+                    <span className="min-w-0 flex-1 text-xs font-bold uppercase tracking-wider text-teal-800">
                       {currentDetail.mqRole}
                     </span>
                   </div>
-                  <p className="text-xs leading-relaxed text-slate-700 font-semibold">
+                  <p className="w-full whitespace-normal break-words text-xs font-semibold leading-relaxed text-slate-700 [overflow-wrap:anywhere]">
                     {currentDetail.mqText}
                   </p>
                 </div>
               </div>
 
               {/* Key Benefit Highlights */}
-              <div className="mt-5 rounded-2xl border border-slate-100 bg-slate-50/50 p-4">
-                <p className="flex items-center gap-2 text-xs font-bold text-slate-800">
-                  <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                  {tr ? "Öne Çıkan Güven Unsuru" : "Key Safety Highlight"}
+              <div className="mt-5 w-full min-w-0 rounded-2xl border border-slate-100 bg-slate-50/50 p-4">
+                <p className="flex items-start gap-2 text-xs font-bold text-slate-800">
+                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+                  <span className="min-w-0 flex-1">
+                    {tr ? "Öne Çıkan Güven Unsuru" : "Key Safety Highlight"}
+                  </span>
                 </p>
-                <p className="mt-1 text-xs text-slate-600 leading-relaxed">
+                <p className="mt-1 w-full whitespace-normal break-words text-xs leading-relaxed text-slate-600 [overflow-wrap:anywhere]">
                   {tr
                     ? "Tüm tıbbi görüşmeler ve teklifler KVKK/GDPR uyumlu şifreli altyapı üzerinden yürütülür."
                     : "All medical consultations and quotes are handled via HIPAA/GDPR encrypted infrastructure."}
@@ -249,7 +251,7 @@ export function PatientJourneyFlow() {
               animate={{ opacity: 1, y: 0 }}
               exit={reduced ? undefined : { opacity: 0 }}
               transition={{ duration: 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="rounded-2xl border border-slate-200 bg-[#f8fafc] p-3.5 sm:p-5 shadow-sm"
+              className="min-w-0 rounded-2xl border border-slate-200 bg-[#f8fafc] p-3.5 shadow-sm sm:p-5"
             >
               <JourneyPreview step={active} />
             </motion.div>

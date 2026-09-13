@@ -16,7 +16,7 @@ export function DiscoverPreview() {
       <div className="mb-4 rounded-xl border border-border bg-white p-3">
         <div className="flex items-center gap-2 rounded-lg border border-border bg-band px-3 py-2.5">
           <Search className="h-4 w-4 shrink-0 text-slate-400" />
-          <span className="text-sm text-slate-400">
+          <span className="text-sm text-slate-500">
             {tr ? "Tedavi, şehir veya tarih…" : "Treatment, city, or date…"}
           </span>
         </div>

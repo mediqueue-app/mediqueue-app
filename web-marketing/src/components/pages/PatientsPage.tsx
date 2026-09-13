@@ -9,7 +9,7 @@ import { PatientsFinalCta } from "@/components/patients/PatientsFinalCta";
 
 export function PatientsPage() {
   return (
-    <div className="overflow-x-hidden bg-white">
+    <div className="min-w-0 overflow-x-clip bg-white">
       <PatientsHero />
       <WhyMediQueue />
       <PatientsFeatureShowcase />

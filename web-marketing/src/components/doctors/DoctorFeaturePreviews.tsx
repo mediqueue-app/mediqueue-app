@@ -314,11 +314,11 @@ export function DoctorProfilePreview() {
       <div className="flex items-center gap-2">
         <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg">
           <Building2 className="h-3.5 w-3.5 text-slate-500" />
-          Memorial Health Group
+          Sample Clinic C
         </span>
         <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg">
           <Building2 className="h-3.5 w-3.5 text-slate-500" />
-          Acibadem Health
+          XYZ Clinic
         </span>
       </div>
 
