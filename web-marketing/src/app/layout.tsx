@@ -36,6 +36,11 @@ export async function generateMetadata(): Promise<Metadata> {
     metadataBase: new URL(SITE_URL),
     ...localeMeta,
     alternates: { canonical: "/" },
+    icons: {
+      icon: "/mediqueue-icon.png",
+      apple: "/mediqueue-icon.png",
+      shortcut: "/mediqueue-icon.png",
+    },
     openGraph: {
       type: "website",
       url: SITE_URL,

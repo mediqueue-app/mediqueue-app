@@ -8,6 +8,7 @@ Sağlık turizmi odaklı klinik yönetim ve hasta–doktor eşleştirme platform
 |--------|-------|----------|------|
 | [`backend/`](backend/) | Aktif | FastAPI — auth, klinikler, hastalar, randevular, match proxy | 8000 |
 | [`ai/`](ai/) | Aktif | Kural tabanlı doktor/klinik eşleştirme microservice | 8001 |
+| [`web-marketing/`](web-marketing/) | Aktif | Next.js 14 Pazarlama & Müşteri Edinme (Lead Capture) Sitesi | 3004 |
 | [`web-admin/`](web-admin/) | Prototip (mock) | Süperadmin paneli — applications API yok | 3003 |
 | [`web-clinic/`](web-clinic/) | Hybrid | JWT + operasyonel API; büyüme modülleri mock | 3000 |
 | [`web-doctor/`](web-doctor/) | Hybrid (kısmi) | JWT + randevu/hasta API; mesajlar mock | 3001 |

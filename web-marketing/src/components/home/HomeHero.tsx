@@ -83,7 +83,7 @@ export function HomeHero() {
           </div>
         </div>
 
-        <div className="mt-12 sm:mt-14 lg:mt-16 grid gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16 lg:items-start">
+        <div className="mt-16 sm:mt-20 lg:mt-24 grid gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16 lg:items-start">
           <AnimatePresence mode="wait">
             <motion.div
               key={mode}
@@ -91,7 +91,7 @@ export function HomeHero() {
               animate={{ opacity: 1, y: 0 }}
               exit={reduced ? undefined : { opacity: 0, y: -6 }}
               transition={{ duration: reduced ? 0 : 0.25, ease: [0.22, 1, 0.36, 1] }}
-              className="max-w-xl py-1"
+              className="max-w-xl pt-4 lg:pt-6 pb-2"
             >
               <div className="min-h-[160px] sm:min-h-[175px]">
                 <h1 className="font-display text-[2.35rem] leading-[1.06] tracking-[-0.03em] text-ink sm:text-5xl lg:text-[3.2rem]">
@@ -129,7 +129,7 @@ export function HomeHero() {
               animate={{ opacity: 1, y: 0 }}
               exit={reduced ? undefined : { opacity: 0, y: -10 }}
               transition={{ duration: reduced ? 0 : 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="relative min-h-[460px] py-1"
+              className="relative min-h-[460px] pt-4 lg:pt-6 pb-2"
             >
               <div
                 className="pointer-events-none absolute -inset-4 rounded-[2rem] bg-gradient-to-br from-primary/10 via-transparent to-accent/10 blur-2xl"
