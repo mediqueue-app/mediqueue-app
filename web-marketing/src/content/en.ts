@@ -253,30 +253,30 @@ export const en: SiteContent = {
       },
     ],
     analytics: {
-      eyebrow: "Patient analytics",
-      title: "Know where your patients come from. Decide with data.",
+      eyebrow: "Patient Analytics",
+      title: "Know Where Your Patients Come From",
       body:
-        "Your MediQueue panel maps how much demand you receive from each country in real time — without a separate reporting tool or integration. If volume from Germany is rising, you can reserve capacity for that market; if another country softens, you can reallocate marketing spend. This is not a random summary: it is a source that updates with every request in your panel and feeds your international growth and operations decisions directly.",
-      panelTitle: "Countries your patients come from",
+        "Track demand by country in real time on an interactive globe and make growth decisions backed by live patient data.",
+      panelTitle: "Countries of Origin",
       panelSubtitle:
-        "{patients} international patients applied from {countries} different countries.",
+        "{patients} international patients requested care from {countries} countries.",
       demoCaption: "Sample clinic panel view · demo data",
       countryColumn: "Country",
       patientColumn: "Patients",
       emptyList:
-        "Country breakdown will appear here once your first international requests arrive.",
+        "Country breakdown will appear here when your first international requests arrive.",
       highlights: [
         {
-          title: "Country-level distribution",
-          body: "Track demand by market instantly on the globe map and ranked list.",
+          title: "Country Breakdown",
+          body: "Monitor global demand live on an interactive globe.",
         },
         {
-          title: "Trend tracking",
-          body: "See period-over-period change by country and plan capacity and marketing ahead of time.",
+          title: "Trend Tracking",
+          body: "Spot growth trends across international markets.",
         },
         {
-          title: "Automatic data collection",
-          body: "Built from request records in your panel — no extra tools or manual reporting.",
+          title: "Automated Data",
+          body: "Updated instantly from incoming patient requests.",
         },
       ],
     },

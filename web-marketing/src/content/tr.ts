@@ -256,9 +256,9 @@ export const tr: SiteContent = {
     ],
     analytics: {
       eyebrow: "Hasta Analitiği",
-      title: "Hastalarınızın Nereden Geldiğini Bilin. Kararlarınızı Veriyle Alın.",
+      title: "Hastalarınızın Nereden Geldiğini Görün",
       body:
-        "MediQueue paneliniz, hangi ülkelerden ne kadar talep aldığınızı anlık olarak haritalar — ayrı bir raporlama aracına veya entegrasyona ihtiyaç duymadan. Almanya'dan gelen talep hacminiz artıyorsa o pazara kapasite ayırabilir; düşüş gösteren bir ülkede ise pazarlama bütçenizi yeniden dağıtabilirsiniz. Bu veri tesadüfi bir özet değil; kliniğinizin uluslararası büyüme ve operasyon kararlarını doğrudan besleyen, panelinize düşen her taleple güncellenen bir kaynak.",
+        "Hangi ülkelerden ne kadar talep aldığınızı anlık küre haritasından takip edin; pazarlama ve kapasite kararlarınızı canlı veriyle alın.",
       panelTitle: "Hastalarınızın Geldiği Ülkeler",
       panelSubtitle:
         "{patients} uluslararası hasta, {countries} farklı ülkeden başvurdu.",
@@ -269,16 +269,16 @@ export const tr: SiteContent = {
         "Ülke kırılımı, ilk uluslararası talepleriniz geldiğinde burada listelenecek.",
       highlights: [
         {
-          title: "Ülke bazlı dağılım",
-          body: "Hangi pazardan ne kadar talep geldiğini küre haritası ve sıralı listeden anlık izleyin.",
+          title: "Ülke Bazlı Dağılım",
+          body: "Pazar taleplerini küre haritasında anlık izleyin.",
         },
         {
-          title: "Trend takibi",
-          body: "Ülke bazında dönemsel değişimi görün; kapasite ve pazarlama kararlarınızı önceden planlayın.",
+          title: "Trend Takibi",
+          body: "Ülke bazında dönemsel değişimi kolayca görün.",
         },
         {
-          title: "Otomatik veri toplama",
-          body: "Panelinize düşen talep kayıtlarından üretilir — ek araç veya manuel raporlama gerekmez.",
+          title: "Otomatik Veri",
+          body: "Manuel raporlama gerekmeden anlık güncellenir.",
         },
       ],
     },

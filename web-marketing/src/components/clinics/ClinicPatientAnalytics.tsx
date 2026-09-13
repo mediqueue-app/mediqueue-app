@@ -31,7 +31,7 @@ export function ClinicPatientAnalytics() {
   return (
     <section
       id="hasta-analitigi"
-      className="scroll-mt-28 border-b border-slate-200/80 bg-white py-16 md:py-20"
+      className="scroll-mt-28 border-b border-slate-200/80 bg-white py-12 md:py-16"
       aria-labelledby="clinic-analytics-title"
     >
       <Container>
@@ -41,16 +41,16 @@ export function ClinicPatientAnalytics() {
           </p>
           <h2
             id="clinic-analytics-title"
-            className="font-display mt-3 max-w-3xl text-3xl tracking-tight text-ink sm:text-4xl"
+            className="font-display mt-2 max-w-2xl text-2xl font-bold tracking-tight text-ink sm:text-3xl"
           >
             {a.title}
           </h2>
-          <p className="mt-5 max-w-3xl text-lg leading-relaxed text-slate-600">
+          <p className="mt-3 max-w-2xl text-base text-slate-600">
             {a.body}
           </p>
         </FadeIn>
 
-        <FadeIn delay={0.08} className="mt-12">
+        <FadeIn delay={0.08} className="mt-8">
           <OriginReachWidget
             scope="clinic"
             data={previewClinicOriginCountries}
@@ -66,20 +66,20 @@ export function ClinicPatientAnalytics() {
           />
         </FadeIn>
 
-        <FadeIn delay={0.12} className="mt-10">
-          <ul className="grid gap-8 sm:grid-cols-3 sm:gap-6">
+        <FadeIn delay={0.12} className="mt-8">
+          <ul className="grid gap-6 sm:grid-cols-3">
             {a.highlights.map((item, i) => {
               const Icon = HIGHLIGHT_ICONS[i] ?? Globe2;
               return (
-                <li key={item.title} className="flex gap-4">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-primary shadow-sm ring-1 ring-border">
-                    <Icon className="h-[18px] w-[18px]" strokeWidth={1.75} />
+                <li key={item.title} className="flex gap-3 items-start">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-white text-primary shadow-sm ring-1 ring-border mt-0.5">
+                    <Icon className="h-4 w-4" strokeWidth={1.75} />
                   </span>
                   <div>
                     <p className="text-sm font-semibold text-slate-900">
                       {item.title}
                     </p>
-                    <p className="mt-1.5 text-sm leading-relaxed text-slate-600">
+                    <p className="mt-1 text-xs text-slate-600 leading-relaxed">
                       {item.body}
                     </p>
                   </div>
