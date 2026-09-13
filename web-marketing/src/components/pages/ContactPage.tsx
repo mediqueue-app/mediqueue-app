@@ -68,8 +68,8 @@ export function ContactPage() {
     <div className="overflow-x-hidden bg-white">
       {/* Hero Section */}
       <section className="relative overflow-hidden border-b border-border bg-slate-50/50">
-        <HeroBackdrop withGrid />
-        <Container className="relative pt-20 pb-8 sm:pt-24 sm:pb-10 lg:pt-28 lg:pb-12">
+        <HeroBackdrop />
+        <Container className="relative pt-8 pb-8 sm:pt-10 sm:pb-10 lg:pt-12 lg:pb-12">
           <FadeIn className="max-w-3xl">
             <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary">
               <span>{c.eyebrow}</span>

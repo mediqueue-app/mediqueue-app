@@ -49,7 +49,7 @@ export function AboutSocial() {
   const reduced = useReducedMotion();
 
   return (
-    <section className="bg-slate-50/60 py-24 md:py-32">
+    <section className="bg-slate-50/60 py-16 md:py-20">
       <Container>
         {/* Social Links Cards */}
         <motion.div
@@ -132,7 +132,7 @@ export function AboutSocial() {
           className="mt-16"
         >
           <div className="mx-auto max-w-6xl">
-            <div className="relative overflow-hidden rounded-[2.25rem] bg-ink px-8 py-12 text-center sm:px-14 sm:py-16 shadow-2xl">
+            <div className="relative overflow-hidden rounded-[2.25rem] bg-ink px-6 py-10 text-center sm:px-12 sm:py-12 shadow-2xl">
               <div
                 className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(58,106,214,0.35),_transparent_55%),radial-gradient(ellipse_at_bottom_right,_rgba(16,185,129,0.2),_transparent_46%)]"
                 aria-hidden

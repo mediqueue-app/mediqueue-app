@@ -83,7 +83,7 @@ export function HomeHero() {
           </div>
         </div>
 
-        <div className="mt-8 grid gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16 lg:items-center">
+        <div className="mt-8 grid gap-12 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1.05fr)] lg:gap-16 lg:items-start">
           <AnimatePresence mode="wait">
             <motion.div
               key={mode}
@@ -91,7 +91,7 @@ export function HomeHero() {
               animate={{ opacity: 1, x: 0 }}
               exit={reduced ? undefined : { opacity: 0, x: mode === "patient" ? 16 : -16 }}
               transition={{ duration: reduced ? 0 : 0.35, ease: [0.22, 1, 0.36, 1] }}
-              className="max-w-xl my-auto py-2"
+              className="max-w-xl py-2"
             >
               <div>
                 <h1 className="font-display text-[2.35rem] leading-[1.06] tracking-[-0.03em] text-ink sm:text-5xl lg:text-[3.2rem]">

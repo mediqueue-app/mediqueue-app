@@ -10,7 +10,7 @@ export function WhyMediQueue() {
   const p = t.patients;
 
   return (
-    <section id="neden" className="scroll-mt-28 border-y border-slate-200/80 bg-gradient-to-b from-slate-50 via-slate-100/40 to-white pt-6 md:pt-8 pb-20 md:pb-28">
+    <section id="neden" className="scroll-mt-28 border-b border-slate-200/80 bg-gradient-to-b from-slate-50 via-slate-100/40 to-white py-16 md:py-20">
       <Container>
         <FadeIn className="mx-auto max-w-3xl text-center">
           <span className="inline-flex items-center gap-1.5 rounded-full border border-primary/20 bg-primary/10 px-3.5 py-1 text-xs font-bold uppercase tracking-wider text-primary">

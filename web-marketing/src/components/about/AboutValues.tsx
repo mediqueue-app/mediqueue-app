@@ -21,7 +21,7 @@ export function AboutValues() {
   if (!values || values.length === 0) return null;
 
   return (
-    <section className="bg-slate-50/50 py-20 md:py-28 border-b border-slate-200/80">
+    <section className="bg-white py-16 md:py-20 border-b border-slate-200/80">
       <Container>
         <FadeIn className="max-w-2xl mb-14 lg:mb-18">
           <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-3">

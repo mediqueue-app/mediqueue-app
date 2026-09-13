@@ -38,7 +38,7 @@ export function MatchMoment() {
   return (
     <section
       ref={ref}
-      className="relative overflow-hidden border-y border-slate-200/80 bg-gradient-to-b from-slate-50 via-teal-50/20 to-slate-50 py-20 text-slate-900 md:py-28"
+      className="relative overflow-hidden border-b border-slate-200/80 bg-gradient-to-b from-slate-50 via-teal-50/20 to-slate-50 py-16 text-slate-900 md:py-20"
       aria-labelledby="match-moment-title"
     >
       <div

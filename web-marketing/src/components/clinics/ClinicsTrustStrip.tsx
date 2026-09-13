@@ -31,7 +31,7 @@ export function ClinicsTrustStrip() {
   ];
 
   return (
-    <section className="border-y border-slate-200/80 bg-gradient-to-b from-slate-50 via-slate-100/50 to-white py-20 md:py-28">
+    <section className="border-b border-slate-200/80 bg-gradient-to-b from-slate-50 via-slate-100/50 to-white py-16 md:py-20">
       <Container>
         <FadeIn>
           <div className="relative overflow-hidden rounded-[2rem] border border-slate-200/90 bg-white p-8 shadow-md sm:p-12 lg:p-14">

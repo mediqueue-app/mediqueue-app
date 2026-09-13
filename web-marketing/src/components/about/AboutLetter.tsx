@@ -38,7 +38,7 @@ export function AboutLetter() {
   const copy = t.team;
 
   return (
-    <section className="bg-slate-50/50 py-20 md:py-28 border-b border-slate-200/80">
+    <section className="bg-slate-50/50 py-16 md:py-20 border-b border-slate-200/80">
       <Container>
         <div className="grid gap-8 lg:grid-cols-2 lg:gap-10">
           {/* Mission Card */}

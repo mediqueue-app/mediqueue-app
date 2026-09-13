@@ -11,7 +11,7 @@ export function FaqSection({ className }: { className?: string }) {
   const [open, setOpen] = useState(0);
 
   return (
-    <section id="sss" className={cn("scroll-mt-28 bg-white pt-6 md:pt-8 pb-16 md:pb-20", className)}>
+    <section id="sss" className={cn("scroll-mt-28 border-b border-slate-200/80 bg-white py-16 md:py-20", className)}>
       <Container className="max-w-3xl">
         <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary">
           {t.faq.eyebrow}

@@ -48,7 +48,7 @@ export function DoctorsFeatureShowcase() {
   const Icon = feature ? ICONS[feature.id] : LayoutDashboard;
 
   return (
-    <section id="ozellikler" className="scroll-mt-28 bg-white pt-6 md:pt-8 pb-16 md:pb-24">
+    <section id="ozellikler" className="scroll-mt-28 border-b border-slate-200/80 bg-white py-16 md:py-20">
       <Container>
         <FadeIn>
           <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-5">

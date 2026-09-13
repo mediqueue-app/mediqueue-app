@@ -95,8 +95,8 @@ export function HowPage() {
     <div className="overflow-x-hidden bg-white">
       {/* Hero Section */}
       <section className="relative overflow-hidden border-b border-border bg-slate-50/50">
-        <HeroBackdrop withGrid />
-        <Container className="relative pt-20 pb-8 sm:pt-24 sm:pb-10 lg:pt-28 lg:pb-12">
+        <HeroBackdrop />
+        <Container className="relative pt-8 pb-8 sm:pt-10 sm:pb-10 lg:pt-12 lg:pb-12">
           <FadeIn className="max-w-3xl">
             <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary">
               <span>{h.eyebrow}</span>
@@ -121,7 +121,7 @@ export function HowPage() {
       </section>
 
       {/* 3 Steps Section */}
-      <section className="bg-white py-24 md:py-28 lg:py-32">
+      <section className="border-b border-slate-200/80 bg-white py-16 md:py-20">
         <Container>
           <FadeIn className="max-w-2xl">
             <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
@@ -137,7 +137,7 @@ export function HowPage() {
               const Icon = STEP_ICONS[i] ?? Search;
               return (
                 <FadeIn key={step.title} delay={i * 0.08}>
-                  <li className="relative flex h-full flex-col justify-between rounded-3xl border border-slate-200/90 bg-white p-7 shadow-md transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
+                  <li className="relative flex h-full flex-col rounded-3xl border border-slate-200/90 bg-white p-7 shadow-md transition-all duration-300 hover:-translate-y-1 hover:border-primary/30 hover:shadow-lg">
                     <div>
                       <div className="flex items-center justify-between">
                         <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-light text-primary shadow-2xs">
@@ -154,11 +154,6 @@ export function HowPage() {
                         {step.body}
                       </p>
                     </div>
-
-                    <div className="mt-6 flex items-center gap-2 border-t border-slate-100 pt-4 text-xs font-semibold text-primary">
-                      <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                      <span>{tr ? "Sıfır Ön Ödeme Riski" : "Zero Upfront Risk"}</span>
-                    </div>
                   </li>
                 </FadeIn>
               );
@@ -168,7 +163,7 @@ export function HowPage() {
       </section>
 
       {/* Platform Mechanics Section */}
-      <section className="bg-slate-50/70 py-24 md:py-28 border-y border-slate-200/80">
+      <section className="border-b border-slate-200/80 bg-slate-50/70 py-16 md:py-20">
         <Container>
           <FadeIn>
             <div className="relative overflow-hidden rounded-[2rem] bg-ink px-8 py-14 text-white sm:px-12 sm:py-16 lg:p-16 shadow-xl">
@@ -220,7 +215,7 @@ export function HowPage() {
       </section>
 
       {/* SSS / FAQ Section */}
-      <section id="faq" className="scroll-mt-28 bg-white pt-6 md:pt-8 pb-20 md:pb-28 lg:pb-32">
+      <section id="faq" className="scroll-mt-28 border-b border-slate-200/80 bg-white py-16 md:py-20">
         <Container>
           <FadeIn className="mx-auto max-w-2xl text-center">
             <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">

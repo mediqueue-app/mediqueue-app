@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useEffect, useId, useState } from "react";
-import { X } from "lucide-react";
+import { CheckCircle2, X } from "lucide-react";
 import { useLocale } from "@/lib/locale";
 import { useLeadCapture, type LeadMode } from "@/lib/lead-capture";
 import { cn } from "@/lib/cn";
@@ -34,7 +34,7 @@ const emptyForm = (role: "clinic" | "doctor"): FormState => ({
   consent: false,
 });
 
-const defaultLeadCopy = {
+const trLeadCopy = {
   close: "Kapat",
   patientTab: "Hasta Talebi",
   clinicTab: "Klinik / Doktor Kaydı",
@@ -45,10 +45,15 @@ const defaultLeadCopy = {
   successTitle: "Talebiniz Başarıyla Alındı!",
   successBody: "Ekibimiz ve akredite klinikler talebinizi inceleyip en kısa sürede sizinle iletişime geçecektir.",
   name: "Ad Soyad",
+  namePlaceholder: "Örn: Ahmet Yılmaz",
   email: "E-posta Adresi",
+  emailPlaceholder: "ornek@email.com",
   phone: "Telefon Numarası",
+  phonePlaceholder: "+90 5XX XXX XX XX",
   country: "İkamet Ettiğiniz Ülke",
+  countryPlaceholder: "Örn: Birleşik Krallık / Almanya",
   treatment: "Talep Edilen Tedavi",
+  selectTreatment: "Tedavi seçiniz...",
   treatmentOptions: [
     "Saç Ekimi (DHI / FUE)",
     "Estetik & Plastik Cerrahi",
@@ -59,22 +64,76 @@ const defaultLeadCopy = {
     "Diğer",
   ],
   clinicName: "Klinik / Hastane Adı",
+  clinicNamePlaceholder: "Örn: Anadolu Sağlık Merkezi",
   city: "Şehir / Ülke",
+  cityPlaceholder: "Örn: İstanbul, Türkiye",
   website: "Web Sitesi (Opsiyonel)",
+  websitePlaceholder: "https://klinik-web-sitesi.com",
   role: "Rolünüz",
   roleClinic: "Klinik Yöneticisi / Temsilcisi",
   roleDoctor: "Hekim / Doktor",
   message: "Semptomlar veya Özel İstekleriniz",
+  messagePlaceholder: "İletmek istediğiniz tüm tıbbi ayrıntıları yazabilirsiniz...",
   consent: "Kişisel verilerimin işlenmesini ve gizlilik politikasını kabul ediyorum.",
   privacyLink: "Gizlilik Politikası",
   error: "Bir hata oluştu. Lütfen tüm alanları doldurup tekrar deneyin.",
   submitting: "Gönderiliyor...",
   submit: "Talebi Gönder",
+  required: "Bu alan zorunludur.",
+};
+
+const enLeadCopy = {
+  close: "Close",
+  patientTab: "Patient Request",
+  clinicTab: "Clinic / Doctor Registration",
+  patientTitle: "Create Free Healthcare Request",
+  clinicTitle: "Add Your Clinic to MediQueue",
+  patientBody: "Enter your request details, and accredited clinics will provide quotes with zero upfront cost.",
+  clinicBody: "No subscription fee. Only act on verified patient leads delivered directly to your portal.",
+  successTitle: "Request Received Successfully!",
+  successBody: "Our team and partner clinics will review your details and contact you as soon as possible.",
+  name: "Full Name",
+  namePlaceholder: "e.g. John Doe",
+  email: "Email Address",
+  emailPlaceholder: "example@email.com",
+  phone: "Phone / WhatsApp Number",
+  phonePlaceholder: "+44 7XXX XXXXXX",
+  country: "Country of Residence",
+  countryPlaceholder: "e.g. United Kingdom / Germany",
+  treatment: "Requested Treatment",
+  selectTreatment: "Select treatment...",
+  treatmentOptions: [
+    "Hair Transplant (DHI / FUE)",
+    "Aesthetics & Plastic Surgery",
+    "Eye Surgery & LASIK",
+    "Dental Care & Smile Design",
+    "Bariatric & Weight Loss Surgery",
+    "Orthopedics & Physical Therapy",
+    "Other",
+  ],
+  clinicName: "Clinic / Hospital Name",
+  clinicNamePlaceholder: "e.g. London Health Clinic",
+  city: "City / Country",
+  cityPlaceholder: "e.g. London, UK",
+  website: "Website (Optional)",
+  websitePlaceholder: "https://yourclinic.com",
+  role: "Your Role",
+  roleClinic: "Clinic Manager / Representative",
+  roleDoctor: "Physician / Doctor",
+  message: "Symptoms or Special Requests",
+  messagePlaceholder: "Write any medical details or specific preferences...",
+  consent: "I accept the processing of my personal data and the privacy policy.",
+  privacyLink: "Privacy Policy",
+  error: "An error occurred. Please fill in the required fields and try again.",
+  submitting: "Submitting...",
+  submit: "Submit Request",
+  required: "This field is required.",
 };
 
 export function LeadCaptureModal() {
-  const { t } = useLocale();
-  const copy = { ...defaultLeadCopy, ...(t?.lead || {}) };
+  const { locale, t } = useLocale();
+  const baseCopy = locale === "tr" ? trLeadCopy : enLeadCopy;
+  const copy = { ...baseCopy, ...(t?.lead || {}) };
   const { open, mode, role, openLead, closeLead } = useLeadCapture();
   const titleId = useId();
   const [form, setForm] = useState<FormState>(() => emptyForm(role));
@@ -140,7 +199,7 @@ export function LeadCaptureModal() {
           source: "Modal Formu (Lead Modal)",
           formType: mode === "patient" ? "Hasta Talebi Formu" : "Klinik / Doktor Kaydı Formu",
           ...form,
-          locale: t.seo.title,
+          locale,
         }),
       });
       if (!response.ok) throw new Error("failed");
@@ -155,10 +214,10 @@ export function LeadCaptureModal() {
   }
 
   return (
-    <div className="fixed inset-0 z-[80] flex items-end justify-center p-0 sm:items-center sm:p-6">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
       <button
         type="button"
-        className="absolute inset-0 bg-ink/50 backdrop-blur-sm"
+        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
         aria-label={copy.close}
         onClick={closeLead}
       />
@@ -166,12 +225,13 @@ export function LeadCaptureModal() {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative z-10 max-h-[92vh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-border bg-white shadow-2xl sm:rounded-3xl"
+        className="relative z-10 my-auto flex max-h-[calc(100vh-3rem)] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl"
       >
-        <div className="sticky top-0 z-10 flex items-start justify-between border-b border-border bg-white px-5 py-4 sm:px-6">
-          <div>
+        {/* Header */}
+        <div className="flex shrink-0 items-start justify-between border-b border-slate-100 bg-white px-6 py-5">
+          <div className="pr-4">
             <div
-              className="inline-flex rounded-full border border-border bg-mist p-1 text-xs font-semibold"
+              className="inline-flex rounded-full border border-slate-200 bg-slate-100 p-1 text-xs font-semibold"
               role="tablist"
             >
               <TabButton
@@ -187,41 +247,46 @@ export function LeadCaptureModal() {
                 {copy.clinicTab}
               </TabButton>
             </div>
-            <h2 id={titleId} className="mt-3 text-lg font-semibold text-ink">
+            <h2 id={titleId} className="mt-3 text-lg font-bold text-slate-900">
               {mode === "patient" ? copy.patientTitle : copy.clinicTitle}
             </h2>
-            <p className="mt-1 text-sm text-slate-600">
+            <p className="mt-1 text-xs leading-relaxed text-slate-600">
               {mode === "patient" ? copy.patientBody : copy.clinicBody}
             </p>
           </div>
           <button
             type="button"
             onClick={closeLead}
-            className="ml-3 inline-flex h-10 w-10 items-center justify-center rounded-full text-slate-500 hover:bg-mist"
+            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
             aria-label={copy.close}
           >
             <X className="h-5 w-5" />
           </button>
         </div>
 
+        {/* Body */}
         {status === "success" ? (
-          <div className="px-5 py-10 text-center sm:px-6">
-            <p className="text-xl font-semibold text-ink">{copy.successTitle}</p>
-            <p className="mt-3 text-sm leading-relaxed text-slate-600">
+          <div className="overflow-y-auto px-6 py-10 text-center">
+            <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-600">
+              <CheckCircle2 className="h-7 w-7" />
+            </span>
+            <p className="mt-4 text-xl font-bold text-slate-900">{copy.successTitle}</p>
+            <p className="mt-2 text-sm leading-relaxed text-slate-600 max-w-md mx-auto">
               {copy.successBody}
             </p>
             <button
               type="button"
               onClick={closeLead}
-              className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-6 text-sm font-semibold text-white hover:bg-primary-hover"
+              className="mt-6 inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-6 text-sm font-bold text-white hover:bg-primary-hover shadow-md"
             >
               {copy.close}
             </button>
           </div>
         ) : (
-          <form onSubmit={onSubmit} className="space-y-4 px-5 py-5 sm:px-6">
+          <form onSubmit={onSubmit} className="overflow-y-auto px-6 py-5 space-y-4">
             <Field
               label={copy.name}
+              placeholder={copy.namePlaceholder}
               error={errors.name}
               value={form.name}
               onChange={(value) => setField("name", value)}
@@ -229,6 +294,7 @@ export function LeadCaptureModal() {
             />
             <Field
               label={copy.email}
+              placeholder={copy.emailPlaceholder}
               type="email"
               error={errors.email}
               value={form.email}
@@ -237,6 +303,7 @@ export function LeadCaptureModal() {
             />
             <Field
               label={copy.phone}
+              placeholder={copy.phonePlaceholder}
               type="tel"
               value={form.phone}
               onChange={(value) => setField("phone", value)}
@@ -247,20 +314,21 @@ export function LeadCaptureModal() {
               <>
                 <Field
                   label={copy.country}
+                  placeholder={copy.countryPlaceholder}
                   error={errors.country}
                   value={form.country}
                   onChange={(value) => setField("country", value)}
                 />
                 <label className="block">
-                  <span className="text-sm font-medium text-slate-700">
-                    {copy.treatment}
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
+                    {copy.treatment} *
                   </span>
                   <select
                     value={form.treatment}
                     onChange={(event) => setField("treatment", event.target.value)}
                     className={inputClass(Boolean(errors.treatment))}
                   >
-                    <option value="" />
+                    <option value="">{copy.selectTreatment}</option>
                     {copy.treatmentOptions.map((option: string) => (
                       <option key={option} value={option}>
                         {option}
@@ -278,24 +346,27 @@ export function LeadCaptureModal() {
               <>
                 <Field
                   label={copy.clinicName}
+                  placeholder={copy.clinicNamePlaceholder}
                   error={errors.clinicName}
                   value={form.clinicName}
                   onChange={(value) => setField("clinicName", value)}
                 />
                 <Field
                   label={copy.city}
+                  placeholder={copy.cityPlaceholder}
                   error={errors.city}
                   value={form.city}
                   onChange={(value) => setField("city", value)}
                 />
                 <Field
                   label={copy.website}
+                  placeholder={copy.websitePlaceholder}
                   type="url"
                   value={form.website}
                   onChange={(value) => setField("website", value)}
                 />
                 <label className="block">
-                  <span className="text-sm font-medium text-slate-700">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
                     {copy.role}
                   </span>
                   <select
@@ -313,28 +384,29 @@ export function LeadCaptureModal() {
             )}
 
             <label className="block">
-              <span className="text-sm font-medium text-slate-700">
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
                 {copy.message}
               </span>
               <textarea
                 rows={3}
+                placeholder={copy.messagePlaceholder}
                 value={form.message}
                 onChange={(event) => setField("message", event.target.value)}
                 className={inputClass(false)}
               />
             </label>
 
-            <label className="flex items-start gap-3 text-sm text-slate-600">
+            <label className="flex items-start gap-3 text-xs leading-relaxed text-slate-600">
               <input
                 type="checkbox"
                 checked={form.consent}
                 onChange={(event) => setField("consent", event.target.checked)}
-                className="mt-1 h-4 w-4 rounded border-slate-300 text-primary"
+                className="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary focus:ring-primary"
               />
               <span>
                 {copy.consent}{" "}
-                <a href="/privacy" className="font-medium text-primary underline">
-                  {t?.legal?.privacyLink || copy.privacyLink}
+                <a href="/privacy" className="font-semibold text-primary hover:underline">
+                  {copy.privacyLink}
                 </a>
               </span>
             </label>
@@ -342,19 +414,21 @@ export function LeadCaptureModal() {
               <p className="text-xs text-danger">{errors.consent}</p>
             ) : null}
             {status === "error" ? (
-              <p className="text-sm text-danger">{copy.error}</p>
+              <p className="text-xs text-danger">{copy.error}</p>
             ) : null}
 
             <button
               type="submit"
               disabled={status === "submitting"}
-              className="inline-flex min-h-11 w-full items-center justify-center rounded-full bg-primary text-sm font-semibold text-white hover:bg-primary-hover disabled:opacity-70"
+              className="inline-flex min-h-11 w-full items-center justify-center rounded-xl bg-primary text-sm font-bold text-white hover:bg-primary-dark shadow-md shadow-primary/20 disabled:opacity-70"
             >
               {status === "submitting" ? copy.submitting : copy.submit}
             </button>
 
-            <p className="text-[11px] leading-relaxed text-slate-500">
-              {t?.footer?.medicalDisclaimer || "Hasta gizliliği ve veri güvenliği temel ilkemizdir."}
+            <p className="text-[11px] leading-relaxed text-slate-500 text-center">
+              {locale === "tr"
+                ? "Hasta gizliliği ve veri güvenliği 256-Bit SSL ile korunmaktadır."
+                : "Patient privacy and data security protected with 256-Bit SSL."}
             </p>
           </form>
         )}
@@ -379,8 +453,8 @@ function TabButton({
       aria-selected={active}
       onClick={onClick}
       className={cn(
-        "rounded-full px-3 py-1.5",
-        active ? "bg-ink text-white" : "text-slate-500 hover:text-slate-800"
+        "rounded-full px-3 py-1.5 transition-colors",
+        active ? "bg-ink text-white" : "text-slate-600 hover:text-slate-900"
       )}
     >
       {children}
@@ -390,6 +464,7 @@ function TabButton({
 
 function Field({
   label,
+  placeholder,
   value,
   onChange,
   type = "text",
@@ -397,6 +472,7 @@ function Field({
   autoComplete,
 }: {
   label: string;
+  placeholder?: string;
   value: string;
   onChange: (value: string) => void;
   type?: string;
@@ -405,10 +481,13 @@ function Field({
 }) {
   return (
     <label className="block">
-      <span className="text-sm font-medium text-slate-700">{label}</span>
+      <span className="text-xs font-bold uppercase tracking-wider text-slate-700">
+        {label} {error ? "*" : ""}
+      </span>
       <input
         type={type}
         value={value}
+        placeholder={placeholder}
         autoComplete={autoComplete}
         onChange={(event) => onChange(event.target.value)}
         className={inputClass(Boolean(error))}
@@ -420,7 +499,7 @@ function Field({
 
 function inputClass(error: boolean) {
   return cn(
-    "mt-1 w-full rounded-xl border bg-white px-3 py-2.5 text-sm text-ink outline-none focus:border-primary",
-    error ? "border-danger" : "border-border"
+    "mt-1 w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20",
+    error ? "border-danger" : "border-slate-200"
   );
 }

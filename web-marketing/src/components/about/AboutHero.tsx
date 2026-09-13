@@ -21,8 +21,8 @@ export function AboutHero() {
         };
 
   return (
-    <section className="relative overflow-hidden bg-slate-50/40 border-b border-slate-200/80 pt-20 pb-8 sm:pt-24 sm:pb-10 lg:pt-28 lg:pb-12">
-      <HeroBackdrop withGrid />
+    <section className="relative overflow-hidden bg-slate-50/40 border-b border-slate-200/80 pt-8 pb-8 sm:pt-10 sm:pb-10 lg:pt-12 lg:pb-12">
+      <HeroBackdrop />
 
       <Container className="relative">
         <motion.div {...anim(0)} className="max-w-4xl">

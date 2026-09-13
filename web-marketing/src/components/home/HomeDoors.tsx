@@ -41,7 +41,7 @@ export function HomeDoors() {
   const h = t.home;
 
   return (
-    <section className="bg-mist py-20 md:py-24">
+    <section className="border-b border-slate-200/80 bg-mist py-16 md:py-20">
       <Container>
         <div className="max-w-xl">
           <p className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">

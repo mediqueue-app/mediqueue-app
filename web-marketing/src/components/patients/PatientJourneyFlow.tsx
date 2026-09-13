@@ -82,7 +82,7 @@ export function PatientJourneyFlow() {
   const currentDetail = stepDetails[active] || stepDetails[0];
 
   return (
-    <section id="yolculuk" className="scroll-mt-28 bg-white pt-6 md:pt-8 pb-20 md:pb-28 lg:pb-32">
+    <section id="yolculuk" className="scroll-mt-28 border-b border-slate-200/80 bg-slate-50/60 py-16 md:py-20">
       <Container>
         <FadeIn>
           <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-5">

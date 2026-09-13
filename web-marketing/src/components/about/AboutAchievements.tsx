@@ -16,7 +16,7 @@ export function AboutAchievements() {
   if (!chips || chips.length === 0) return null;
 
   return (
-    <section className="bg-slate-50/50 py-20 md:py-28 border-b border-slate-200/80">
+    <section className="bg-slate-50/50 py-16 md:py-20 border-b border-slate-200/80">
       <Container>
         <FadeIn>
           <div className="relative overflow-hidden rounded-[2.25rem] bg-gradient-to-br from-slate-900 via-ink to-slate-950 p-8 sm:p-12 lg:p-14 shadow-2xl text-white">

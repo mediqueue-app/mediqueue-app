@@ -106,7 +106,7 @@ export function AboutFounders() {
   const reduced = useReducedMotion();
 
   return (
-    <section className="bg-white py-20 md:py-28 border-b border-slate-200/80">
+    <section className="bg-white py-16 md:py-20 border-b border-slate-200/80">
       <Container>
         <motion.header
           initial={reduced ? false : { opacity: 0, y: 20 }}

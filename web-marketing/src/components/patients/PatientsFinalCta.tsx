@@ -13,22 +13,22 @@ export function PatientsFinalCta() {
   const { openLead } = useLeadCapture();
 
   return (
-    <section className="scroll-mt-28 pt-4 pb-20">
+    <section className="scroll-mt-28 pt-4 pb-12 sm:pb-16">
       <Container>
         <FadeIn>
-          <div className="relative overflow-hidden rounded-[1.75rem] bg-ink px-8 py-20 text-center sm:px-16 sm:py-24">
+          <div className="relative overflow-hidden rounded-[1.75rem] bg-ink px-6 py-10 text-center sm:px-12 sm:py-12">
             <div
               className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(58,106,214,0.28),_transparent_55%),radial-gradient(ellipse_at_bottom_right,_rgba(13,148,136,0.18),_transparent_46%)]"
               aria-hidden
             />
             <div className="relative">
-              <h2 className="font-display text-3xl tracking-tight text-white sm:text-5xl">
+              <h2 className="font-display text-2xl font-bold tracking-tight text-white sm:text-4xl">
                 {p.finalTitle}
               </h2>
-              <p className="mx-auto mt-6 max-w-lg text-lg leading-relaxed text-white/70">
+              <p className="mx-auto mt-3 max-w-lg text-base leading-relaxed text-white/80">
                 {p.finalBody}
               </p>
-              <div className="mt-10">
+              <div className="mt-6">
                 <Button onClick={() => openLead("patient")} size="lg">
                   {p.finalCta}
                   <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
