@@ -327,7 +327,14 @@ export const tr: SiteContent = {
         before:
           "Danışmanlık ve randevu için peşin ücret talebi ve iptal durumunda para kaybı",
         after:
-          "Talep oluşturmak %100 ücretsizdir; ödeme yalnızca kliniğe ulaşıp tedavi başladığında yapılır",
+          "Teklif toplamak ve hekimle görüşmek %100 ücretsizdir; ameliyat rezervasyonu £100 tedavi mahsuplu depozitoyla korunur",
+      },
+      {
+        title: "AI Yüz & Kimlik Maskeleme",
+        before:
+          "Tıbbi fotoğraflarınızın acenta çalışanları arasında elden ele gezmesi veya sızma riski",
+        after:
+          "GDPR uyumlu AI yüz maskeleme ile fotoğraflarınız anında anonimleştirilir; sadece yetkili hekim inceler",
       },
     ],
     journeyTitle: "Tedavi Yolculuğunuz 4 Adımda Nasıl İşler?",
@@ -339,12 +346,12 @@ export const tr: SiteContent = {
         body: "Tedavi türü, şehir ve bütçenize göre arama yapın. JCI akredite kliniklerin başarı oranlarını ve paket fiyatlarını inceleyin.",
       },
       {
-        title: "Ön Ödemesiz Ücretsiz Talep",
-        body: "Beğendiğiniz kliniklere tek tıkla talep gönderin. Hiçbir ön ödeme veya bağlayıcılık riski olmadan teklif toplayın.",
+        title: "Ön Ödemesiz Ücretsiz Teklif",
+        body: "Kliniklere tek tıkla talep gönderin. Kredi kartı veya ön ödeme gerekmeden kişiselleştirilmiş tedavi tekliflerini toplayın.",
       },
       {
-        title: "Birebir Hekim Görüşmesi",
-        body: "Otomatik çevirili mesajlaşma sistemiyle doğrudan klinik hekiminizle yazışın; tıbbi sorularınızı ilk elden yanıtlayın.",
+        title: "Birebir Hekim Görüşmesi & Rezervasyon",
+        body: "Otomatik çeviriyle hekiminizle doğrudan mesajlaşın. Ameliyat tarihinizi £100 tedavi mahsuplu güvence depozitosuyla sabitleyin.",
       },
       {
         title: "Tedavi & İyileşme Takibi",

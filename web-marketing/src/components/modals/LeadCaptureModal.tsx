@@ -417,6 +417,20 @@ export function LeadCaptureModal() {
               <p className="text-xs text-danger">{copy.error}</p>
             ) : null}
 
+            {mode === "patient" && (
+              <div className="rounded-xl border border-emerald-200/80 bg-emerald-50/70 p-3 text-left">
+                <p className="text-xs font-bold text-emerald-900 flex items-center gap-1.5">
+                  <span>🔒</span>
+                  <span>{locale === "tr" ? "AI Yüz Maskeleme & GDPR Koruması" : "AI Face Masking & GDPR Shield"}</span>
+                </p>
+                <p className="mt-1 text-[11px] leading-relaxed text-emerald-700">
+                  {locale === "tr"
+                    ? "Yüklediğiniz tıbbi fotoğraflar yapay zeka ile otomatik maskelenir. Onayınız olmadan kimliğiniz klinik dahil kimseyle paylaşılmaz."
+                    : "Uploaded medical photos are automatically anonymized with AI. Your identity is never exposed without your explicit consent."}
+                </p>
+              </div>
+            )}
+
             <button
               type="submit"
               disabled={status === "submitting"}

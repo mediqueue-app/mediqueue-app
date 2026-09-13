@@ -324,7 +324,14 @@ export const en: SiteContent = {
         before:
           "Upfront fees charged for consultation and bookings with financial loss upon cancellation",
         after:
-          "Creating a request is 100% free; payment occurs only when you arrive and treatment begins",
+          "Requesting quotes and messaging doctors is 100% free; surgery slots are secured with a £100 deposit deducted from your final bill",
+      },
+      {
+        title: "AI Face & Identity Masking",
+        before:
+          "Unencrypted patient photos passed around agency sales teams with risk of public leaks",
+        after:
+          "GDPR-compliant AI anonymizes facial features instantly; photos are accessible strictly by authorized physicians",
       },
     ],
     journeyTitle: "How Your Treatment Journey Works in 4 Steps",
@@ -336,12 +343,12 @@ export const en: SiteContent = {
         body: "Search by treatment, location, and budget. Inspect success rates and package prices of JCI-accredited clinics.",
       },
       {
-        title: "Free No-Upfront Request",
-        body: "Send requests to your preferred clinics in one click. Gather quotes with zero upfront fees or obligation.",
+        title: "Free No-Obligation Quotes",
+        body: "Send requests to your preferred clinics in one click. Gather personalized quotes with zero upfront fees or card registration.",
       },
       {
-        title: "Direct Doctor Consult",
-        body: "Chat directly with your clinic doctor using auto-translated messaging; get medical answers first-hand.",
+        title: "Direct Doctor Consult & Booking",
+        body: "Chat directly with your clinic doctor using auto-translation. Lock in your procedure date with a £100 deposit deducted from your bill.",
       },
       {
         title: "Treatment & Recovery Follow-up",
