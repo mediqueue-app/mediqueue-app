@@ -19,7 +19,7 @@ const OriginGlobe = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="aspect-square w-full max-w-[280px] sm:max-w-[420px] lg:max-w-[540px]">
+      <div className="aspect-square w-full max-w-[260px] sm:max-w-[320px] lg:max-w-[360px]">
         <div className="h-full w-full animate-pulse rounded-full bg-slate-100" />
       </div>
     ),
@@ -123,22 +123,22 @@ export function OriginReachWidget({
 
   return (
     <div ref={sectionRef} className={cn(shellClass, className)}>
-      <div className="flex flex-wrap items-center gap-2 border-b border-slate-100 px-5 py-5 sm:px-6">
-        <Globe2 className="h-5 w-5 shrink-0 text-primary" />
+      <div className="flex flex-wrap items-center gap-2 border-b border-slate-100 px-4 py-3 sm:px-5">
+        <Globe2 className="h-4.5 w-4.5 shrink-0 text-primary" />
         <div className="min-w-0">
           <h2
             className={cn(
               "font-semibold text-ink",
-              variant === "section" ? "text-xl sm:text-2xl" : "text-lg"
+              variant === "section" ? "text-lg sm:text-xl" : "text-base"
             )}
           >
             {title}
           </h2>
-          <p className="mt-1 text-sm text-slate-500">{subtitle}</p>
+          <p className="mt-0.5 text-xs text-slate-500">{subtitle}</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 items-center gap-6 p-5 sm:p-6 lg:grid-cols-5 lg:gap-8">
+      <div className="grid grid-cols-1 items-center gap-4 p-3.5 sm:p-4 lg:grid-cols-5 lg:gap-6">
         <div className="flex justify-center lg:col-span-3">
           <OriginGlobe
             data={sorted}
@@ -163,15 +163,15 @@ export function OriginReachWidget({
             <p className="text-sm text-slate-400">{emptyListText}</p>
           ) : (
             <>
-              <div className="flex items-center justify-between px-3 pb-2">
-                <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+              <div className="flex items-center justify-between px-2.5 pb-1.5">
+                <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                   {countryColumnLabel}
                 </span>
                 <div className="flex items-center gap-2">
-                  <span className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">
+                  <span className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">
                     {patientColumnLabel}
                   </span>
-                  {showListScrollControls && sorted.length > 6 && (
+                  {showListScrollControls && sorted.length > 5 && (
                     <div className="flex overflow-hidden rounded-lg border border-slate-200">
                       <button
                         type="button"
@@ -179,9 +179,9 @@ export function OriginReachWidget({
                         aria-label={
                           locale === "en" ? "Scroll list up" : "Listeyi yukarı kaydır"
                         }
-                        className="flex h-6 w-6 items-center justify-center text-slate-400 transition-colors hover:bg-slate-50 hover:text-primary"
+                        className="flex h-5 w-5 items-center justify-center text-slate-400 transition-colors hover:bg-slate-50 hover:text-primary"
                       >
-                        <ChevronUp className="h-3.5 w-3.5" strokeWidth={2.25} />
+                        <ChevronUp className="h-3 w-3" strokeWidth={2.25} />
                       </button>
                       <span aria-hidden className="w-px bg-slate-200" />
                       <button
@@ -190,9 +190,9 @@ export function OriginReachWidget({
                         aria-label={
                           locale === "en" ? "Scroll list down" : "Listeyi aşağı kaydır"
                         }
-                        className="flex h-6 w-6 items-center justify-center text-slate-400 transition-colors hover:bg-slate-50 hover:text-primary"
+                        className="flex h-5 w-5 items-center justify-center text-slate-400 transition-colors hover:bg-slate-50 hover:text-primary"
                       >
-                        <ChevronDown className="h-3.5 w-3.5" strokeWidth={2.25} />
+                        <ChevronDown className="h-3 w-3" strokeWidth={2.25} />
                       </button>
                     </div>
                   )}
@@ -200,7 +200,7 @@ export function OriginReachWidget({
               </div>
               <ul
                 ref={listRef}
-                className="max-h-[320px] space-y-0.5 overflow-y-auto pr-1 sm:max-h-[460px]"
+                className="max-h-[220px] space-y-0.5 overflow-y-auto pr-1 sm:max-h-[250px]"
               >
                 {sorted.map((country) => {
                   const share =
@@ -213,7 +213,7 @@ export function OriginReachWidget({
                         onMouseEnter={() => setActiveCode(country.countryCode)}
                         onMouseLeave={() => setActiveCode(null)}
                         className={cn(
-                          "flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors duration-150",
+                          "flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 transition-colors duration-150",
                           isActive ? "bg-primary-light/70" : "hover:bg-slate-50"
                         )}
                       >

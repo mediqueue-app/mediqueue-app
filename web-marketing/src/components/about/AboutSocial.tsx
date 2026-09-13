@@ -157,7 +157,7 @@ export function AboutSocial() {
                     size="lg"
                     className="border-0 bg-white text-ink hover:bg-white/90"
                   >
-                    {tr ? "Kliniğinizi Ekleyin — Ücretsiz" : "Add Your Clinic — Free"}
+                    {tr ? "Kliniğinizi Ekleyin" : "Add Your Clinic"}
                     <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
                   </Button>
                 </div>

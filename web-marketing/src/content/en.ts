@@ -150,7 +150,7 @@ export const en: SiteContent = {
       "Stop pouring a fortune into ads. Pay only for the patient who converts.",
     heroSub:
       "Invest in outcomes, not clicks or hope. Zero risk, high conversion in international health travel. No upfront fee. No panel subscription.",
-    primaryCta: "Add your clinic — free",
+    primaryCta: "Add Your Clinic",
     secondaryCta: "How the system works",
     requestLabel: "New appointment request",
     requestBudget: "Budget",

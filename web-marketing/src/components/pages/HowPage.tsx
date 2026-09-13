@@ -113,7 +113,7 @@ export function HowPage() {
                 <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
               </Button>
               <Button onClick={() => openLead("clinic", "clinic")} variant="ink" size="lg">
-                {tr ? "Kliniğinizi Ekleyin — Ücretsiz" : "Add Your Clinic — Free"}
+                {tr ? "Kliniğinizi Ekleyin" : "Add Your Clinic"}
               </Button>
             </div>
           </FadeIn>

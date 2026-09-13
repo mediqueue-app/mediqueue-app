@@ -451,7 +451,7 @@ export function OriginGlobe({
     <div
       ref={containerRef}
       className={cn(
-        "relative aspect-square w-full max-w-[280px] sm:max-w-[420px] lg:max-w-[540px]",
+        "relative aspect-square w-full max-w-[260px] sm:max-w-[320px] lg:max-w-[360px]",
         className
       )}
     >

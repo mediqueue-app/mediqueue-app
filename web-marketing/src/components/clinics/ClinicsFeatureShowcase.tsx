@@ -80,8 +80,8 @@ export function ClinicsFeatureShowcase() {
           </p>
         </FadeIn>
 
-        <div className="mt-14 lg:mt-18 grid gap-8 lg:grid-cols-[minmax(0,0.44fr)_minmax(0,1fr)] lg:gap-12 lg:items-center">
-          <FadeIn delay={0.06} className="self-center">
+        <div className="mt-14 lg:mt-18 grid gap-8 lg:grid-cols-[minmax(0,0.44fr)_minmax(0,1fr)] lg:gap-12 lg:items-start">
+          <FadeIn delay={0.06}>
             <ul className="space-y-2.5">
               {features.map((f, i) => {
                 const Icon = f.icon;
@@ -91,7 +91,6 @@ export function ClinicsFeatureShowcase() {
                     <button
                       type="button"
                       onClick={() => setActive(i)}
-                      onMouseEnter={() => setActive(i)}
                       className={cn(
                         "flex w-full items-start gap-3.5 rounded-2xl border px-4 py-3.5 text-left transition-all duration-200",
                         isSelected

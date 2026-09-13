@@ -149,7 +149,7 @@ export const tr: SiteContent = {
       "Reklamlara Servet Ödemeyi Bırakın. Sadece Dönüşen Hasta İçin Ödeyin.",
     heroSub:
       "Tıklamalara veya umutlara değil, gerçek sonuçlara yatırım yapın. MEDIQUEUE ile uluslararası sağlık turizminde sıfır risk, yüksek dönüşüm. Ön ödeme yok, panel aboneliği yok.",
-    primaryCta: "Kliniğinizi Ücretsiz Ekleyin",
+    primaryCta: "Kliniğinizi Ekleyin",
     secondaryCta: "Sistem Nasıl Çalışır?",
     requestLabel: "Yeni Randevu Talebi",
     requestBudget: "Bütçe",
@@ -200,7 +200,7 @@ export const tr: SiteContent = {
     roadmapMqLabel: "MediQueue Güvencesi",
     roadmapSteps: [
       {
-        title: "Ücretsiz Katılım & Profil",
+        title: "Katılım & Profil",
         clinic:
           "Akreditasyon belgelerinizi yükleyin, tıbbi uzmanlık alanlarınızı ve fiyat aralıklarınızı tanımlayın.",
         mediQueue:
