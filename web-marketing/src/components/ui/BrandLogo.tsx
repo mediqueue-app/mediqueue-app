@@ -38,7 +38,7 @@ export function BrandLogo({
       width={dim.width}
       height={dim.height}
       className={cn("object-contain object-left", dim.className, className)}
-      style={{ width: "auto" }}
+      style={{ width: "auto", height: "auto" }}
       priority={priority}
     />
   );

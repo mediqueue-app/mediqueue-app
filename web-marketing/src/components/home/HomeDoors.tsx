@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/LocaleLink";
 import { ArrowUpRight, Building2, CalendarDays, Search } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { ClinicRequestsPreview } from "@/components/product/ClinicRequestsPreview";
@@ -56,7 +56,7 @@ export function HomeDoors() {
           {h.doors.map((door) => {
             const Icon = ICONS[door.preview];
             return (
-              <Link
+              <LocaleLink
                 key={door.href}
                 href={door.href}
                 className="group relative flex flex-col overflow-hidden rounded-[1.5rem] border border-border bg-white p-6 shadow-sm transition-[box-shadow,transform] duration-500 hover:-translate-y-1 hover:shadow-[0_28px_60px_-28px_rgba(12,26,61,0.18)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary"
@@ -86,7 +86,7 @@ export function HomeDoors() {
                 <div className="relative -mx-2 -mb-2 mt-6 overflow-hidden rounded-xl">
                   <DoorPreview type={door.preview} />
                 </div>
-              </Link>
+              </LocaleLink>
             );
           })}
         </div>

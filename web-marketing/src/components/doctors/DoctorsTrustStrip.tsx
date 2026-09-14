@@ -6,30 +6,14 @@ import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
 
 export function DoctorsTrustStrip() {
-  const { t, locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const d = t.doctors;
-
-  const trustBadges = [
-    {
-      icon: FileCheck,
-      title: tr ? "Doğrulanmış Tıp Lisansı & Diploma" : "Verified Medical License & Diploma",
-      subtitle: tr ? "Resmi Hekimlik Yetki Belgeleri" : "Official Medical Certification",
-      tag: tr ? "Resmi Onaylı" : "Officially Certified",
-    },
-    {
-      icon: Award,
-      title: tr ? "JCI & Uzmanlık Akreditasyonu" : "JCI & Specialty Accreditation",
-      subtitle: tr ? "Uluslararası Hasta Güvenliği Standartları" : "Global Patient Safety Standards",
-      tag: tr ? "Altın Standart" : "Gold Standard",
-    },
-    {
-      icon: UserCheck,
-      title: tr ? "Gerçek Hasta İncelemeleri" : "Verified Patient Reviews",
-      subtitle: tr ? "Şeffaf Yorumlar ve Derecelendirmeler" : "Transparent Ratings & Feedback",
-      tag: tr ? "%100 Gerçek" : "100% Real",
-    },
-  ];
+  const block = t.screens.doctorsTrust;
+  const icons = [FileCheck, Award, UserCheck] as const;
+  const trustBadges = block.badges.map((badge, i) => ({
+    ...badge,
+    icon: icons[i] ?? UserCheck,
+  }));
 
   return (
     <section className="border-b border-slate-200/80 bg-gradient-to-b from-slate-50 via-slate-100/50 to-white py-16 md:py-20">
@@ -49,11 +33,11 @@ export function DoctorsTrustStrip() {
               <div>
                 <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-emerald-800">
                   <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                  {tr ? "%100 Doğrulanmış Hekim Profilleri" : "100% Verified Doctor Profiles"}
+                  {block.eyebrow}
                 </span>
 
                 <h2 className="font-display mt-6 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-[2.35rem]">
-                  {tr ? "Sadece Onaylı Lisanslar. Sadece Gerçek Uzmanlıklar." : "Only Verified Licenses. Only Real Expertise."}
+                  {block.title}
                 </h2>
 
                 <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
@@ -63,11 +47,11 @@ export function DoctorsTrustStrip() {
                 <div className="mt-10 flex flex-wrap items-center gap-6 border-t border-slate-100 pt-6 text-xs text-slate-500">
                   <span className="flex items-center gap-2 font-semibold text-slate-800">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                    {tr ? "Diplomalı Uzman Hekimler" : "Certified Specialist Doctors"}
+                    {block.check1}
                   </span>
                   <span className="flex items-center gap-2 font-semibold text-slate-800">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                    {tr ? "Güvenli Sağlık İletişimi" : "Secure Medical Communication"}
+                    {block.check2}
                   </span>
                 </div>
               </div>

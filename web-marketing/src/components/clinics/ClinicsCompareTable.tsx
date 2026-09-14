@@ -6,7 +6,7 @@ import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
 
 export function ClinicsCompareTable() {
-  const { locale, t } = useLocale();
+  const { t } = useLocale();
   const c = t.clinics;
 
   return (
@@ -21,9 +21,7 @@ export function ClinicsCompareTable() {
             {c.compareTitle}
           </h2>
           <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg max-w-2xl mx-auto">
-            {locale === "tr"
-              ? "Aylık sabit ajans ücretleri veya sonucu garanti edilmeyen dijital reklam harcamaları yerine; dil, bütçe ve tedavi ihtiyacı doğrulanmış hastalarla sıfır riskle büyüyün."
-              : "Scale with zero financial risk by connecting with patients verified by language, budget, and treatment needs, instead of high agency retainers."}
+            {c.compareIntro}
           </p>
         </FadeIn>
 
@@ -39,9 +37,7 @@ export function ClinicsCompareTable() {
                       {c.compareBeforeLabel}
                     </span>
                     <h3 className="mt-3 text-xl font-bold text-slate-900">
-                      {locale === "tr"
-                        ? "Geleneksel Sağlık Turizmi Yöntemleri"
-                        : "Traditional Health Tourism Agencies"}
+                      {c.compareBeforeTitle}
                     </h3>
                   </div>
                 </div>
@@ -62,16 +58,14 @@ export function ClinicsCompareTable() {
               </div>
 
               <div className="mt-8 flex min-h-[3.25rem] items-center justify-center rounded-2xl border border-slate-200/70 bg-slate-100/80 p-4 text-center text-xs font-semibold text-slate-700">
-                {locale === "tr"
-                  ? "Harcanan bütçenin dönüşüm garantisi yoktur; risk kliniğe aittir."
-                  : "Ad budgets carry zero conversion guarantee; financial risk rests on the clinic."}
+                {c.compareBeforeFoot}
               </div>
             </div>
 
             {/* Right Card — MediQueue Model */}
             <div className="relative flex h-full flex-col justify-between rounded-3xl border-2 border-emerald-500/90 bg-white p-7 sm:p-9 shadow-xl shadow-emerald-950/5 ring-4 ring-emerald-500/10">
               <div className="pointer-events-none absolute -top-4 right-8 inline-flex items-center rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-bold text-white shadow-lg shadow-emerald-600/30">
-                {locale === "tr" ? "Tavsiye Edilen Güvenli Model" : "Recommended Risk-Free Model"}
+                {c.compareRecommended}
               </div>
 
               <div>
@@ -82,9 +76,7 @@ export function ClinicsCompareTable() {
                       {c.compareAfterLabel}
                     </span>
                     <h3 className="mt-3 text-xl font-bold text-slate-900">
-                      {locale === "tr"
-                        ? "MediQueue Güvenceli Pazar Yeri"
-                        : "MediQueue Risk-Free Marketplace"}
+                      {c.compareAfterTitle}
                     </h3>
                   </div>
                 </div>
@@ -108,9 +100,7 @@ export function ClinicsCompareTable() {
               </div>
 
               <div className="mt-8 flex min-h-[3.25rem] items-center justify-center rounded-2xl bg-emerald-600 p-4 text-center text-xs font-bold text-white shadow-md shadow-emerald-600/25">
-                {locale === "tr"
-                  ? "Sıfır abonelik ücreti — Yalnızca gelen hasta için ödersiniz."
-                  : "Zero subscription fees — You pay only when a patient arrives."}
+                {c.compareAfterFoot}
               </div>
             </div>
           </div>

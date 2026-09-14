@@ -3,6 +3,7 @@
 import { FormEvent, useEffect, useId, useState } from "react";
 import { CheckCircle2, X } from "lucide-react";
 import { useLocale } from "@/lib/locale";
+import { withLocalePath } from "@/lib/locale-path";
 import { useLeadCapture, type LeadMode } from "@/lib/lead-capture";
 import { cn } from "@/lib/cn";
 
@@ -24,7 +25,7 @@ const emptyForm = (role: "clinic" | "doctor"): FormState => ({
   name: "",
   email: "",
   phone: "",
-  country: "United Kingdom",
+      country: "",
   treatment: "",
   clinicName: "",
   city: "",
@@ -34,106 +35,9 @@ const emptyForm = (role: "clinic" | "doctor"): FormState => ({
   consent: false,
 });
 
-const trLeadCopy = {
-  close: "Kapat",
-  patientTab: "Hasta Talebi",
-  clinicTab: "Klinik / Doktor Kaydı",
-  patientTitle: "Ücretsiz Sağlık & Tedavi Talebi Oluşturun",
-  clinicTitle: "Kliniğinizi MediQueue'ye Ekleyin",
-  patientBody: "Talep kriterlerinizi girin, akredite klinikler sizden ön ödeme almadan teklif versin.",
-  clinicBody: "Abonelik ücreti ödemeyin. Yalnızca panelinize düşen gerçek talepler için işlem yapın.",
-  successTitle: "Talebiniz Başarıyla Alındı!",
-  successBody: "Ekibimiz ve akredite klinikler talebinizi inceleyip en kısa sürede sizinle iletişime geçecektir.",
-  name: "Ad Soyad",
-  namePlaceholder: "Örn: Ahmet Yılmaz",
-  email: "E-posta Adresi",
-  emailPlaceholder: "ornek@email.com",
-  phone: "Telefon Numarası",
-  phonePlaceholder: "+90 5XX XXX XX XX",
-  country: "İkamet Ettiğiniz Ülke",
-  countryPlaceholder: "Örn: Birleşik Krallık / Almanya",
-  treatment: "Talep Edilen Tedavi",
-  selectTreatment: "Tedavi seçiniz...",
-  treatmentOptions: [
-    "Saç Ekimi (DHI / FUE)",
-    "Estetik & Plastik Cerrahi",
-    "Göz Cerrahisi & LASIK",
-    "Diş Tedavisi & Gülüş Tasarımı",
-    "Obezite & Bariatrik Cerrahi",
-    "Ortopedi & Fizik Tedavi",
-    "Diğer",
-  ],
-  clinicName: "Klinik / Hastane Adı",
-  clinicNamePlaceholder: "Örn: Anadolu Sağlık Merkezi",
-  city: "Şehir / Ülke",
-  cityPlaceholder: "Örn: İstanbul, Türkiye",
-  website: "Web Sitesi (Opsiyonel)",
-  websitePlaceholder: "https://klinik-web-sitesi.com",
-  role: "Rolünüz",
-  roleClinic: "Klinik Yöneticisi / Temsilcisi",
-  roleDoctor: "Hekim / Doktor",
-  message: "Semptomlar veya Özel İstekleriniz",
-  messagePlaceholder: "İletmek istediğiniz tüm tıbbi ayrıntıları yazabilirsiniz...",
-  consent: "Kişisel verilerimin işlenmesini ve gizlilik politikasını kabul ediyorum.",
-  privacyLink: "Gizlilik Politikası",
-  error: "Bir hata oluştu. Lütfen tüm alanları doldurup tekrar deneyin.",
-  submitting: "Gönderiliyor...",
-  submit: "Talebi Gönder",
-  required: "Bu alan zorunludur.",
-};
-
-const enLeadCopy = {
-  close: "Close",
-  patientTab: "Patient Request",
-  clinicTab: "Clinic / Doctor Registration",
-  patientTitle: "Create Free Healthcare Request",
-  clinicTitle: "Add Your Clinic to MediQueue",
-  patientBody: "Enter your request details, and accredited clinics will provide quotes with zero upfront cost.",
-  clinicBody: "No subscription fee. Only act on verified patient leads delivered directly to your portal.",
-  successTitle: "Request Received Successfully!",
-  successBody: "Our team and partner clinics will review your details and contact you as soon as possible.",
-  name: "Full Name",
-  namePlaceholder: "e.g. John Doe",
-  email: "Email Address",
-  emailPlaceholder: "example@email.com",
-  phone: "Phone / WhatsApp Number",
-  phonePlaceholder: "+44 7XXX XXXXXX",
-  country: "Country of Residence",
-  countryPlaceholder: "e.g. United Kingdom / Germany",
-  treatment: "Requested Treatment",
-  selectTreatment: "Select treatment...",
-  treatmentOptions: [
-    "Hair Transplant (DHI / FUE)",
-    "Aesthetics & Plastic Surgery",
-    "Eye Surgery & LASIK",
-    "Dental Care & Smile Design",
-    "Bariatric & Weight Loss Surgery",
-    "Orthopedics & Physical Therapy",
-    "Other",
-  ],
-  clinicName: "Clinic / Hospital Name",
-  clinicNamePlaceholder: "e.g. London Health Clinic",
-  city: "City / Country",
-  cityPlaceholder: "e.g. London, UK",
-  website: "Website (Optional)",
-  websitePlaceholder: "https://yourclinic.com",
-  role: "Your Role",
-  roleClinic: "Clinic Manager / Representative",
-  roleDoctor: "Physician / Doctor",
-  message: "Symptoms or Special Requests",
-  messagePlaceholder: "Write any medical details or specific preferences...",
-  consent: "I accept the processing of my personal data and the privacy policy.",
-  privacyLink: "Privacy Policy",
-  error: "An error occurred. Please fill in the required fields and try again.",
-  submitting: "Submitting...",
-  submit: "Submit Request",
-  required: "This field is required.",
-};
-
 export function LeadCaptureModal() {
   const { locale, t } = useLocale();
-  const baseCopy = locale === "tr" ? trLeadCopy : enLeadCopy;
-  const copy = { ...baseCopy, ...(t?.lead || {}) };
+  const copy = t.lead;
   const { open, mode, role, openLead, closeLead } = useLeadCapture();
   const titleId = useId();
   const [form, setForm] = useState<FormState>(() => emptyForm(role));
@@ -405,7 +309,7 @@ export function LeadCaptureModal() {
               />
               <span>
                 {copy.consent}{" "}
-                <a href="/privacy" className="font-semibold text-primary hover:underline">
+                <a href={withLocalePath(locale, "/privacy")} className="font-semibold text-primary hover:underline">
                   {copy.privacyLink}
                 </a>
               </span>
@@ -417,20 +321,6 @@ export function LeadCaptureModal() {
               <p className="text-xs text-danger">{copy.error}</p>
             ) : null}
 
-            {mode === "patient" && (
-              <div className="rounded-xl border border-emerald-200/80 bg-emerald-50/70 p-3 text-left">
-                <p className="text-xs font-bold text-emerald-900 flex items-center gap-1.5">
-                  <span>🔒</span>
-                  <span>{locale === "tr" ? "AI Yüz Maskeleme & GDPR Koruması" : "AI Face Masking & GDPR Shield"}</span>
-                </p>
-                <p className="mt-1 text-[11px] leading-relaxed text-emerald-700">
-                  {locale === "tr"
-                    ? "Yüklediğiniz tıbbi fotoğraflar yapay zeka ile otomatik maskelenir. Onayınız olmadan kimliğiniz klinik dahil kimseyle paylaşılmaz."
-                    : "Uploaded medical photos are automatically anonymized with AI. Your identity is never exposed without your explicit consent."}
-                </p>
-              </div>
-            )}
-
             <button
               type="submit"
               disabled={status === "submitting"}
@@ -440,9 +330,7 @@ export function LeadCaptureModal() {
             </button>
 
             <p className="text-[11px] leading-relaxed text-slate-500 text-center">
-              {locale === "tr"
-                ? "Hasta gizliliği ve veri güvenliği 256-Bit SSL ile korunmaktadır."
-                : "Patient privacy and data security protected with 256-Bit SSL."}
+              {copy.dataNote}
             </p>
           </form>
         )}

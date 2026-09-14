@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { usePathname } from "next/navigation";
 import { useLocale } from "@/lib/locale";
 import { documentTitleForPath } from "@/lib/page-title";
@@ -8,10 +8,14 @@ import { documentTitleForPath } from "@/lib/page-title";
 export function DocumentTitle() {
   const { locale } = useLocale();
   const pathname = usePathname() ?? "/";
+  const lastPath = useRef(pathname);
 
   useEffect(() => {
     document.title = documentTitleForPath(locale, pathname);
-    window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    if (lastPath.current !== pathname) {
+      lastPath.current = pathname;
+      window.scrollTo({ top: 0, left: 0, behavior: "instant" });
+    }
   }, [locale, pathname]);
 
   return null;

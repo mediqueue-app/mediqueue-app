@@ -18,46 +18,22 @@ import { DoctorSchedulePreview } from "@/components/product/DoctorSchedulePrevie
 import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
 
+const CLINIC_ICONS = {
+  requests: LayoutDashboard,
+  analytics: BarChart3,
+  direct: Users,
+  schedule: Calendar,
+} as const;
+
 export function ClinicsFeatureShowcase() {
-  const { locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
+  const block = t.screens.clinicsShowcase;
   const reduced = useReducedMotion();
   const [active, setActive] = useState(0);
-
-  const features = [
-    {
-      id: "requests",
-      title: tr ? "Canlı Talep Yönetim Paneli" : "Live Request Management Panel",
-      body: tr
-        ? "Bütçe, dil ve tedavi ihtiyacı doğrulanmış hasta taleplerini tek ekrandan inceleyin ve onaylayın."
-        : "Review and approve patient requests verified by budget, language, and treatment need.",
-      icon: LayoutDashboard,
-    },
-    {
-      id: "analytics",
-      title: tr ? "Küresel Hasta Analitiği & Harita" : "Global Patient Analytics & Map",
-      body: tr
-        ? "Hastalarınızın hangi ülkelerden başvurduğunu anlık küre haritası ve oran kırılımları ile izleyin."
-        : "Track patient applications worldwide using real-time global mapping and conversion analytics.",
-      icon: BarChart3,
-    },
-    {
-      id: "direct",
-      title: tr ? "Doğrudan & Otomatik Çevirili Mesajlaşma" : "Direct & Auto-Translated Chat",
-      body: tr
-        ? "Aracı acentalar olmadan hasta ile kendi dilinde doğrudan mesajlaşın, tedavi detaylarını netleştirin."
-        : "Chat directly with patients in their native language using automatic translation tools.",
-      icon: Users,
-    },
-    {
-      id: "schedule",
-      title: tr ? "Akıllı Takvim & Randevu Koordinasyonu" : "Smart Calendar & Scheduling",
-      body: tr
-        ? "Klinik hekimlerinizin ve ameliyathanelerinizin boş saatlerini uluslararası hastalarla eşleştirin."
-        : "Coordinate physician schedules and operating rooms seamlessly with international arrivals.",
-      icon: Calendar,
-    },
-  ];
+  const features = block.items.map((item) => ({
+    ...item,
+    icon: CLINIC_ICONS[item.id as keyof typeof CLINIC_ICONS] ?? LayoutDashboard,
+  }));
 
   const currentFeature = features[active];
 
@@ -67,16 +43,14 @@ export function ClinicsFeatureShowcase() {
         <FadeIn>
           <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-5">
             <span>
-              {tr ? "Klinik Yönetim Ekranları & Özellikler" : "Clinic Management Screens & Features"}
+              {block.eyebrow}
             </span>
           </div>
           <h2 className="font-display max-w-2xl text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-            {tr ? "Kliniğinizi Büyüten Akıllı Yönetim Araçları" : "Smart Tools to Scale Your Clinic"}
+            {block.title}
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
-            {tr
-              ? "Uluslararası pazarlama ve operasyon süreçlerinizi karmaşık yazılımlar yerine MediQueue'nun sezgisel paneli üzerinden yönetin."
-              : "Manage international marketing and operations seamlessly using MediQueue's intuitive clinic dashboard."}
+            {block.intro}
           </p>
         </FadeIn>
 

@@ -14,10 +14,21 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/terms",
     "/disclaimer",
   ];
-  return routes.map((path) => ({
-    url: `${SITE_URL}${path}`,
-    lastModified: new Date(),
-    changeFrequency: path === "" ? "weekly" : "monthly",
-    priority: path === "" ? 1.0 : path === "/clinics" || path === "/patients" ? 0.9 : 0.8,
-  }));
+
+  return routes.flatMap((path) => {
+    const tr = `${SITE_URL}${path}`;
+    const en = `${SITE_URL}${path === "" ? "/en" : `/en${path}`}`;
+    const isHome = path === "";
+    const isPriority = path === "/clinics" || path === "/patients";
+    const changeFrequency: "weekly" | "monthly" = isHome ? "weekly" : "monthly";
+    const entry = {
+      lastModified: new Date(),
+      changeFrequency,
+      priority: isHome ? 1.0 : isPriority ? 0.9 : 0.8,
+    };
+    return [
+      { url: tr, ...entry },
+      { url: en, ...entry, priority: entry.priority * 0.95 },
+    ];
+  });
 }

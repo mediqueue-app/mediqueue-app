@@ -6,29 +6,13 @@ import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
 
 export function TrustCredentials() {
-  const { t, locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const p = t.patients;
 
   const trustBadges = [
-    {
-      icon: Award,
-      title: tr ? "JCI Uluslararası Akreditasyon" : "JCI International Accreditation",
-      subtitle: tr ? "Dünya Çapında Hasta Güvenliği Standartları" : "Global Patient Safety Standards",
-      tag: tr ? "Altın Standart" : "Gold Standard",
-    },
-    {
-      icon: FileCheck,
-      title: tr ? "Sağlık Turizmi Yetki Belgesi" : "Official Health Tourism License",
-      subtitle: tr ? "T.C. Sağlık Bakanlığı Onaylı Kurumlar" : "Ministry of Health Certified",
-      tag: tr ? "Resmi Lisanslı" : "Officially Licensed",
-    },
-    {
-      icon: Lock,
-      title: tr ? "GDPR & KVKK Uçtan Uca Şifreleme" : "256-Bit GDPR Data Protection",
-      subtitle: tr ? "Hasta Mahremiyeti ve Tıbbi Veri Güvenliği" : "Patient Privacy & Medical Data Encryption",
-      tag: tr ? "Şifreli Altyapı" : "Encrypted Infrastructure",
-    },
+    { icon: Award, ...p.trustBadges[0] },
+    { icon: FileCheck, ...p.trustBadges[1] },
+    { icon: Lock, ...p.trustBadges[2] },
   ];
 
   return (
@@ -49,7 +33,7 @@ export function TrustCredentials() {
               <div>
                 <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-emerald-800">
                   <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                  {tr ? "%100 Denetimli & Lisanslı Klinikler" : "100% Verified & Licensed Clinics"}
+                  {p.trustEyebrow}
                 </span>
 
                 <h2 className="font-display mt-6 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-[2.5rem]">
@@ -63,11 +47,11 @@ export function TrustCredentials() {
                 <div className="mt-10 flex flex-wrap items-center gap-6 border-t border-slate-100 pt-6 text-xs text-slate-500">
                   <span className="flex items-center gap-2 font-semibold text-slate-800">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                    {tr ? "Sıfır Sahte Klinik Riski" : "Zero Unverified Clinic Risk"}
+                    {p.trustCheck1}
                   </span>
                   <span className="flex items-center gap-2 font-semibold text-slate-800">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                    {tr ? "Doğrulanmış Tıbbi Uzmanlık" : "Verified Medical Expertise"}
+                    {p.trustCheck2}
                   </span>
                 </div>
               </div>

@@ -8,8 +8,7 @@ import { useLocale } from "@/lib/locale";
 const ACHIEVEMENT_ICONS = [Trophy, Award, ShieldCheck];
 
 export function AboutAchievements() {
-  const { t, locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const copy = t.team;
   const chips = copy.achievementChips;
 
@@ -34,15 +33,15 @@ export function AboutAchievements() {
                 <div>
                   <span className="inline-flex items-center gap-2 rounded-full border border-amber-400/30 bg-amber-400/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-amber-400 mb-3">
                     <Trophy className="h-4 w-4 text-amber-400" />
-                    <span>{copy.achievementsEyebrow || (tr ? "Ödüller ve Başarılar" : "Awards & Recognition")}</span>
+                    <span>{copy.achievementsEyebrow}</span>
                   </span>
                   <h2 className="font-display text-2xl font-bold tracking-tight text-white sm:text-3xl lg:text-4xl">
-                    {copy.achievementsTitle || (tr ? "Girişimcilik ve İnovasyon Ekosistemindeki Yerimiz" : "Our Position in the Tech Ecosystem")}
+                    {copy.achievementsTitle}
                   </h2>
                 </div>
 
                 <div className="hidden lg:flex items-center text-xs font-semibold text-white/50">
-                  <span>Tescilli Başarılar</span>
+                  <span>{copy.achievementsAside}</span>
                 </div>
               </div>
 

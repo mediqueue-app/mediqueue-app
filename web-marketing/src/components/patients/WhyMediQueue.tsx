@@ -6,7 +6,7 @@ import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
 
 export function WhyMediQueue() {
-  const { locale, t } = useLocale();
+  const { t } = useLocale();
   const p = t.patients;
 
   return (
@@ -21,7 +21,7 @@ export function WhyMediQueue() {
             {p.whyTitle}
           </h2>
           <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg max-w-2xl mx-auto">
-            Komisyoncuların yönlendirmeleri yerine, akredite klinikleri şeffafça kıyaslayabileceğiniz özgür bir tedavi platformu.
+            {p.whyIntro}
           </p>
         </FadeIn>
 
@@ -37,7 +37,7 @@ export function WhyMediQueue() {
                       {p.whyBeforeLabel}
                     </span>
                     <h3 className="mt-3 text-xl font-bold text-slate-900">
-                      Geleneksel Sağlık Turizmi Acentaları
+                      {p.whyBeforeTitle}
                     </h3>
                   </div>
                 </div>
@@ -58,16 +58,14 @@ export function WhyMediQueue() {
               </div>
 
               <div className="mt-8 flex min-h-[3.25rem] items-center justify-center rounded-2xl border border-slate-200/70 bg-slate-100/80 p-4 text-center text-xs font-semibold text-slate-700">
-                {locale === "tr"
-                  ? "Gizli maliyet riski ve kısıtlı seçeneklerle hareket edilir."
-                  : "Hidden cost risk and limited options define the experience."}
+                {p.whyBeforeFoot}
               </div>
             </div>
 
             {/* Right Card — MediQueue Model */}
             <div className="relative flex h-full flex-col justify-between rounded-3xl border-2 border-emerald-500/90 bg-white p-7 sm:p-9 shadow-xl shadow-emerald-950/5 ring-4 ring-emerald-500/10">
               <div className="pointer-events-none absolute -top-4 right-8 inline-flex items-center rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-bold text-white shadow-lg shadow-emerald-600/30">
-                {locale === "tr" ? "Tavsiye Edilen Şeffaf Model" : "Recommended Transparent Model"}
+                {p.whyRecommended}
               </div>
 
               <div>
@@ -78,7 +76,7 @@ export function WhyMediQueue() {
                       {p.whyAfterLabel}
                     </span>
                     <h3 className="mt-3 text-xl font-bold text-slate-900">
-                      MediQueue Şeffaf Pazar Yeri
+                      {p.whyAfterTitle}
                     </h3>
                   </div>
                 </div>
@@ -102,9 +100,7 @@ export function WhyMediQueue() {
               </div>
 
               <div className="mt-8 flex min-h-[3.25rem] items-center justify-center rounded-2xl bg-emerald-600 p-4 text-center text-xs font-bold text-white shadow-md shadow-emerald-600/25">
-                {locale === "tr"
-                  ? "%100 Ücretsiz Keşif — Gizli komisyon ve aracı ücreti yok."
-                  : "100% free discovery — No hidden commissions or middleman fees."}
+                {p.whyAfterFoot}
               </div>
             </div>
           </div>

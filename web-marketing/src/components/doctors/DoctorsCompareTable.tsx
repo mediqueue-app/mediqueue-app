@@ -6,7 +6,7 @@ import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
 
 export function DoctorsCompareTable() {
-  const { locale, t } = useLocale();
+  const { t } = useLocale();
   const d = t.doctors;
 
   return (
@@ -21,9 +21,7 @@ export function DoctorsCompareTable() {
             {d.compareTitle}
           </h2>
           <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg max-w-2xl mx-auto">
-            {locale === "tr"
-              ? "Dağınık kanallar ve kağıt takvimler yerine, tüm günlük randevu akışınızı ve hasta iletişimini tek ekrandan yönetin."
-              : "Manage your entire daily appointment flow and patient communication from a single screen instead of scattered tools."}
+            {d.compareIntro}
           </p>
         </FadeIn>
 
@@ -39,7 +37,7 @@ export function DoctorsCompareTable() {
                       {d.compareBeforeLabel}
                     </span>
                     <h3 className="mt-3 text-xl font-bold text-slate-900">
-                      {locale === "tr" ? "Geleneksel Doktor Süreçleri" : "Traditional Doctor Workflows"}
+                      {d.compareBeforeTitle}
                     </h3>
                   </div>
                 </div>
@@ -60,16 +58,14 @@ export function DoctorsCompareTable() {
               </div>
 
               <div className="mt-8 flex min-h-[3.25rem] items-center justify-center rounded-2xl border border-slate-200/70 bg-slate-100/80 p-4 text-center text-xs font-semibold text-slate-700">
-                {locale === "tr"
-                  ? "Süreç karmaşası ve verimsiz randevu takibi yaşanır."
-                  : "Process chaos and inefficient appointment tracking."}
+                {d.compareBeforeFoot}
               </div>
             </div>
 
             {/* Right Card — MediQueue Model */}
             <div className="relative flex h-full flex-col justify-between rounded-3xl border-2 border-emerald-500/90 bg-white p-7 sm:p-9 shadow-xl shadow-emerald-950/5 ring-4 ring-emerald-500/10">
               <div className="pointer-events-none absolute -top-4 right-8 inline-flex items-center rounded-full bg-emerald-600 px-4 py-1.5 text-xs font-bold text-white shadow-lg shadow-emerald-600/30">
-                {locale === "tr" ? "Öne Çıkan Doktor Paneli" : "Featured Doctor Panel"}
+                {d.compareRecommended}
               </div>
 
               <div>
@@ -80,7 +76,7 @@ export function DoctorsCompareTable() {
                       {d.compareAfterLabel}
                     </span>
                     <h3 className="mt-3 text-xl font-bold text-slate-900">
-                      {locale === "tr" ? "MediQueue Hekim Paneli" : "MediQueue Doctor Dashboard"}
+                      {d.compareAfterTitle}
                     </h3>
                   </div>
                 </div>
@@ -104,9 +100,7 @@ export function DoctorsCompareTable() {
               </div>
 
               <div className="mt-8 flex min-h-[3.25rem] items-center justify-center rounded-2xl bg-emerald-600 p-4 text-center text-xs font-bold text-white shadow-md shadow-emerald-600/25">
-                {locale === "tr"
-                  ? "Tüm hastalar, takvim ve tıbbi notlar tek ekranda organize."
-                  : "All patients, calendar, and medical notes organized on one screen."}
+                {d.compareAfterFoot}
               </div>
             </div>
           </div>

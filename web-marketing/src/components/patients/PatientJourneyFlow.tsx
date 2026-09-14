@@ -28,56 +28,14 @@ function JourneyPreview({ step }: { step: number }) {
 }
 
 export function PatientJourneyFlow() {
-  const { locale, t } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const p = t.patients;
+  const s = t.screens;
   const reduced = useReducedMotion();
   const [active, setActive] = useState(0);
   const steps = p.journeySteps;
   const progress = ((active + 1) / steps.length) * 100;
-
-  const stepDetails = [
-    {
-      patientRole: tr ? "Özgür Seçim" : "Free Selection",
-      patientText: tr
-        ? "Acenta yönlendirmesi olmadan, bütçe ve konumunuza uygun JCI akredite klinikleri özgürce kıyaslayın."
-        : "Compare JCI-accredited clinics freely by budget and location without agency bias.",
-      mqRole: tr ? "MediQueue Şeffaflığı" : "MediQueue Transparency",
-      mqText: tr
-        ? "Gerçek hasta değerlendirmeleri, onaylı lisanslar ve gizli maliyetsiz net paket fiyatları sunulur."
-        : "Verified patient reviews, certified licenses, and clear all-inclusive package prices.",
-    },
-    {
-      patientRole: tr ? "Sıfır Riskli Başvuru" : "Zero-Risk Request",
-      patientText: tr
-        ? "Kredi kartı veya ön ödeme gerekmeden beğendiğiniz kliniklere tek tıkla resmi talep iletin."
-        : "Submit official requests to preferred clinics in one click with zero upfront fees or deposits.",
-      mqRole: tr ? "Veri Gizliliği & Güvenlik" : "Data Privacy & Safety",
-      mqText: tr
-        ? "Siz onay verene kadar kişisel iletişim bilgileriniz gizli tutulur; yalnızca doğrulanmış teklifler toplanır."
-        : "Personal contact info stays private until you approve; only verified offers are collected.",
-    },
-    {
-      patientRole: tr ? "Aracısız Doğrudan Mesajlaşma" : "Direct Doctor Chat",
-      patientText: tr
-        ? "Tedavi planınızı doğrudan sorumlu hekiminizle konuşun, aklınızdaki tüm soruları ilk elden yanıtlayın."
-        : "Discuss your treatment plan directly with your doctor and get first-hand medical answers.",
-      mqRole: tr ? "Anlık Otomatik Çeviri" : "Instant Auto-Translation",
-      mqText: tr
-        ? "Çift yönlü otomatik çeviri altyapısı sayesinde yabancı dildeki doktorlarla dil engeli yaşamadan yazışın."
-        : "Bilingual auto-translation enables seamless messaging with international doctors without language barriers.",
-    },
-    {
-      patientRole: tr ? "Güvenli Tedavi & Seyahat" : "Safe Care & Travel",
-      patientText: tr
-        ? "Klinik kapısında karşılanın, tedavinizi tamamlayıp huzurla eve dönün."
-        : "Receive warm arrival welcome, complete treatment, and return home with full peace of mind.",
-      mqRole: tr ? "Kesintisiz İyileşme Takibi" : "Continuous Recovery Support",
-      mqText: tr
-        ? "Operasyon sonrasında da iyileşme kontrolleri ve hatırlatmalar dijital asistan üzerinden devam eder."
-        : "Post-op check-ups and recovery reminders continue through your digital assistant even after returning home.",
-    },
-  ];
+  const stepDetails = s.patientJourneyExtra;
 
   const currentDetail = stepDetails[active] || stepDetails[0];
 
@@ -86,7 +44,7 @@ export function PatientJourneyFlow() {
       <Container>
         <FadeIn>
           <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-5">
-            <span>{tr ? "Adım Adım Hasta Rehberi" : "Step-by-Step Patient Guide"}</span>
+            <span>{s.patientGuideEyebrow}</span>
           </div>
           <h2 className="font-display max-w-2xl text-3xl font-bold tracking-tight text-ink sm:text-4xl">
             {p.journeyTitle}
@@ -232,13 +190,11 @@ export function PatientJourneyFlow() {
                 <p className="flex items-start gap-2 text-xs font-bold text-slate-800">
                   <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
                   <span className="min-w-0 flex-1">
-                    {tr ? "Öne Çıkan Güven Unsuru" : "Key Safety Highlight"}
+                    {s.patientSafetyHighlight}
                   </span>
                 </p>
                 <p className="mt-1 w-full whitespace-normal break-words text-xs leading-relaxed text-slate-600 [overflow-wrap:anywhere]">
-                  {tr
-                    ? "Tüm tıbbi görüşmeler ve teklifler KVKK/GDPR uyumlu şifreli altyapı üzerinden yürütülür."
-                    : "All medical consultations and quotes are handled via HIPAA/GDPR encrypted infrastructure."}
+                    {s.patientSafetyBody}
                 </p>
               </div>
             </motion.div>

@@ -30,7 +30,7 @@ function PreviewShell({
   title: string;
   children: ReactNode;
 }) {
-  const { locale } = useLocale();
+  const { t } = useLocale();
   return (
     <div className="overflow-hidden rounded-3xl border border-slate-200/90 bg-white shadow-xl shadow-slate-900/5 ring-1 ring-slate-900/5">
       <div className="relative overflow-hidden border-b border-slate-100 bg-slate-50/60 px-5 sm:px-6 py-4">
@@ -46,7 +46,7 @@ function PreviewShell({
           </div>
           <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 border border-emerald-200/60">
             <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulse" />
-            {locale === "tr" ? "Canlı Demo" : "Live Demo"}
+            {t.doctors.liveDemo}
           </span>
         </div>
       </div>
@@ -56,9 +56,9 @@ function PreviewShell({
 }
 
 export function DoctorOverviewPreview() {
-  const { locale, t } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const d = t.previews.doctor;
+  const x = t.screens.doctorDemo;
   const stats = [
     { n: "4", l: d.statAppointments },
     { n: "3", l: d.statMessages },
@@ -81,7 +81,7 @@ export function DoctorOverviewPreview() {
 
       <div className="space-y-2">
         <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
-          {tr ? "Bugünün Programı & Hastaları" : "Today's Schedule & Patients"}
+          {x.todayPatients}
         </p>
         <ul className="space-y-2">
           {NAMES.slice(0, 3).map((name, i) => (
@@ -105,9 +105,9 @@ export function DoctorOverviewPreview() {
       </div>
 
       <div className="flex items-center justify-between border-t border-slate-100 pt-3 text-xs font-semibold text-primary">
-        <span>{tr ? "Günün Özeti Hazır" : "Daily Overview Ready"}</span>
+        <span>{x.overviewReady}</span>
         <span className="inline-flex items-center gap-1 hover:underline cursor-pointer">
-          {tr ? "Tüm Akışı Gör" : "View Full Flow"} <ArrowRight className="h-3.5 w-3.5" />
+          {x.viewFlow} <ArrowRight className="h-3.5 w-3.5" />
         </span>
       </div>
     </PreviewShell>
@@ -115,19 +115,19 @@ export function DoctorOverviewPreview() {
 }
 
 export function DoctorPatientsPreview() {
-  const { locale, t } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const d = t.previews.doctor;
+  const x = t.screens.doctorDemo;
 
   return (
     <PreviewShell label={d.patientsKicker} title={d.patientsTitle}>
       <div className="flex items-center justify-between text-xs font-medium text-slate-500 border-b border-slate-100 pb-2.5">
         <span className="flex items-center gap-1.5 font-bold text-slate-800">
           <UserCheck className="h-4 w-4 text-primary" />
-          {tr ? "4 Aktif Hasta Kaydı" : "4 Active Patient Records"}
+          {x.activeRecords}
         </span>
         <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md font-semibold text-[11px]">
-          {tr ? "Tüm Kayıtlar Doğrulanmış" : "All Records Verified"}
+          {x.recordsVerified}
         </span>
       </div>
 
@@ -153,24 +153,24 @@ export function DoctorPatientsPreview() {
       </ul>
 
       <div className="flex items-center justify-between border-t border-slate-100 pt-3 text-xs font-medium text-slate-500">
-        <span>{tr ? "Birebir Hekim-Hasta Mesajlaşması Aktif" : "Direct Doctor-Patient Chat Active"}</span>
-        <span className="text-primary font-semibold">{tr ? "Detaylı Liste →" : "Detailed List →"}</span>
+        <span>{x.chatActive}</span>
+        <span className="text-primary font-semibold">{x.detailedList}</span>
       </div>
     </PreviewShell>
   );
 }
 
 export function DoctorCalendarPreview() {
-  const { locale, t } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const d = t.previews.doctor;
+  const x = t.screens.doctorDemo;
 
   return (
     <PreviewShell label={d.calendarKicker} title={d.calendarTitle}>
       <div className="flex items-center justify-between border-b border-slate-100 pb-2.5">
-        <span className="text-xs font-bold text-slate-800">{tr ? "Temmuz 2026" : "July 2026"}</span>
+        <span className="text-xs font-bold text-slate-800">{x.july}</span>
         <span className="rounded-md bg-emerald-50 px-2.5 py-0.5 text-[11px] font-semibold text-emerald-700 border border-emerald-200/60">
-          {tr ? "Haftalık Müsaitlik Takvimi" : "Weekly Availability Calendar"}
+          {x.weeklyCal}
         </span>
       </div>
 
@@ -197,7 +197,7 @@ export function DoctorCalendarPreview() {
             <span className="text-xs font-bold text-primary">09:00 - 10:30</span>
           </div>
           <span className="text-xs font-semibold text-slate-900">
-            Ahmed Al-Farsi ({tr ? "Saç Ekimi DHI" : "Hair Transplant DHI"})
+            Ahmed Al-Farsi ({x.hair})
           </span>
         </div>
 
@@ -207,7 +207,7 @@ export function DoctorCalendarPreview() {
             <span className="text-xs font-bold text-slate-600">11:00 - 12:00</span>
           </div>
           <span className="text-xs font-medium text-slate-700">
-            Sophie Laurent ({tr ? "Konsültasyon" : "Consultation"})
+            Sophie Laurent ({x.consult})
           </span>
         </div>
 
@@ -217,7 +217,7 @@ export function DoctorCalendarPreview() {
             <span className="text-xs font-bold text-emerald-700">14:00 - 15:30</span>
           </div>
           <span className="text-xs font-semibold text-slate-900">
-            James Whitfield ({tr ? "Rinoplasti Takip" : "Rhinoplasty Follow-up"})
+            James Whitfield ({x.rhino})
           </span>
         </div>
       </div>
@@ -225,47 +225,47 @@ export function DoctorCalendarPreview() {
       <div className="flex items-center justify-between border-t border-slate-100 pt-2.5 text-xs text-slate-500">
         <span className="flex items-center gap-1 font-semibold text-emerald-700">
           <CalendarIcon className="h-3.5 w-3.5" />
-          {tr ? "Çakışma Kontrolü Aktif" : "Conflict Prevention Active"}
+          {x.conflict}
         </span>
-        <span className="font-semibold text-primary">{tr ? "Saatleri Yönet →" : "Manage Slots →"}</span>
+        <span className="font-semibold text-primary">{x.manageSlots}</span>
       </div>
     </PreviewShell>
   );
 }
 
 export function DoctorMessagesPreview() {
-  const { locale, t } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const d = t.previews.doctor;
+  const x = t.screens.doctorDemo;
 
   return (
     <PreviewShell label={d.messagesKicker} title={d.messagesTitle}>
       <div className="flex items-center justify-between border-b border-slate-100 pb-2 text-xs font-medium text-slate-500">
         <span className="flex items-center gap-1.5 text-primary font-semibold">
           <MessageSquare className="h-3.5 w-3.5" />
-          {tr ? "Otomatik Çevirili Sohbet" : "Auto-Translated Chat"}
+          {x.translatedChat}
         </span>
-        <span className="text-emerald-600 font-semibold">{tr ? "Aktif Görüşme" : "Active Session"}</span>
+        <span className="text-emerald-600 font-semibold">{x.activeSession}</span>
       </div>
 
       <div className="space-y-2.5">
         <div className="rounded-xl bg-slate-100/90 p-3">
           <p className="text-[10px] font-bold text-slate-600">
-            Ahmed Al-Farsi ({tr ? "Arapça / Almanca" : "Arabic / German"})
+            Ahmed Al-Farsi ({x.arDe})
           </p>
           <p className="mt-1 text-xs text-slate-800">{d.patientMsg1}</p>
         </div>
 
         <div className="ml-5 rounded-xl bg-primary-light p-3 border border-primary/15">
           <p className="text-[10px] font-bold text-primary">
-            {d.you} ({tr ? "Türkçe → Almanca Otomatik" : "English → German Auto"})
+            {d.you} ({x.autoLang})
           </p>
           <p className="mt-1 text-xs text-slate-900">{d.doctorMsg1}</p>
         </div>
 
         <div className="rounded-xl bg-slate-100/90 p-3">
           <p className="text-[10px] font-bold text-slate-600">
-            Sophie Laurent ({tr ? "Fransızca" : "French"})
+            Sophie Laurent ({x.french})
           </p>
           <p className="mt-1 text-xs text-slate-800">{d.patientMsg2}</p>
         </div>
@@ -275,11 +275,7 @@ export function DoctorMessagesPreview() {
         <input
           type="text"
           disabled
-          placeholder={
-            tr
-              ? "Mesajınızı Türkçe yazın, otomatik çevrilir..."
-              : "Type your message, translated automatically..."
-          }
+          placeholder={x.msgPlaceholder}
           className="w-full bg-transparent text-xs text-slate-600 placeholder:text-slate-400 focus:outline-none"
         />
         <Send className="h-4 w-4 text-primary shrink-0" />
@@ -289,9 +285,9 @@ export function DoctorMessagesPreview() {
 }
 
 export function DoctorProfilePreview() {
-  const { locale, t } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const d = t.previews.doctor;
+  const x = t.screens.doctorDemo;
 
   return (
     <PreviewShell label={d.profileKicker} title={d.profileTitle}>
@@ -329,7 +325,7 @@ export function DoctorProfilePreview() {
       <div className="flex items-center justify-between border-t border-slate-100 pt-2.5">
         <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/60">
           <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
-          {tr ? "JCI Akredite Hekim Rozeti" : "JCI Accredited Doctor Badge"}
+          {x.jciBadge}
         </span>
         <span className="inline-flex items-center gap-1 text-xs font-semibold text-primary">
           {d.editProfile}
@@ -341,8 +337,7 @@ export function DoctorProfilePreview() {
 }
 
 export function DoctorSchedulePreviewMini() {
-  const { locale, t } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const d = t.previews.doctor;
   const items = t.previews.schedule.items;
 
@@ -361,7 +356,7 @@ export function DoctorSchedulePreviewMini() {
       </ul>
 
       <div className="pt-2 text-right text-xs font-semibold text-primary">
-        {tr ? "Tüm Programı Gör →" : "View Full Schedule →"}
+        {t.screens.doctorDemo.viewSchedule}
       </div>
     </PreviewShell>
   );

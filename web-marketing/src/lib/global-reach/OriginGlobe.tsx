@@ -7,6 +7,7 @@ import { CountryFlag } from "./CountryFlag";
 import type { CountryPatientData } from "./types";
 import { PLATFORM_HUB } from "./types";
 import { useLocale } from "@/lib/locale";
+import { cityLabel, countryLabel } from "./format";
 
 function cn(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(" ");
@@ -112,17 +113,10 @@ export function OriginGlobe({
   ariaLabel?: string;
   className?: string;
 }) {
-  const { locale } = useLocale();
-  const resolvedEmptyTitle =
-    emptyTitle ??
-    (locale === "en"
-      ? "No international patients yet"
-      : "Henüz yurt dışı hasta kaydı yok");
-  const resolvedEmptyBody =
-    emptyBody ??
-    (locale === "en"
-      ? "When your first international request arrives, origin countries will map here."
-      : "İlk uluslararası talebiniz ulaştığında hastalarınızın geldiği ülkeler burada haritalanacak.");
+  const { locale, t } = useLocale();
+  const g = t.home.globalReach;
+  const resolvedEmptyTitle = emptyTitle ?? g.emptyTitle;
+  const resolvedEmptyBody = emptyBody ?? g.emptyBody;
   const containerRef = useRef<HTMLDivElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const tooltipRef = useRef<HTMLDivElement>(null);
@@ -442,10 +436,7 @@ export function OriginGlobe({
 
   const hovered = hoveredIndex === null ? null : data[hoveredIndex];
   const label =
-    ariaLabel ??
-    (locale === "en"
-      ? `Rotatable globe showing ${data.length} countries`
-      : `${data.length} ülkeyi gösteren döndürülebilir dünya`);
+    ariaLabel ?? g.globeAria.replace("{count}", String(data.length));
 
   return (
     <div
@@ -474,7 +465,7 @@ export function OriginGlobe({
             type="button"
             onClick={() => applyZoom(ZOOM_STEP)}
             disabled={zoom >= MAX_ZOOM}
-            aria-label={locale === "en" ? "Zoom in" : "Yakınlaştır"}
+            aria-label={g.zoomIn}
             className="flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary disabled:pointer-events-none disabled:text-slate-300"
           >
             <Plus className="h-4 w-4" strokeWidth={2.25} />
@@ -484,7 +475,7 @@ export function OriginGlobe({
             type="button"
             onClick={() => applyZoom(1 / ZOOM_STEP)}
             disabled={zoom <= MIN_ZOOM}
-            aria-label={locale === "en" ? "Zoom out" : "Uzaklaştır"}
+            aria-label={g.zoomOut}
             className="flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary disabled:pointer-events-none disabled:text-slate-300"
           >
             <Minus className="h-4 w-4" strokeWidth={2.25} />
@@ -501,16 +492,23 @@ export function OriginGlobe({
             <div className="flex items-center gap-2 whitespace-nowrap">
               <CountryFlag
                 code={hovered.countryCode}
-                countryName={hovered.countryName}
+                countryName={countryLabel(
+                  hovered.countryCode,
+                  hovered.countryName,
+                  locale
+                )}
               />
               <span className="text-sm font-semibold text-slate-900">
-                {hovered.countryName}
+                {countryLabel(
+                  hovered.countryCode,
+                  hovered.countryName,
+                  locale
+                )}
               </span>
             </div>
             <div className="mt-1 flex items-center gap-2 whitespace-nowrap">
               <span className="text-xs font-medium text-slate-600">
-                {hovered.patientCount}{" "}
-                {locale === "en" ? "patients" : "hasta"}
+                {hovered.patientCount} {g.patientsNoun}
               </span>
               {hovered.trendPercent !== undefined && (
                 <span
@@ -531,7 +529,7 @@ export function OriginGlobe({
             {hovered.topCity && (
               <p className="mt-0.5 flex items-center gap-1 whitespace-nowrap text-[11px] text-slate-500">
                 <MapPin className="h-3 w-3" />
-                {locale === "en" ? "Most from" : "En çok"}: {hovered.topCity}
+                {g.mostFrom}: {cityLabel(hovered.topCity, locale)}
               </p>
             )}
           </div>

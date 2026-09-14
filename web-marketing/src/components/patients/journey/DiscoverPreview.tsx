@@ -6,8 +6,8 @@ import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
 
 export function DiscoverPreview() {
-  const { t, locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
+  const x = t.screens.discover;
   const note = t.patients.discoverPrivacyNote;
   const clinics = t.previews.compareClinics;
 
@@ -17,13 +17,13 @@ export function DiscoverPreview() {
         <div className="flex items-center gap-2 rounded-lg border border-border bg-band px-3 py-2.5">
           <Search className="h-4 w-4 shrink-0 text-slate-400" />
           <span className="text-sm text-slate-500">
-            {tr ? "Tedavi, şehir veya tarih…" : "Treatment, city, or date…"}
+            {x.search}
           </span>
         </div>
         <div className="mt-3 flex flex-wrap gap-2">
-          <FilterChip active>{tr ? "Saç Ekimi" : "Hair transplant"}</FilterChip>
-          <FilterChip>{tr ? "İstanbul" : "Istanbul"}</FilterChip>
-          <FilterChip>{tr ? "Eyl 2026" : "Sep 2026"}</FilterChip>
+          <FilterChip active>{x.hair}</FilterChip>
+          <FilterChip>{x.city}</FilterChip>
+          <FilterChip>{x.month}</FilterChip>
         </div>
       </div>
 

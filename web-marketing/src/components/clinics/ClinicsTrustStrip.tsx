@@ -6,29 +6,13 @@ import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
 
 export function ClinicsTrustStrip() {
-  const { locale } = useLocale();
-  const tr = locale === "tr";
-
-  const trustBadges = [
-    {
-      icon: FileCheck,
-      title: tr ? "Uluslararası Sağlık Turizmi Belgesi" : "International Health Tourism Permit",
-      subtitle: tr ? "Sağlık Bakanlığı Resmi Yetki Belgesi" : "Ministry of Health Certification",
-      tag: tr ? "Yasal Zorunluluk" : "Official Permit",
-    },
-    {
-      icon: Award,
-      title: tr ? "JCI & ISO Kalite Sertifikası" : "JCI & ISO Quality Certification",
-      subtitle: tr ? "Küresel Hasta Hizmet ve Hijyen Standartları" : "Global Patient Service & Hygiene Standards",
-      tag: tr ? "Küresel Güvence" : "Global Standard",
-    },
-    {
-      icon: Building2,
-      title: tr ? "%100 Doğrulanmış Klinik Kadrosu" : "100% Verified Clinic & Faculty",
-      subtitle: tr ? "Denetimden Geçmiş Hekim ve Ameliyathane İmkânları" : "Audited Faculty & Operating Facilities",
-      tag: tr ? "Denetimli Ağ" : "Audited Network",
-    },
-  ];
+  const { t } = useLocale();
+  const block = t.screens.clinicsTrust;
+  const icons = [FileCheck, Award, Building2] as const;
+  const trustBadges = block.badges.map((badge, i) => ({
+    ...badge,
+    icon: icons[i] ?? Building2,
+  }));
 
   return (
     <section className="border-b border-slate-200/80 bg-gradient-to-b from-slate-50 via-slate-100/50 to-white py-16 md:py-20">
@@ -48,27 +32,25 @@ export function ClinicsTrustStrip() {
               <div>
                 <span className="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-emerald-800">
                   <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                  {tr ? "%100 Akredite Klinik Ağı" : "100% Verified Clinic Network"}
+                  {block.eyebrow}
                 </span>
 
                 <h2 className="font-display mt-6 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-[2.35rem]">
-                  {tr ? "Sağlık Bakanlığı Onaylı Lisanslar. Küresel Güvenlik Standartları." : "Ministry Approved Licenses. Global Safety Standards."}
+                  {block.title}
                 </h2>
 
                 <p className="mt-5 text-base leading-relaxed text-slate-600 sm:text-lg">
-                  {tr
-                    ? "MediQueue pazar yerinde listelenen tüm klinikler, Uluslararası Sağlık Turizmi Yetki Belgesi ve JCI kriterlerimize göre titizlikle doğrulanır. Sahte klinikler veya merdiven altı işletmeler platforma kabul edilmez."
-                    : "All clinics listed on MediQueue are strictly verified according to International Health Tourism authorization permit and JCI quality criteria."}
+                  {block.body}
                 </p>
 
                 <div className="mt-10 flex flex-wrap items-center gap-6 border-t border-slate-100 pt-6 text-xs text-slate-500">
                   <span className="flex items-center gap-2 font-semibold text-slate-800">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                    {tr ? "Lisanslı Sağlık Kuruluşları" : "Licensed Health Institutions"}
+                    {block.check1}
                   </span>
                   <span className="flex items-center gap-2 font-semibold text-slate-800">
                     <CheckCircle2 className="h-4 w-4 text-emerald-600" />
-                    {tr ? "Sıfır Sahte Klinik Riski" : "Zero Unverified Clinic Risk"}
+                    {block.check2}
                   </span>
                 </div>
               </div>

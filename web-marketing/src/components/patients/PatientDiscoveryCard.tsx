@@ -7,9 +7,9 @@ import { cn } from "@/lib/cn";
 import { DemoCaptionPill } from "@/components/ui/DemoCaptionPill";
 
 export function PatientDiscoveryCard() {
-  const { locale, t } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const p = t.patients;
+  const x = t.screens.discoveryCard;
   const reduced = useReducedMotion();
 
   return (
@@ -37,7 +37,7 @@ export function PatientDiscoveryCard() {
           </div>
           <div>
             <p className="text-xs font-semibold text-slate-700">
-              {tr ? "Örnek Klinik C" : "Sample Clinic C"}
+              {x.sampleC}
             </p>
           </div>
         </div>
@@ -62,7 +62,7 @@ export function PatientDiscoveryCard() {
                 />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-teal-500" />
               </span>
-              {tr ? "Canlı Klinik Kıyaslama" : "Live Clinic Discovery"}
+              {x.live}
             </span>
           </div>
 
@@ -73,13 +73,13 @@ export function PatientDiscoveryCard() {
             <div className="min-w-0 flex-1">
               <div className="flex items-center gap-1.5">
                 <p className="truncate text-base font-semibold tracking-tight text-slate-900">
-                  {tr ? "Örnek Klinik A" : "Sample Clinic A"}
+                  {x.sampleA}
                 </p>
                 <BadgeCheck className="h-4 w-4 shrink-0 text-primary" />
               </div>
               <p className="mt-0.5 flex items-center gap-1.5 text-xs text-slate-500">
                 <MapPin className="h-3.5 w-3.5" aria-hidden />
-                {tr ? "İstanbul, Türkiye" : "Istanbul, Turkey"}
+                {x.loc}
                 <span className="text-slate-300">•</span>
                 <span className="flex items-center gap-0.5 font-bold text-amber-600">
                   <Star className="h-3 w-3 fill-amber-400 text-amber-400" />
@@ -92,34 +92,24 @@ export function PatientDiscoveryCard() {
           <dl className="mt-6 space-y-3 border-t border-slate-100 pt-5 text-xs">
             <div className="flex items-center justify-between gap-4">
               <dt className="font-medium text-slate-400">
-                {tr ? "Aranan Tedavi" : "Treatment"}
+                {x.treatment}
               </dt>
-              <dd className="font-semibold text-slate-900">
-                {tr ? "Rinoplasti (Burun Estetiği)" : "Rhinoplasty"}
-              </dd>
+              <dd className="font-semibold text-slate-900">{x.rhino}</dd>
             </div>
             <div className="flex items-center justify-between gap-4">
-              <dt className="font-medium text-slate-400">
-                {tr ? "Şeffaf Paket Fiyatı" : "Package Price"}
-              </dt>
+              <dt className="font-medium text-slate-400">{x.price}</dt>
               <dd className="font-semibold text-emerald-700">
-                €2.200 – €3.100 {tr ? "(Her Şey Dahil)" : "(All-Inclusive)"}
+                €2.200 – €3.100 {x.inclusive}
               </dd>
             </div>
             <div className="flex items-center justify-between gap-4">
-              <dt className="font-medium text-slate-400">
-                {tr ? "İletişim Modeli" : "Communication"}
-              </dt>
-              <dd className="font-medium text-slate-700">
-                {tr ? "Aracısız · Birebir Hekim Görüşmesi" : "Direct Doctor Chat"}
-              </dd>
+              <dt className="font-medium text-slate-400">{x.comm}</dt>
+              <dd className="font-medium text-slate-700">{x.direct}</dd>
             </div>
           </dl>
 
           <div className="mt-5 flex items-center justify-between rounded-2xl bg-slate-50 px-4 py-3">
-            <p className="text-xs font-medium text-slate-600">
-              {tr ? "Doğrudan Ücretsiz Teklif İste" : "Request Direct Free Quote"}
-            </p>
+            <p className="text-xs font-medium text-slate-600">{x.cta}</p>
             <span className="inline-flex h-8 w-8 items-center justify-center rounded-full bg-primary text-white shadow-sm">
               <ArrowUpRight className="h-4 w-4" aria-hidden />
             </span>

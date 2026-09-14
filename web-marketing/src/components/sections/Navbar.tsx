@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/LocaleLink";
 import { usePathname } from "next/navigation";
 import {
   Menu,
@@ -17,6 +17,7 @@ import { Button } from "@/components/ui/Button";
 import { cn } from "@/lib/cn";
 import { useLocale } from "@/lib/locale";
 import { useLeadCapture } from "@/lib/lead-capture";
+import { stripLocalePath } from "@/lib/locale-path";
 import type { Locale } from "@/content";
 
 function LocaleToggle({
@@ -27,7 +28,7 @@ function LocaleToggle({
 }: {
   locale: string;
   setLocale: (loc: Locale) => void;
-  t: { nav: { localeTr: string; localeEn: string } };
+  t: { nav: { localeTr: string; localeEn: string; languageAria: string } };
   compact?: boolean;
 }) {
   return (
@@ -37,7 +38,7 @@ function LocaleToggle({
         compact ? "self-start" : ""
       )}
       role="group"
-      aria-label="Language"
+      aria-label={t.nav.languageAria}
     >
       <button
         type="button"
@@ -72,30 +73,14 @@ const SOLUTION_ICONS = [Building2, Users, Stethoscope];
 export function Navbar() {
   const { t, locale, setLocale } = useLocale();
   const { openLead } = useLeadCapture();
-  const pathname = usePathname();
+  const pathname = stripLocalePath(usePathname() ?? "/");
   const [solid, setSolid] = useState(false);
   const [open, setOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const tr = locale === "tr";
-  const solutionsLabel = t.nav.solutionsLabel || (tr ? "Çözümler" : "Solutions");
-  const solutions = t.nav.solutions || [
-    {
-      href: "/clinics",
-      label: tr ? "Klinikler İçin" : "For Clinics",
-      desc: tr ? "Sıfır riskli dönüşüm & hasta yönetimi" : "Risk-free lead management",
-    },
-    {
-      href: "/patients",
-      label: tr ? "Hastalar İçin" : "For Patients",
-      desc: tr ? "Şeffaf klinik kıyaslama & doğrudan iletişim" : "Transparent comparison & direct chat",
-    },
-    {
-      href: "/doctors",
-      label: tr ? "Doktorlar İçin" : "For Doctors",
-      desc: tr ? "Bugünün programı & günlük akış yönetimi" : "Daily schedule & single screen",
-    },
-  ];
+  const solutionsLabel = t.nav.solutionsLabel;
+  const solutions = t.nav.solutions;
+  const homeLabel = t.nav.links.find((l) => l.href === "/")?.label ?? "";
 
   const isSolutionsActive =
     pathname.startsWith("/clinics") ||
@@ -142,15 +127,15 @@ export function Navbar() {
 
           <ul className="hidden items-center gap-9 lg:flex xl:gap-12">
             <li>
-              <Link
+              <LocaleLink
                 href="/"
                 className={cn(
                   "whitespace-nowrap text-[0.98rem] font-bold tracking-tight transition-colors",
                   pathname === "/" ? "text-primary" : "text-slate-800 hover:text-slate-950"
                 )}
               >
-                {tr ? "Ana Sayfa" : "Home"}
-              </Link>
+                {homeLabel}
+              </LocaleLink>
             </li>
 
             <li
@@ -185,7 +170,7 @@ export function Navbar() {
                         const Icon = SOLUTION_ICONS[idx] ?? Building2;
                         const active = pathname.startsWith(item.href);
                         return (
-                          <Link
+                          <LocaleLink
                             key={item.href}
                             href={item.href}
                             onClick={() => setDropdownOpen(false)}
@@ -214,7 +199,7 @@ export function Navbar() {
                                 {item.desc}
                               </p>
                             </div>
-                          </Link>
+                          </LocaleLink>
                         );
                       })}
                     </div>
@@ -229,7 +214,7 @@ export function Navbar() {
                 const active = pathname.startsWith(link.href);
                 return (
                   <li key={link.href}>
-                    <Link
+                    <LocaleLink
                       href={link.href}
                       className={cn(
                         "whitespace-nowrap text-[0.98rem] font-bold tracking-tight transition-colors",
@@ -237,7 +222,7 @@ export function Navbar() {
                       )}
                     >
                       {link.label}
-                    </Link>
+                    </LocaleLink>
                   </li>
                 );
               })}
@@ -249,7 +234,7 @@ export function Navbar() {
               onClick={() => openLead("patient")}
               className="whitespace-nowrap px-5 py-2.5 text-sm font-bold shadow-xs shadow-primary/20 xl:px-6"
             >
-              {tr ? "Hemen Başlayın" : "Get Started"}
+              {t.nav.getStarted}
             </Button>
           </div>
 
@@ -274,7 +259,7 @@ export function Navbar() {
           className="fixed inset-0 z-[150] flex flex-col bg-white lg:hidden"
           role="dialog"
           aria-modal="true"
-          aria-label={tr ? "Menü" : "Menu"}
+          aria-label={t.nav.menu}
         >
           {/* Industry Standard Top Header: Logo on left, X close on right */}
           <div className="flex h-16 shrink-0 items-center justify-between border-b border-slate-100 px-5">
@@ -300,7 +285,7 @@ export function Navbar() {
                 {solutions.map((item, idx) => {
                   const Icon = SOLUTION_ICONS[idx] ?? Building2;
                   return (
-                    <Link
+                    <LocaleLink
                       key={item.href}
                       href={item.href}
                       onClick={() => setOpen(false)}
@@ -316,7 +301,7 @@ export function Navbar() {
                         </div>
                       </div>
                       <ChevronRight className="h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-0.5" />
-                    </Link>
+                    </LocaleLink>
                   );
                 })}
               </div>
@@ -325,21 +310,21 @@ export function Navbar() {
             {/* Main Navigation Pages */}
             <div className="border-t border-slate-100 pt-6">
               <p className="mb-3 text-[11px] font-extrabold uppercase tracking-widest text-slate-400">
-                {tr ? "SAYFALAR" : "PAGES"}
+                {t.nav.pages}
               </p>
               <div className="space-y-1">
-                <Link
+                <LocaleLink
                   href="/"
                   onClick={() => setOpen(false)}
                   className="flex items-center justify-between rounded-xl px-3 py-3 text-base font-semibold text-slate-900 transition-colors hover:bg-slate-50"
                 >
-                  <span>{tr ? "Ana Sayfa" : "Home"}</span>
+                  <span>{homeLabel}</span>
                   <ChevronRight className="h-4 w-4 text-slate-400" />
-                </Link>
+                </LocaleLink>
                 {t.nav.links
                   .filter((l) => l.href !== "/")
                   .map((link) => (
-                    <Link
+                    <LocaleLink
                       key={link.href}
                       href={link.href}
                       onClick={() => setOpen(false)}
@@ -347,7 +332,7 @@ export function Navbar() {
                     >
                       <span>{link.label}</span>
                       <ChevronRight className="h-4 w-4 text-slate-400" />
-                    </Link>
+                    </LocaleLink>
                   ))}
               </div>
             </div>
@@ -357,7 +342,7 @@ export function Navbar() {
           <div className="shrink-0 border-t border-slate-100 bg-white p-5 space-y-4">
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold text-slate-600">
-                {tr ? "Dil Seçimi" : "Language"}
+                {t.nav.language}
               </span>
               <LocaleToggle locale={locale} setLocale={setLocale} t={t} compact />
             </div>
@@ -369,7 +354,7 @@ export function Navbar() {
               }}
               className="w-full justify-center shadow-lg shadow-primary/25 text-base font-bold py-3.5"
             >
-              {tr ? "Hemen Başlayın" : "Get Started"}
+              {t.nav.getStarted}
             </Button>
           </div>
         </div>

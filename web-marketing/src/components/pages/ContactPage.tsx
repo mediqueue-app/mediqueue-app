@@ -21,8 +21,7 @@ import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
 
 export function ContactPage() {
-  const { t, locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const c = t.contact;
 
   const [activeTab, setActiveTab] = useState<"patient" | "clinic">("patient");
@@ -149,7 +148,7 @@ export function ContactPage() {
                           variant="ink"
                           size="md"
                         >
-                          {tr ? "Yeni Mesaj Gönder" : "Send Another Message"}
+                          {c.sendAnother}
                         </Button>
                       </div>
                     </div>
@@ -164,7 +163,7 @@ export function ContactPage() {
                           required
                           value={form.name}
                           onChange={(e) => setForm({ ...form, name: e.target.value })}
-                          placeholder={tr ? "Örn: Ahmet Yılmaz" : "e.g. John Doe"}
+                          placeholder={c.namePlaceholder}
                           className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
                         />
                       </div>
@@ -179,7 +178,7 @@ export function ContactPage() {
                             required
                             value={form.email}
                             onChange={(e) => setForm({ ...form, email: e.target.value })}
-                            placeholder={tr ? "ornek@email.com" : "example@email.com"}
+                            placeholder={c.emailPlaceholder}
                             className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
                           />
                         </div>
@@ -191,7 +190,7 @@ export function ContactPage() {
                             type="tel"
                             value={form.phone}
                             onChange={(e) => setForm({ ...form, phone: e.target.value })}
-                            placeholder={tr ? "+90 5XX XXX XX XX" : "+44 7XXX XXXXXX"}
+                            placeholder={c.phonePlaceholder}
                             className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
                           />
                         </div>
@@ -207,12 +206,8 @@ export function ContactPage() {
                           onChange={(e) => setForm({ ...form, topic: e.target.value })}
                           placeholder={
                             activeTab === "patient"
-                              ? tr
-                                ? "Örn: Saç Ekimi, Rinoplasti, Diş..."
-                                : "e.g. Hair Transplant, Rhinoplasty..."
-                              : tr
-                              ? "Örn: Klinik Kaydı, Hekim Profili..."
-                              : "e.g. Clinic Onboarding, Doctor Profile..."
+                              ? c.topicPlaceholderPatient
+                              : c.topicPlaceholderClinic
                           }
                           className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
                         />
@@ -226,11 +221,7 @@ export function ContactPage() {
                           rows={4}
                           value={form.message}
                           onChange={(e) => setForm({ ...form, message: e.target.value })}
-                          placeholder={
-                            tr
-                              ? "İletmek istediğiniz sorularınızı veya notlarınızı yazın..."
-                              : "Write any details or questions you have..."
-                          }
+                          placeholder={c.messagePlaceholder}
                           className="w-full rounded-xl border border-slate-200 bg-slate-50/50 px-4 py-3.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/20"
                         />
                       </div>
@@ -271,7 +262,7 @@ export function ContactPage() {
               <FadeIn delay={0.08}>
                 <div className="rounded-3xl border border-slate-200/80 bg-slate-50/70 p-7 shadow-sm space-y-6">
                   <h3 className="text-lg font-bold text-slate-900 border-b border-slate-200/80 pb-4">
-                    {tr ? "Doğrudan İletişim Kanalları" : "Direct Contact Channels"}
+                    {c.channelsTitle}
                   </h3>
 
                   {/* Email */}
@@ -287,7 +278,7 @@ export function ContactPage() {
                         mediqueue.tech@gmail.com
                       </p>
                       <p className="text-xs font-medium text-slate-600">
-                        {tr ? "Hızlı Ekip Yanıtı" : "Direct Team Inbox"}
+                        {c.teamInbox}
                       </p>
                     </div>
                   </div>
@@ -316,12 +307,10 @@ export function ContactPage() {
                 <div className="rounded-3xl border border-emerald-200 bg-emerald-50/60 p-6 shadow-2xs">
                   <div className="flex items-center gap-2.5 text-emerald-800 font-bold text-sm">
                     <Clock className="h-4.5 w-4.5 text-emerald-600" />
-                    <span>{tr ? "Ortalama Yanıt Süresi" : "Average Response Time"}</span>
+                    <span>{c.avgResponse}</span>
                   </div>
                   <p className="mt-2 text-xs leading-relaxed text-slate-700 font-medium">
-                    {tr
-                      ? "Bıraktığınız iletişim talepleri ekibimiz tarafından öncelikle değerlendirilir ve mesai saatlerinde ortalama 15 dakika içinde dönüş sağlanır."
-                      : "Contact requests are reviewed immediately and our team responds within 15 minutes during working hours."}
+                    {c.responseNote}
                   </p>
                 </div>
               </FadeIn>
@@ -330,9 +319,7 @@ export function ContactPage() {
                 <div className="flex items-center gap-3 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-2xs">
                   <ShieldCheck className="h-8 w-8 text-primary shrink-0" />
                   <p className="text-xs leading-relaxed text-slate-600 font-medium">
-                    {tr
-                      ? "Verileriniz 256-Bit SSL şifreleme ve KVKK/GDPR standartlarında korunur."
-                      : "Your data is encrypted with 256-Bit SSL and GDPR standards."}
+                    {c.privacyNote}
                   </p>
                 </div>
               </FadeIn>

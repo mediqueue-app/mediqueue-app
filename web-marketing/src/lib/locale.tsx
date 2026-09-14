@@ -11,6 +11,7 @@ import {
 } from "react";
 import { content, type Locale, type SiteContent } from "@/content";
 import { LOCALE_STORAGE_KEY, localeCookieString } from "@/lib/locale-cookie";
+import { switchLocaleUrl } from "@/lib/locale-path";
 
 type LocaleContextValue = {
   locale: Locale;
@@ -31,19 +32,7 @@ export function LocaleProvider({
 
   useEffect(() => {
     setLocaleState(initialLocale);
-  }, [initialLocale]);
-
-  useEffect(() => {
-    const stored = window.localStorage.getItem(LOCALE_STORAGE_KEY);
-    if (stored !== "en" && stored !== "tr") return;
-    if (stored === initialLocale) return;
-    const hasCookie = /(?:^|; )mq-locale=(en|tr)/.test(document.cookie);
-    if (hasCookie) {
-      window.localStorage.setItem(LOCALE_STORAGE_KEY, initialLocale);
-      return;
-    }
-    document.cookie = localeCookieString(stored);
-    setLocaleState(stored);
+    window.localStorage.setItem(LOCALE_STORAGE_KEY, initialLocale);
   }, [initialLocale]);
 
   const setLocale = useCallback((next: Locale) => {
@@ -51,6 +40,14 @@ export function LocaleProvider({
     document.cookie = localeCookieString(next);
     setLocaleState(next);
     document.documentElement.lang = next;
+    window.location.assign(
+      switchLocaleUrl(
+        next,
+        window.location.pathname,
+        window.location.search,
+        window.location.hash
+      )
+    );
   }, []);
 
   useEffect(() => {

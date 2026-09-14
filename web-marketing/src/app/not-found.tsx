@@ -1,11 +1,21 @@
-"use client";
-
+import type { Metadata } from "next";
 import Link from "next/link";
-import { useLocale } from "@/lib/locale";
+import { content } from "@/content";
+import { getRequestLocale } from "@/lib/locale-server";
+import { withLocalePath } from "@/lib/locale-path";
 
-export default function NotFound() {
-  const { locale } = useLocale();
-  const tr = locale === "tr";
+export async function generateMetadata(): Promise<Metadata> {
+  const locale = await getRequestLocale();
+  const copy = content[locale].notFound;
+  return {
+    title: `${copy.title} · MEDIQUEUE`,
+    robots: { index: false, follow: true },
+  };
+}
+
+export default async function NotFound() {
+  const locale = await getRequestLocale();
+  const copy = content[locale].notFound;
 
   return (
     <div className="mx-auto flex max-w-lg flex-col items-center px-6 py-24 text-center">
@@ -13,18 +23,16 @@ export default function NotFound() {
         404
       </p>
       <h1 className="font-display mt-3 text-3xl tracking-tight text-ink">
-        {tr ? "Sayfa bulunamadı" : "Page not found"}
+        {copy.title}
       </h1>
       <p className="mt-3 text-base text-slate-600">
-        {tr
-          ? "Bu adres artık yok veya hiç olmadı. Ana sayfadan devam edebilirsiniz."
-          : "This address is gone or never existed. You can continue from the home page."}
+        {copy.body}
       </p>
       <Link
-        href="/"
+        href={withLocalePath(locale, "/")}
         className="mt-8 inline-flex min-h-11 items-center justify-center rounded-full bg-primary px-7 py-3 text-sm font-semibold text-white hover:bg-primary-hover"
       >
-        {tr ? "Ana sayfaya dön" : "Back to home"}
+        {copy.cta}
       </Link>
     </div>
   );

@@ -12,8 +12,8 @@ import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
 
 export function TravelPreview() {
-  const { locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
+  const x = t.screens.travel;
 
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-[#f5f6f8] shadow-sm">
@@ -22,20 +22,16 @@ export function TravelPreview() {
         <span className="h-2.5 w-2.5 rounded-full bg-[#f59e0b]/80" />
         <span className="h-2.5 w-2.5 rounded-full bg-[#10b981]/80" />
         <span className="ml-2 truncate rounded-md bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-500 ring-1 ring-slate-200">
-          patient · {tr ? "Seyahat & Transfer Koordinasyonu" : "Travel & Transfer Coordination"}
+          patient · {x.chrome}
         </span>
       </div>
 
       <div className="p-4 space-y-3">
-        <p className="text-xs text-slate-500">
-          {tr
-            ? "Aşağıdaki hizmetler isteğe bağlıdır — dilediğinizi seçebilirsiniz."
-            : "The services below are optional — choose what you need."}
-        </p>
+        <p className="text-xs text-slate-500">{x.intro}</p>
         <div className="grid gap-3 sm:grid-cols-2">
         <OptionalCard
           selected
-          label={tr ? "Uçuş koordinasyonu" : "Flight coordination"}
+          label={x.flight}
         >
           <div className="flex items-center justify-between gap-3">
             <div>
@@ -54,67 +50,55 @@ export function TravelPreview() {
           </div>
           <dl className="mt-3 grid grid-cols-2 gap-2 text-xs">
             <div>
-              <dt className="text-slate-400">{tr ? "Tarih" : "Date"}</dt>
+              <dt className="text-slate-400">{x.date}</dt>
               <dd className="font-semibold text-slate-800">12 Eyl 2026</dd>
             </div>
             <div>
-              <dt className="text-slate-400">{tr ? "Koltuk" : "Seat"}</dt>
+              <dt className="text-slate-400">{x.seat}</dt>
               <dd className="font-semibold text-slate-800">14A</dd>
             </div>
           </dl>
         </OptionalCard>
 
-        <OptionalCard selected={false} label={tr ? "Konaklama" : "Accommodation"}>
+        <OptionalCard selected={false} label={x.stay}>
           <p className="text-sm font-semibold text-slate-900">
-            {tr ? "Partner otel" : "Partner hotel"}
+            {x.partnerHotel}
           </p>
           <div className="mt-2 flex items-center gap-2">
             <StarRating value={4} />
-            <span className="text-xs text-slate-500">
-              {tr ? "4 yıldız" : "4 stars"}
-            </span>
+            <span className="text-xs text-slate-500">{x.stars}</span>
           </div>
           <p className="mt-2.5 inline-flex rounded-full bg-primary-light px-2.5 py-1 text-[11px] font-semibold text-primary">
-            {tr ? "3 gece konaklama" : "3 nights"}
+            {x.nights}
           </p>
         </OptionalCard>
 
         <OptionalCard
           selected={false}
-          label={tr ? "VIP ulaşım" : "VIP transfer"}
+          label={x.vip}
         >
           <div className="flex items-start gap-3">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-band text-slate-600">
               <Car className="h-4 w-4" strokeWidth={1.75} />
             </span>
             <div>
-              <p className="text-sm font-medium text-slate-900">
-                {tr ? "Havalimanı ↔ klinik" : "Airport ↔ clinic"}
-              </p>
-              <p className="mt-1 text-xs text-slate-500">
-                {tr ? "Özel transfer aracı" : "Private transfer vehicle"}
-              </p>
+              <p className="text-sm font-medium text-slate-900">{x.airport}</p>
+              <p className="mt-1 text-xs text-slate-500">{x.vehicle}</p>
             </div>
           </div>
         </OptionalCard>
 
         <OptionalCard
           selected={false}
-          label={tr ? "Tercüman" : "Interpreter"}
+          label={x.interpreter}
         >
           <div className="flex items-start gap-3">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-band text-slate-600">
               <Languages className="h-4 w-4" strokeWidth={1.75} />
             </span>
             <div>
-              <p className="text-sm font-medium text-slate-900">
-                {tr ? "Almanca · Türkçe" : "German · Turkish"}
-              </p>
-              <p className="mt-1 text-xs text-slate-500">
-                {tr
-                  ? "Klinik görüşmelerinde eşlik"
-                  : "Support during clinic visits"}
-              </p>
+              <p className="text-sm font-medium text-slate-900">{x.langs}</p>
+              <p className="mt-1 text-xs text-slate-500">{x.escort}</p>
             </div>
           </div>
         </OptionalCard>
@@ -133,8 +117,8 @@ function OptionalCard({
   selected: boolean;
   label: string;
 }) {
-  const { locale } = useLocale();
-  const optionalLabel = locale === "tr" ? "İsteğe bağlı" : "Optional";
+  const { t } = useLocale();
+  const optionalLabel = t.previews.optional;
 
   return (
     <article

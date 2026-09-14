@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, Source_Serif_4 } from "next/font/google";
 import Script from "next/script";
 import { content } from "@/content";
-import { SITE_URL } from "@/lib/site";
+import { COMPANY_INSTAGRAM, COMPANY_LINKEDIN, SITE_URL } from "@/lib/site";
 import { getRequestLocale } from "@/lib/locale-server";
-import { localizedMetadata } from "@/lib/seo";
 import { SiteChrome } from "@/components/SiteChrome";
 import "./globals.css";
 
@@ -28,33 +27,13 @@ const inter = Inter({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const localeMeta = await localizedMetadata("home");
-  const locale = await getRequestLocale();
-  const seo = content[locale].seo;
-
   return {
     metadataBase: new URL(SITE_URL),
-    ...localeMeta,
-    alternates: { canonical: "/" },
     icons: {
       icon: "/mediqueue-icon.png",
       apple: "/mediqueue-icon.png",
       shortcut: "/mediqueue-icon.png",
     },
-    openGraph: {
-      type: "website",
-      url: SITE_URL,
-      siteName: "MEDIQUEUE",
-      ...localeMeta.openGraph,
-      title: seo.title,
-      description: seo.description,
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: seo.title,
-      description: seo.description,
-    },
-    robots: { index: true, follow: true },
   };
 }
 
@@ -75,10 +54,7 @@ export default async function RootLayout({
         url: SITE_URL,
         logo: `${SITE_URL}/mediqueue-logo.png`,
         description: seo.description,
-        sameAs: [
-          "https://www.instagram.com/mediqueue/",
-          "https://www.linkedin.com/company/medyqueue",
-        ],
+        sameAs: [COMPANY_INSTAGRAM, COMPANY_LINKEDIN],
       },
       {
         "@type": "WebSite",
@@ -87,7 +63,7 @@ export default async function RootLayout({
         name: "MEDIQUEUE",
         description: seo.description,
         publisher: { "@id": `${SITE_URL}/#organization` },
-        inLanguage: [locale === "tr" ? "tr-TR" : "en-US"],
+        inLanguage: ["tr-TR", "en-US"],
       },
     ],
   };

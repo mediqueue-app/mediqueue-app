@@ -1,21 +1,77 @@
 import type { PreviewsContent } from "./previews";
+import type { ScreensContent } from "./screens";
 
 export type Locale = "en" | "tr";
 
 export type NavLink = { href: string; label: string };
 
+export type LegalDoc = {
+  title: string;
+  intro: string;
+  updated: string;
+  sections: { heading: string; body: string }[];
+};
+
+export type LeadCopy = {
+  close: string;
+  patientTab: string;
+  clinicTab: string;
+  patientTitle: string;
+  clinicTitle: string;
+  patientBody: string;
+  clinicBody: string;
+  successTitle: string;
+  successBody: string;
+  name: string;
+  namePlaceholder: string;
+  email: string;
+  emailPlaceholder: string;
+  phone: string;
+  phonePlaceholder: string;
+  country: string;
+  countryPlaceholder: string;
+  treatment: string;
+  selectTreatment: string;
+  treatmentOptions: string[];
+  clinicName: string;
+  clinicNamePlaceholder: string;
+  city: string;
+  cityPlaceholder: string;
+  website: string;
+  websitePlaceholder: string;
+  role: string;
+  roleClinic: string;
+  roleDoctor: string;
+  message: string;
+  messagePlaceholder: string;
+  consent: string;
+  privacyLink: string;
+  error: string;
+  submitting: string;
+  submit: string;
+  required: string;
+  dataNote: string;
+};
+
 export type SiteContent = {
-  seo: { title: string; description: string };
+  seo: { title: string; description: string; keywords: string[] };
+  notFound: { title: string; body: string; cta: string };
+  lead: LeadCopy;
   nav: {
     links: NavLink[];
-    solutionsLabel?: string;
-    solutions?: { href: string; label: string; desc: string }[];
+    solutionsLabel: string;
+    solutions: { href: string; label: string; desc: string }[];
     clinicCta: string;
     openMenu: string;
     closeMenu: string;
     localeEn: string;
     localeTr: string;
     skip: string;
+    getStarted: string;
+    menu: string;
+    pages: string;
+    language: string;
+    languageAria: string;
   };
   contact: {
     seoTitle: string;
@@ -37,6 +93,17 @@ export type SiteContent = {
     emailTitle: string;
     addressTitle: string;
     privacyNote: string;
+    sendAnother: string;
+    namePlaceholder: string;
+    emailPlaceholder: string;
+    phonePlaceholder: string;
+    channelsTitle: string;
+    teamInbox: string;
+    avgResponse: string;
+    topicPlaceholderPatient: string;
+    topicPlaceholderClinic: string;
+    messagePlaceholder: string;
+    responseNote: string;
   };
   home: {
     platformEyebrow: string;
@@ -91,6 +158,15 @@ export type SiteContent = {
       countryColumn: string;
       patientColumn: string;
       emptyList: string;
+      zoomIn: string;
+      zoomOut: string;
+      patientsNoun: string;
+      mostFrom: string;
+      emptyTitle: string;
+      emptyBody: string;
+      globeAria: string;
+      scrollUp: string;
+      scrollDown: string;
     };
     finalPatientTitle: string;
     finalPatientBody: string;
@@ -117,6 +193,12 @@ export type SiteContent = {
     compareBeforeLabel: string;
     compareAfterLabel: string;
     compareCriteriaLabel: string;
+    compareIntro: string;
+    compareBeforeTitle: string;
+    compareBeforeFoot: string;
+    compareRecommended: string;
+    compareAfterTitle: string;
+    compareAfterFoot: string;
     compareRows: {
       title: string;
       before: string;
@@ -163,6 +245,12 @@ export type SiteContent = {
     whyBeforeLabel: string;
     whyAfterLabel: string;
     whyCriteriaLabel: string;
+    whyIntro: string;
+    whyBeforeTitle: string;
+    whyBeforeFoot: string;
+    whyRecommended: string;
+    whyAfterTitle: string;
+    whyAfterFoot: string;
     whyRows: { title: string; before: string; after: string }[];
     journeyTitle: string;
     journeyIntro: string;
@@ -172,6 +260,10 @@ export type SiteContent = {
     trustBody: string;
     trustJci: string;
     trustNational: string;
+    trustEyebrow: string;
+    trustCheck1: string;
+    trustCheck2: string;
+    trustBadges: { title: string; subtitle: string; tag: string }[];
     finalTitle: string;
     finalBody: string;
     finalCta: string;
@@ -189,12 +281,20 @@ export type SiteContent = {
     compareBeforeLabel: string;
     compareAfterLabel: string;
     compareCriteriaLabel: string;
+    compareIntro: string;
+    compareBeforeTitle: string;
+    compareBeforeFoot: string;
+    compareRecommended: string;
+    compareAfterTitle: string;
+    compareAfterFoot: string;
     compareRows: {
       title: string;
       before: string;
       after: string;
       highlight?: boolean;
     }[];
+    featuresEyebrow: string;
+    liveDemo: string;
     featuresTitle: string;
     featuresIntro: string;
     features: { id: string; title: string; body: string }[];
@@ -226,6 +326,14 @@ export type SiteContent = {
     faqTitle: string;
     faqSubtitle: string;
     faqItems: { q: string; a: string }[];
+    patientCta: string;
+    clinicCta: string;
+    stepsKicker: string;
+    stepsTitle: string;
+    marketplaceBadge: string;
+    faqExtraTitle: string;
+    faqExtraBody: string;
+    faqExtraCta: string;
   };
   team: {
     seoTitle: string;
@@ -233,6 +341,8 @@ export type SiteContent = {
     heroLeadBold: string;
     heroLeadLight: string;
     heroIntro: string;
+    heroChip1: string;
+    heroChip2: string;
     missionLabel: string;
     missionBody: string;
     visionLabel: string;
@@ -250,6 +360,12 @@ export type SiteContent = {
       linkedin: string;
     }[];
     socialTitle: string;
+    socialEyebrow: string;
+    socialIntro: string;
+    visitPage: string;
+    exploreAsPatient: string;
+    addClinicCta: string;
+    achievementsAside: string;
     socialLinks: {
       platform: "linkedin" | "instagram" | "x";
       label: string;
@@ -257,23 +373,29 @@ export type SiteContent = {
       href: string;
     }[];
     stats?: { label: string; value: string; hint: string }[];
-    valuesEyebrow?: string;
-    valuesTitle?: string;
+    valuesEyebrow: string;
+    valuesTitle: string;
     values?: { title: string; body: string; icon: string }[];
     achievementsEyebrow?: string;
     achievementsTitle?: string;
-    finalCtaTitle?: string;
-    finalCtaBody?: string;
+    finalCtaTitle: string;
+    finalCtaBody: string;
   };
   footer: {
     tagline: string;
     groups: { title: string; links: NavLink[] }[];
     copyright: string;
+    sendEmail: string;
     privacyNote: string;
     medicalDisclaimer?: string;
   };
-  legal?: any;
-  faq?: any;
-  lead?: any;
+  legal: {
+    updatedLabel: string;
+    backHome: string;
+    privacy: LegalDoc;
+    terms: LegalDoc;
+    disclaimer: LegalDoc;
+  };
   previews: PreviewsContent;
+  screens: ScreensContent;
 };

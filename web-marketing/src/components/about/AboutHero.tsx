@@ -44,11 +44,11 @@ export function AboutHero() {
           <div className="mt-8 flex flex-wrap items-center gap-6 pt-2 text-xs font-semibold text-slate-500">
             <span className="flex items-center gap-2 text-slate-800">
               <ShieldCheck className="h-4 w-4 text-emerald-600" />
-              %100 Doğrulanmış Sağlık Ağı
+              {copy.heroChip1}
             </span>
             <span className="flex items-center gap-2 text-slate-800">
               <HeartPulse className="h-4 w-4 text-primary" />
-              Sıfır Komisyonlu İletişim
+              {copy.heroChip2}
             </span>
           </div>
         </motion.div>

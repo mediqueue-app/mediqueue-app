@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import { LocaleLink } from "@/components/ui/LocaleLink";
 import { Mail } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
@@ -36,7 +36,7 @@ const iconButtonClass = cn(
 );
 
 export function Footer() {
-  const { t, locale } = useLocale();
+  const { t } = useLocale();
   const year = new Date().getFullYear();
   const socialLinks = (t.team.socialLinks ?? []).filter(
     (link) => link.platform === "linkedin" || link.platform === "instagram"
@@ -71,7 +71,7 @@ export function Footer() {
               })}
               <a
                 href={`mailto:${CONTACT_EMAIL}`}
-                aria-label={locale === "tr" ? "E-posta gönder" : "Send email"}
+                aria-label={t.footer.sendEmail}
                 className={iconButtonClass}
               >
                 <Mail className="h-4 w-4" strokeWidth={1.75} />
@@ -88,12 +88,12 @@ export function Footer() {
                 <ul className="mt-3 space-y-2">
                   {group.links.map((link) => (
                     <li key={link.href + link.label}>
-                      <Link
+                      <LocaleLink
                         href={link.href}
                         className="text-xs sm:text-sm text-slate-500 transition-colors hover:text-slate-900"
                       >
                         {link.label}
-                      </Link>
+                      </LocaleLink>
                     </li>
                   ))}
                 </ul>

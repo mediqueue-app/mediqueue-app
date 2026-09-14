@@ -5,8 +5,8 @@ import { Calendar, ChevronDown, Globe, User, Wallet } from "lucide-react";
 import { useLocale } from "@/lib/locale";
 
 export function RequestFormPreview() {
-  const { locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
+  const x = t.screens.request;
 
   return (
     <div className="mx-auto max-w-sm overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
@@ -14,7 +14,7 @@ export function RequestFormPreview() {
         <span className="h-2 w-2 rounded-full bg-slate-300" />
         <span className="h-2 w-2 rounded-full bg-slate-300" />
         <span className="ml-1 text-[11px] font-medium text-slate-500">
-          patient · {tr ? "Randevu Talebi" : "Appointment request"}
+          patient · {x.chrome}
         </span>
       </div>
       <div className="p-4">
@@ -23,35 +23,31 @@ export function RequestFormPreview() {
             <User className="h-5 w-5" strokeWidth={1.75} />
           </span>
           <div>
-            <p className="text-sm font-semibold text-slate-900">
-              {tr ? "Hasta profili" : "Patient profile"}
-            </p>
-            <p className="text-xs text-slate-500">
-              {tr ? "Kimlik gizli" : "Identity hidden"}
-            </p>
+            <p className="text-sm font-semibold text-slate-900">{x.profile}</p>
+            <p className="text-xs text-slate-500">{x.hidden}</p>
           </div>
         </div>
 
         <div className="mt-5 space-y-3">
           <Field
             icon={<ChevronDown className="h-3.5 w-3.5" />}
-            label={tr ? "Tedavi türü" : "Treatment type"}
-            value={tr ? "Saç Ekimi (DHI)" : "Hair transplant (DHI)"}
+            label={x.treatment}
+            value={x.treatmentVal}
           />
           <Field
             icon={<Calendar className="h-3.5 w-3.5" />}
-            label={tr ? "Tercih edilen tarih aralığı" : "Preferred date range"}
-            value={tr ? "15–30 Eyl 2026" : "Sep 15–30, 2026"}
+            label={x.dates}
+            value={x.datesVal}
           />
           <Field
             icon={<Wallet className="h-3.5 w-3.5" />}
-            label={tr ? "Bütçe aralığı" : "Budget range"}
+            label={x.budget}
             value="€2.000 – €3.500"
           />
           <Field
             icon={<Globe className="h-3.5 w-3.5" />}
-            label={tr ? "Dil tercihi" : "Language preference"}
-            value={tr ? "Almanca, İngilizce" : "German, English"}
+            label={x.lang}
+            value={x.langVal}
           />
         </div>
 
@@ -59,7 +55,7 @@ export function RequestFormPreview() {
           type="button"
           className="mt-5 w-full rounded-xl bg-primary py-3 text-sm font-semibold text-white"
         >
-          {tr ? "Talebi Gönder" : "Send request"}
+          {x.send}
         </button>
       </div>
     </div>

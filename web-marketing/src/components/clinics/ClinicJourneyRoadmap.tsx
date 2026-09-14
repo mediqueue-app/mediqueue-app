@@ -17,8 +17,8 @@ import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
 
 function StepCustomPreview({ step }: { step: number }) {
-  const { locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
+  const s = t.screens;
 
   if (step === 0) {
     return (
@@ -27,30 +27,30 @@ function StepCustomPreview({ step }: { step: number }) {
           <div className="flex items-center gap-2">
             <ShieldCheck className="h-5 w-5 text-emerald-600" />
             <span className="text-sm font-bold tracking-tight text-slate-900">
-              {tr ? "Akreditasyon & Kurumsal Doğrulama" : "Accreditation & Profile Verification"}
+              {s.clinicVerifyTitle}
             </span>
           </div>
           <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
-            {tr ? "Aktif Onaylı Profil" : "Verified Active Profile"}
+            {s.clinicVerifyBadge}
           </span>
         </div>
         <div className="mt-4 grid gap-3 sm:grid-cols-3">
           <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-4">
-            <p className="text-xs font-medium text-slate-500">{tr ? "JCI & Sağlık Lisansı" : "JCI & Ministry License"}</p>
+            <p className="text-xs font-medium text-slate-500">{s.clinicLicense}</p>
             <p className="mt-1 flex items-center gap-1.5 text-sm font-bold text-emerald-600">
-              <CheckCircle2 className="h-4 w-4 shrink-0" /> {tr ? "Doğrulandı" : "Verified"}
+              <CheckCircle2 className="h-4 w-4 shrink-0" /> {s.verified}
             </p>
           </div>
           <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-4">
-            <p className="text-xs font-medium text-slate-500">{tr ? "Çok Dilli Profil Sunumu" : "Multilingual Profile Presentation"}</p>
+            <p className="text-xs font-medium text-slate-500">{s.clinicMultilingual}</p>
             <p className="mt-1 flex items-center gap-1.5 text-sm font-bold text-emerald-600">
               <CheckCircle2 className="h-4 w-4 shrink-0" /> TR · EN
             </p>
           </div>
           <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-4">
-            <p className="text-xs font-medium text-slate-500">{tr ? "Hasta Mahremiyeti" : "Patient Privacy"}</p>
+            <p className="text-xs font-medium text-slate-500">{s.clinicPrivacy}</p>
             <p className="mt-1 flex items-center gap-1.5 text-sm font-bold text-emerald-600">
-              <CheckCircle2 className="h-4 w-4 shrink-0" /> {tr ? "KVKK & GDPR Uyumlu" : "GDPR & HIPAA Compliant"}
+              <CheckCircle2 className="h-4 w-4 shrink-0" /> {s.clinicPrivacyValue}
             </p>
           </div>
         </div>
@@ -74,9 +74,9 @@ function StepCustomPreview({ step }: { step: number }) {
 }
 
 export function ClinicJourneyRoadmap() {
-  const { t, locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const c = t.clinics;
+  const s = t.screens;
   const reduced = useReducedMotion();
   const [active, setActive] = useState(0);
   const steps = c.roadmapSteps;
@@ -88,7 +88,7 @@ export function ClinicJourneyRoadmap() {
       <Container>
         <FadeIn className="max-w-2xl">
           <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary">
-            <span>{tr ? "Adım Adım Büyüme Rehberi" : "Step-by-Step Growth Guide"}</span>
+            <span>{s.clinicRoadmapEyebrow}</span>
           </div>
           <h2 className="font-display mt-5 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl lg:text-[2.5rem]">
             {c.roadmapTitle}
@@ -205,7 +205,7 @@ export function ClinicJourneyRoadmap() {
                     </span>
                   </div>
                   <span className="rounded-full bg-slate-100 px-2.5 py-0.5 text-[11px] font-semibold text-slate-600">
-                    {tr ? "Sizin Adımınız" : "Your Action"}
+                    {s.clinicYourAction}
                   </span>
                 </div>
                 <p className="break-words text-[15px] font-medium leading-relaxed text-slate-800">
@@ -228,7 +228,7 @@ export function ClinicJourneyRoadmap() {
                     </span>
                   </div>
                   <span className="rounded-full bg-emerald-100/90 px-2.5 py-0.5 text-[11px] font-bold text-emerald-800">
-                    {tr ? "Sistem Güvencesi" : "Platform Automation"}
+                    {s.clinicPlatform}
                   </span>
                 </div>
                 <p className="break-words text-[15px] font-semibold leading-relaxed text-slate-900">

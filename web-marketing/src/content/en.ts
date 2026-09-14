@@ -1,11 +1,76 @@
 import type { SiteContent } from "./types";
 import { enPreviews } from "./previews";
+import { enScreens } from "./screens";
 
 export const en: SiteContent = {
   seo: {
     title: "MEDIQUEUE — Transparent health travel, no middleman",
     description:
       "Compare accredited clinics, message directly, and send a request with no upfront payment. Clinics pay only when a patient arrives — no subscription.",
+    keywords: [
+      "MediQueue",
+      "Health Tourism",
+      "Medical Travel Marketplace",
+      "JCI Accredited Clinics",
+      "Hair Transplant Cost",
+      "Rhinoplasty Surgery",
+      "Doctor Appointments",
+      "International Patients",
+      "Direct Clinic Marketplace",
+    ],
+  },
+  notFound: {
+    title: "Page not found",
+    body: "This address is gone or never existed. You can continue from the home page.",
+    cta: "Back to home",
+  },
+  lead: {
+    close: "Close",
+    patientTab: "Patient Request",
+    clinicTab: "Clinic / Doctor Registration",
+    patientTitle: "Create Free Healthcare Request",
+    clinicTitle: "Add Your Clinic to MediQueue",
+    patientBody: "Enter your request details, and accredited clinics will provide quotes with zero upfront cost.",
+    clinicBody: "No subscription fee. Only act on verified patient leads delivered directly to your portal.",
+    successTitle: "Request Received Successfully!",
+    successBody: "Our team and partner clinics will review your details and contact you as soon as possible.",
+    name: "Full Name",
+    namePlaceholder: "e.g. John Doe",
+    email: "Email Address",
+    emailPlaceholder: "example@email.com",
+    phone: "Phone / WhatsApp Number",
+    phonePlaceholder: "+44 7XXX XXXXXX",
+    country: "Country of Residence",
+    countryPlaceholder: "e.g. United Kingdom / Germany",
+    treatment: "Requested Treatment",
+    selectTreatment: "Select treatment...",
+    treatmentOptions: [
+      "Hair Transplant (DHI / FUE)",
+      "Aesthetics & Plastic Surgery",
+      "Eye Surgery & LASIK",
+      "Dental Care & Smile Design",
+      "Bariatric & Weight Loss Surgery",
+      "Orthopedics & Physical Therapy",
+      "Other",
+    ],
+    clinicName: "Clinic / Hospital Name",
+    clinicNamePlaceholder: "e.g. London Health Clinic",
+    city: "City / Country",
+    cityPlaceholder: "e.g. London, UK",
+    website: "Website (Optional)",
+    websitePlaceholder: "https://yourclinic.com",
+    role: "Your Role",
+    roleClinic: "Clinic Manager / Representative",
+    roleDoctor: "Physician / Doctor",
+    message: "Symptoms or Special Requests",
+    messagePlaceholder: "Write any medical details or specific preferences...",
+    consent: "I accept the processing of my personal data and the privacy policy.",
+    privacyLink: "Privacy Policy",
+    error: "An error occurred. Please fill in the required fields and try again.",
+    submitting: "Submitting...",
+    submit: "Submit Request",
+    required: "This field is required.",
+    dataNote: "We do not sell your contact details. See the privacy policy for how we handle data.",
   },
   nav: {
     links: [
@@ -26,13 +91,18 @@ export const en: SiteContent = {
     localeEn: "EN",
     localeTr: "TR",
     skip: "Skip to content",
+    getStarted: "Get Started",
+    menu: "Menu",
+    pages: "PAGES",
+    language: "Language",
+    languageAria: "Language",
   },
   contact: {
     seoTitle: "Contact Us — Get in Touch",
-    eyebrow: "24/7 Dedicated Support",
+    eyebrow: "Get in touch",
     title: "Leave Your Contact Details, We'll Reach Out",
     intro:
-      "Whether you are a patient seeking treatment or a clinic/doctor looking to join our network — fill in your details and our team will respond within 15 minutes.",
+      "Whether you are a patient seeking treatment or a clinic/doctor looking to join our network — fill in your details and our team will respond during business hours.",
     patientTab: "Patient & Care Inquiry",
     clinicTab: "Clinic & Doctor Onboarding",
     name: "Full Name",
@@ -44,12 +114,23 @@ export const en: SiteContent = {
     submitting: "Sending Request...",
     successTitle: "Contact Request Received!",
     successBody:
-      "Your details have reached our team. We will get in touch with you shortly (average 15 minutes) via your preferred contact channel.",
+      "Your details have reached our team. We will get in touch via your preferred channel during business hours.",
     phoneTitle: "Phone & WhatsApp",
     emailTitle: "Email Addresses",
     addressTitle: "Headquarters",
     privacyNote:
-      "Your information is protected with 256-Bit SSL encryption and GDPR compliance. Never shared with third parties.",
+      "Your request is sent to our team. We do not sell your contact details. See our privacy policy for how we handle data.",
+    sendAnother: "Send Another Message",
+    namePlaceholder: "e.g. John Doe",
+    emailPlaceholder: "example@email.com",
+    phonePlaceholder: "+44 7XXX XXXXXX",
+    channelsTitle: "Direct Contact Channels",
+    teamInbox: "Direct Team Inbox",
+    avgResponse: "Average Response Time",
+    topicPlaceholderPatient: "e.g. Hair Transplant, Rhinoplasty...",
+    topicPlaceholderClinic: "e.g. Clinic Onboarding, Doctor Profile...",
+    messagePlaceholder: "Write any details or questions you have...",
+    responseNote: "Contact requests are reviewed by our team during business hours.",
   },
   home: {
     platformEyebrow:
@@ -134,6 +215,16 @@ export const en: SiteContent = {
       patientColumn: "Patients",
       emptyList:
         "Country breakdown will appear here once your first international requests arrive.",
+      zoomIn: "Zoom in",
+      zoomOut: "Zoom out",
+      patientsNoun: "patients",
+      mostFrom: "Most from",
+      emptyTitle: "No international patients yet",
+      emptyBody:
+        "When your first international request arrives, origin countries will map here.",
+      globeAria: "Rotatable globe showing {count} countries",
+      scrollUp: "Scroll list up",
+      scrollDown: "Scroll list down",
     },
     finalPatientTitle: "You decide your treatment journey",
     finalPatientBody:
@@ -164,6 +255,14 @@ export const en: SiteContent = {
     compareBeforeLabel: "Traditional Methods",
     compareAfterLabel: "Risk-Free Model",
     compareCriteriaLabel: "Criterion",
+    compareIntro:
+      "Scale with zero financial risk by connecting with patients verified by language, budget, and treatment needs, instead of high agency retainers.",
+    compareBeforeTitle: "Traditional Health Tourism Agencies",
+    compareBeforeFoot:
+      "Ad budgets carry zero conversion guarantee; financial risk rests on the clinic.",
+    compareRecommended: "Recommended Risk-Free Model",
+    compareAfterTitle: "MediQueue Risk-Free Marketplace",
+    compareAfterFoot: "Zero subscription fees — You pay only when a patient arrives.",
     compareRows: [
       {
         title: "Marketing Budget",
@@ -297,6 +396,13 @@ export const en: SiteContent = {
     whyBeforeLabel: "Traditional Agency Method",
     whyAfterLabel: "MediQueue Transparent Marketplace",
     whyCriteriaLabel: "Criterion",
+    whyIntro:
+      "A free treatment platform where you compare accredited clinics openly — instead of being steered by commission-driven agents.",
+    whyBeforeTitle: "Traditional Health Tourism Agencies",
+    whyBeforeFoot: "Hidden cost risk and limited options define the experience.",
+    whyRecommended: "Recommended Transparent Model",
+    whyAfterTitle: "MediQueue Transparent Marketplace",
+    whyAfterFoot: "Discovery and the request form on this site are free — no hidden agency-commission model.",
     whyRows: [
       {
         title: "Transparent Pricing",
@@ -310,28 +416,28 @@ export const en: SiteContent = {
         before:
           "One or two unilateral clinic options pushed by agencies without real filtering",
         after:
-          "Compare hundreds of JCI-accredited clinics freely by specialty, language, and budget",
+          "Compare accredited clinics freely by specialty, language, and budget",
       },
       {
         title: "Direct Doctor Communication",
         before:
           "No direct contact with doctors; all questions filtered through agency reps",
         after:
-          "Message clinic doctors directly with automatic translation and plan your care together",
+          "Message clinic doctors directly. Translation on this site is demo copy. Plan care with the clinic.",
       },
       {
         title: "Zero Upfront Payment Risk",
         before:
           "Upfront fees charged for consultation and bookings with financial loss upon cancellation",
         after:
-          "Requesting quotes and messaging doctors is 100% free; surgery slots are secured with a £100 deposit deducted from your final bill",
+          "Requesting quotes and messaging from this site is free. Surgery deposits, if any, are agreed with the clinic — MediQueue does not charge cards.",
       },
       {
-        title: "AI Face & Identity Masking",
+        title: "Photo privacy",
         before:
           "Unencrypted patient photos passed around agency sales teams with risk of public leaks",
         after:
-          "GDPR-compliant AI anonymizes facial features instantly; photos are accessible strictly by authorized physicians",
+          "Share photos only when you choose to request a clinic; we do not run automated face-masking as a live product feature",
       },
     ],
     journeyTitle: "How Your Treatment Journey Works in 4 Steps",
@@ -340,7 +446,7 @@ export const en: SiteContent = {
     journeySteps: [
       {
         title: "Discover & Compare Clinics",
-        body: "Search by treatment, location, and budget. Inspect success rates and package prices of JCI-accredited clinics.",
+        body: "Search by treatment, location, and budget. Package and credential fields appear on sample clinic cards.",
       },
       {
         title: "Free No-Obligation Quotes",
@@ -348,7 +454,7 @@ export const en: SiteContent = {
       },
       {
         title: "Direct Doctor Consult & Booking",
-        body: "Chat directly with your clinic doctor using auto-translation. Lock in your procedure date with a £100 deposit deducted from your bill.",
+        body: "The goal is to message the treating doctor directly. Auto-translation on this site is demo copy. Dates and payment are agreed with the clinic.",
       },
       {
         title: "Treatment & Recovery Follow-up",
@@ -357,11 +463,31 @@ export const en: SiteContent = {
     ],
     discoverPrivacyNote:
       "Clinic identity stays hidden until you send a request.",
-    trustTitle: "Only the best. Only the verified.",
+    trustTitle: "Clinics listed with submitted documents",
     trustBody:
-      "Every clinic on our platform has been reviewed by international health authorities, and holds JCI accreditation or equivalent national health-tourism certificates. Your health is more than a filter criterion to us.",
+      "Joining clinics are asked for JCI (or equivalent) and health-tourism evidence. That is a listing rule, not a live government census or a claim of zero fraud.",
     trustJci: "JCI accreditation",
     trustNational: "National health-tourism certificate",
+    trustEyebrow: "Clinics that submit documents",
+    trustCheck1: "Listing rules — not a claim of zero fraud",
+    trustCheck2: "Verified Medical Expertise",
+    trustBadges: [
+      {
+        title: "JCI International Accreditation",
+        subtitle: "Document type requested at onboarding",
+        tag: "Criterion",
+      },
+      {
+        title: "Official Health Tourism License",
+        subtitle: "Authorization asked for when a clinic joins",
+        tag: "Criterion",
+      },
+      {
+        title: "Privacy as a first principle",
+        subtitle: "Identity is not listed publicly until you request a clinic",
+        tag: "Privacy",
+      },
+    ],
     finalTitle: "Be the architect of your journey.",
     finalBody:
       "Discover accredited clinics, compare openly, and communicate directly — transparency and control stay with you.",
@@ -381,6 +507,13 @@ export const en: SiteContent = {
     compareBeforeLabel: "Traditional setup",
     compareAfterLabel: "MediQueue Model",
     compareCriteriaLabel: "Criteria",
+    compareIntro:
+      "Manage your entire daily appointment flow and patient communication from a single screen instead of scattered tools.",
+    compareBeforeTitle: "Traditional Doctor Workflows",
+    compareBeforeFoot: "Process chaos and inefficient appointment tracking.",
+    compareRecommended: "Featured Doctor Panel",
+    compareAfterTitle: "MediQueue Doctor Dashboard",
+    compareAfterFoot: "All patients, calendar, and medical notes organized on one screen.",
     compareRows: [
       {
         title: "Appointment tracking",
@@ -416,6 +549,8 @@ export const en: SiteContent = {
       },
     ],
     featuresTitle: "Doctor Panel Screens",
+    featuresEyebrow: "Panel Screens & Features",
+    liveDemo: "Live Demo",
     featuresIntro:
       "Each screen focuses on a single job — manage your entire day without scatter.",
     features: [
@@ -472,7 +607,7 @@ export const en: SiteContent = {
       },
       {
         title: "Patient Request & Care",
-        doctor: "Review filtered patient applications and consult directly using auto-translated chat.",
+        doctor: "Review incoming patient requests. Translation lines in previews are demo copy.",
         mediQueue:
           "Bilingual real-time chat infrastructure, request tracking, and appointment confirmation system.",
       },
@@ -500,7 +635,7 @@ export const en: SiteContent = {
       },
       {
         title: "Direct Consult & Care",
-        body: "Consult directly with clinic doctors via auto-translated messaging. Confirm your care plan and pay upon arrival at the clinic.",
+        body: "Consult directly with clinic doctors. Auto-translated messaging on this site is a preview, not a live engine. Pay according to the clinic’s terms.",
       },
     ],
     techTitle: "Transparent Matching & Smart Filtering Engine",
@@ -529,13 +664,21 @@ export const en: SiteContent = {
       },
       {
         q: "How is my personal data and medical privacy protected?",
-        a: "Your personal data and medical documents are end-to-end encrypted under GDPR and privacy standards. Your identity remains private until you explicitly submit a request to a clinic.",
+        a: "We collect contact details on the request form and share them with clinics you choose. Your identity is not listed publicly on the marketplace until you submit a request. See the privacy policy for details.",
       },
       {
         q: "Who handles flight and accommodation arrangements?",
         a: "MediQueue facilitates direct clinic-patient communication. Accommodation, airport transfers, and travel logistics are coordinated as part of your chosen clinic's optional package.",
       },
     ],
+    patientCta: "Explore clinics",
+    clinicCta: "Add your clinic",
+    stepsKicker: "3-step transparent journey",
+    stepsTitle: "Process map",
+    marketplaceBadge: "Direct & transparent marketplace",
+    faqExtraTitle: "Have a specific question?",
+    faqExtraBody: "Our team can help you with the next step.",
+    faqExtraCta: "Ask us",
   },
   team: {
     seoTitle: "About Us — MediQueue",
@@ -544,10 +687,12 @@ export const en: SiteContent = {
     heroLeadLight: "Broker-Free Future with Tech.",
     heroIntro:
       "We are setting a new global standard where middleman commissions, hidden pricing, and uncertain medical travel are replaced by complete transparency. MediQueue is an independent healthcare marketplace connecting international patients directly with accredited clinics and doctors.",
+    heroChip1: "Clinics that submit documents",
+    heroChip2: "No-broker communication model",
     stats: [
       { value: "301/1", label: "1st Place Winner", hint: "Entrepreneurship Marathon Champion" },
-      { value: "AI-Powered", label: "Smart Matching", hint: "Proprietary algorithm & AI architecture" },
-      { value: "100%", label: "Transparent Platform", hint: "Zero broker markup & direct doctor chat" },
+      { value: "Filter", label: "Structured ranking", hint: "Rule-based filter by language, budget, and need" },
+      { value: "Open", label: "Transparent platform", hint: "No broker markup in the model" },
       { value: "JCI", label: "Verified Quality", hint: "Only audited & accredited healthcare institutions" },
     ],
     missionLabel: "Our Mission",
@@ -555,23 +700,23 @@ export const en: SiteContent = {
       "Completely eliminate middleman brokers and hidden commissions from healthcare travel. Enable patients worldwide to connect directly, transparently, and safely with accredited clinics in their native language.",
     visionLabel: "Our Vision",
     visionBody:
-      "Free clinics from ad agencies selling unverified leads; empower them with a risk-free growth engine that wins only when matching treatment-ready patients, setting global transparency as the industry default.",
+      "Free clinics from ad agencies selling unverified leads; empower them with a risk-free growth engine that wins when treatment-ready patients arrive, setting global transparency as the industry default.",
     valuesEyebrow: "Our Core Principles",
     valuesTitle: "4 Pillars Defining MediQueue Standards",
     values: [
       {
         title: "Uncompromising Transparency",
-        body: "No hidden agency markups. All treatment packages, clinic credentials, and doctor licenses are 100% visible to every user.",
+        body: "No hidden agency-markup model. Package and license fields appear on sample cards; live prices are confirmed with the clinic.",
         icon: "ShieldCheck",
       },
       {
         title: "Direct Doctor Connection",
-        body: "No sales rep filters. Communicate directly with attending physicians using real-time automated translation.",
+        body: "No sales-rep filter is the goal. Direct doctor chat is the product model; translation lines on this site are demo copy.",
         icon: "Stethoscope",
       },
       {
-        title: "AI-Powered Matching",
-        body: "Fair, unbiased algorithms matching patient budget, language, and specific medical needs with ideal accredited clinics in seconds.",
+        title: "Rule-based filtering",
+        body: "We filter and rank clinics by language, budget, and treatment need — structured comparison, not a black-box recommendation.",
         icon: "Sparkles",
       },
       {
@@ -580,7 +725,7 @@ export const en: SiteContent = {
         icon: "CheckCircle2",
       },
     ],
-    note: "MediQueue is a dynamic ecosystem continuously advancing international healthtech and AI innovation.",
+    note: "MediQueue is a growing team building a broker-free marketplace for international health travel.",
     achievementsEyebrow: "Awards & Recognition",
     achievementsTitle: "Our Position in the Tech & Startup Ecosystem",
     achievementChips: [
@@ -589,8 +734,8 @@ export const en: SiteContent = {
         detail: "Düzce Teknopark Entrepreneurship Marathon Championship · 2026",
       },
       {
-        label: "Proprietary AI Matching Architecture",
-        detail: "Proprietary AI algorithm & broker-free marketplace model",
+        label: "Rule-based ranking",
+        detail: "Filter by language, budget, and need — plus a broker-free marketplace model",
       },
       {
         label: "Capsule Pre-Incubator Program",
@@ -602,8 +747,8 @@ export const en: SiteContent = {
     members: [
       {
         name: "Azra İrem Derin",
-        roleTitle: "CTO / AI, Data & Web Engineering",
-        bio: "Developing AI-powered matching algorithms, platform architecture, and end-to-end data infrastructure.",
+        roleTitle: "CTO / Software, data & matching infrastructure",
+        bio: "Building the platform architecture, data layer, and rule-based clinic filtering service.",
         image: "/team/azra-irem-derin.jpg",
         accent: "#0d9488",
         linkedin: "https://www.linkedin.com/in/azraderin/",
@@ -626,12 +771,18 @@ export const en: SiteContent = {
       },
     ],
     socialTitle: "Follow Us on Social Media",
+    socialEyebrow: "Community & social",
+    socialIntro: "Official announcements and team news — clinic success stories are not live case studies yet.",
+    visitPage: "Visit page",
+    exploreAsPatient: "Explore as a patient",
+    addClinicCta: "Add your clinic",
+    achievementsAside: "Awards",
     socialLinks: [
       {
         platform: "linkedin",
         label: "LinkedIn",
         hint: "Founding team & official company updates",
-        href: "https://www.linkedin.com/company/medyqueue",
+        href: "https://www.linkedin.com/company/mediqueue",
       },
       {
         platform: "instagram",
@@ -676,39 +827,53 @@ export const en: SiteContent = {
         links: [
           { href: "/how-it-works#faq", label: "FAQ" },
           { href: "/privacy", label: "Privacy Policy" },
-          { href: "/terms", label: "GDPR & Privacy" },
+          { href: "/terms", label: "Terms of Use" },
         ],
       },
     ],
     copyright: "MediQueue. All rights reserved.",
+    sendEmail: "Send email",
     privacyNote: "Built with patient privacy as a core principle.",
     medicalDisclaimer: "MediQueue is a healthcare marketplace platform. All content is for informational purposes only and does not constitute professional medical advice.",
   },
   legal: {
     updatedLabel: "Last Updated",
+    backHome: "Back to Home",
     privacy: {
       title: "Privacy Policy",
       intro: "At MediQueue, protecting patient privacy and medical data confidentiality is our utmost priority.",
-      updated: "September 12, 2026",
+      updated: "September 14, 2026",
       sections: [
         {
           heading: "1. Data Collection & Use",
           body: "Treatment requests and medical forms submitted through MediQueue are shared strictly with accredited clinics and physicians you explicitly approve, via encrypted protocols. Your personal contact information is never sold to third parties.",
         },
         {
-          heading: "2. GDPR & HIPAA Compliance",
-          body: "In accordance with European General Data Protection Regulation (GDPR) and HIPAA standards, your medical data is stored on high-security servers. You retain the right to request full data deletion at any time.",
+          heading: "2. Personal data",
+          body: "We process contact details from request forms so we can connect you with clinics you choose. You may ask us to delete your data. This page is not a certification of GDPR or HIPAA compliance.",
         },
         {
           heading: "3. Cookies & Analytics",
           body: "The platform utilizes anonymous performance cookies to enhance navigation efficiency. You can manage or disable cookie preferences at any time via your browser settings.",
+        },
+        {
+          heading: "4. Controller and contact",
+          body: "Marketing-site forms go to the MediQueue team. Email mediqueue.tech@gmail.com for access or deletion requests.",
+        },
+        {
+          heading: "5. Retention and processors",
+          body: "We keep form data to handle your request and to share it with clinics you choose. If email automation is configured, the same payload may be forwarded. This page is not a KVKK, GDPR, or HIPAA certification.",
+        },
+        {
+          heading: "6. Scope of this site",
+          body: "getmediqueue.com is a marketing and lead site. Live booking, payments, and clinic software do not run here.",
         },
       ],
     },
     terms: {
       title: "Terms of Service & Platform Agreement",
       intro: "Terms and conditions governing the use of MediQueue for patients, accredited clinics, and healthcare specialists.",
-      updated: "September 12, 2026",
+      updated: "September 14, 2026",
       sections: [
         {
           heading: "1. Scope of Service & Marketplace Model",
@@ -720,14 +885,14 @@ export const en: SiteContent = {
         },
         {
           heading: "3. Zero Upfront Payment Policy",
-          body: "Patients can request non-binding treatment quotes with zero upfront deposits or mandatory credit card registration.",
+          body: "Patients can leave non-binding requests on this site with no card on file. Clinic appointments and fees are agreed with the clinic; MediQueue does not collect treatment payments.",
         },
       ],
     },
     disclaimer: {
       title: "Medical Disclaimer",
       intro: "Important legal notification regarding content and informational materials on MediQueue.",
-      updated: "September 12, 2026",
+      updated: "September 14, 2026",
       sections: [
         {
           heading: "1. No Direct Medical Services",
@@ -745,4 +910,5 @@ export const en: SiteContent = {
     },
   },
   previews: enPreviews,
+  screens: enScreens,
 };

@@ -3,7 +3,17 @@ import { content, type Locale } from "@/content";
 import { getRequestLocale } from "@/lib/locale-server";
 import { SITE_URL } from "@/lib/site";
 
-type SeoPage = "home" | "clinics" | "patients" | "doctors" | "how" | "team" | "contact";
+export type SeoPage =
+  | "home"
+  | "clinics"
+  | "patients"
+  | "doctors"
+  | "how"
+  | "team"
+  | "contact"
+  | "privacy"
+  | "terms"
+  | "disclaimer";
 
 const PAGE_PATHS: Record<SeoPage, string> = {
   home: "",
@@ -13,6 +23,9 @@ const PAGE_PATHS: Record<SeoPage, string> = {
   how: "/how-it-works",
   team: "/team",
   contact: "/contact",
+  privacy: "/privacy",
+  terms: "/terms",
+  disclaimer: "/disclaimer",
 };
 
 function pageCopy(locale: Locale, page: SeoPage) {
@@ -30,9 +43,24 @@ function pageCopy(locale: Locale, page: SeoPage) {
       return { title: t.team.seoTitle, description: t.team.heroIntro };
     case "contact":
       return { title: t.contact.seoTitle, description: t.contact.intro };
+    case "privacy":
+      return { title: t.legal.privacy.title, description: t.legal.privacy.intro };
+    case "terms":
+      return { title: t.legal.terms.title, description: t.legal.terms.intro };
+    case "disclaimer":
+      return { title: t.legal.disclaimer.title, description: t.legal.disclaimer.intro };
     default:
       return t.seo;
   }
+}
+
+function localizedPath(locale: Locale, path: string) {
+  if (locale === "en") return path === "" ? "/en" : `/en${path}`;
+  return path;
+}
+
+function canonicalFor(locale: Locale, path: string) {
+  return `${SITE_URL}${localizedPath(locale, path)}`;
 }
 
 export async function localizedMetadata(page: SeoPage = "home"): Promise<Metadata> {
@@ -43,31 +71,8 @@ export async function localizedMetadata(page: SeoPage = "home"): Promise<Metadat
 
   const displayTitle = page === "home" ? title : `${title} · MEDIQUEUE`;
   const path = PAGE_PATHS[page];
-
-  const keywords =
-    locale === "tr"
-      ? [
-          "MediQueue",
-          "Sağlık Turizmi",
-          "Klinik Karşılaştırma",
-          "JCI Akredite Klinikler",
-          "Saç Ekimi Fiyatları",
-          "Rinoplasti Cerrahi",
-          "Doktor Randevu",
-          "Uluslararası Hasta",
-          "Komisyonsuz Sağlık Pazar Yeri",
-        ]
-      : [
-          "MediQueue",
-          "Health Tourism",
-          "Medical Travel Marketplace",
-          "JCI Accredited Clinics",
-          "Hair Transplant Cost",
-          "Rhinoplasty Surgery",
-          "Doctor Appointments",
-          "International Patients",
-          "Direct Clinic Marketplace",
-        ];
+  const canonical = canonicalFor(locale, path);
+  const keywords = content[locale].seo.keywords;
 
   return {
     metadataBase: new URL(SITE_URL),
@@ -75,15 +80,16 @@ export async function localizedMetadata(page: SeoPage = "home"): Promise<Metadat
     description,
     keywords,
     alternates: {
-      canonical: `${SITE_URL}${path}`,
+      canonical,
       languages: {
-        tr: `${SITE_URL}${path}?lang=tr`,
-        en: `${SITE_URL}${path}?lang=en`,
+        tr: canonicalFor("tr", path),
+        en: canonicalFor("en", path),
+        "x-default": canonicalFor("tr", path),
       },
     },
     openGraph: {
       type: "website",
-      url: `${SITE_URL}${path}`,
+      url: canonical,
       siteName: "MEDIQUEUE",
       locale: ogLocale,
       alternateLocale: altLocale,

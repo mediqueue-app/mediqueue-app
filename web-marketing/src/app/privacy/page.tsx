@@ -1,11 +1,7 @@
-import type { Metadata } from "next";
+import { localizedMetadata } from "@/lib/seo";
 import { LegalPage } from "@/components/pages/LegalPage";
-import { content } from "@/content";
 
-export const metadata: Metadata = {
-  title: content.en.legal.privacy.title,
-  description: content.en.legal.privacy.intro,
-};
+export const generateMetadata = () => localizedMetadata("privacy");
 
 export default function Page() {
   return <LegalPage kind="privacy" />;

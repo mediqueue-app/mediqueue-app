@@ -1,6 +1,8 @@
-import type { ComponentProps } from "react";
-import Link from "next/link";
+"use client";
+
+import type { ComponentProps, MouseEventHandler } from "react";
 import { cn } from "@/lib/cn";
+import { LocaleLink } from "@/components/ui/LocaleLink";
 
 type ButtonProps = ComponentProps<"button"> & {
   href?: string;
@@ -32,9 +34,13 @@ export function Button({
 
   if (href) {
     return (
-      <Link href={href} className={classes} onClick={onClick as any}>
+      <LocaleLink
+        href={href}
+        className={classes}
+        onClick={onClick as MouseEventHandler<HTMLAnchorElement> | undefined}
+      >
         {children}
-      </Link>
+      </LocaleLink>
     );
   }
 

@@ -1,6 +1,6 @@
 import { ImageResponse } from "next/og";
 
-export const alt = "MEDIQUEUE — Pay for the patient who shows up";
+export const alt = "MEDIQUEUE";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
@@ -46,7 +46,7 @@ export default function OpenGraphImage() {
               maxWidth: 940,
             }}
           >
-            Pay for the patient who shows up.
+            MEDIQUEUE
           </div>
           <div
             style={{
@@ -57,7 +57,7 @@ export default function OpenGraphImage() {
               maxWidth: 720,
             }}
           >
-            No subscription. A request lands — then you pay.
+            getmediqueue.com
           </div>
         </div>
       </div>

@@ -5,15 +5,15 @@ import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
 
 export function DoctorSchedulePreview() {
-  const { locale, t } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const s = t.previews.schedule;
   const doc = t.previews.doctor;
+  const x = t.screens.schedule;
 
   const filters = [
-    { label: tr ? "Bekleyen" : "Pending", count: 2 },
-    { label: tr ? "Onaylanan" : "Approved", count: 1 },
-    { label: tr ? "Tümü" : "All", count: 3 },
+    { label: x.pending, count: 2 },
+    { label: x.approved, count: 1 },
+    { label: x.all, count: 3 },
   ] as const;
 
   return (
@@ -24,17 +24,15 @@ export function DoctorSchedulePreview() {
         <span className="h-2.5 w-2.5 rounded-full bg-[#f59e0b]/80" />
         <span className="h-2.5 w-2.5 rounded-full bg-[#10b981]/80" />
         <span className="ml-2 truncate rounded-md bg-slate-50 px-2 py-0.5 text-[11px] font-medium text-slate-500 ring-1 ring-slate-200">
-          {tr ? "doctor · Bugünün Programı" : "doctor · Today's Schedule"}
+          doctor · {x.chrome}
         </span>
       </div>
 
       {/* Main Content Area */}
       <div className="p-4">
-        <p className="text-lg font-bold text-slate-900">
-          {tr ? "Bugünün Programı" : "Today's Schedule"}
-        </p>
+        <p className="text-lg font-bold text-slate-900">{x.title}</p>
         <p className="mt-0.5 text-sm text-slate-500">
-          <span>{tr ? "Hastalarım, Takvim & Hekim Paneli." : "Patients, Calendar & Doctor Dashboard."}</span>
+          <span>{x.subtitle}</span>
         </p>
 
         {/* Filter Pills */}

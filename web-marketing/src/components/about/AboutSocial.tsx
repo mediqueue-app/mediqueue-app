@@ -42,8 +42,7 @@ const PLATFORM_CONFIG = {
 } as const;
 
 export function AboutSocial() {
-  const { t, locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const s = t.team;
   const { openLead } = useLeadCapture();
   const reduced = useReducedMotion();
@@ -61,15 +60,13 @@ export function AboutSocial() {
         >
           <div className="mx-auto max-w-2xl text-center mb-12">
             <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-3">
-              <span>{tr ? "Topluluk & İletişim" : "Community & Social"}</span>
+              <span>{s.socialEyebrow}</span>
             </div>
             <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
               {s.socialTitle}
             </h2>
             <p className="mt-3 text-base text-slate-600">
-              {tr
-                ? "Resmi duyurularımızı, klinik başarı hikayelerini ve haberleri anlık takip edin."
-                : "Follow our official announcements, clinic success stories, and healthcare updates."}
+              {s.socialIntro}
             </p>
           </div>
 
@@ -114,7 +111,7 @@ export function AboutSocial() {
                   </div>
 
                   <div className="mt-8 flex items-center gap-1.5 border-t border-slate-100 pt-4 text-xs font-bold text-primary">
-                    <span>{tr ? "Sayfayı Ziyaret Et" : "Visit Page"}</span>
+                    <span>{s.visitPage}</span>
                     <ArrowRight className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-1" />
                   </div>
                 </a>
@@ -140,16 +137,16 @@ export function AboutSocial() {
 
               <div className="relative z-10 mx-auto max-w-2xl text-center">
                 <h2 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-[2.65rem] leading-tight">
-                  {s.finalCtaTitle || (tr ? "Geleceğin Sağlık Ekosistemine Adım Atın" : "Step Into the Future of Healthcare")}
+                  {s.finalCtaTitle}
                 </h2>
 
                 <p className="mx-auto mt-4 max-w-xl text-base leading-relaxed text-slate-300 sm:text-lg">
-                  {s.finalCtaBody || (tr ? "İster uluslararası tedavi arayan bir hasta, ister şeffaf büyümek isteyen bir klinik olun; MediQueue güvencesiyle hemen başlayın." : "Get started with MediQueue today.")}
+                  {s.finalCtaBody}
                 </p>
 
                 <div className="mt-9 flex flex-col items-center justify-center gap-4 sm:flex-row">
                   <Button onClick={() => openLead("patient")} size="lg">
-                    {tr ? "Hasta Olarak Keşfedin" : "Explore as Patient"}
+                    {s.exploreAsPatient}
                     <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
                   </Button>
                   <Button
@@ -157,7 +154,7 @@ export function AboutSocial() {
                     size="lg"
                     className="border-0 bg-white text-ink hover:bg-white/90"
                   >
-                    {tr ? "Kliniğinizi Ekleyin" : "Add Your Clinic"}
+                    {s.addClinicCta}
                     <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
                   </Button>
                 </div>

@@ -57,7 +57,8 @@ export function OriginReachWidget({
   className,
   showListScrollControls = false,
 }: OriginReachWidgetProps) {
-  const { locale } = useLocale();
+  const { locale, t } = useLocale();
+  const g = t.home.globalReach;
   const [activeCode, setActiveCode] = useState<string | null>(null);
   const [revealed, setRevealed] = useState(!revealOnScroll);
   const [reducedMotion, setReducedMotion] = useState(false);
@@ -176,9 +177,7 @@ export function OriginReachWidget({
                       <button
                         type="button"
                         onClick={() => scrollList("up")}
-                        aria-label={
-                          locale === "en" ? "Scroll list up" : "Listeyi yukarı kaydır"
-                        }
+                        aria-label={g.scrollUp}
                         className="flex h-5 w-5 items-center justify-center text-slate-400 transition-colors hover:bg-slate-50 hover:text-primary"
                       >
                         <ChevronUp className="h-3 w-3" strokeWidth={2.25} />
@@ -187,9 +186,7 @@ export function OriginReachWidget({
                       <button
                         type="button"
                         onClick={() => scrollList("down")}
-                        aria-label={
-                          locale === "en" ? "Scroll list down" : "Listeyi aşağı kaydır"
-                        }
+                        aria-label={g.scrollDown}
                         className="flex h-5 w-5 items-center justify-center text-slate-400 transition-colors hover:bg-slate-50 hover:text-primary"
                       >
                         <ChevronDown className="h-3 w-3" strokeWidth={2.25} />

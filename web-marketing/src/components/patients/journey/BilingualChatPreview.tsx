@@ -33,22 +33,18 @@ const MESSAGES = [
 ];
 
 export function BilingualChatPreview() {
-  const { locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
+  const x = t.screens.chat;
 
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-white">
       <div className="border-b border-border bg-band px-4 py-3">
-        <p className="text-sm font-semibold text-slate-900">
-          {tr ? "Hasta Mesajları" : "Patient messages"}
-        </p>
-        <p className="text-xs text-slate-500">
-          {tr ? "Otomatik çeviri" : "Auto-translate"}
-        </p>
+        <p className="text-sm font-semibold text-slate-900">{x.title}</p>
+        <p className="text-xs text-slate-500">{x.translate}</p>
       </div>
       <div className="space-y-4 p-4">
         {MESSAGES.map((msg, i) => (
-          <ChatBubble key={i} msg={msg} tr={tr} />
+          <ChatBubble key={i} msg={msg} labels={{ translated: x.translated, original: x.original }} />
         ))}
       </div>
     </div>
@@ -57,10 +53,10 @@ export function BilingualChatPreview() {
 
 function ChatBubble({
   msg,
-  tr,
+  labels,
 }: {
   msg: (typeof MESSAGES)[number];
-  tr: boolean;
+  labels: { translated: string; original: string };
 }) {
   const isPatient = msg.role === "patient";
   const showOriginal = !isPatient && msg.translated && "original" in msg;
@@ -90,13 +86,13 @@ function ChatBubble({
         {msg.translated ? (
           <span className="mb-1.5 inline-flex items-center gap-1 rounded-full bg-primary-light/80 px-2 py-0.5 text-[10px] font-semibold text-primary">
             <Languages className="h-3 w-3" />
-            {tr ? "Otomatik çevrildi" : "Auto-translated"}
+            {labels.translated}
           </span>
         ) : null}
         <p className="text-sm leading-relaxed">{msg.main}</p>
         {showOriginal ? (
           <p className="mt-2 text-[11px] leading-relaxed text-slate-400">
-            {tr ? "Orijinal" : "Original"} ({msg.originalLabel}): {msg.original}
+            {labels.original} ({msg.originalLabel}): {msg.original}
           </p>
         ) : null}
       </div>

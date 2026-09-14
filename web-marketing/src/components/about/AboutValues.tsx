@@ -1,11 +1,12 @@
 "use client";
 
+import type { LucideIcon } from "lucide-react";
 import { ShieldCheck, Stethoscope, Sparkles, CheckCircle2 } from "lucide-react";
 import { Container } from "@/components/ui/Container";
 import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
 
-const VALUE_ICONS: Record<string, any> = {
+const VALUE_ICONS: Record<string, LucideIcon> = {
   ShieldCheck,
   Stethoscope,
   Sparkles,
@@ -13,8 +14,7 @@ const VALUE_ICONS: Record<string, any> = {
 };
 
 export function AboutValues() {
-  const { t, locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const copy = t.team;
   const values = copy.values;
 
@@ -25,10 +25,10 @@ export function AboutValues() {
       <Container>
         <FadeIn className="max-w-2xl mb-14 lg:mb-18">
           <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-3">
-            <span>{copy.valuesEyebrow || (tr ? "Değerlerimiz ve Prensiplerimiz" : "Our Core Principles")}</span>
+            <span>{copy.valuesEyebrow}</span>
           </div>
           <h2 className="font-display text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-            {copy.valuesTitle || (tr ? "MediQueue Standartlarını Şekillendiren 4 Temel İlke" : "4 Pillars Defining MediQueue Standards")}
+            {copy.valuesTitle}
           </h2>
         </FadeIn>
 

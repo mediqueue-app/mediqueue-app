@@ -7,13 +7,13 @@ import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
 
 export function ComparePreview() {
-  const { locale, t } = useLocale();
+  const { t } = useLocale();
   const p = t.previews;
 
   const filters = [
-    { label: locale === "tr" ? "Bekleyen" : "Pending", count: 2 },
-    { label: locale === "tr" ? "Onaylanan" : "Approved", count: 1 },
-    { label: locale === "tr" ? "Tümü" : "All", count: 3 },
+    { label: p.requests.pending, count: 2 },
+    { label: p.requests.approved, count: 1 },
+    { label: p.requests.all, count: 3 },
   ] as const;
 
   return (

@@ -86,8 +86,7 @@ function FaqAccordion({ items }: { items: { q: string; a: string }[] }) {
 }
 
 export function HowPage() {
-  const { t, locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
   const h = t.how;
   const { openLead } = useLeadCapture();
 
@@ -109,11 +108,11 @@ export function HowPage() {
             </p>
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Button onClick={() => openLead("patient")} size="lg">
-                {tr ? "Klinikleri Keşfedin" : "Explore Clinics"}
+                {h.patientCta}
                 <ArrowRight className="ml-2 h-4 w-4" aria-hidden />
               </Button>
               <Button onClick={() => openLead("clinic", "clinic")} variant="ink" size="lg">
-                {tr ? "Kliniğinizi Ekleyin" : "Add Your Clinic"}
+                {h.clinicCta}
               </Button>
             </div>
           </FadeIn>
@@ -125,10 +124,10 @@ export function HowPage() {
         <Container>
           <FadeIn className="max-w-2xl">
             <span className="text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
-              {tr ? "3 Adımda Şeffaf Yolculuk" : "3-Step Transparent Journey"}
+              {h.stepsKicker}
             </span>
             <h2 className="font-display mt-4 text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">
-              {tr ? "Kapsamlı Süreç Haritası" : "Comprehensive Process Map"}
+              {h.stepsTitle}
             </h2>
           </FadeIn>
 
@@ -179,7 +178,7 @@ export function HowPage() {
               <div className="relative z-10">
                 <span className="inline-flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 text-xs font-bold uppercase tracking-wider text-emerald-400 border border-white/10">
                   <ShieldCheck className="h-4 w-4 text-emerald-400" />
-                  {tr ? "Doğrudan & Şeffaf Pazar Yeri" : "Direct & Transparent Marketplace"}
+                  {h.marketplaceBadge}
                 </span>
 
                 <h2 className="font-display mt-6 max-w-3xl text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-[2.35rem]">
@@ -236,14 +235,14 @@ export function HowPage() {
           <FadeIn className="mx-auto mt-12 max-w-xl text-center">
             <div className="rounded-2xl border border-slate-200/80 bg-slate-50/70 p-6 text-center">
               <p className="text-sm font-bold text-slate-900">
-                {tr ? "Aklınıza takılan farklı bir soru mu var?" : "Have a specific question?"}
+                {h.faqExtraTitle}
               </p>
               <p className="mt-1 text-xs text-slate-600">
-                {tr ? "Ekibimiz tüm süreçler konusunda size yardımcı olmaktan mutluluk duyar." : "Our team is ready to help you navigate every step."}
+                {h.faqExtraBody}
               </p>
               <div className="mt-4">
                 <Button href="/contact" variant="ink" size="md">
-                  {tr ? "Bize Sorun" : "Ask Us"}
+                  {h.faqExtraCta}
                   <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
                 </Button>
               </div>

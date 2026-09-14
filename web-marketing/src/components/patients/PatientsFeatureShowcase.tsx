@@ -25,46 +25,22 @@ const PREVIEWS: Record<string, () => ReactNode> = {
   travel: TravelPreview,
 };
 
+const PATIENT_ICONS: Record<string, LucideIcon> = {
+  compare: Search,
+  chat: MessageSquare,
+  request: FileText,
+  travel: Plane,
+};
+
 export function PatientsFeatureShowcase() {
-  const { locale } = useLocale();
-  const tr = locale === "tr";
+  const { t } = useLocale();
+  const block = t.screens.patientsShowcase;
   const reduced = useReducedMotion();
   const [active, setActive] = useState(0);
-
-  const features = [
-    {
-      id: "compare",
-      title: tr ? "Akredite Klinikleri Şeffafça Kıyaslayın" : "Compare Accredited Clinics Transparently",
-      body: tr
-        ? "JCI ve Sağlık Bakanlığı onaylı klinikleri fiyat, sertifika, uzman hekim ve hasta yorumlarına göre 360° inceleyin."
-        : "Analyze JCI and Ministry-approved clinics 360° based on pricing, certifications, doctor credentials, and patient reviews.",
-      icon: Search,
-    },
-    {
-      id: "chat",
-      title: tr ? "Komisyonsuz & Doğrudan Mesajlaşın" : "Chat Directly Without Middlemen",
-      body: tr
-        ? "Aracı acenteler veya komisyoncular olmadan kliniğin medikal direktörleri ile kendi dilinizde anında yazışın."
-        : "Communicate instantly in your language with clinic medical coordinators with zero agent commissions.",
-      icon: MessageSquare,
-    },
-    {
-      id: "request",
-      title: tr ? "Ön Ödemesiz & Ücretsiz Talep Oluşturun" : "Create Free Requests with Zero Upfront Cost",
-      body: tr
-        ? "Kişisel tedavi beklentilerinizi, bütçenizi ve dil tercihinizi belirterek bağlayıcı olmayan özel teklifler alın."
-        : "Specify your treatment needs, budget, and language to receive tailored non-binding clinic proposals.",
-      icon: FileText,
-    },
-    {
-      id: "travel",
-      title: tr ? "Bütüncül Seyahat & Tedavi Takibi" : "End-to-End Travel & Recovery Assistance",
-      body: tr
-        ? "Havalimanı VIP transferinden otel konaklamasına, operasyon bakımlarından iyileşme sürecine kadar tüm adımları izleyin."
-        : "Track VIP transfers, hotel accommodation, operation steps, and post-op care seamlessly from one screen.",
-      icon: Plane,
-    },
-  ];
+  const features = block.items.map((item) => ({
+    ...item,
+    icon: PATIENT_ICONS[item.id] ?? Search,
+  }));
 
   const currentFeature = features[active];
   const PreviewComponent = PREVIEWS[currentFeature.id];
@@ -75,16 +51,14 @@ export function PatientsFeatureShowcase() {
         <FadeIn>
           <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary mb-5">
             <span>
-              {tr ? "Hasta Deneyimi & Platform Ekranları" : "Patient Experience & Platform Screens"}
+              {block.eyebrow}
             </span>
           </div>
           <h2 className="font-display max-w-2xl text-3xl font-bold tracking-tight text-ink sm:text-4xl">
-            {tr ? "Tedavinizi Güvenle Yöneten Akıllı Hasta Ekranları" : "Smart Patient Tools for Safe Treatment"}
+            {block.title}
           </h2>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-600 sm:text-lg">
-            {tr
-              ? "Tedavi arayışından dönüş yolculuğunuza kadar tüm aşamaları şeffaf, güvenli ve aracısız bir arayüzde kontrol edin."
-              : "Control every step of your medical journey transparently and directly without intermediary agents."}
+            {block.intro}
           </p>
         </FadeIn>
 

@@ -63,6 +63,7 @@ export type PreviewsContent = {
     fullCalendar: string;
     items: { time: string; name: string; treatment: string }[];
   };
+  optional: string;
   compareChromeLabel: string;
   compareTitle: string;
   compareSubtitle: string;
@@ -187,6 +188,7 @@ export const trPreviews: PreviewsContent = {
     ],
   },
   compareChromeLabel: "patient · Klinik Kıyaslama",
+  optional: "İsteğe bağlı",
   compareTitle: "Klinik Kıyaslama",
   compareSubtitle: "akredite klinikleri kıyaslayın ve doğrudan iletişime geçin.",
   scheduleChromeLabel: "doctor · Günlük Program",
@@ -315,6 +317,7 @@ export const enPreviews: PreviewsContent = {
     ],
   },
   compareChromeLabel: "patient · Clinic comparison",
+  optional: "Optional",
   compareTitle: "Clinic comparison",
   compareSubtitle: "compare accredited clinics and connect directly.",
   scheduleChromeLabel: "doctor · Today's schedule",
