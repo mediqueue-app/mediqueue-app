@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
 import { Inter, Plus_Jakarta_Sans, Source_Serif_4 } from "next/font/google";
-import Script from "next/script";
 import { content } from "@/content";
-import { COMPANY_INSTAGRAM, COMPANY_LINKEDIN, SITE_URL } from "@/lib/site";
+import {
+  COMPANY_EMAIL,
+  COMPANY_INSTAGRAM,
+  COMPANY_LINKEDIN,
+  SITE_URL,
+} from "@/lib/site";
 import { getRequestLocale } from "@/lib/locale-server";
 import { SiteChrome } from "@/components/SiteChrome";
 import "./globals.css";
@@ -29,6 +33,10 @@ const inter = Inter({
 export async function generateMetadata(): Promise<Metadata> {
   return {
     metadataBase: new URL(SITE_URL),
+    applicationName: "MEDIQUEUE",
+    authors: [{ name: "MEDIQUEUE", url: SITE_URL }],
+    creator: "MEDIQUEUE",
+    publisher: "MEDIQUEUE",
     icons: {
       icon: "/mediqueue-icon.png",
       apple: "/mediqueue-icon.png",
@@ -51,8 +59,13 @@ export default async function RootLayout({
         "@type": "Organization",
         "@id": `${SITE_URL}/#organization`,
         name: "MEDIQUEUE",
+        alternateName: ["MediQueue", "MEDI·QUEUE", "Medi Queue"],
         url: SITE_URL,
-        logo: `${SITE_URL}/mediqueue-logo.png`,
+        logo: {
+          "@type": "ImageObject",
+          url: `${SITE_URL}/mediqueue-logo.png`,
+        },
+        email: COMPANY_EMAIL,
         description: seo.description,
         sameAs: [COMPANY_INSTAGRAM, COMPANY_LINKEDIN],
       },
@@ -61,9 +74,19 @@ export default async function RootLayout({
         "@id": `${SITE_URL}/#website`,
         url: SITE_URL,
         name: "MEDIQUEUE",
-        description: seo.description,
+        alternateName: ["MediQueue"],
+        inLanguage: "tr-TR",
+        description: content.tr.seo.description,
         publisher: { "@id": `${SITE_URL}/#organization` },
-        inLanguage: ["tr-TR", "en-US"],
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${SITE_URL}/en#website`,
+        url: `${SITE_URL}/en`,
+        name: "MEDIQUEUE",
+        inLanguage: "en-US",
+        description: content.en.seo.description,
+        publisher: { "@id": `${SITE_URL}/#organization` },
       },
     ],
   };
@@ -75,28 +98,6 @@ export default async function RootLayout({
       className={`${jakarta.variable} ${display.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
-        {process.env.NEXT_PUBLIC_GA_ID && (
-          <>
-            <Script
-              strategy="afterInteractive"
-              src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_ID}`}
-            />
-            <Script
-              id="google-analytics"
-              strategy="afterInteractive"
-              dangerouslySetInnerHTML={{
-                __html: `
-                  window.dataLayer = window.dataLayer || [];
-                  function gtag(){dataLayer.push(arguments);}
-                  gtag('js', new Date());
-                  gtag('config', '${process.env.NEXT_PUBLIC_GA_ID}', {
-                    page_path: window.location.pathname,
-                  });
-                `,
-              }}
-            />
-          </>
-        )}
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGraph) }}

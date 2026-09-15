@@ -79,6 +79,7 @@ export async function localizedMetadata(page: SeoPage = "home"): Promise<Metadat
     title: displayTitle,
     description,
     keywords,
+    applicationName: "MEDIQUEUE",
     alternates: {
       canonical,
       languages: {

@@ -389,6 +389,12 @@ export type SiteContent = {
     privacyNote: string;
     medicalDisclaimer?: string;
   };
+  cookie: {
+    message: string;
+    accept: string;
+    reject: string;
+    privacy: string;
+  };
   legal: {
     updatedLabel: string;
     backHome: string;

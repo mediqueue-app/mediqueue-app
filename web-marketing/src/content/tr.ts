@@ -4,19 +4,19 @@ import { trScreens } from "./screens";
 
 export const tr: SiteContent = {
   seo: {
-    title: "MEDIQUEUE — Şeffaf, aracısız sağlık turizmi",
+    title: "MEDIQUEUE — Resmi site | Şeffaf, aracısız sağlık turizmi",
     description:
-      "Akredite klinikleri kıyaslayın, doğrudan yazışın, ön ödeme olmadan talep gönderin. Klinikler yalnızca gelen hasta için öder — abonelik yok.",
+      "MEDIQUEUE resmi web sitesi. Akredite klinikleri kıyaslayın, doğrudan yazışın, bu siteden ön ödeme olmadan talep bırakın. Klinik yazılımı ve tahsilat burada çalışmaz.",
     keywords: [
+      "MEDIQUEUE",
       "MediQueue",
-      "Sağlık Turizmi",
-      "Klinik Karşılaştırma",
-      "JCI Akredite Klinikler",
-      "Saç Ekimi Fiyatları",
-      "Rinoplasti Cerrahi",
-      "Doktor Randevu",
-      "Uluslararası Hasta",
-      "Komisyonsuz Sağlık Pazar Yeri",
+      "MEDI QUEUE",
+      "MediQueue resmi",
+      "sağlık turizmi",
+      "klinik karşılaştırma",
+      "JCI klinik",
+      "uluslararası hasta",
+      "aracısız sağlık",
     ],
   },
   notFound: {
@@ -30,10 +30,10 @@ export const tr: SiteContent = {
     clinicTab: "Klinik / Doktor Kaydı",
     patientTitle: "Ücretsiz Sağlık & Tedavi Talebi Oluşturun",
     clinicTitle: "Kliniğinizi MediQueue'ye Ekleyin",
-    patientBody: "Talep kriterlerinizi girin, akredite klinikler sizden ön ödeme almadan teklif versin.",
-    clinicBody: "Abonelik ücreti ödemeyin. Yalnızca panelinize düşen gerçek talepler için işlem yapın.",
-    successTitle: "Talebiniz Başarıyla Alındı!",
-    successBody: "Ekibimiz ve akredite klinikler talebinizi inceleyip en kısa sürede sizinle iletişime geçecektir.",
+    patientBody: "Talep ayrıntılarınızı girin. MediQueue ekibi sizinle iletişime geçer; bu form bağlayıcı randevu veya kart çekimi değildir.",
+    clinicBody: "Klinik veya hekim kaydı için formu doldurun. Abonelik ücreti bu sitede alınmaz; katılım koşulları e-posta ile netleşir.",
+    successTitle: "Talebiniz alındı",
+    successBody: "MediQueue ekibi iletinizi inceler ve e-posta veya telefon üzerinden dönüş yapar. Canlı klinik ağı bu sitede çalışmaz.",
     name: "Ad Soyad",
     namePlaceholder: "Örn: Ahmet Yılmaz",
     email: "E-posta Adresi",
@@ -81,7 +81,7 @@ export const tr: SiteContent = {
     ],
     solutionsLabel: "Çözümler",
     solutions: [
-      { href: "/clinics", label: "Klinikler İçin", desc: "Sıfır riskli dönüşüm & hasta yönetimi" },
+      { href: "/clinics", label: "Klinikler İçin", desc: "Uluslararası talep ve panel önizlemesi" },
       { href: "/patients", label: "Hastalar İçin", desc: "Şeffaf klinik kıyaslama & doğrudan hekim" },
       { href: "/doctors", label: "Doktorlar İçin", desc: "Bugünün programı & günlük akış yönetimi" },
     ],
@@ -102,7 +102,7 @@ export const tr: SiteContent = {
     eyebrow: "İletişim",
     title: "İletişim Bilgilerinizi Bırakın, Sizinle İletişime Geçelim",
     intro:
-      "İster tedavi arayan bir hasta, ister platforma katılmak isteyen bir klinik veya doktor olun — formu doldurun, ekibimiz mesai saatlerinde size dönüş yapsın.",
+      "Hasta, klinik veya hekim kaydı için formu doldurun. MediQueue ekibi mesai saatlerinde dönüş yapar. Canlı ağ bu sitede çalışmaz.",
     patientTab: "Hasta / Tedavi İletişimi",
     clinicTab: "Klinik & Hekim İletişimi",
     name: "Ad Soyad",
@@ -134,12 +134,12 @@ export const tr: SiteContent = {
   },
   home: {
     platformEyebrow:
-      "Uluslararası sağlık turizminde şeffaf, aracısız pazar yeri",
+      "MEDIQUEUE — resmi site · şeffaf, aracısız sağlık turizmi",
     audiencePatient: "Hasta",
     audienceClinic: "Klinik",
     patient: {
-      headline: "Şeffaflığa",
-      headlineAccent: "emanet edin.",
+      headline: "MEDIQUEUE",
+      headlineAccent: "şeffaflığa emanet edin.",
       subcopy:
         "Akredite klinikleri yan yana kıyaslayın, doğrudan yazışın, ön ödeme yapmadan talep gönderin. Karar sizde — süreç görünür.",
       primaryCta: "Klinikleri Keşfedin",
@@ -147,8 +147,8 @@ export const tr: SiteContent = {
       previewCaption: "Canlı Demo — Hasta Uygulaması & Klinik Kıyaslama Ekranı",
     },
     clinic: {
-      headline: "Gelen hasta",
-      headlineAccent: "için ödeyin.",
+      headline: "MEDIQUEUE",
+      headlineAccent: "gelen hasta için ödeyin.",
       subcopy:
         "Reklam bütçesi eritmeyin. Yalnızca panelinize düşen gerçek talep ve fiilen gelen hasta için ücretlendirilirsiniz — abonelik yok.",
       primaryCta: "Kliniğinizi Katın",
@@ -196,17 +196,17 @@ export const tr: SiteContent = {
       },
     ],
     trust: [
-      { label: "Doğrudan İletişim", detail: "Aracı yok, gizli komisyon yok" },
-      { label: "Akredite Klinikler", detail: "JCI ve uluslararası sertifikalı sağlık kuruluşları" },
-      { label: "Şeffaf Fiyatlandırma", detail: "Sürpriz ücret yok, net teklifler" },
-      { label: "Hasta Mahremiyeti", detail: "Uçtan uca şifreli ve güvenli iletişim" },
+      { label: "Doğrudan İletişim", detail: "Aracı komisyonu eklemeyen model" },
+      { label: "Akredite Klinikler", detail: "Katılımda JCI veya eşdeğer belge istenir" },
+      { label: "Şeffaf Fiyatlandırma", detail: "Paket alanları örnek kartlarda gösterilir" },
+      { label: "Hasta Mahremiyeti", detail: "Form verisi satılmaz; HTTPS ile iletilir" },
     ],
     trustStripLabel: "Güven ve Şeffaflık",
     globalReach: {
       eyebrow: "Klinik panelinizden bir önizleme",
       title: "Dünyanın Dört Bir Yanından Hastalar",
       subtitle:
-        "Kliniğiniz MediQueue'ye katıldığında, hangi ülkelerden hasta talebi aldığınızı panelinizde anlık olarak görürsünüz.",
+        "Kliniğiniz MediQueue’ye katıldığında talep ülkeleri panelde listelenmek üzere tasarlanır. Aşağıdaki küre örnek veridir.",
       panelTitle: "Hastalarınızın Geldiği Ülkeler",
       panelSubtitle:
         "{patients} uluslararası hasta, {countries} farklı ülkeden başvurdu.",
@@ -229,7 +229,7 @@ export const tr: SiteContent = {
     finalPatientBody:
       "Klinikleri kıyaslayın, doğrudan yazışın, ön ödeme olmadan talep gönderin.",
     finalPatientCta: "Klinikleri Keşfedin",
-    finalClinicTitle: "Uluslararası hastaları sıfır riskle karşılayın",
+    finalClinicTitle: "Uluslararası hastalar, ajans retainer’ı olmadan",
     finalClinicBody:
       "Yalnızca gelen ve tedavisi onaylanan hasta için ödeyin. Panel aboneliği yok.",
     finalClinicCta: "Kliniğinizi Ekleyin",
@@ -239,7 +239,7 @@ export const tr: SiteContent = {
     heroTag:
       "Reklamlara Servet Ödemeyi Bırakın. Sadece Dönüşen Hasta İçin Ödeyin.",
     heroSub:
-      "Tıklamalara veya umutlara değil, gerçek sonuçlara yatırım yapın. MEDIQUEUE ile uluslararası sağlık turizminde sıfır risk, yüksek dönüşüm. Ön ödeme yok, panel aboneliği yok.",
+      "Ajans retainer’ı ve belirsiz tıklama bütçesi yerine, talep formu ve panel modeliyle uluslararası hastaya açılın. Bu sitede peşin abonelik tahsilatı yoktur.",
     primaryCta: "Kliniğinizi Ekleyin",
     secondaryCta: "Sistem Nasıl Çalışır?",
     requestLabel: "Yeni Randevu Talebi",
@@ -250,18 +250,18 @@ export const tr: SiteContent = {
     metricCaption: "Canlı Demo — Klinik Yönetim Paneli & Randevu Talepleri Ekranı",
     panelLabel: "Klinik paneli",
     compareEyebrow: "Geleneksel Model vs. MediQueue",
-    compareTitle: "Reklam Riski Yok. Yalnızca Gelen Hasta İçin Ödeyin.",
+    compareTitle: "Ajans retainer’ı yok. Ücret klinikle netleşir.",
     compareBeforeLabel: "Geleneksel Yöntemler",
-    compareAfterLabel: "Sıfır Riskli Model",
+    compareAfterLabel: "Hedeflenen model",
     compareCriteriaLabel: "Kriter",
     compareIntro:
-      "Aylık sabit ajans ücretleri veya sonucu garanti edilmeyen dijital reklam harcamaları yerine; dil, bütçe ve tedavi ihtiyacı doğrulanmış hastalarla sıfır riskle büyüyün.",
+      "Sabit ajans ücreti veya sonucu garanti edilmeyen reklama alternatif olarak; dil, bütçe ve tedavi notuyla gelen talepleri panelde görmek üzere tasarlandı.",
     compareBeforeTitle: "Geleneksel Sağlık Turizmi Yöntemleri",
     compareBeforeFoot:
       "Harcanan bütçenin dönüşüm garantisi yoktur; risk kliniğe aittir.",
-    compareRecommended: "Tavsiye Edilen Güvenli Model",
-    compareAfterTitle: "MediQueue Güvenceli Pazar Yeri",
-    compareAfterFoot: "Sıfır abonelik ücreti — Yalnızca gelen hasta için ödersiniz.",
+    compareRecommended: "Tavsiye edilen şeffaf model",
+    compareAfterTitle: "MediQueue pazar yeri modeli",
+    compareAfterFoot: "Bu sitede abonelik tahsilatı yok — ticari koşullar yazılı netleşir.",
     compareRows: [
       {
         title: "Pazarlama Bütçesi",
@@ -281,7 +281,7 @@ export const tr: SiteContent = {
         before:
           "Danışmanlık ve teklif sürecine harcanan zaman; hasta caydığında bütçe boşa gider",
         after:
-          "Ödeme yalnızca hasta kliniğe ulaştığında alınır — cayma ve iptal riski MediQueue'dedir",
+          "Ödeme, tedavi ve cayma koşulları klinikle yazılı olarak netleşir — MediQueue bu sitede kart çekmez ve cayma sigortası satmaz",
         highlight: true,
       },
       {
@@ -296,69 +296,69 @@ export const tr: SiteContent = {
     roadmapIntro:
       "MediQueue'ye katıldıktan sonra süreç adım adım nasıl işler — kliniğin yaptığı minimum, platformun üstlendiği maksimum.",
     roadmapClinicLabel: "Kliniğin Rolü",
-    roadmapMqLabel: "MEDIQUEUE Güvencesi",
+    roadmapMqLabel: "MEDIQUEUE tarafı",
     roadmapSteps: [
       {
         title: "Katılım & Profil",
         clinic:
-          "Akreditasyon belgelerinizi yükleyin, tıbbi uzmanlık alanlarınızı ve fiyat aralıklarınızı tanımlayın.",
+          "Akreditasyon belgelerini yükleyin, uzmanlık ve fiyat aralıklarını tanımlayın.",
         mediQueue:
-          "Çok dilli profil optimizasyonu, kurum doğrulaması ve pazarlama sunumu tamamen ücretsiz hazırlanır.",
+          "Çok dilli profil sunumu ve belge kontrol süreci ücretsiz tasarlanır.",
         previewHint:
-          "Akreditasyon belgeleri dijital panelden yüklenir; onay durumu anlık takip edilir.",
+          "Belgeler panele yüklenir; onay durumu örnek ekranda izlenir.",
       },
       {
         title: "Filtrelenmiş Hasta Talepleri",
         clinic:
-          "Bütçesi, dili ve tedavi ihtiyacı doğrulanmış hazır hasta başvurularını panelinizde inceleyin.",
+          "Bütçe, dil ve tedavi notuyla gelen başvuruları panelde inceleyin.",
         mediQueue:
-          "Otomatik talep doğrulama ve spam filtreleme ile yalnızca gerçek hastalar kliniğinize ulaştırılır.",
+          "Talep alanları yapılandırılır; spam ve gerçek hasta ayrımı ürün hedefidir, bu sitede canlı tarama yoktur.",
         previewHint:
-          "Nitelikli uluslararası hasta talepleri doğrudan klinik panelinize iletilir.",
+          "Uluslararası talep kartları doğrudan klinik paneli önizlemesinde gösterilir.",
       },
       {
         title: "Birebir Görüşme & Teklif",
         clinic:
-          "Platform üzerinden hastayla doğrudan görüşün, kişiselleştirilmiş tedavi planınızı sunun.",
+          "Platform üzerinden hastayla doğrudan yazışmayı hedefleriz; teklifi klinik verir.",
         mediQueue:
-          "Çift yönlü anlık çeviri ve güvenli iletişim altyapısı sayesinde aracı olmadan süreci yönetin.",
+          "Mesajlaşma HTTPS ile tasarlanır. Çeviri satırı bu sitede demo metnidir.",
         previewHint:
-          "Klinik hekimleri ve hastalar çok dilli mesajlaşma ile doğrudan iletişim kurar.",
+          "Hekim ve hasta yazışması çok dilli önizlemede gösterilir.",
       },
       {
         title: "Tedavi & Hakediş",
         clinic:
-          "Hastayı karşılayın ve tedaviyi gerçekleştirin; hasta fiilen gelene kadar sıfır maliyet.",
+          "Hastayı karşılayıp tedaviyi klinik yürütür. Peşin ajans ücreti bu sitede alınmaz.",
         mediQueue:
-          "Hizmet bedeli yalnızca gerçekleşen tedavi üzerinden kesilir; cayma ve kayıp riski MediQueue güvencesindedir.",
+          "Ticari model: platform bedeli yazılı sözleşmede netleşir. Cayma sigortası veya kart tahsilatı bu sitede yoktur.",
         previewHint:
-          "Tedavi fiilen başladığında ödeme alınır; öncesinde peşin maliyet riski yoktur.",
+          "Ödeme ve iptal klinikle kararlaşır; MediQueue bu formdan çekim yapmaz.",
       },
     ],
-    performanceTitle: "Bu ayki performans",
+    performanceTitle: "Örnek ay görünümü (demo)",
     metrics: [
       {
-        label: "Aktif Hastalar",
+        label: "Aktif hastalar (örnek)",
         value: "34",
-        hint: "Tedavi sürecindeki uluslararası hastalar",
+        hint: "Demo rakam — canlı panel verisi değil",
       },
       {
-        label: "Bekleyen Teklifler",
+        label: "Bekleyen teklifler (örnek)",
         value: "8",
-        hint: "Yanıt bekleyen yapılandırılmış teklifler",
+        hint: "Örnek liste",
       },
       {
-        label: "Aylık Beklenen Gelir",
+        label: "Aylık projeksiyon (örnek)",
         value: "₺186k",
-        hint: "Onaylı taleplerden projeksiyon",
+        hint: "Senaryo rakamı, gelir vaadi değil",
       },
     ],
     analytics: {
-      eyebrow: "Hasta Analitiği",
-      title: "Hastalarınızın Nereden Geldiğini Görün",
+      eyebrow: "Hasta analitiği (önizleme)",
+      title: "Talep ülkeleri panelde nasıl görünür",
       body:
-        "Hangi ülkelerden ne kadar talep aldığınızı anlık küre haritasından takip edin; pazarlama ve kapasite kararlarınızı canlı veriyle alın.",
-      panelTitle: "Hastalarınızın Geldiği Ülkeler",
+        "Küre, katılan kliniklerin ülke kırılımını göstermek üzere tasarlanmıştır. Aşağıdaki sayılar örnek veridir.",
+      panelTitle: "Hastaların geldiği ülkeler",
       panelSubtitle:
         "{patients} uluslararası hasta, {countries} farklı ülkeden başvurdu.",
       demoCaption: "Örnek klinik paneli görünümü · demo veri",
@@ -368,20 +368,20 @@ export const tr: SiteContent = {
         "Ülke kırılımı, ilk uluslararası talepleriniz geldiğinde burada listelenecek.",
       highlights: [
         {
-          title: "Ülke Bazlı Dağılım",
-          body: "Pazar taleplerini küre haritasında anlık izleyin.",
+          title: "Ülke bazlı dağılım",
+          body: "Harita örnek senaryoyu gösterir.",
         },
         {
-          title: "Trend Takibi",
-          body: "Ülke bazında dönemsel değişimi kolayca görün.",
+          title: "Trend takibi",
+          body: "Canlı üründe dönemsel değişim hedeflenir.",
         },
         {
-          title: "Otomatik Veri",
-          body: "Manuel raporlama gerekmeden anlık güncellenir.",
+          title: "Otomatik veri",
+          body: "Bu sitedeki rakamlar senkron canlı feed değildir.",
         },
       ],
     },
-    finalTitle: "Sıfır Risk. Sınırsız Potansiyel.",
+    finalTitle: "Ajans retainer’ı olmadan uluslararası görünürlük.",
     finalBody:
       "Uluslararası hastalar kliniğinizi arıyor. Onları karşılamaya hazır mısınız?",
     finalCta: "Hemen Başlayın",
@@ -390,7 +390,7 @@ export const tr: SiteContent = {
     seoTitle: "Hastalar için",
     heroTag: "Sağlığınızı Tesadüflere Değil. Şeffaflığa Emanet Edin.",
     heroSub:
-      "Aracı kurumların gizli komisyonları, belirsiz fiyatlar ve şeffaf olmayan süreçler geride kaldı. MEDIQUEUE; dünyanın dört bir yanındaki akredite klinikleri, gerçek referansları ve doğrudan iletişim imkanını tek bir platformda önünüze seriyor. Kendi tedavi yolculuğunuzun mimarı olun.",
+      "Aracı kurumların gizli komisyonları ve belirsiz fiyatlar geride kalsın. MEDIQUEUE; belgeleyen klinikleri kıyaslamak ve doğrudan yazışmak için tasarlanmış resmi sitedir. Bu sitedeki listeler pazarlama önizlemesidir.",
     primaryCta: "Klinikleri Keşfedin",
     secondaryCta: "Neden MEDIQUEUE?",
     caption: "Canlı Demo — Hasta Uygulaması & Klinik Kıyaslama Ekranı",
@@ -461,7 +461,7 @@ export const tr: SiteContent = {
       },
       {
         title: "Tedavi & İyileşme Takibi",
-        body: "Seçtiğiniz kliniğe seyahat edin. Tedaviniz süresince ve eve döndükten sonra dijital asistanınız takipte kalır.",
+        body: "Seçtiğiniz kliniğe seyahat edin. İyileşme takibi klinikle planlanır; bu sitede canlı asistan paneli yoktur.",
       },
     ],
     discoverPrivacyNote:
@@ -601,23 +601,23 @@ export const tr: SiteContent = {
         title: "Belge Doğrulama",
         doctor: "Hekim lisansınızı ve uzmanlık sertifikalarınızı dijital panele yüklersiniz.",
         mediQueue:
-          "Hızlı evrak denetimi, JCI Akredite Hekim rozeti onayı ve güvenli profil statüsü tanımlaması.",
+          "Hızlı evrak incelemesi ve rozet durumu — örnek süreç, anlık sicil taraması değil.",
       },
       {
         title: "Müsaitlik & Takvim",
         doctor: "Haftalık müsaitlik saatlerinizi ve randevu aralıklarınızı panelde belirlersiniz.",
         mediQueue:
-          "Otomatik çakışma engelleme, zaman dilimi (timezone) çevirisi ve randevu hatırlatmaları.",
+          "Çakışma kontrolü ve saat dilimi tasarımı; hatırlatmalar ürün hedefidir.",
       },
       {
         title: "Hasta Kabulü & İletişim",
         doctor: "Panele düşen talepleri incelersiniz. Çeviri satırı demo önizlemedir.",
         mediQueue:
-          "Birebir çift dilli mesajlaşma altyapısı, talep takibi ve randevu onay sistemi.",
+          "Çift dilli mesajlaşma modeli; çeviri satırı bu sitede demodur.",
       },
     ],
     trustMessage:
-      "Panelimizdeki her doktor profili doğrulanmış lisans ve uzmanlık bilgisiyle yayındadır.",
+      "Hekim profilleri yüklenen lisans ve uzmanlık belgelerine dayanır. Anlık devlet sicil taraması vaadi yoktur.",
     finalTitle: "Hastalar sizi arıyor.",
     finalBody: "Onlara ulaşmaya hazır mısınız?",
     finalCta: "Doktor Profilimi Oluştur",
@@ -627,7 +627,7 @@ export const tr: SiteContent = {
     eyebrow: "Şeffaf Platform Süreci",
     title: "İlk Aramadan Tedaviye: Şeffaf Süreç Nasıl İşler?",
     intro:
-      "Hastalar için ücretsiz kıyaslama ve doğrudan talep; klinikler için sıfır reklam riski. MEDIQUEUE ile sağlık seyahatinde tüm süreç şeffaf, güvenli ve kontrolünüz altında.",
+      "Hastalar için bu siteden ücretsiz kıyaslama ve bağlayıcı olmayan talep; klinikler için peşin ajans ücreti yok. Canlı randevu ve ödeme burada çalışmaz.",
     steps: [
       {
         title: "Keşfedin & Kıyaslayın",
@@ -639,15 +639,15 @@ export const tr: SiteContent = {
       },
       {
         title: "Doğrudan İletişim & Tedavi",
-        body: "Otomatik çevirili mesajlaşma ile hekiminizle birebir görüşün. Tedavinizi kararlaştırıp ödemeyi kliniğe vardığınızda yapın.",
+        body: "Klinik hekimleriyle doğrudan yazışmayı hedefleriz. Otomatik çeviri bu sitede demo metnidir. Ödeme klinikle kararlaşır.",
       },
     ],
-    techTitle: "Şeffaf Eşleşme & Akıllı Filtreleme Mekanizması",
+    techTitle: "Şeffaf karşılaştırma ve kural tabanlı filtreleme",
     techBody:
-      "Karmaşık aracı komisyonları ve kapalı kapılar arkasında dönen pazarlıklar yok. MEDIQUEUE akıllı filtreleme altyapısı, hastanın bütçe, dil ve tedavi ihtiyacını doğrudan en uygun akredite kliniğin masasına ulaştırır.",
+      "Aracı komisyonu eklemeyen bir model. Dil, bütçe ve tedavi notuna göre talepler yapılandırılır — kara kutu öneri motoru vaadi değil.",
     pipeline: [
       { title: "Kriter & İhtiyaç Filtresi", body: "Dil tercihi, tedavi türü ve bütçe aralığı doğrulanan hasta talepleri filtrelenir." },
-      { title: "Akredite Klinik Eşleşmesi", body: "JCI ve Ulusal Sağlık Turizmi lisanslı klinikler şeffafça sıralanır ve sunulur." },
+      { title: "Akredite klinik listesi", body: "JCI veya eşdeğer belge sunan klinikler şeffaf sıralanmak üzere tasarlanır." },
       { title: "Doğrudan Hekim İletişimi", body: "Aracı olmadan doğrudan klinik hekimiyle mesajlaşın, net fiyat teklifleri toplayın." },
     ],
     faqEyebrow: "Sıkça Sorulan Sorular",
@@ -660,11 +660,11 @@ export const tr: SiteContent = {
       },
       {
         q: "Platformdaki klinikler nasıl denetleniyor?",
-        a: "Yalnızca JCI (Joint Commission International) akreditasyonuna sahip veya T.C. Sağlık Bakanlığı onaylı Uluslararası Sağlık Turizmi Yetki Belgesi bulunan akredite sağlık kuruluşları kabul edilir.",
+        a: "Katılan klinikten JCI (veya eşdeğer) ve uluslararası sağlık turizmi belgesi isteriz. Bu, her başvurunun devlet sicilinde anlık tarandığı anlamına gelmez.",
       },
       {
         q: "Klinikler için ödeme ve komisyon modeli nasıl çalışıyor?",
-        a: "MediQueue'da gizli komisyon veya hasta başı aracı payı yoktur. Klinikler yalnızca onaylanan randevu talepleri ve şeffaf platform modelimiz üzerinden güvenle işlem yapar.",
+        a: "Gizli acenta komisyonu modeli yoktur. Platform bedeli varsa yazılı sözleşmede belirtilir. Bu sitede kart çekimi yoktur.",
       },
       {
         q: "Hasta verilerimin ve tıbbi belgelerimin gizliliği nasıl korunuyor?",
@@ -704,7 +704,7 @@ export const tr: SiteContent = {
       "Sağlık turizminde aracı ve gizli komisyon modelini tamamen tarihe gömmek. Dünyanın dört bir yanındaki hastaların akredite kliniklerle kendi dillerinde, doğrudan, şeffaf ve güvenli bir şekilde buluşmasını sağlamak.",
     visionLabel: "Vizyonumuz",
     visionBody:
-      "Klinikleri sonucu garanti edilmeyen reklam harcamalarından kurtarmak; yalnızca tedaviye hazır hastalarla buluşturan risksiz bir büyüme altyapısı sunarak sağlık turizminde küresel şeffaflık standardı olmak.",
+      "Klinikleri belirsiz reklam harcamasından kurtarmak; tedaviye hazır hastalarla şeffaf bir pazar yeri standardı kurmak.",
     valuesEyebrow: "Değerlerimiz ve Prensiplerimiz",
     valuesTitle: "MediQueue Standartlarını Şekillendiren 4 Temel İlke",
     values: [
@@ -840,17 +840,24 @@ export const tr: SiteContent = {
     privacyNote: "Hasta gizliliği ve veri güvenliği ilk ilkemizdir.",
     medicalDisclaimer: "MediQueue bir pazar yeri platformudur. Sunulan içerikler bilgilendirme amaçlıdır ve tıbbi teşhis/tedavi tavsiyesi yerine geçmez.",
   },
+  cookie: {
+    message:
+      "Ziyaret istatistiği için Google Analytics yalnızca siz kabul ederseniz yüklenir. Reddederseniz site aynı şekilde çalışır.",
+    accept: "Kabul et",
+    reject: "Reddet",
+    privacy: "Gizlilik politikası",
+  },
   legal: {
     updatedLabel: "Son Güncelleme",
     backHome: "Ana Sayfa'ya Dön",
     privacy: {
       title: "Gizlilik Politikası",
-      intro: "MediQueue olarak hasta verilerinin gizliliğini ve tıbbi bilgilerin güvenliğini en üst seviyede tutmayı temel ilke edindik.",
-      updated: "14 Eylül 2026",
+      intro: "Bu metin getmediqueue.com pazarlama sitesindeki formlar ve çerezler içindir. Canlı klinik yazılımı burada çalışmaz.",
+      updated: "15 Eylül 2026",
       sections: [
         {
           heading: "1. Veri Toplama ve Kullanımı",
-          body: "MediQueue üzerinden ilettiğiniz tedavi talepleri ve medikal formlar, yalnızca onay verdiğiniz akredite klinikler ve doktorlar ile şifreli kanallar üzerinden paylaşılır. Kişisel iletişim bilgileriniz üçüncü taraflara pazarlama amacıyla satılmaz.",
+          body: "İletişim formundaki ad, e-posta, telefon ve mesaj MediQueue ekibine iletilir. Verileriniz pazarlama listelerine satılmaz. Klinik paylaşımı, sizin seçiminiz ve ekip onayı sonrası e-posta ile olur; bu sitede uçtan uca şifreli klinik yazılımı çalışmaz.",
         },
         {
           heading: "2. Kişisel veriler",
@@ -858,7 +865,7 @@ export const tr: SiteContent = {
         },
         {
           heading: "3. Çerezler ve Analitik",
-          body: "Platform kullanıcı deneyimini iyileştirmek için anonim performans çerezleri kullanmaktadır. Tarayıcı ayarlarınızdan çerez tercihlerinizi dilediğiniz zaman değiştirebilirsiniz.",
+          body: "Google Analytics yalnızca çerez çubuğunda kabul ederseniz yüklenir. Reddederseniz analitik betiği çalışmaz. Tercihiniz bir yıl saklanır.",
         },
         {
           heading: "4. Veri sorumlusu ve iletişim",
@@ -876,12 +883,12 @@ export const tr: SiteContent = {
     },
     terms: {
       title: "Kullanım Şartları & Şeffaflık Sözleşmesi",
-      intro: "MediQueue pazar yeri platformunu kullanan hastalar, klinikler ve hekimler için geçerli kullanım koşulları.",
-      updated: "14 Eylül 2026",
+      intro: "These terms cover the getmediqueue.com marketing site. Live clinic software, booking, and payments do not run here.",
+      updated: "15 Eylül 2026",
       sections: [
         {
           heading: "1. Hizmet Kapsamı ve Pazar Yeri Modeli",
-          body: "MediQueue, uluslararası hastalar ile Sağlık Bakanlığı ve JCI akreditasyonuna sahip sağlık kuruluşlarını aracısız buluşturan şeffaf bir pazar yeridir. Platform komisyoncu veya acenta gibi fiyatların üstüne ek ücret eklemez.",
+          body: "MEDIQUEUE, uluslararası hastalar ile belge sunan klinikleri aracısız buluşturmak üzere tasarlanmış bir pazar yeridir. Bu sitede acenta gibi fiyat üzerine komisyon eklenmez ve kart çekilmez. Katılım kriteri JCI veya eşdeğer belgedir; her klinik devlet onaylıdır iddiası yoktur.",
         },
         {
           heading: "2. Kullanıcı Yükümlülükleri",
@@ -896,7 +903,7 @@ export const tr: SiteContent = {
     disclaimer: {
       title: "Tıbbi Sorumluluk Reddi (Medical Disclaimer)",
       intro: "MediQueue platformunda yer alan içerikler ve bilgilendirmeler hakkında yasal uyarı.",
-      updated: "14 Eylül 2026",
+      updated: "15 Eylül 2026",
       sections: [
         {
           heading: "1. Doğrudan Tıbbi Hizmet Verilmeyişi",

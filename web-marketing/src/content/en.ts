@@ -4,19 +4,19 @@ import { enScreens } from "./screens";
 
 export const en: SiteContent = {
   seo: {
-    title: "MEDIQUEUE — Transparent health travel, no middleman",
+    title: "MEDIQUEUE — Official site | Transparent health travel, no middleman",
     description:
-      "Compare accredited clinics, message directly, and send a request with no upfront payment. Clinics pay only when a patient arrives — no subscription.",
+      "Official MEDIQUEUE website. Compare accredited clinics, message directly, and leave a request with no upfront payment on this site. Live booking and clinic software do not run here.",
     keywords: [
+      "MEDIQUEUE",
       "MediQueue",
-      "Health Tourism",
-      "Medical Travel Marketplace",
-      "JCI Accredited Clinics",
-      "Hair Transplant Cost",
-      "Rhinoplasty Surgery",
-      "Doctor Appointments",
-      "International Patients",
-      "Direct Clinic Marketplace",
+      "MEDI QUEUE",
+      "MediQueue official",
+      "health tourism",
+      "medical travel marketplace",
+      "JCI clinics",
+      "international patients",
+      "direct clinic marketplace",
     ],
   },
   notFound: {
@@ -30,10 +30,10 @@ export const en: SiteContent = {
     clinicTab: "Clinic / Doctor Registration",
     patientTitle: "Create Free Healthcare Request",
     clinicTitle: "Add Your Clinic to MediQueue",
-    patientBody: "Enter your request details, and accredited clinics will provide quotes with zero upfront cost.",
-    clinicBody: "No subscription fee. Only act on verified patient leads delivered directly to your portal.",
-    successTitle: "Request Received Successfully!",
-    successBody: "Our team and partner clinics will review your details and contact you as soon as possible.",
+    patientBody: "Enter your request. The MediQueue team will follow up. This form is not a booking or a card charge.",
+    clinicBody: "Register your clinic or practice. There is no subscription checkout on this site; onboarding is confirmed by email.",
+    successTitle: "Request received",
+    successBody: "The MediQueue team will review your message and reply by email or phone. A live clinic network does not run on this marketing site.",
     name: "Full Name",
     namePlaceholder: "e.g. John Doe",
     email: "Email Address",
@@ -81,7 +81,7 @@ export const en: SiteContent = {
     ],
     solutionsLabel: "Solutions",
     solutions: [
-      { href: "/clinics", label: "For Clinics", desc: "Risk-free patient lead management" },
+      { href: "/clinics", label: "For Clinics", desc: "International demand and panel preview" },
       { href: "/patients", label: "For Patients", desc: "Transparent clinic comparison & direct chat" },
       { href: "/doctors", label: "For Doctors", desc: "Daily schedule & single-screen workflow" },
     ],
@@ -102,7 +102,7 @@ export const en: SiteContent = {
     eyebrow: "Get in touch",
     title: "Leave Your Contact Details, We'll Reach Out",
     intro:
-      "Whether you are a patient seeking treatment or a clinic/doctor looking to join our network — fill in your details and our team will respond during business hours.",
+      "Whether you are a patient or a clinic/doctor exploring MediQueue — leave your details and our team will reply during business hours. A live network does not run on this site.",
     patientTab: "Patient & Care Inquiry",
     clinicTab: "Clinic & Doctor Onboarding",
     name: "Full Name",
@@ -134,12 +134,12 @@ export const en: SiteContent = {
   },
   home: {
     platformEyebrow:
-      "A transparent marketplace for international health travel",
+      "MEDIQUEUE — official site · transparent health travel, no middleman",
     audiencePatient: "Patient",
     audienceClinic: "Clinic",
     patient: {
-      headline: "Entrust your care",
-      headlineAccent: "to transparency.",
+      headline: "MEDIQUEUE",
+      headlineAccent: "transparent care, no middleman.",
       subcopy:
         "Compare accredited clinics side by side, message directly, and send a request with no upfront payment. You decide — the process stays visible.",
       primaryCta: "Explore Clinics",
@@ -147,10 +147,10 @@ export const en: SiteContent = {
       previewCaption: "Live Demo — Patient App & Clinic Comparison Screen",
     },
     clinic: {
-      headline: "Pay for the patient",
-      headlineAccent: "who shows up.",
+      headline: "MEDIQUEUE",
+      headlineAccent: "pay when the patient arrives.",
       subcopy:
-        "Stop burning ad budget. You are charged only when a real request lands in your panel and the patient arrives — no subscription.",
+        "Skip the agency retainer on this site. Commercial terms are confirmed in writing. No subscription checkout here.",
       primaryCta: "Join as a Clinic",
       secondaryCta: "See the Process",
       previewCaption: "Live Demo — Clinic Management Panel & Appointment Requests",
@@ -196,17 +196,17 @@ export const en: SiteContent = {
       },
     ],
     trust: [
-      { label: "Direct Communication", detail: "No middlemen, zero hidden fees" },
-      { label: "Accredited Clinics", detail: "JCI and international certified healthcare institutions" },
-      { label: "Transparent Pricing", detail: "Clear quotes, no unexpected charges" },
-      { label: "Patient Privacy", detail: "End-to-end encrypted and secure communication" },
+      { label: "Direct Communication", detail: "No agency-commission markup model" },
+      { label: "Accredited Clinics", detail: "JCI or equivalent evidence is requested at join" },
+      { label: "Transparent Pricing", detail: "Package fields shown on sample cards" },
+      { label: "Patient Privacy", detail: "Form data is not sold; submitted over HTTPS" },
     ],
     trustStripLabel: "Trust & Transparency",
     globalReach: {
       eyebrow: "A preview from your clinic panel",
       title: "Patients from every corner of the world",
       subtitle:
-        "When your clinic joins MediQueue, you see in your panel — in real time — which countries patient requests come from.",
+        "When your clinic joins MediQueue, request countries are designed to appear in the panel. The globe below is sample data.",
       panelTitle: "Countries your patients come from",
       panelSubtitle:
         "{patients} international patients applied from {countries} different countries.",
@@ -230,7 +230,7 @@ export const en: SiteContent = {
     finalPatientBody:
       "Compare clinics, message directly, send a request with no upfront payment.",
     finalPatientCta: "Explore clinics",
-    finalClinicTitle: "Welcome international patients at zero risk",
+    finalClinicTitle: "International patients, without an agency retainer",
     finalClinicBody:
       "Pay only when the patient arrives and treatment is confirmed. No panel subscription.",
     finalClinicCta: "Add your clinic",
@@ -240,7 +240,7 @@ export const en: SiteContent = {
     heroTag:
       "Stop pouring a fortune into ads. Pay only for the patient who converts.",
     heroSub:
-      "Invest in outcomes, not clicks or hope. Zero risk, high conversion in international health travel. No upfront fee. No panel subscription.",
+      "Instead of retainers and unverified ad spend, join a request-and-panel model for international patients. This site does not collect a subscription fee.",
     primaryCta: "Add Your Clinic",
     secondaryCta: "How the system works",
     requestLabel: "New appointment request",
@@ -251,18 +251,18 @@ export const en: SiteContent = {
     metricCaption: "Live Demo — Clinic Management Panel & Appointment Requests",
     panelLabel: "Clinic panel",
     compareEyebrow: "Traditional vs. MediQueue",
-    compareTitle: "Zero Ad Risk. Pay Only for Patients Who Show Up.",
+    compareTitle: "No agency retainer. Fees are agreed with the clinic.",
     compareBeforeLabel: "Traditional Methods",
-    compareAfterLabel: "Risk-Free Model",
+    compareAfterLabel: "Intended model",
     compareCriteriaLabel: "Criterion",
     compareIntro:
-      "Scale with zero financial risk by connecting with patients verified by language, budget, and treatment needs, instead of high agency retainers.",
+      "Built so clinics can see requests tagged with language, budget, and treatment — instead of paying a fixed agency retainer or ads with no outcome guarantee.",
     compareBeforeTitle: "Traditional Health Tourism Agencies",
     compareBeforeFoot:
       "Ad budgets carry zero conversion guarantee; financial risk rests on the clinic.",
-    compareRecommended: "Recommended Risk-Free Model",
-    compareAfterTitle: "MediQueue Risk-Free Marketplace",
-    compareAfterFoot: "Zero subscription fees — You pay only when a patient arrives.",
+    compareRecommended: "Recommended transparent model",
+    compareAfterTitle: "MediQueue marketplace model",
+    compareAfterFoot: "No subscription checkout on this site — commercial terms are confirmed in writing.",
     compareRows: [
       {
         title: "Marketing Budget",
@@ -280,7 +280,7 @@ export const en: SiteContent = {
         title: "Drop-off & Risk Management",
         before: "Time and budget spent on consultation and quotes are lost when patients walk away",
         after:
-          "Payment occurs only upon patient arrival — drop-off risk is fully absorbed by MediQueue",
+          "Payment, treatment, and cancellation terms are agreed with the clinic in writing. MediQueue does not charge cards or sell drop-off insurance on this site.",
         highlight: true,
       },
       {
@@ -294,69 +294,69 @@ export const en: SiteContent = {
     roadmapIntro:
       "Step by step after you join MediQueue — minimum effort for the clinic, maximum load carried by the platform.",
     roadmapClinicLabel: "Clinic Role",
-    roadmapMqLabel: "MediQueue Guarantee",
+    roadmapMqLabel: "MediQueue side",
     roadmapSteps: [
       {
-        title: "Free Joining & Profile",
+        title: "Joining & profile",
         clinic:
-          "Upload your accreditation documents and define your medical specialties and pricing ranges.",
+          "Upload accreditation documents and define specialties and price ranges.",
         mediQueue:
-          "Multilingual profile optimization, institution verification, and presentation are prepared at zero cost.",
+          "Multilingual profile presentation and document review are designed at no listing fee on this site.",
         previewHint:
-          "Accreditation documents are uploaded in the digital panel; approval status is tracked in real time.",
+          "Documents are uploaded in the panel preview; approval status is illustrative.",
       },
       {
-        title: "Filtered Patient Leads",
+        title: "Filtered patient requests",
         clinic:
-          "Review qualified patient applications with verified budgets, language, and treatment requirements.",
+          "Review applications tagged with budget, language, and treatment notes.",
         mediQueue:
-          "Automated lead verification and spam filtering ensure only genuine patients reach your clinic.",
+          "Structured request fields are the product. Live spam scanning is not running on this marketing site.",
         previewHint:
-          "Qualified international patient requests are delivered directly to your clinic panel.",
+          "International request cards appear in the clinic-panel preview.",
       },
       {
-        title: "Direct Chat & Quotes",
+        title: "Direct chat & quotes",
         clinic:
-          "Communicate directly with patients on-platform and deliver customized treatment plans.",
+          "The model is unmediated chat; the clinic issues the quote.",
         mediQueue:
-          "Bilingual real-time translation and secure messaging infrastructure power direct communication.",
+          "Messaging is designed to run over HTTPS. Translation lines here are demo copy.",
         previewHint:
-          "Clinic doctors and patients communicate directly through multilingual messaging.",
+          "Doctor–patient chat is shown as a bilingual preview.",
       },
       {
-        title: "Treatment & Settlement",
+        title: "Treatment & settlement",
         clinic:
-          "Welcome the patient and deliver treatment — zero upfront financial risk until patient arrives.",
+          "The clinic delivers care. This site does not collect an agency retainer.",
         mediQueue:
-          "Service fee is collected only on delivered treatment; drop-off risk is fully backed by MediQueue.",
+          "Platform fees, if any, are set in a written agreement. MediQueue does not charge cards or sell drop-off insurance here.",
         previewHint:
-          "Payment is processed when treatment begins; zero upfront risk beforehand.",
+          "Payment and cancellation are agreed with the clinic; this form does not take payment.",
       },
     ],
-    performanceTitle: "This month's performance",
+    performanceTitle: "Sample month (demo)",
     metrics: [
       {
-        label: "Active patients",
+        label: "Active patients (sample)",
         value: "34",
-        hint: "International patients in treatment",
+        hint: "Demo figure — not live panel data",
       },
       {
-        label: "Pending quotes",
+        label: "Pending quotes (sample)",
         value: "8",
-        hint: "Structured offers awaiting response",
+        hint: "Sample list",
       },
       {
-        label: "Expected monthly revenue",
+        label: "Monthly projection (sample)",
         value: "₺186k",
-        hint: "Projection from confirmed requests",
+        hint: "Scenario number, not a revenue promise",
       },
     ],
     analytics: {
-      eyebrow: "Patient Analytics",
-      title: "Know Where Your Patients Come From",
+      eyebrow: "Patient analytics (preview)",
+      title: "How request countries appear in the panel",
       body:
-        "Track demand by country in real time on an interactive globe and make growth decisions backed by live patient data.",
-      panelTitle: "Countries of Origin",
+        "The globe is designed to show country breakdown for joined clinics. The numbers below are sample data.",
+      panelTitle: "Countries of origin",
       panelSubtitle:
         "{patients} international patients requested care from {countries} countries.",
       demoCaption: "Sample clinic panel view · demo data",
@@ -366,20 +366,20 @@ export const en: SiteContent = {
         "Country breakdown will appear here when your first international requests arrive.",
       highlights: [
         {
-          title: "Country Breakdown",
-          body: "Monitor global demand live on an interactive globe.",
+          title: "Country breakdown",
+          body: "The map shows a sample scenario.",
         },
         {
-          title: "Trend Tracking",
-          body: "Spot growth trends across international markets.",
+          title: "Trend tracking",
+          body: "Period-over-period views are a product goal.",
         },
         {
-          title: "Automated Data",
-          body: "Updated instantly from incoming patient requests.",
+          title: "Automated data",
+          body: "Figures on this site are not a live synced feed.",
         },
       ],
     },
-    finalTitle: "Zero risk. Open-ended potential.",
+    finalTitle: "International visibility without an agency retainer.",
     finalBody: "International patients are looking for your clinic. Ready to receive them?",
     finalCta: "Get started",
   },
@@ -387,7 +387,7 @@ export const en: SiteContent = {
     seoTitle: "For patients",
     heroTag: "Entrust your health to transparency, not chance.",
     heroSub:
-      "Hidden agency commissions, opaque prices, and processes you cannot see are over. MEDIQUEUE puts accredited clinics around the world, real references, and direct communication on one platform. Be the architect of your own treatment journey.",
+      "Leave hidden agency commissions and opaque prices behind. MEDIQUEUE is the official site designed so you can compare clinics that submit documents and message them directly. Lists on this site are marketing previews.",
     primaryCta: "Explore clinics",
     secondaryCta: "Why MEDIQUEUE?",
     caption: "Live Demo — Patient App & Clinic Comparison",
@@ -458,7 +458,7 @@ export const en: SiteContent = {
       },
       {
         title: "Treatment & Recovery Follow-up",
-        body: "Travel to your chosen clinic. Your digital assistant stays by your side throughout treatment and recovery.",
+        body: "Travel to your chosen clinic. Recovery follow-up is planned with the clinic; there is no live assistant panel on this site.",
       },
     ],
     discoverPrivacyNote:
@@ -597,23 +597,23 @@ export const en: SiteContent = {
         title: "Credential Verification",
         doctor: "Upload your medical license and specialty certifications to your digital panel.",
         mediQueue:
-          "Fast document verification, JCI Accredited Doctor badge approval, and verified profile status.",
+          "Fast document review and badge status — a sample process, not a live registry scan.",
       },
       {
         title: "Calendar & Schedule",
         doctor: "Set your weekly availability grid and consultation time slots in the panel.",
         mediQueue:
-          "Automated conflict prevention, timezone conversion, and patient appointment reminders.",
+          "Conflict checks and timezone design; reminders are a product goal.",
       },
       {
         title: "Patient Request & Care",
         doctor: "Review incoming patient requests. Translation lines in previews are demo copy.",
         mediQueue:
-          "Bilingual real-time chat infrastructure, request tracking, and appointment confirmation system.",
+          "Bilingual messaging is the model; translation lines on this site are demo copy.",
       },
     ],
     trustMessage:
-      "Every doctor profile on our panel is published with verified license and specialty information.",
+      "Doctor profiles are based on uploaded licenses and specialty documents. That is not instant government-registry verification.",
     finalTitle: "Patients are looking for you.",
     finalBody: "Ready to reach them?",
     finalCta: "Create My Doctor Profile",
@@ -623,7 +623,7 @@ export const en: SiteContent = {
     eyebrow: "Transparent Platform Mechanics",
     title: "From First Search to Care: How the Process Works",
     intro:
-      "Free comparison and direct requests for patients; zero upfront risk for clinics. MEDIQUEUE keeps the entire health travel journey transparent, secure, and under your control.",
+      "Free comparison and a non-binding request on this site for patients; no agency retainer checkout for clinics. Live booking and payments do not run here.",
     steps: [
       {
         title: "Discover & Compare",
@@ -638,12 +638,12 @@ export const en: SiteContent = {
         body: "Consult directly with clinic doctors. Auto-translated messaging on this site is a preview, not a live engine. Pay according to the clinic’s terms.",
       },
     ],
-    techTitle: "Transparent Matching & Smart Filtering Engine",
+    techTitle: "Transparent comparison and rule-based filtering",
     techBody:
-      "No hidden agency commissions or behind-the-scenes markups. MEDIQUEUE's smart filtering engine delivers qualified patient requests based on budget, language, and treatment directly to the right clinic.",
+      "No agency-commission markup model. Requests are structured by language, budget, and treatment notes — not a black-box recommendation engine.",
     pipeline: [
       { title: "Criteria & Need Filter", body: "Patient applications are verified and filtered by language, budget, and medical need." },
-      { title: "Accredited Clinic Match", body: "JCI and officially certified healthcare institutions are listed transparently." },
+      { title: "Accredited clinic list", body: "Clinics that submit JCI or equivalent evidence are designed to appear in a transparent list." },
       { title: "Direct Doctor Communication", body: "Message clinic doctors directly without intermediaries and receive clear quotes." },
     ],
     faqEyebrow: "Frequently Asked Questions",
@@ -656,11 +656,11 @@ export const en: SiteContent = {
       },
       {
         q: "How are clinics verified on the platform?",
-        a: "We only partner with healthcare providers that hold JCI (Joint Commission International) accreditation or official International Health Tourism Certification from health authorities.",
+        a: "Joining clinics are asked for JCI (or equivalent) and an international health-tourism permit. That is not instant government-registry scanning of every application.",
       },
       {
         q: "How does the pricing and clinic fee model work?",
-        a: "There are zero middleman markups or hidden commissions on MediQueue. Clinics operate on a transparent, direct platform model with clear terms.",
+        a: "There is no hidden agency-commission model. If a platform fee applies, it is stated in a written agreement. This site does not charge cards.",
       },
       {
         q: "How is my personal data and medical privacy protected?",
@@ -700,7 +700,7 @@ export const en: SiteContent = {
       "Completely eliminate middleman brokers and hidden commissions from healthcare travel. Enable patients worldwide to connect directly, transparently, and safely with accredited clinics in their native language.",
     visionLabel: "Our Vision",
     visionBody:
-      "Free clinics from ad agencies selling unverified leads; empower them with a risk-free growth engine that wins when treatment-ready patients arrive, setting global transparency as the industry default.",
+      "Free clinics from ad spend with no outcome guarantee; set a transparent marketplace standard that connects treatment-ready patients with clinics that submit documents.",
     valuesEyebrow: "Our Core Principles",
     valuesTitle: "4 Pillars Defining MediQueue Standards",
     values: [
@@ -836,17 +836,24 @@ export const en: SiteContent = {
     privacyNote: "Built with patient privacy as a core principle.",
     medicalDisclaimer: "MediQueue is a healthcare marketplace platform. All content is for informational purposes only and does not constitute professional medical advice.",
   },
+  cookie: {
+    message:
+      "Google Analytics loads only if you accept. If you decline, the site works the same way.",
+    accept: "Accept",
+    reject: "Decline",
+    privacy: "Privacy policy",
+  },
   legal: {
     updatedLabel: "Last Updated",
     backHome: "Back to Home",
     privacy: {
       title: "Privacy Policy",
-      intro: "At MediQueue, protecting patient privacy and medical data confidentiality is our utmost priority.",
-      updated: "September 14, 2026",
+      intro: "This notice covers forms and cookies on the getmediqueue.com marketing site. Live clinic software does not run here.",
+      updated: "September 15, 2026",
       sections: [
         {
           heading: "1. Data Collection & Use",
-          body: "Treatment requests and medical forms submitted through MediQueue are shared strictly with accredited clinics and physicians you explicitly approve, via encrypted protocols. Your personal contact information is never sold to third parties.",
+          body: "Name, email, phone, and message from contact forms go to the MediQueue team. We do not sell your details. Sharing with a clinic happens after your choice and our team follow-up, typically by email. End-to-end encrypted clinic software does not run on this site.",
         },
         {
           heading: "2. Personal data",
@@ -854,7 +861,7 @@ export const en: SiteContent = {
         },
         {
           heading: "3. Cookies & Analytics",
-          body: "The platform utilizes anonymous performance cookies to enhance navigation efficiency. You can manage or disable cookie preferences at any time via your browser settings.",
+          body: "Google Analytics loads only if you accept the cookie bar. If you decline, the analytics script does not run. Your choice is stored for one year.",
         },
         {
           heading: "4. Controller and contact",
@@ -872,12 +879,12 @@ export const en: SiteContent = {
     },
     terms: {
       title: "Terms of Service & Platform Agreement",
-      intro: "Terms and conditions governing the use of MediQueue for patients, accredited clinics, and healthcare specialists.",
-      updated: "September 14, 2026",
+      intro: "These terms cover getmediqueue.com. Live clinic software, booking, and payments do not run here.",
+      updated: "September 15, 2026",
       sections: [
         {
           heading: "1. Scope of Service & Marketplace Model",
-          body: "MediQueue is a transparent marketplace connecting international patients directly with accredited healthcare providers without agent markups or hidden broker fees.",
+          body: "MEDIQUEUE is designed as a marketplace that connects international patients with clinics that submit documents, without an agency markup on this site. Joining criteria include JCI or equivalent evidence — not a claim that every clinic is state-certified.",
         },
         {
           heading: "2. User Obligations",
@@ -892,7 +899,7 @@ export const en: SiteContent = {
     disclaimer: {
       title: "Medical Disclaimer",
       intro: "Important legal notification regarding content and informational materials on MediQueue.",
-      updated: "September 14, 2026",
+      updated: "September 15, 2026",
       sections: [
         {
           heading: "1. No Direct Medical Services",

@@ -7,6 +7,7 @@ import { DocumentTitle } from "@/components/DocumentTitle";
 import { LocaleProvider, useLocale } from "@/lib/locale";
 import { LeadCaptureProvider } from "@/lib/lead-capture";
 import { LeadCaptureModal } from "@/components/modals/LeadCaptureModal";
+import { AnalyticsConsent } from "@/components/AnalyticsConsent";
 import type { Locale } from "@/content";
 
 export function SiteChrome({
@@ -21,6 +22,7 @@ export function SiteChrome({
       <LeadCaptureProvider>
         <ChromeInner>{children}</ChromeInner>
         <LeadCaptureModal />
+        <AnalyticsConsent />
       </LeadCaptureProvider>
     </LocaleProvider>
   );
