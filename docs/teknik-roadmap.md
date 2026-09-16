@@ -74,6 +74,39 @@ Haftada iki kontrol noktası — tek Cuma yetmiyor, Salı günü de kısa bir ar
 | **Eylül** | Doctor mesaj (karar sonrası), belge yükleme, staging — tek tek | Her Cuma: hangi epik açık, hangisi kapandı | Aynı anda 2 epik açmak |
 | **Ekim** | UX polish, mobil geçiş dokümanı, demo prova #1 | Her Cuma: polish listesi daralıyor mu | Yeni dashboard modülü, AI review özeti |
 
+### Flutter native backlog (web-first; native geçişte)
+
+Web’de çentik/Dynamic Island `viewport-fit=cover` + `env(safe-area-inset-*)` ile
+karşılanır. Native kabukta CSS inset yoktur.
+
+- `[P2]` **SafeArea her ekranda:** login, tab kökleri, detay, modal/sheet/drawer,
+  harita, sohbet composer, FAB/toast. Checklist: `docs/flutter-safe-area.md`.
+  AppBar varsa `SafeArea(top: false)`; özel üst bar varsa `top: true`.
+  `SafeArea` + `MediaQuery.padding` çift uygulanmaz. Test: Dynamic Island,
+  çentik, Android cutout, home indicator.
+
+- `[P2]` **HapticFeedback (light / medium / heavy):** web’de API yok (iOS
+  Safari). Native’de yalnızca sonuç anı: randevu oluşturma başarısı,
+  form submit, hata/uyarı, yıkıcı onay. Checklist + plan:
+  `docs/flutter-haptic-feedback.md`. Buton tap’inde değil; scroll/disabled/
+  dialog açılışında yok. WebView diliminde çalma.
+
+- `[P2]` **İzin primer’ı (rationale-first):** web’de native tarayıcı
+  diyaloğundan önce `PermissionPrimer` (kamera/belge, konum, bildirim).
+  Flutter’da `permission_handler.request()` aynı kural: önce neden,
+  sonra OS prompt; splash/login’de istek yok. Checklist:
+  `docs/flutter-permission-primer.md`. Android `shouldShowRequestRationale`
+  primer’ın yerine geçmez.
+
+- `[P2]` **Uygulama ikonu (launcher / splash):** `flutter create` varsayılan
+  ikonu yok. Kaynak `mediqueue-icon.png` (M kiremit). Checklist:
+  `docs/flutter-app-icons.md`. Web favicon/PWA envanteri: `docs/brand-icons.md`.
+
+- **Manuel QA + Playwright:** 19 UX maddesi, hasta arama→randevu, klinik onay,
+  doktor paneli, cihaz matrisi ve e2e yol haritası:
+  `docs/frontend-qa-checklist.md`. AI `pytest --cov` satır kapsamının e2e
+  karşılığı journey kapısıdır; Istanbul %96 hedefi Playwright’a taşınmaz.
+
 ---
 
 ### Kasım–Aralık — Freeze ve Buffer
