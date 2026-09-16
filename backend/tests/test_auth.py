@@ -62,7 +62,7 @@ class TestRegister:
         assert response.status_code == 409
         body = response.json()
         assert body["success"] is False
-        assert body["error"]["code"] == "CONFLICT"
+        assert body["error"]["code"] == "EMAIL_TAKEN"
 
 
 class TestLogin:

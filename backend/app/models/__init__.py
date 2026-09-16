@@ -1,5 +1,6 @@
 from app.models.appointment import Appointment, AppointmentStatus
 from app.models.appointment_message import AppointmentMessage, AppointmentMessageSenderRole
+from app.models.audit_event import AuditEvent
 from app.models.clinic import Clinic
 from app.models.doctor import Doctor
 from app.models.doctor_clinic import DoctorClinic
@@ -12,6 +13,7 @@ __all__ = [
     "AppointmentMessage",
     "AppointmentMessageSenderRole",
     "AppointmentStatus",
+    "AuditEvent",
     "Clinic",
     "Doctor",
     "DoctorClinic",
@@ -20,3 +22,4 @@ __all__ = [
     "User",
     "UserRole",
 ]
+

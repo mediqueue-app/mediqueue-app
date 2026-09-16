@@ -10,7 +10,12 @@ from app.core.config import settings
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 
+UNUSABLE_PASSWORD_PREFIX = "!"
+
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
+    if not hashed_password or hashed_password.startswith(UNUSABLE_PASSWORD_PREFIX):
+        return False
     return pwd_context.verify(plain_password, hashed_password)
 
 

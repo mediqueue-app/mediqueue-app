@@ -30,6 +30,7 @@ class TestValidationErrorFormat:
         assert isinstance(body["error"]["details"], list)
         assert body["error"]["details"][0]["loc"] == ["body", "specialty"]
         assert "input" not in body["error"]["details"][0]
+        assert "msg" not in body["error"]["details"][0]
 
 
 class TestNotFoundErrorFormat:
@@ -47,8 +48,9 @@ class TestNotFoundErrorFormat:
         assert_error_envelope(
             response.json(),
             code="NOT_FOUND",
-            message="Clinic not found",
+            message="Resource not found",
         )
+        assert "Clinic not found" not in response.text
 
 
 class TestDatabaseErrorFormat:
@@ -66,8 +68,9 @@ class TestDatabaseErrorFormat:
         assert_error_envelope(
             response.json(),
             code="DATABASE_ERROR",
-            message="A database error occurred",
+            message="An unexpected error occurred",
         )
+        assert "connection failed" not in response.text
 
 
 class TestUnexpectedExceptionFormat:

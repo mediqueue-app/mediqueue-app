@@ -119,8 +119,8 @@ class TestCreateAppointment:
         assert response.status_code == 409
         body = response.json()
         assert body["success"] is False
-        assert body["error"]["code"] == "CONFLICT"
-        assert "active appointment already exists" in body["error"]["message"]
+        assert body["error"]["code"] == "DUPLICATE_APPOINTMENT"
+        assert body["error"]["message"] == "This action conflicts with the current state"
 
     @patch("app.api.v1.appointments.find_doctor_date_conflict")
     @patch("app.api.v1.appointments.find_duplicate_active_appointment", return_value=None)
@@ -152,7 +152,8 @@ class TestCreateAppointment:
         )
         assert response.status_code == 409
         body = response.json()
-        assert "date-level conflict" in body["error"]["message"]
+        assert body["error"]["code"] == "DOCTOR_DATE_CONFLICT"
+        assert body["error"]["message"] == "This action conflicts with the current state"
 
     @patch("app.api.v1.appointments.find_doctor_date_conflict", return_value=None)
     @patch("app.api.v1.appointments.find_duplicate_active_appointment", return_value=None)

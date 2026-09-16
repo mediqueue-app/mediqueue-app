@@ -66,8 +66,6 @@ VALIDATION_ERROR_EXAMPLE = {
         {
             "type": "string_too_short",
             "loc": ["body", "specialty"],
-            "msg": "String should have at least 1 character",
-            "input": "",
         }
     ]
 }

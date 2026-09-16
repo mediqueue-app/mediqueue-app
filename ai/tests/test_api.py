@@ -209,8 +209,9 @@ class TestExceptionHandlers:
 
         error = body["detail"][0]
         assert "loc" in error
-        assert "msg" in error
         assert "type" in error
+        assert "msg" not in error
+        assert "input" not in error
         assert "specialty" in error["loc"]
 
     def test_internal_error_returns_500_without_stack_trace(

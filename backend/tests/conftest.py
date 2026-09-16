@@ -24,6 +24,7 @@ def active_user() -> User:
         clinic_id=None,
         doctor_id=None,
         is_active=True,
+        deleted_at=None,
         created_at=datetime.now(timezone.utc),
     )
 
@@ -39,6 +40,7 @@ def admin_user() -> User:
         clinic_id=None,
         doctor_id=None,
         is_active=True,
+        deleted_at=None,
         created_at=datetime.now(timezone.utc),
     )
 
@@ -54,6 +56,7 @@ def clinic_user() -> User:
         clinic_id=1,
         doctor_id=None,
         is_active=True,
+        deleted_at=None,
         created_at=datetime.now(timezone.utc),
     )
 
@@ -69,6 +72,7 @@ def doctor_user() -> User:
         clinic_id=None,
         doctor_id=7,
         is_active=True,
+        deleted_at=None,
         created_at=datetime.now(timezone.utc),
     )
 

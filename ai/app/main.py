@@ -101,6 +101,36 @@ def _is_invalid_json_error(errors: list[dict[str, Any]]) -> bool:
     return any(error.get("type") == "json_invalid" for error in errors)
 
 
+def _sanitize_validation_errors(errors: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    sanitized: list[dict[str, Any]] = []
+    for error in errors:
+        loc = error.get("loc")
+        if not isinstance(loc, (list, tuple)):
+            loc = []
+        sanitized.append(
+            {
+                "type": error.get("type"),
+                "loc": [part for part in loc if isinstance(part, (str, int))],
+            }
+        )
+    return sanitized
+
+
+def _safe_http_detail(status_code: int) -> str:
+    if status_code >= 500:
+        return "Internal server error"
+    mapping = {
+        400: "The request could not be processed",
+        401: "Authentication required",
+        403: "Access denied",
+        404: "Resource not found",
+        409: "This action conflicts with the current state",
+        422: "Request validation failed",
+        429: "Too many requests",
+    }
+    return mapping.get(status_code, "Request failed")
+
+
 @app.exception_handler(RequestValidationError)
 async def request_validation_exception_handler(
     request: Request,
@@ -114,10 +144,16 @@ async def request_validation_exception_handler(
             content={"detail": "Invalid JSON payload"},
         )
 
-    logger.warning("Validation error on %s %s: %s", request.method, request.url.path, errors)
+    sanitized = _sanitize_validation_errors(errors)
+    logger.warning(
+        "Validation error on %s %s: %d issue(s)",
+        request.method,
+        request.url.path,
+        len(sanitized),
+    )
     return JSONResponse(
         status_code=422,
-        content={"detail": errors},
+        content={"detail": sanitized},
     )
 
 
@@ -126,10 +162,16 @@ async def http_exception_handler(
     request: Request,
     exc: StarletteHTTPException,
 ) -> JSONResponse:
-    logger.warning("HTTP error on %s %s: %s", request.method, request.url.path, exc.detail)
+    logger.warning(
+        "HTTP error on %s %s: status=%s detail=%s",
+        request.method,
+        request.url.path,
+        exc.status_code,
+        exc.detail,
+    )
     return JSONResponse(
         status_code=exc.status_code,
-        content={"detail": exc.detail},
+        content={"detail": _safe_http_detail(exc.status_code)},
     )
 
 

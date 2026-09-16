@@ -26,8 +26,6 @@ class ValidationErrorItem(BaseModel):
                 {
                     "type": "string_too_short",
                     "loc": ["body", "specialty"],
-                    "msg": "String should have at least 1 character",
-                    "input": "",
                 }
             ]
         },
@@ -35,8 +33,6 @@ class ValidationErrorItem(BaseModel):
 
     type: str
     loc: list[str | int]
-    msg: str
-    input: str | int | float | bool | None = None
 
 
 class ValidationErrorResponse(BaseModel):
@@ -48,8 +44,6 @@ class ValidationErrorResponse(BaseModel):
                         {
                             "type": "string_too_short",
                             "loc": ["body", "specialty"],
-                            "msg": "String should have at least 1 character",
-                            "input": "",
                         }
                     ]
                 }

@@ -32,7 +32,7 @@ def login(
     db: Session = Depends(get_db),
 ) -> Token:
     user = authenticate_user(db, email=form_data.username, password=form_data.password)
-    if not user or not user.is_active:
+    if not user or not user.is_active or user.deleted_at is not None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Incorrect email or password",

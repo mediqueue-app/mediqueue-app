@@ -91,7 +91,7 @@ class TestMatchRoute:
         body = response.json()
         assert body["success"] is False
         assert body["error"]["code"] == "SERVICE_UNAVAILABLE"
-        assert body["error"]["message"] == "AI matching service is unavailable"
+        assert body["error"]["message"] == "Service temporarily unavailable"
 
     def test_match_rejects_invalid_request(self, authenticated_client: TestClient) -> None:
         response = authenticated_client.post(

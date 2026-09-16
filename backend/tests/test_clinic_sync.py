@@ -1,3 +1,4 @@
+from datetime import datetime, timezone
 from unittest.mock import MagicMock, patch
 
 import pytest
@@ -118,6 +119,19 @@ class TestClinicNeedsUpdate:
             address=SAMPLE_RECORD.address,
             phone=SAMPLE_RECORD.phone,
             is_active=True,
+        )
+
+        assert clinic_needs_update(clinic, SAMPLE_RECORD) is False
+
+    def test_does_not_reactivate_erased_clinic(self) -> None:
+        clinic = Clinic(
+            id=1,
+            name=SAMPLE_RECORD.name,
+            description="Old description",
+            address=SAMPLE_RECORD.address,
+            phone=SAMPLE_RECORD.phone,
+            is_active=False,
+            deleted_at=datetime.now(timezone.utc),
         )
 
         assert clinic_needs_update(clinic, SAMPLE_RECORD) is False
@@ -245,6 +259,25 @@ class TestSyncDoctorClinicRelations:
 
         assert first == (0, 1)
         assert second == (0, 1)
+        db.add.assert_not_called()
+
+    def test_skips_erased_clinic(self) -> None:
+        db = MagicMock()
+        clinic = Clinic(
+            id=1,
+            name=SAMPLE_RECORD.name,
+            is_active=False,
+            deleted_at=datetime.now(timezone.utc),
+        )
+
+        inserted, skipped = sync_doctor_clinic_relations(
+            db,
+            [SAMPLE_RECORD],
+            {1: clinic},
+        )
+
+        assert inserted == 0
+        assert skipped == 1
         db.add.assert_not_called()
 
 

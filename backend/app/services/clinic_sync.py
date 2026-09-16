@@ -42,13 +42,13 @@ class ClinicSyncSummary:
 FALLBACK_CLINICS: list[dict[str, Any]] = [
     {
         "id": 1,
-        "name": "MediQueue Clinic",
-        "description": "International patient clinic",
-        "address": "Istanbul",
-        "phone": "+90 555 000 00 00",
-        "specialty": ["Cardiology"],
-        "city": "Istanbul",
-        "languages": ["Turkish", "English"],
+        "name": "Istanbul Hair Center",
+        "description": "FUE ve DHI saç ekiminde uluslararası hasta merkezi. Danışmanlık Türkçe, İngilizce ve Arapça.",
+        "address": "İstanbul, Türkiye",
+        "phone": None,
+        "specialty": ["Hair Transplant"],
+        "city": "İstanbul",
+        "languages": ["Turkish", "English", "Arabic"],
     }
 ]
 
@@ -94,7 +94,7 @@ def _build_description(raw: dict[str, Any], specialties: list[str], city: str) -
 
     if specialties:
         specialty_text = ", ".join(specialties)
-        return f"{specialty_text} services in {city}"
+        return f"{city} — {specialty_text}"
 
     return None
 
@@ -177,10 +177,17 @@ def find_existing_clinic(db: Session, record: AiClinicRecord) -> Clinic | None:
     if by_id is not None:
         return by_id
 
-    return db.scalar(select(Clinic).where(Clinic.name == record.name))
+    return db.scalar(
+        select(Clinic).where(
+            Clinic.name == record.name,
+            Clinic.deleted_at.is_(None),
+        )
+    )
 
 
 def clinic_needs_update(clinic: Clinic, record: AiClinicRecord) -> bool:
+    if clinic.deleted_at is not None:
+        return False
     return (
         clinic.name != record.name
         or clinic.description != record.description
@@ -268,7 +275,7 @@ def sync_doctor_clinic_relations(
 
     for record in records:
         clinic = clinic_by_source_id.get(record.source_id)
-        if clinic is None:
+        if clinic is None or clinic.deleted_at is not None:
             skipped += 1
             continue
 

@@ -8,6 +8,7 @@ from app.db.base import Base
 from app.models import (
     Appointment,
     AppointmentMessage,
+    AuditEvent,
     Clinic,
     Doctor,
     DoctorClinic,
@@ -28,6 +29,7 @@ target_metadata = Base.metadata
 _models = (
     Appointment,
     AppointmentMessage,
+    AuditEvent,
     Clinic,
     Doctor,
     DoctorClinic,
