@@ -35,7 +35,7 @@ export const en: SiteContent = {
     successTitle: "Request received",
     successBody: "The MediQueue team will review your message and reply by email or phone. A live clinic network does not run on this marketing site.",
     name: "Full Name",
-    namePlaceholder: "e.g. Ahmet Yılmaz",
+    namePlaceholder: "e.g. John Doe",
     email: "Email Address",
     emailPlaceholder: "example@email.com",
     phone: "Phone / WhatsApp Number",
@@ -123,7 +123,7 @@ export const en: SiteContent = {
     privacyNote:
       "Your request is sent to our team. We do not sell your contact details. See our privacy policy for how we handle data.",
     sendAnother: "Send Another Message",
-    namePlaceholder: "e.g. Ahmet Yılmaz",
+    namePlaceholder: "e.g. John Doe",
     emailPlaceholder: "example@email.com",
     phonePlaceholder: "+44 7XXX XXXXXX",
     channelsTitle: "Direct Contact Channels",
