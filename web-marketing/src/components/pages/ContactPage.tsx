@@ -19,6 +19,7 @@ import { HeroBackdrop } from "@/components/ui/HeroBackdrop";
 import { FadeIn } from "@/components/clinics/FadeIn";
 import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
+import { COMPANY_EMAIL } from "@/lib/site";
 
 export function ContactPage() {
   const { t } = useLocale();
@@ -84,10 +85,7 @@ export function ContactPage() {
         <HeroBackdrop />
         <Container className="relative pt-8 pb-8 sm:pt-10 sm:pb-10 lg:pt-12 lg:pb-12">
           <FadeIn className="max-w-3xl">
-            <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light px-3.5 py-1.5 text-xs font-bold text-primary">
-              <span>{c.eyebrow}</span>
-            </div>
-            <h1 className="font-display mt-4 text-[2.35rem] leading-[1.12] tracking-[-0.03em] text-ink sm:text-5xl lg:text-[3.2rem]">
+            <h1 className="font-display text-[2.35rem] leading-[1.12] tracking-[-0.03em] text-ink sm:text-5xl lg:text-[3.2rem]">
               {c.title}
             </h1>
             <p className="mt-5 max-w-2xl text-lg leading-relaxed text-slate-600">
@@ -293,7 +291,7 @@ export function ContactPage() {
                         {c.emailTitle}
                       </p>
                       <p className="mt-1 text-sm font-bold text-slate-900">
-                        mediqueue.tech@gmail.com
+                        {COMPANY_EMAIL}
                       </p>
                       <p className="text-xs font-medium text-slate-600">
                         {c.teamInbox}

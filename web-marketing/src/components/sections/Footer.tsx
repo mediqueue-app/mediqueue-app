@@ -6,8 +6,7 @@ import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
 import { useLocale } from "@/lib/locale";
 import { cn } from "@/lib/cn";
-
-const CONTACT_EMAIL = "mediqueue.tech@gmail.com";
+import { COMPANY_EMAIL } from "@/lib/site";
 
 function LinkedinIcon({ className }: { className?: string }) {
   return (
@@ -70,7 +69,7 @@ export function Footer() {
                 );
               })}
               <a
-                href={`mailto:${CONTACT_EMAIL}`}
+                href={`mailto:${COMPANY_EMAIL}`}
                 aria-label={t.footer.sendEmail}
                 className={iconButtonClass}
               >

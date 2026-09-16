@@ -30,7 +30,7 @@ const PLATFORM_CONFIG = {
     iconBg: "bg-[#0a66c2]/10 text-[#0a66c2] ring-1 ring-[#0a66c2]/20",
     hoverBorder: "hover:border-[#0a66c2]/40 hover:shadow-lg hover:shadow-[#0a66c2]/5",
     badgeBg: "bg-[#0a66c2]/10 text-[#0a66c2]",
-    handle: "@mediqueue",
+    handle: "@medyqueue",
   },
   instagram: {
     icon: InstagramIcon,

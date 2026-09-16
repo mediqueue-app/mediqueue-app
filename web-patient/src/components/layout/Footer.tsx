@@ -53,7 +53,7 @@ export function Footer() {
             </p>
             <div className="mt-5 space-y-2 text-sm text-slate-500">
               <p className="flex items-center gap-2">
-                <Mail className="h-4 w-4 text-primary" /> mediqueue.tech@gmail.com
+                <Mail className="h-4 w-4 text-primary" /> contact@getmediqueue.com
               </p>
               <p className="flex items-center gap-2">
                 <MapPin className="h-4 w-4 text-primary" /> Düzce Teknopark Ön

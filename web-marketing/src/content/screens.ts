@@ -8,7 +8,6 @@ export type TrustBlock = {
 };
 
 export type ShowcaseBlock = {
-  eyebrow: string;
   title: string;
   intro: string;
   items: { id: string; title: string; body: string }[];
@@ -108,7 +107,6 @@ export const trScreens: ScreensContent = {
     ],
   },
   clinicsShowcase: {
-    eyebrow: "Klinik yönetim ekranları (demo)",
     title: "Uluslararası talebi tek panelde görmek için tasarlandı",
     intro: "Aşağıdaki ekranlar ürün önizlemesidir. Canlı klinik paneli bu sitede çalışmaz.",
     items: [
@@ -135,7 +133,6 @@ export const trScreens: ScreensContent = {
     ],
   },
   patientsShowcase: {
-    eyebrow: "Hasta deneyimi ekranları (demo)",
     title: "Tedavi arayışını şeffaf tutmak için tasarlanmış ekranlar",
     intro: "Keşif, talep ve takip ekranları pazarlama önizlemesidir; canlı hasta uygulaması bu sitede yoktur.",
     items: [
@@ -360,7 +357,6 @@ export const enScreens: ScreensContent = {
     ],
   },
   clinicsShowcase: {
-    eyebrow: "Clinic screens (demo)",
     title: "Designed to see international demand in one panel",
     intro: "These screens are product previews. The live clinic app does not run on this marketing site.",
     items: [
@@ -387,7 +383,6 @@ export const enScreens: ScreensContent = {
     ],
   },
   patientsShowcase: {
-    eyebrow: "Patient screens (demo)",
     title: "Screens designed to keep the search transparent",
     intro: "Discovery, request, and follow-up views are marketing previews. The live patient app is not hosted here.",
     items: [

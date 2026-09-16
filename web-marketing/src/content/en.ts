@@ -101,7 +101,6 @@ export const en: SiteContent = {
   },
   contact: {
     seoTitle: "Contact Us — Get in Touch",
-    eyebrow: "Get in touch",
     title: "Leave Your Contact Details, We'll Reach Out",
     intro:
       "Whether you are a patient or a clinic/doctor exploring MediQueue — leave your details and our team will reply during business hours. A live network does not run on this site.",
@@ -552,7 +551,6 @@ export const en: SiteContent = {
       },
     ],
     featuresTitle: "Doctor Panel Screens",
-    featuresEyebrow: "Panel Screens & Features",
     liveDemo: "Live Demo",
     featuresIntro:
       "Each screen focuses on a single job — manage your entire day without scatter.",
@@ -623,7 +621,6 @@ export const en: SiteContent = {
   },
   how: {
     seoTitle: "How It Works",
-    eyebrow: "Transparent Platform Mechanics",
     title: "From First Search to Care: How the Process Works",
     intro:
       "Free comparison and a non-binding request on this site for patients; no agency retainer checkout for clinics. Live booking and payments do not run here.",
@@ -685,7 +682,6 @@ export const en: SiteContent = {
   },
   team: {
     seoTitle: "About Us — MediQueue",
-    heroEyebrow: "About Us & Story",
     heroLeadBold: "Transparency in Healthcare.",
     heroLeadLight: "Broker-Free Future with Tech.",
     heroIntro:
@@ -785,7 +781,7 @@ export const en: SiteContent = {
         platform: "linkedin",
         label: "LinkedIn",
         hint: "Founding team & official company updates",
-        href: "https://www.linkedin.com/company/mediqueue",
+        href: "https://www.linkedin.com/company/medyqueue",
       },
       {
         platform: "instagram",
@@ -868,7 +864,7 @@ export const en: SiteContent = {
         },
         {
           heading: "4. Controller and contact",
-          body: "Marketing-site forms go to the MediQueue team. Email mediqueue.tech@gmail.com for access or deletion requests.",
+          body: "Marketing-site forms go to the MediQueue team. Email contact@getmediqueue.com for access or deletion requests.",
         },
         {
           heading: "5. Retention and processors",

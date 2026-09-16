@@ -101,7 +101,6 @@ export const tr: SiteContent = {
   },
   contact: {
     seoTitle: "İletişim — Bize Ulaşın",
-    eyebrow: "İletişim",
     title: "İletişim Bilgilerinizi Bırakın, Sizinle İletişime Geçelim",
     intro:
       "Hasta, klinik veya hekim kaydı için formu doldurun. MediQueue ekibi mesai saatlerinde dönüş yapar. Canlı ağ bu sitede çalışmaz.",
@@ -556,7 +555,6 @@ export const tr: SiteContent = {
       },
     ],
     featuresTitle: "Doktor Paneli Ekranları",
-    featuresEyebrow: "Panel Ekranları & Özellikler",
     liveDemo: "Canlı Demo",
     featuresIntro:
       "Her ekran tek bir işe odaklanır — gününüzü tek bir panelden dağılmadan yönetin.",
@@ -627,7 +625,6 @@ export const tr: SiteContent = {
   },
   how: {
     seoTitle: "Nasıl Çalışır",
-    eyebrow: "Şeffaf Platform Süreci",
     title: "İlk Aramadan Tedaviye: Şeffaf Süreç Nasıl İşler?",
     intro:
       "Hastalar için bu siteden ücretsiz kıyaslama ve bağlayıcı olmayan talep; klinikler için peşin ajans ücreti yok. Canlı randevu ve ödeme burada çalışmaz.",
@@ -689,7 +686,6 @@ export const tr: SiteContent = {
   },
   team: {
     seoTitle: "Hakkımızda — MediQueue",
-    heroEyebrow: "Hakkımızda & Hikayemiz",
     heroLeadBold: "Sağlık Turizminde Şeffaflık.",
     heroLeadLight: "Teknolojiyle Aracısız Gelecek.",
     heroIntro:
@@ -789,7 +785,7 @@ export const tr: SiteContent = {
         platform: "linkedin",
         label: "LinkedIn",
         hint: "Kurucu ekip ve resmi şirket gelişmeleri",
-        href: "https://www.linkedin.com/company/mediqueue",
+        href: "https://www.linkedin.com/company/medyqueue",
       },
       {
         platform: "instagram",
@@ -872,7 +868,7 @@ export const tr: SiteContent = {
         },
         {
           heading: "4. Veri sorumlusu ve iletişim",
-          body: "Pazarlama sitesi formları MediQueue ekibine iletilir. Talepleriniz için mediqueue.tech@gmail.com adresine yazabilirsiniz. Silme veya düzeltme taleplerini aynı kanaldan iletebilirsiniz.",
+          body: "Pazarlama sitesi formları MediQueue ekibine iletilir. Talepleriniz için contact@getmediqueue.com adresine yazabilirsiniz. Silme veya düzeltme taleplerini aynı kanaldan iletebilirsiniz.",
         },
         {
           heading: "5. Saklama ve üçüncü taraflar",

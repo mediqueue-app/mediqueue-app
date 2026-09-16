@@ -77,7 +77,6 @@ export type SiteContent = {
   };
   contact: {
     seoTitle: string;
-    eyebrow: string;
     title: string;
     intro: string;
     patientTab: string;
@@ -297,7 +296,6 @@ export type SiteContent = {
       after: string;
       highlight?: boolean;
     }[];
-    featuresEyebrow: string;
     liveDemo: string;
     featuresTitle: string;
     featuresIntro: string;
@@ -319,7 +317,6 @@ export type SiteContent = {
   };
   how: {
     seoTitle: string;
-    eyebrow: string;
     title: string;
     intro: string;
     steps: { title: string; body: string }[];
@@ -341,7 +338,6 @@ export type SiteContent = {
   };
   team: {
     seoTitle: string;
-    heroEyebrow: string;
     heroLeadBold: string;
     heroLeadLight: string;
     heroIntro: string;

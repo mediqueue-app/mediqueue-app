@@ -26,10 +26,6 @@ export function AboutHero() {
 
       <Container className="relative">
         <motion.div {...anim(0)} className="max-w-4xl">
-          <div className="inline-flex items-center rounded-full border border-primary/20 bg-primary-light/80 px-4 py-1.5 text-xs font-bold text-primary mb-6 shadow-2xs">
-            <span>{copy.heroEyebrow}</span>
-          </div>
-
           <h1 className="font-display text-4xl font-bold tracking-tight text-slate-900 sm:text-5xl lg:text-[4rem] leading-[1.1]">
             {copy.heroLeadBold}{" "}
             <span className="bg-gradient-to-r from-primary via-primary-dark to-slate-900 bg-clip-text text-transparent font-semibold italic">

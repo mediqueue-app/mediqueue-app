@@ -20,7 +20,7 @@ export function resolveSiteUrl(raw?: string): string {
 
 export const SITE_URL = resolveSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
 
-export const COMPANY_LINKEDIN = "https://www.linkedin.com/company/mediqueue";
+export const COMPANY_LINKEDIN = "https://www.linkedin.com/company/medyqueue";
 export const COMPANY_INSTAGRAM = "https://www.instagram.com/mediqueue/";
-export const COMPANY_EMAIL = "mediqueue.tech@gmail.com";
+export const COMPANY_EMAIL = "contact@getmediqueue.com";
 export const ANALYTICS_CONSENT_COOKIE = "mq-analytics";
