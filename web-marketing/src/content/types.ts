@@ -111,7 +111,6 @@ export type SiteContent = {
     errorServer: string;
   };
   home: {
-    platformEyebrow: string;
     audiencePatient: string;
     audienceClinic: string;
     patient: {

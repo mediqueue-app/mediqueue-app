@@ -138,8 +138,6 @@ export const en: SiteContent = {
     errorServer: "This is a problem on our side. Our team has been notified. Please try again.",
   },
   home: {
-    platformEyebrow:
-      "MEDIQUEUE — official site · transparent health travel, no middleman",
     audiencePatient: "Patient",
     audienceClinic: "Clinic",
     patient: {

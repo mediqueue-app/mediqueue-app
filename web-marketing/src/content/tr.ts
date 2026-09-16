@@ -138,8 +138,6 @@ export const tr: SiteContent = {
     errorServer: "Bu bizim tarafımızdaki bir sorun, ekibimize bildirildi. Lütfen tekrar dene.",
   },
   home: {
-    platformEyebrow:
-      "MEDIQUEUE — resmi site · şeffaf, aracısız sağlık turizmi",
     audiencePatient: "Hasta",
     audienceClinic: "Klinik",
     patient: {
