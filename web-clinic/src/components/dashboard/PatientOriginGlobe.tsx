@@ -8,6 +8,7 @@ import {
   type CountryPatientData,
 } from "@/lib/patient-origins";
 import { CountryFlag } from "@/components/ui/CountryFlag";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
 import { cn } from "@/lib/utils";
 
 /**
@@ -395,23 +396,11 @@ export function PatientOriginGlobe({
 
   if (data.length === 0) {
     return (
-      <div
-        className={cn(
-          "flex aspect-square w-full max-w-[540px] flex-col items-center justify-center gap-3 rounded-2xl border border-dashed border-slate-200 px-6 text-center",
-          className
-        )}
-      >
-        <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-light text-primary">
-          <Globe2 className="h-6 w-6" />
-        </span>
-        <p className="text-sm font-semibold text-slate-700">
-          Henüz yurt dışı hasta kaydı yok
-        </p>
-        <p className="max-w-[15rem] text-xs leading-relaxed text-slate-400">
-          İlk uluslararası talebiniz ulaştığında hastalarınızın geldiği ülkeler
-          burada haritalanacak.
-        </p>
-      </div>
+      <LocalizedEmpty
+        copyKey="origins"
+        icon={Globe2}
+        className={cn("aspect-square w-full max-w-[540px]", className)}
+      />
     );
   }
 
@@ -443,7 +432,7 @@ export function PatientOriginGlobe({
           onClick={() => applyZoom(ZOOM_STEP)}
           disabled={zoom >= MAX_ZOOM}
           aria-label="Yakınlaştır"
-          className="flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary disabled:pointer-events-none disabled:text-slate-300"
+          className="touch-slop flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary disabled:pointer-events-none disabled:text-slate-300"
         >
           <Plus className="h-4 w-4" strokeWidth={2.25} />
         </button>
@@ -453,7 +442,7 @@ export function PatientOriginGlobe({
           onClick={() => applyZoom(1 / ZOOM_STEP)}
           disabled={zoom <= MIN_ZOOM}
           aria-label="Uzaklaştır"
-          className="flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary disabled:pointer-events-none disabled:text-slate-300"
+          className="touch-slop flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary disabled:pointer-events-none disabled:text-slate-300"
         >
           <Minus className="h-4 w-4" strokeWidth={2.25} />
         </button>

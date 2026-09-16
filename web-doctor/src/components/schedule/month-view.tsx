@@ -4,8 +4,7 @@ import type { ScheduleSlot } from "@/types";
 import { getMonthMatrix, isSameMonth } from "@/lib/schedule-grid";
 import { getDayNumber } from "@/lib/ui";
 import { TODAY_ISO } from "@/lib/mock-doctor";
-
-const weekdayHeaders = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
+import { formatWeekdayHeaders } from "@/lib/datetime";
 
 export function MonthView({
   anchorDate,
@@ -21,9 +20,9 @@ export function MonthView({
   return (
     <div className="flex flex-col gap-2">
       <div className="grid grid-cols-7 gap-2 px-1">
-        {weekdayHeaders.map((label) => (
+        {formatWeekdayHeaders().map((label, i) => (
           <p
-            key={label}
+            key={`${i}-${label}`}
             className="py-1 text-center text-xs font-semibold text-slate-400"
           >
             {label}

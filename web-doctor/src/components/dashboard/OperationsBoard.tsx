@@ -23,8 +23,14 @@ import type {
 } from "@/types";
 import { TodaySchedule } from "@/components/dashboard/TodaySchedule";
 import { RecentActivity } from "@/components/dashboard/RecentActivity";
-import { getInitials } from "@/lib/calendar-utils";
+import { getInitials, isToday as isClinicToday } from "@/lib/calendar-utils";
 import { cn } from "@/lib/utils";
+import {
+  formatCalendarParts,
+  formatMonthYear,
+  formatWeekdayLong,
+  formatWeekdayShort,
+} from "@/lib/datetime";
 
 function greetingForHour(hour: number): string {
   if (hour < 12) return "Günaydın";
@@ -48,11 +54,7 @@ export function OperationsBoard({
   const now = new Date();
   const greeting = greetingForHour(now.getHours());
   const firstName = doctor.fullName.split(" ")[0];
-  const dateLabel = now.toLocaleDateString("tr-TR", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  });
+  const dateLabel = formatWeekdayLong(now);
 
   const sortedToday = useMemo(
     () => [...appointments].sort((a, b) => a.time.localeCompare(b.time)),
@@ -78,18 +80,16 @@ export function OperationsBoard({
       const d = new Date(base);
       d.setDate(base.getDate() + mondayOffset + i);
       return {
-        label: ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"][d.getDay()],
+        label: formatWeekdayShort(d),
         num: d.getDate(),
-        isToday:
-          d.getDate() === base.getDate() && d.getMonth() === base.getMonth(),
+        isToday: isClinicToday(d),
       };
     });
   }, []);
 
-  const monthLabel = now.toLocaleDateString("tr-TR", {
-    month: "long",
-    year: "numeric",
-  });
+  const nextAptParts = formatCalendarParts(now);
+  const nextAptDateLabel = `${nextAptParts.day} ${nextAptParts.month}`;
+  const monthLabel = formatMonthYear(now);
 
   const incomingPatients = useMemo(() => {
     const waiting = patients.filter((p) => p.treatmentStatus === "BEKLEMEDE");
@@ -231,12 +231,8 @@ export function OperationsBoard({
                   const apt = appointments.find(
                     (a) => a.patientId === patient.id
                   );
-                  const dateStr = new Date(
-                    `${patient.lastVisitDate}T12:00:00`
-                  ).toLocaleDateString("tr-TR", {
-                    day: "numeric",
-                    month: "short",
-                  });
+                  const visit = formatCalendarParts(patient.lastVisitDate);
+                  const dateStr = `${visit.day} ${visit.month}`;
                   const note =
                     patient.highlightNote ??
                     patient.medicalNotes[0]?.content ??
@@ -272,13 +268,13 @@ export function OperationsBoard({
                           onClick={() =>
                             setAcceptedIds((ids) => [...ids, patient.id])
                           }
-                          className="flex-1 rounded-xl bg-primary py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition hover:bg-primary-hover"
+                          className="flex-1 min-h-12 rounded-xl bg-primary py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition hover:bg-primary-hover"
                         >
                           Kabul et
                         </button>
                         <Link
                           href={`/dashboard/patients/${patient.id}`}
-                          className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-500 transition hover:bg-slate-200"
+                          className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-100 text-slate-500 transition hover:bg-slate-200"
                           aria-label="Hasta detayı"
                         >
                           <MoreVertical className="h-4 w-4" />
@@ -302,8 +298,8 @@ export function OperationsBoard({
               <h3 className="text-sm font-bold capitalize text-slate-900">
                 {monthLabel}
               </h3>
-              <Link href="/dashboard/calendar" aria-label="Takvim">
-                <Maximize2 className="h-4 w-4 text-slate-400 hover:text-primary" />
+              <Link href="/dashboard/calendar" aria-label="Takvim" className="touch-target inline-flex items-center justify-center rounded-lg text-slate-400 hover:text-primary">
+                <Maximize2 className="h-4 w-4" />
               </Link>
             </div>
             <div className="grid grid-cols-7 gap-1 text-center">
@@ -336,7 +332,7 @@ export function OperationsBoard({
               <div className="flex gap-1">
                 <Link
                   href="/dashboard/messages"
-                  className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-50 hover:text-primary"
+                  className="touch-target rounded-lg p-1.5 text-slate-400 hover:bg-slate-50 hover:text-primary"
                   aria-label="Mesajlar"
                 >
                   <MessageSquare className="h-4 w-4" />
@@ -347,7 +343,7 @@ export function OperationsBoard({
                       ? `/dashboard/patients/${nextApt.patientId}`
                       : "/dashboard/patients"
                   }
-                  className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-50 hover:text-primary"
+                  className="touch-target rounded-lg p-1.5 text-slate-400 hover:bg-slate-50 hover:text-primary"
                   aria-label="Detay"
                 >
                   <Maximize2 className="h-4 w-4" />
@@ -377,11 +373,7 @@ export function OperationsBoard({
                   <div className="relative mt-4 flex flex-wrap gap-3 text-[11px] text-white/80">
                     <span className="inline-flex items-center gap-1.5">
                       <CalendarDays className="h-3.5 w-3.5" />
-                      {now.toLocaleDateString("tr-TR", {
-                        day: "numeric",
-                        month: "short",
-                      })}
-                      , {nextApt.time}
+                      {nextAptDateLabel}, {nextApt.time}
                     </span>
                     <span className="inline-flex items-center gap-1.5">
                       <UserPlus className="h-3.5 w-3.5" />

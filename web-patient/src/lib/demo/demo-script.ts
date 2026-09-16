@@ -67,6 +67,9 @@ function buildDemoAppointment(): Appointment {
   const now = new Date();
   // Randevu tarihini yarına al ki "yaklaşan" hissi versin.
   const requested = new Date(now.getTime() + 24 * 60 * 60 * 1000);
+  const y = requested.getFullYear();
+  const mo = String(requested.getMonth() + 1).padStart(2, "0");
+  const da = String(requested.getDate()).padStart(2, "0");
 
   return {
     id: DEMO_APPOINTMENT_ID,
@@ -74,10 +77,10 @@ function buildDemoAppointment(): Appointment {
     clinic_id: DEMO_CLINIC.id,
     doctor_id: 0,
     branch: DEMO_CLINIC.branch,
-    requested_date: requested.toISOString(),
+    requested_date: `${y}-${mo}-${da}`,
     alternative_date: null,
     status: "confirmed", // (b) anında onaylandı
-    notes: "Demo randevusu — uçtan uca akışı denemek için oluşturuldu.",
+    notes: "Saat: 10:00 · Demo randevusu — uçtan uca akışı denemek için oluşturuldu.",
     patient_name: DEMO_CLINIC.patientName,
     doctor_name: DEMO_CLINIC.doctorName,
     created_at: now.toISOString(),
@@ -137,6 +140,20 @@ export function getDemoAppointments(): Appointment[] {
 /** Demo akışı şu an aktif mi? */
 export function isDemoActive(): boolean {
   return readPersisted() !== null;
+}
+
+/** Demo randevusunu iptal eder (kalıcı; geri alınamaz). */
+export function cancelDemoAppointment(): Appointment | null {
+  const appointment = readPersisted();
+  if (!appointment) return null;
+  const cancelled: Appointment = {
+    ...appointment,
+    status: "cancelled",
+    updated_at: new Date().toISOString(),
+  };
+  persist(cancelled);
+  notifyChange();
+  return cancelled;
 }
 
 /** Demo akışını tamamen temizler (randevu + sohbet geçmişi). */

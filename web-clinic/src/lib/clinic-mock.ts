@@ -39,12 +39,12 @@ export type ClinicProfile = {
 };
 
 export const clinicProfile: ClinicProfile = {
-  name: "Estetik International Hospital",
-  tagline: "Saç ekimi, estetik cerrahi ve diş tedavilerinde uluslararası merkez",
+  name: "Istanbul Hair Center",
+  tagline: "FUE ve DHI saç ekiminde uluslararası hasta merkezi",
   city: "İstanbul",
   country: "Türkiye",
   about:
-    "2011'den bu yana 60'tan fazla ülkeden hastayı ağırlayan, JCI standartlarında hizmet veren tam donanımlı bir sağlık kuruluşuyuz. Uçtan uca hasta yolculuğunu; karşılama, tedavi ve takip süreçleriyle birlikte yönetiyoruz.",
+    "İstanbul’da saç ekimi odaklı, çok dilli hasta kabulü yapan bir merkeziz. Greft planlamasından uçuş sonrası takibe kadar süreç şeffaf ilerler; danışmanlık Türkçe, İngilizce ve Arapça sunulur.",
   completion: 80,
   missingItems: [
     "JCI akreditasyon belgesi yükleyin",

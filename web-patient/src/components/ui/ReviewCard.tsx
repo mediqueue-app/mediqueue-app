@@ -6,7 +6,7 @@ export function ReviewCard({ review }: { review: Review }) {
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5">
       <div className="flex items-center gap-3">
-        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-[#eaf0fc] text-sm font-semibold text-[#3a6ad6]">
+        <span className="flex h-10 w-10 items-center justify-center rounded-full bg-primary-light text-sm font-semibold text-primary">
           {initials(review.author)}
         </span>
         <div>

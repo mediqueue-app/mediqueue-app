@@ -53,7 +53,7 @@ export function PatientDetailView({ patient }: { patient: Patient }) {
   return (
     <div className="animate-fade-in-up flex flex-col gap-5 lg:gap-6">
       {toast && (
-        <div className="fixed bottom-6 left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-sm font-medium text-white shadow-lg">
+        <div className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] left-1/2 z-50 flex -translate-x-1/2 items-center gap-2 rounded-xl bg-slate-900 px-4 py-3 text-sm font-medium text-white shadow-lg">
           <Check className="h-4 w-4 text-emerald-400" />
           {toast}
         </div>
@@ -133,7 +133,7 @@ export function PatientDetailView({ patient }: { patient: Patient }) {
               onClick={() =>
                 showDemoToast("Ek işlemler menüsü Ay 2'de eklenecek.")
               }
-              className="flex h-10 w-10 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-white backdrop-blur hover:bg-white/20"
+              className="flex h-12 w-12 items-center justify-center rounded-xl border border-white/20 bg-white/10 text-white backdrop-blur hover:bg-white/20"
               aria-label="Diğer işlemler"
             >
               <MoreHorizontal className="h-5 w-5" />

@@ -1,3 +1,4 @@
+import { T } from "@/lib/i18n";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -8,6 +9,7 @@ import {
   Stethoscope,
   BadgeCheck,
   Building2,
+  MessageSquare,
 } from "lucide-react";
 import {
   doctors,
@@ -17,6 +19,7 @@ import {
 import { Avatar } from "@/components/ui/Avatar";
 import { StarRating } from "@/components/ui/StarRating";
 import { ReviewCard } from "@/components/ui/ReviewCard";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
 import { BookingWidget } from "@/components/booking/BookingWidget";
 
 export function generateStaticParams() {
@@ -44,11 +47,11 @@ export default async function DoctorProfilePage({
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <nav className="mb-4 flex items-center gap-1.5 text-sm text-slate-400">
-        <Link href="/" className="hover:text-[#3a6ad6]">
+        <Link href="/" className="hover:text-primary">
           Ana Sayfa
         </Link>
         <ChevronRight className="h-4 w-4" />
-        <Link href="/doctors" className="hover:text-[#3a6ad6]">
+        <Link href="/doctors" className="hover:text-primary">
           Doktorlar
         </Link>
         <ChevronRight className="h-4 w-4" />
@@ -62,10 +65,10 @@ export default async function DoctorProfilePage({
               <Avatar
                 src={doctor.photo}
                 name={doctor.name}
-                className="h-24 w-24 shrink-0 rounded-2xl ring-2 ring-[#eaf0fc]"
+                className="h-24 w-24 shrink-0 rounded-2xl ring-2 ring-primary-light"
               />
               <div className="min-w-0">
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#eaf0fc] px-2.5 py-1 text-xs font-semibold text-[#3a6ad6]">
+                <span className="inline-flex items-center gap-1 rounded-full bg-primary-light px-2.5 py-1 text-xs font-semibold text-primary">
                   <BadgeCheck className="h-3.5 w-3.5" />
                   Doğrulanmış Hekim
                 </span>
@@ -111,7 +114,7 @@ export default async function DoctorProfilePage({
 
           <section className="rounded-2xl border border-slate-200 bg-white p-6">
             <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
-              <Stethoscope className="h-5 w-5 text-[#3a6ad6]" />
+              <Stethoscope className="h-5 w-5 text-primary" />
               Hakkında
             </h2>
             <p className="mt-3 leading-relaxed text-slate-600">
@@ -125,7 +128,7 @@ export default async function DoctorProfilePage({
                 {doctor.focusAreas.map((f) => (
                   <span
                     key={f}
-                    className="rounded-full bg-[#eaf0fc] px-3 py-1 text-sm font-medium text-[#3a6ad6]"
+                    className="rounded-full bg-primary-light px-3 py-1 text-sm font-medium text-primary"
                   >
                     {f}
                   </span>
@@ -137,13 +140,13 @@ export default async function DoctorProfilePage({
           <div className="grid gap-6 sm:grid-cols-2">
             <section className="rounded-2xl border border-slate-200 bg-white p-6">
               <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
-                <GraduationCap className="h-5 w-5 text-[#3a6ad6]" />
+                <GraduationCap className="h-5 w-5 text-primary" />
                 Eğitim & Deneyim
               </h2>
               <ul className="mt-3 space-y-3">
                 {doctor.education.map((e) => (
                   <li key={e} className="flex gap-3">
-                    <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-[#3a6ad6]" />
+                    <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-primary" />
                     <span className="text-sm text-slate-600">{e}</span>
                   </li>
                 ))}
@@ -152,8 +155,8 @@ export default async function DoctorProfilePage({
 
             <section className="rounded-2xl border border-slate-200 bg-white p-6">
               <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
-                <Languages className="h-5 w-5 text-[#3a6ad6]" />
-                Konuşulan Diller
+                <Languages className="h-5 w-5 text-primary" />
+                <T k="doctorsPage.languages" />
               </h2>
               <div className="mt-3 flex flex-wrap gap-2">
                 {doctor.languages.map((l) => (
@@ -168,12 +171,12 @@ export default async function DoctorProfilePage({
               {clinic && (
                 <div className="mt-5 rounded-xl border border-slate-100 bg-slate-50/60 p-4">
                   <p className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                    <Building2 className="h-4 w-4 text-[#3a6ad6]" />
-                    Çalıştığı Klinik
+                    <Building2 className="h-4 w-4 text-primary" />
+                    <T k="doctorsPage.worksAt" />
                   </p>
                   <Link
                     href={`/clinics/${clinic.id}`}
-                    className="mt-1 block text-sm text-[#3a6ad6] hover:underline"
+                    className="mt-1 block text-sm text-primary hover:underline"
                   >
                     {clinic.name} — {clinic.district}, {clinic.city}
                   </Link>
@@ -183,11 +186,21 @@ export default async function DoctorProfilePage({
           </div>
 
           <section className="rounded-2xl border border-slate-200 bg-white p-6">
-            <h2 className="text-lg font-bold text-slate-900">Hasta Yorumları</h2>
+            <h2 className="text-lg font-bold text-slate-900">
+              <T k="doctorsPage.reviews" />
+            </h2>
             <div className="mt-4 space-y-4">
-              {doctor.reviews.map((r) => (
-                <ReviewCard key={r.id} review={r} />
-              ))}
+              {doctor.reviews.length === 0 ? (
+                <LocalizedEmpty
+                  copyKey="doctorReviews"
+                  icon={MessageSquare}
+                  compact
+                />
+              ) : (
+                doctor.reviews.map((r) => (
+                  <ReviewCard key={r.id} review={r} />
+                ))
+              )}
             </div>
           </section>
         </div>

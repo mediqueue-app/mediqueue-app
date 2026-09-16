@@ -15,7 +15,7 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
   return (
     <Link
       href={`/doctors/${doctor.id}`}
-      className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1.5 hover:border-[#3a6ad6]/30 hover:shadow-2xl hover:shadow-[#3a6ad6]/10"
+      className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all duration-300 hover:-translate-y-1.5 hover:border-primary/30 hover:shadow-2xl hover:shadow-primary/10"
     >
       <div className="relative aspect-[4/5] overflow-hidden bg-slate-100">
         <Avatar
@@ -25,7 +25,7 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
         />
         <div className="pointer-events-none absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/25 to-transparent" />
 
-        <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-semibold text-[#3a6ad6] shadow-sm ring-1 ring-black/5 backdrop-blur">
+        <span className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-semibold text-primary shadow-sm ring-1 ring-black/5 backdrop-blur">
           <BadgeCheck className="h-3.5 w-3.5" />
           Doğrulanmış Uzman
         </span>
@@ -36,7 +36,7 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
       </div>
 
       <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-lg font-semibold leading-snug text-slate-900 transition-colors group-hover:text-[#3a6ad6]">
+        <h3 className="text-lg font-semibold leading-snug text-slate-900 transition-colors group-hover:text-primary">
           {doctor.name}
         </h3>
 
@@ -65,7 +65,7 @@ export function DoctorCard({ doctor }: { doctor: Doctor }) {
         </div>
 
         <div className="mt-4 flex items-center justify-end">
-          <span className="inline-flex items-center gap-1 text-sm font-semibold text-slate-500 transition-colors group-hover:text-[#3a6ad6]">
+          <span className="inline-flex items-center gap-1 text-sm font-semibold text-slate-500 transition-colors group-hover:text-primary">
             Profili Görüntüle
             <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5" />
           </span>

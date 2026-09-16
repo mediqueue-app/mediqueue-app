@@ -17,7 +17,7 @@ export function SectionHeading({
     <div className="mb-8 flex flex-wrap items-end justify-between gap-4">
       <div className="max-w-2xl">
         {eyebrow && (
-          <p className="text-sm font-semibold uppercase tracking-wide text-[#3a6ad6]">
+          <p className="text-sm font-semibold uppercase tracking-wide text-primary">
             {eyebrow}
           </p>
         )}
@@ -31,7 +31,7 @@ export function SectionHeading({
       {linkHref && linkLabel && (
         <Link
           href={linkHref}
-          className="text-sm font-semibold text-[#3a6ad6] hover:underline"
+          className="text-sm font-semibold text-primary hover:underline"
         >
           {linkLabel} →
         </Link>

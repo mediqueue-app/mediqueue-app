@@ -1,16 +1,19 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
-const TABS = [
-  { id: "hakkinda", label: "Hakkında" },
-  { id: "olanaklar", label: "Olanaklar" },
-  { id: "doktorlar", label: "Doktorlar" },
-  { id: "yorumlar", label: "Yorumlar" },
-];
+const TAB_IDS = ["hakkinda", "olanaklar", "doktorlar", "yorumlar"] as const;
 
 export function ClinicTabs() {
+  const t = useT();
+  const tabs = [
+    { id: "hakkinda", label: t("clinic.tabAbout") },
+    { id: "olanaklar", label: t("clinic.tabAmenities") },
+    { id: "doktorlar", label: t("clinic.tabDoctors") },
+    { id: "yorumlar", label: t("clinic.tabReviews") },
+  ];
   const [active, setActive] = useState("hakkinda");
 
   useEffect(() => {
@@ -22,8 +25,8 @@ export function ClinicTabs() {
       },
       { rootMargin: "-120px 0px -70% 0px" }
     );
-    TABS.forEach((tab) => {
-      const el = document.getElementById(tab.id);
+    TAB_IDS.forEach((id) => {
+      const el = document.getElementById(id);
       if (el) observer.observe(el);
     });
     return () => observer.disconnect();
@@ -32,14 +35,14 @@ export function ClinicTabs() {
   return (
     <div className="sticky top-16 z-30 -mx-4 border-b border-slate-200 bg-white/90 px-4 backdrop-blur sm:mx-0 sm:px-0">
       <nav className="flex gap-1 overflow-x-auto">
-        {TABS.map((tab) => (
+        {tabs.map((tab) => (
           <a
             key={tab.id}
             href={`#${tab.id}`}
             className={cn(
               "whitespace-nowrap border-b-2 px-4 py-3 text-sm font-medium transition-colors",
               active === tab.id
-                ? "border-[#3a6ad6] text-[#3a6ad6]"
+                ? "border-primary text-primary"
                 : "border-transparent text-slate-500 hover:text-slate-900"
             )}
           >

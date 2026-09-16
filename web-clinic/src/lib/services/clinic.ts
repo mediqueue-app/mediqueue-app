@@ -1,7 +1,7 @@
 /**
  * Clinic profile & dashboard — hybrid: API when JWT present, clinic-mock fallback.
  */
-import { apiFetch } from "@/lib/api/client";
+import { apiFetch, isTimeoutOrNetwork } from "@/lib/api/client";
 import {
   computeDashboardSummary,
   mapAppointmentsToUpcoming,
@@ -56,8 +56,8 @@ export async function fetchClinicProfile(): Promise<ClinicProfile> {
   try {
     user = await apiFetch<UserRead>("/auth/me", { token });
     if (user) setSession(token!, user);
-  } catch {
-    // Continue with stored user if /auth/me fails transiently.
+  } catch (err) {
+    if (isTimeoutOrNetwork(err)) throw err;
   }
 
   const clinic = await apiFetch<ClinicRead>(`/clinics/${clinicId}`, { token });

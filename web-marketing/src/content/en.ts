@@ -35,7 +35,7 @@ export const en: SiteContent = {
     successTitle: "Request received",
     successBody: "The MediQueue team will review your message and reply by email or phone. A live clinic network does not run on this marketing site.",
     name: "Full Name",
-    namePlaceholder: "e.g. John Doe",
+    namePlaceholder: "e.g. Ahmet Yılmaz",
     email: "Email Address",
     emailPlaceholder: "example@email.com",
     phone: "Phone / WhatsApp Number",
@@ -66,7 +66,9 @@ export const en: SiteContent = {
     messagePlaceholder: "Write any medical details or specific preferences...",
     consent: "I accept the processing of my personal data and the privacy policy.",
     privacyLink: "Privacy Policy",
-    error: "An error occurred. Please fill in the required fields and try again.",
+    error: "Some fields are missing or invalid. Check the form and try again.",
+    errorNetwork: "Check your internet connection and try again.",
+    errorServer: "This is a problem on our side. Our team has been notified. Please try again.",
     submitting: "Submitting...",
     submit: "Submit Request",
     required: "This field is required.",
@@ -121,7 +123,7 @@ export const en: SiteContent = {
     privacyNote:
       "Your request is sent to our team. We do not sell your contact details. See our privacy policy for how we handle data.",
     sendAnother: "Send Another Message",
-    namePlaceholder: "e.g. John Doe",
+    namePlaceholder: "e.g. Ahmet Yılmaz",
     emailPlaceholder: "example@email.com",
     phonePlaceholder: "+44 7XXX XXXXXX",
     channelsTitle: "Direct Contact Channels",
@@ -131,6 +133,9 @@ export const en: SiteContent = {
     topicPlaceholderClinic: "e.g. Clinic Onboarding, Doctor Profile...",
     messagePlaceholder: "Write any details or questions you have...",
     responseNote: "Contact requests are reviewed by our team during business hours.",
+    error: "Some fields are missing or invalid. Check the form and try again.",
+    errorNetwork: "Check your internet connection and try again.",
+    errorServer: "This is a problem on our side. Our team has been notified. Please try again.",
   },
   home: {
     platformEyebrow:

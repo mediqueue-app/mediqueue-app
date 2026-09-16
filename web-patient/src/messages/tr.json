@@ -1,0 +1,352 @@
+{
+  "meta": {
+    "brand": "MediQueue",
+    "documentTitle": "MediQueue | Kliniğinizi ve Doktorunuzu Bulun",
+    "documentDescription": "MediQueue — semptomunuza, şehrinize ve tarihinize göre en iyi klinikleri ve doktorları keşfedin, şeffaf fiyatlarla anında randevu alın."
+  },
+  "nav": {
+    "homeAria": "Ana sayfa",
+    "treatments": "Tedaviler",
+    "clinics": "Klinikler",
+    "doctors": "Doktorlar",
+    "appointments": "Randevularım",
+    "howItWorks": "Nasıl Çalışır?",
+    "account": "Hesap",
+    "signIn": "Giriş Yap",
+    "book": "Randevu Al",
+    "menu": "Menü",
+    "language": "Dil",
+    "languageEn": "English",
+    "languageTr": "Türkçe"
+  },
+  "footer": {
+    "tagline": "Türkiye'nin akredite klinik ve doktorlarını tek çatı altında buluşturan sağlık pazaryeri. Şeffaf fiyatlarla güvenle randevu alın.",
+    "services": "Hizmetler",
+    "company": "Kurumsal",
+    "legal": "Yasal",
+    "about": "Hakkımızda",
+    "addClinic": "Kliniğinizi Ekleyin",
+    "careers": "Kariyer",
+    "contact": "İletişim",
+    "privacy": "Gizlilik Politikası",
+    "terms": "Kullanım Koşulları",
+    "kvkk": "KVKK",
+    "copyright": "© {year} MediQueue. Tüm hakları saklıdır.",
+    "deleteAccount": "Hesabımı sil"
+  },
+  "account": {
+    "title": "Hesap ayarları",
+    "lead": "KVKK kapsamındaki unutulma hakkın gereği hesabını kendin silebilirsin. Neden belirtmen gerekmez.",
+    "retention": "Silme geri alınamaz. Ad, e-posta, telefon ve sağlık geçmişi silinir. Randevu tarihleri ve durumları yasal saklama için anonim tutulur. Ödeme kayıtları eklendiğinde muhasebe yükümlülüğü nedeniyle saklanır.",
+    "loading": "Yükleniyor…",
+    "authTitle": "Hesap ayarları için giriş yap",
+    "authLead": "Hesabını yönetmek veya silmek için oturum açman gerekir."
+  },
+  "hero": {
+    "badge": "Türkiye'nin akredite sağlık pazaryeri",
+    "imageAlt": "Modern klinik ortamı",
+    "title": "Doğru kliniği ve doktoru saniyeler içinde bulun",
+    "subtitle": "Semptomunuza, şehrinize ve tarihinize göre en iyi uzmanları keşfedin. Şeffaf fiyatlar, gerçek yorumlar ve anında randevu.",
+    "patients": "500.000+ mutlu hasta",
+    "rating": "4.9 / 5 ortalama puan",
+    "jci": "JCI akrediteli klinikler"
+  },
+  "search": {
+    "symptom": "Semptom / Tedavi",
+    "symptomPh": "Örn. Diş implantı, göz lazeri",
+    "city": "Şehir",
+    "cityPh": "Şehir seçin veya yazın",
+    "date": "Tarih",
+    "submit": "Ara"
+  },
+  "home": {
+    "treatmentsEyebrow": "Tedaviler",
+    "treatmentsTitle": "Aradığınız tedaviyi seçin",
+    "treatmentsDesc": "Diş hekimliğinden estetik cerrahiye, en çok tercih edilen tedavi kategorileri.",
+    "seeAll": "Tümünü gör",
+    "clinicsEyebrow": "Öne çıkan klinikler",
+    "clinicsTitle": "Popüler klinikler",
+    "clinicsDesc": "Akredite, yüksek puanlı ve şeffaf fiyatlı klinikler.",
+    "allClinics": "Tüm klinikler",
+    "doctorsEyebrow": "Uzman hekimler",
+    "doctorsTitle": "Alanında uzman doktorlar",
+    "doctorsDesc": "Deneyim, puan ve müsaitlik durumuna göre öne çıkan hekimler.",
+    "allDoctors": "Tüm doktorlar",
+    "howEyebrow": "Nasıl çalışır?",
+    "howTitle": "3 basit adımda randevunuz hazır",
+    "from": "itibaren"
+  },
+  "how": {
+    "step1Title": "Arayın & Karşılaştırın",
+    "step1Desc": "Semptom, şehir ve tarihe göre klinik ve doktorları filtreleyin, şeffaf fiyatları görün.",
+    "step2Title": "Randevu Alın",
+    "step2Desc": "Uygun tarih ve saati seçin, saniyeler içinde ön ödemesiz randevu talebi oluşturun.",
+    "step3Title": "Tedavi Olun",
+    "step3Desc": "Kliniğe gidin, uzman hekiminizle görüşün ve ödemeyi yerinde yapın.",
+    "pageTitle": "Nasıl Çalışır? | MediQueue",
+    "eyebrow": "Nasıl Çalışır?",
+    "headline": "Sağlığınıza giden en kolay yol",
+    "lead": "MediQueue, doğru kliniği bulmaktan randevu almaya kadar tüm süreci basitleştirir.",
+    "v1Title": "Akredite Klinikler",
+    "v1Desc": "Platformumuzdaki tüm klinikler titiz bir değerlendirme sürecinden geçer.",
+    "v2Title": "Şeffaf Fiyatlar",
+    "v2Desc": "Gizli ücret yok. Randevu öncesi tüm fiyatları net biçimde görürsünüz.",
+    "v3Title": "Gerçek Yorumlar",
+    "v3Desc": "Sadece tedavi olan hastaların doğrulanmış değerlendirmeleri.",
+    "v4Title": "Ön Ödemesiz Randevu",
+    "v4Desc": "Randevu talebinizi ücretsiz oluşturun, ödemeyi klinikte yapın.",
+    "ctaTitle": "Bugün randevunuzu oluşturun",
+    "ctaBody": "Binlerce akredite klinik ve uzman hekim, sizi bekliyor.",
+    "ctaClinics": "Klinikleri Keşfet",
+    "ctaDoctors": "Doktorları Gör"
+  },
+  "treatmentsPage": {
+    "title": "Tedaviler",
+    "metaTitle": "Tedaviler | MediQueue",
+    "lead": "İhtiyacınız olan tedaviyi seçin, ilgili klinik ve doktorları görün.",
+    "starting": "Başlangıç",
+    "findClinic": "Klinik Bul"
+  },
+  "auth": {
+    "welcomeBack": "Tekrar hoş geldiniz",
+    "loginLead": "Randevularınızı yönetmek için hesabınıza giriş yapın.",
+    "email": "E-posta",
+    "emailPh": "ornek@eposta.com",
+    "password": "Şifre",
+    "passwordPh": "En az 8 karakter",
+    "showPassword": "Şifreyi göster",
+    "hidePassword": "Şifreyi gizle",
+    "remember": "Beni hatırla",
+    "signingIn": "Giriş yapılıyor...",
+    "signIn": "Giriş Yap",
+    "noAccount": "Hesabın yok mu?",
+    "register": "Kayıt Ol",
+    "ssl": "Bilgileriniz 256-bit SSL ile şifrelenerek korunur",
+    "createTitle": "Hesap oluşturun",
+    "createLead": "Dakikalar içinde randevu almaya başlayın.",
+    "fullName": "Ad Soyad",
+    "fullNamePh": "Adınız Soyadınız",
+    "creating": "Hesap oluşturuluyor...",
+    "registerCta": "Kayıt Ol",
+    "hasAccount": "Zaten hesabın var mı?",
+    "terms": "Kaydolarak Kullanım Koşulları'nı kabul etmiş olursunuz",
+    "forgot": "Şifremi unuttum"
+  },
+  "errors": {
+    "retry": "Tekrar Dene",
+    "network": "İnternet bağlantını kontrol et ve tekrar dene.",
+    "loginBad": "E-posta veya şifre hatalı. Bilgilerini kontrol edip tekrar dene.",
+    "session": "Oturumun sona erdi. Tekrar giriş yap.",
+    "forbidden": "Bu işlem için yetkin yok. Doğru hesapla giriş yaptığından emin ol.",
+    "notFound": "Aradığın kayıt bulunamadı. Listeyi yenile veya başka bir seçenek dene.",
+    "emailTaken": "Bu e-posta ile kayıtlı bir hesap var. Giriş yapmayı dene.",
+    "dupAppt": "Bu tarih için zaten bir randevu talebin var. Randevularım sayfasından kontrol et.",
+    "doctorConflict": "Seçilen tarihte hekim müsait değil. Başka bir gün dene.",
+    "conflict": "Bu işlem mevcut kayıtla çakışıyor. Bilgileri değiştirip tekrar dene.",
+    "validationEmpty": "Gönderdiğin bilgilerde eksik veya hatalı alan var. Formu kontrol edip tekrar dene.",
+    "validationOne": "{field} alanını kontrol et ve tekrar dene.",
+    "validationMany": "{rest} ve {last} alanlarını kontrol et.",
+    "rateLimit": "Çok fazla deneme yaptın. Birkaç dakika sonra tekrar dene.",
+    "server": "Bu bizim tarafımızdaki bir sorun, ekibimize bildirildi. Lütfen tekrar dene.",
+    "generic": "İsteğin tamamlanamadı. Lütfen tekrar dene."
+  },
+  "fields": {
+    "email": "E-posta",
+    "password": "Şifre",
+    "full_name": "Ad soyad",
+    "username": "E-posta",
+    "phone": "Telefon",
+    "requested_date": "Randevu tarihi",
+    "alternative_date": "Alternatif tarih",
+    "clinic_id": "Klinik",
+    "doctor_id": "Doktor",
+    "patient_id": "Hasta",
+    "specialty": "Uzmanlık",
+    "language": "Dil",
+    "budget": "Bütçe",
+    "notes": "Not",
+    "branch": "Tedavi / branş",
+    "status": "Durum"
+  },
+  "common": {
+    "retry": "Tekrar Dene",
+    "loading": "Yükleniyor…",
+    "accredited": "Akredite",
+    "favouriteAdd": "Favorilere ekle",
+    "favouriteRemove": "Favorilerden çıkar",
+    "from": "itibaren",
+    "backToList": "Listeye dön",
+    "showOnMap": "Haritada Göster"
+  },
+  "source": {
+    "api": "Canlı API",
+    "apiTip": "Bu veriler canlı API sunucusundan alınmıştır.",
+    "mock": "Demo Veri",
+    "mockTip": "Bu veriler demo amaçlı örnek (mock) verilerdir.",
+    "hybrid": "Hibrit Veri",
+    "hybridTip": "Canlı API verisi demo içerikle zenginleştirilmiştir."
+  },
+  "clinic": {
+    "tabAbout": "Hakkında",
+    "tabAmenities": "Olanaklar",
+    "tabDoctors": "Doktorlar",
+    "tabReviews": "Yorumlar",
+    "searchPh": "Klinik veya tedavi ara...",
+    "about": "Klinik Hakkında",
+    "services": "Sunulan Hizmetler",
+    "amenities": "Klinik Olanakları",
+    "doctors": "Klinik Doktorları",
+    "reviews": "Hasta Yorumları",
+    "bookingTitle": "{name} — Randevu",
+    "generalExam": "Genel Muayene",
+    "priceRange": "Fiyat aralığı",
+    "callClinic": "Kliniği Ara",
+    "metaTitle": "Klinik Detayı | MediQueue",
+    "listTitle": "Klinikler | MediQueue"
+  },
+  "empty": {
+    "appointments": {
+      "title": "Henüz randevunuz yok",
+      "description": "Kliniğinizi seçip ilk ziyaretinizi oluşturduğunuzda tüm süreç — onay, transfer ve tedavi günü — burada görünür.",
+      "action": "Klinikleri İncele"
+    },
+    "appointmentsAuth": {
+      "title": "Randevularınızı görmek için giriş yapın",
+      "description": "Talep geçmişinize, onay durumuna ve klinik mesajlaşmasına hesabınızla ulaşabilirsiniz.",
+      "action": "Giriş Yap"
+    },
+    "clinicSearch": {
+      "title": "Bu aramaya uygun klinik yok",
+      "description": "Şehri, tedaviyi veya olanakları değiştirerek yeniden deneyin. İstanbul ve Antalya’daki akrediteli klinikler sizi bekliyor.",
+      "action": "Filtreleri Temizle"
+    },
+    "doctorSearch": {
+      "title": "Bu aramaya uygun doktor yok",
+      "description": "Uzmanlık veya şehir filtresini genişletin. Doğrulanmış hekimler tedavi planınızı sizinle birlikte şekillendirir.",
+      "action": "Filtreleri Temizle"
+    },
+    "chat": {
+      "title": "Klinik ile sohbete başlayın",
+      "description": "Randevu saati, transfer ve belgeleriniz hakkında buradan yazın. İlk mesajı siz gönderin — ekip güvenli kanaldan yanıtlar."
+    },
+    "clinicReviews": {
+      "title": "Bu klinik için henüz yorum yok",
+      "description": "Tedaviniz tamamlandığında deneyiminizi paylaşabilirsiniz. İlk samimi yorum, sonraki hastalara yol gösterir."
+    },
+    "doctorReviews": {
+      "title": "Bu hekim için henüz yorum yok",
+      "description": "Tedavi sonrası deneyiminizi paylaşan ilk hasta olabilirsiniz. Yorumlar diğer uluslararası hastalar için güven oluşturur."
+    },
+    "clinicDoctors": {
+      "title": "Bu klinikte henüz listelenen hekim yok",
+      "description": "Kliniğin kendisinden randevu talebi oluşturabilir; hekim ataması onay sürecinde netleşir.",
+      "action": "Randevu Oluştur"
+    },
+    "treatments": {
+      "title": "Gösterilecek tedavi bulunamadı",
+      "description": "Katalog şu an boş görünüyor. Klinik aramasıyla ihtiyacınız olan uzmanlığa yine ulaşabilirsiniz.",
+      "action": "Klinik Bul"
+    }
+  },
+  "doctorsPage": {
+    "metaTitle": "Doktorlar | MediQueue",
+    "reviews": "Hasta Yorumları",
+    "searchPh": "Doktor, uzmanlık veya tedavi ara...",
+    "heroAlt": "Hastane ve uzman hekim ortamı",
+    "languages": "Konuşulan Diller",
+    "worksAt": "Çalıştığı Klinik"
+  },
+  "appointments": {
+    "metaTitle": "Randevularım | MediQueue",
+    "eyebrow": "Randevu Takibi",
+    "title": "Randevularım",
+    "lead": "Oluşturduğunuz randevu taleplerini ve güncel durumlarını buradan takip edebilirsiniz.",
+    "liveTip": "Randevularınız canlı API'den çekilmektedir.",
+    "loadFailed": "Randevular yüklenemedi",
+    "alternative": "Alternatif: {date}",
+    "chat": "Mesajlaş",
+    "cancel": "Randevuyu iptal et",
+    "viewClinic": "Kliniği Gör",
+    "status": {
+      "pending": "Onay Bekliyor",
+      "confirmed": "Onaylandı",
+      "alternative_date": "Alternatif Tarih Önerildi",
+      "cancelled": "İptal Edildi",
+      "arrived": "Giriş Yapıldı",
+      "completed": "Tamamlandı"
+    }
+  },
+  "booking": {
+    "consultFee": "Muayene ücreti",
+    "fromPrice": "'den itibaren",
+    "open": "Randevuya Açık",
+    "prevMonth": "Önceki ay",
+    "nextMonth": "Sonraki ay",
+    "slots": "Uygun saatler",
+    "submitting": "Gönderiliyor...",
+    "submit": "Randevu Talebi Oluştur",
+    "pickSlot": "Tarih ve saat seçin",
+    "noDeposit": "Ödeme klinikte alınır — ön ödeme gerekmez",
+    "unavailable": "Bu klinik için çevrimiçi randevu henüz kullanılamıyor.",
+    "successTitle": "Randevu Talebiniz Alındı",
+    "statusLine": "Talebiniz iletildi. Durum: {status}",
+    "clinicWillCall": "Klinik en kısa sürede sizi arayarak randevunuzu onaylayacaktır.",
+    "newBooking": "Yeni randevu oluştur",
+    "notes": "Saat: {time}",
+    "months": ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
+    "weekdays": ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"]
+  },
+  "chat": {
+    "aria": "Klinik ile mesajlaşma",
+    "withClinic": "Klinik ile iletişim",
+    "demoTip": "Mesajlaşma demo verisiyle çalışmaktadır.",
+    "close": "Sohbeti kapat",
+    "placeholder": "Bir mesaj yazın…",
+    "send": "Gönder",
+    "loadFailed": "Mesajlar yüklenemedi",
+    "deleteAria": "Mesajı sil",
+    "attachAria": "Kimlik veya belge ekle"
+  },
+  "confirm": {
+    "cancel": "Vazgeç",
+    "close": "Kapat",
+    "busy": "İşleniyor…",
+    "appointmentTitle": "Randevuyu iptal et",
+    "appointmentBody": "Bu randevuyu iptal etmek istediğine emin misin? Bu işlem geri alınamaz. Klinik bilgilendirilir ve saat başka bir hastaya açılabilir.",
+    "appointmentAction": "Evet, iptal et",
+    "accountTitle": "Hesabını sil",
+    "accountBody": "Hesabını silmek istediğine emin misin? Neden sormuyoruz. Bu işlem geri alınamaz. Kişisel verilerin KVKK kapsamındaki unutulma hakkı gereği silinir veya anonimleştirilir; açık randevular iptal edilir ve giriş kapanır.",
+    "accountAction": "Devam et",
+    "accountSecondTitle": "Son onay",
+    "accountSecondBody": "Bu işlem geri alınamaz. Hesabın kalıcı olarak kapanacak. Randevu geçmişi yasal saklama için anonim tutulur; ad, e-posta, sağlık geçmişi ve mesaj içerikleri silinir.",
+    "accountSecondAction": "Evet, hesabı kalıcı sil",
+    "accountTrigger": "Hesabımı sil",
+    "messageTitle": "Mesajı sil",
+    "messageBody": "Bu mesajı silmek istediğine emin misin? Karşı taraf da göremez. Bu işlem geri alınamaz.",
+    "messageAction": "Mesajı sil"
+  },
+  "datetime": {
+    "istanbul": "İstanbul saati",
+    "yourTime": "Sizin saat diliminiz"
+  },
+  "permission": {
+    "later": "Şimdi değil",
+    "close": "Kapat",
+    "cameraTitle": "Kamera ve dosya erişimi",
+    "cameraAction": "Devam et",
+    "cameraId": "Kimlik belgeni veya tıbbi fotoğrafı doğrulamak için kamera veya galeri erişimine ihtiyacımız var. Görüntü yalnızca bu randevu kaydına eklenir.",
+    "cameraChat": "Bu konuşmaya görüntü veya belge eklemek için dosya erişimine ihtiyacımız var.",
+    "locationTitle": "Konum erişimi",
+    "locationBody": "Yakındaki klinikleri göstermek için konumuna ihtiyacımız var. Konum harita dışında paylaşılmaz.",
+    "locationAction": "Konumu kullan",
+    "locationOk": "Konum alındı — yakındaki klinikler vurgulanır.",
+    "locationDenied": "Konum izni kapalı. Tarayıcı site ayarlarından açabilirsin.",
+    "notifyTitle": "Tarayıcı bildirimleri",
+    "notifyBody": "Randevu onayı ve yeni mesajlar için tarayıcı bildirimi göndermek istiyoruz. İstediğin zaman kapatabilirsin.",
+    "notifyAction": "Bildirimlere izin ver",
+    "notifyEnable": "Tarayıcı bildirimlerini aç",
+    "notifyOn": "Bildirimler açık",
+    "notifyDenied": "Bildirim izni tarayıcıda kapalı. Site ayarlarından açabilirsin.",
+    "notifyUnsupported": "Bu tarayıcı bildirim desteklemiyor."
+  }
+}

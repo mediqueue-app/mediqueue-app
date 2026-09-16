@@ -11,7 +11,7 @@ export function TreatmentGrid() {
         <Link
           key={t.id}
           href={`/treatments#${t.slug}`}
-          className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all hover:-translate-y-1 hover:border-[#3a6ad6]/40 hover:shadow-xl hover:shadow-slate-200/60"
+          className="group flex flex-col overflow-hidden rounded-2xl border border-slate-200 bg-white transition-all hover:-translate-y-1 hover:border-primary/40 hover:shadow-xl hover:shadow-slate-200/60"
         >
           <div className="relative aspect-[4/3] overflow-hidden">
             <SmartImage
@@ -20,16 +20,16 @@ export function TreatmentGrid() {
               className="h-full w-full transition-transform duration-500 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent" />
-            <span className="absolute bottom-3 left-3 flex h-11 w-11 items-center justify-center rounded-xl bg-white text-[#3a6ad6] shadow-lg ring-1 ring-black/5">
+            <span className="absolute bottom-3 left-3 flex h-11 w-11 items-center justify-center rounded-xl bg-white text-primary shadow-lg ring-1 ring-black/5">
               <TreatmentIcon name={t.icon} className="h-6 w-6" />
             </span>
           </div>
 
           <div className="flex flex-1 flex-col p-4">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-[#3a6ad6]">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-primary">
               {t.category}
             </p>
-            <h3 className="mt-0.5 font-semibold text-slate-900 group-hover:text-[#3a6ad6]">
+            <h3 className="mt-0.5 font-semibold text-slate-900 group-hover:text-primary">
               {t.name}
             </h3>
             <p className="mt-1 line-clamp-2 flex-1 text-sm text-slate-500">

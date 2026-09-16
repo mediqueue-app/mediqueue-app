@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { CheckCircle2, Info, X, XCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { usePresence } from "@/lib/motion";
 
 export type ToastTone = "success" | "danger" | "info";
 
@@ -19,11 +20,11 @@ const TONES: Record<
 > = {
   success: {
     icon: CheckCircle2,
-    accent: "bg-emerald-500",
-    iconColor: "text-emerald-500",
+    accent: "bg-success",
+    iconColor: "text-success",
   },
-  danger: { icon: XCircle, accent: "bg-red-500", iconColor: "text-red-500" },
-  info: { icon: Info, accent: "bg-primary", iconColor: "text-primary" },
+  danger: { icon: XCircle, accent: "bg-error", iconColor: "text-error" },
+  info: { icon: Info, accent: "bg-secondary", iconColor: "text-secondary" },
 };
 
 /**
@@ -46,31 +47,41 @@ export function Toast({
     return () => clearTimeout(timer);
   }, [toast, duration, onDismiss]);
 
-  if (!toast) return null;
+  const [current, setCurrent] = useState(toast);
+  useEffect(() => {
+    if (toast) setCurrent(toast);
+  }, [toast]);
 
-  const tone = TONES[toast.tone];
+  const { mounted, leaving } = usePresence(Boolean(toast));
+
+  if (!mounted || !current) return null;
+
+  const tone = TONES[current.tone];
   const Icon = tone.icon;
 
   return (
     <div
       role="status"
       aria-live="polite"
-      className="fixed bottom-6 left-4 right-4 z-50 flex justify-center sm:left-auto sm:right-6 sm:justify-end"
+      className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] left-4 right-4 z-50 flex justify-center sm:left-auto sm:right-6 sm:justify-end"
     >
       <div
-        key={toast.id}
-        className="animate-fade-in-up flex w-full max-w-sm items-center gap-3 overflow-hidden rounded-2xl border border-slate-100 bg-white pr-3 shadow-lg shadow-slate-900/10"
+        key={current.id}
+        className={cn(
+          "mq-panel flex w-full max-w-sm items-center gap-3 overflow-hidden rounded-2xl border border-border bg-surface pr-3 shadow-lg shadow-slate-900/10",
+          leaving && "is-leave"
+        )}
       >
         <span className={cn("h-full w-1 self-stretch", tone.accent)} />
         <Icon className={cn("h-5 w-5 shrink-0", tone.iconColor)} />
-        <p className="flex-1 py-3.5 text-sm font-medium text-slate-700">
-          {toast.message}
+        <p className="flex-1 py-3.5 text-sm font-medium text-foreground">
+          {current.message}
         </p>
         <button
           type="button"
           onClick={onDismiss}
           aria-label="Bildirimi kapat"
-          className="shrink-0 rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+          className="touch-target shrink-0 rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
         >
           <X className="h-4 w-4" />
         </button>

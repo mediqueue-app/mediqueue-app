@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "language": "Language",
+    "main": "Main menu",
+    "logout": "Sign out",
+    "collapse": "Collapse",
+    "expand": "Expand menu",
+    "shrink": "Collapse menu",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu",
+    "notifications": "Notifications",
+    "closeNotifications": "Close notifications",
+    "search": "Search",
+    "searchPh": "Search clinics, patients or applications…",
+    "crumb": "Admin",
+    "role": "Superadmin",
+    "groups": { "genel": "General", "marketplace": "Marketplace", "system": "System" },
+    "items": {
+      "overview": "Overview",
+      "applications": "Applications",
+      "clinics": "Clinics",
+      "patients": "Patients",
+      "feedback": "Support tickets",
+      "settings": "Settings"
+    }
+  },
+  "pages": {
+    "dashboard": { "title": "Overview", "desc": "Live marketplace snapshot" },
+    "applications": { "title": "Applications", "desc": "Clinic approval centre and document review" },
+    "clinics": { "title": "Clinics", "desc": "Approved clinics, visibility and physicians" },
+    "patients": { "title": "Patients", "desc": "Everyone on the platform and their status" },
+    "feedback": { "title": "Support tickets", "desc": "Feedback from patients and clinics" },
+    "settings": { "title": "System settings", "desc": "Commission rates, showcase and platform config" },
+    "fallback": { "title": "Admin panel" }
+  },
+  "login": {
+    "panel": "Admin",
+    "headline1": "Marketplace",
+    "headline2": "Control centre",
+    "lead": "Approve clinic applications, watch quality standards, and run patients and platform revenue from one panel.",
+    "b1": "Clinic approval centre",
+    "b2": "Real-time revenue analysis",
+    "b3": "Support ticket management",
+    "copyright": "© 2026 MediQueue · Authorised platform admins only",
+    "title": "Admin sign-in",
+    "subtitle": "Sign in with your superadmin account.",
+    "email": "Email",
+    "password": "Password",
+    "signingIn": "Signing in…",
+    "submit": "Sign in to the panel",
+    "demo": "Demo access:",
+    "demoHint": "The fields are pre-filled — you can sign in straight away.",
+    "failed": "Sign-in failed"
+  },
+  "chrome": {
+    "redirecting": "Redirecting to sign-in…",
+    "loading": "Loading…"
+  },
+  "notify": {
+    "n1t": "New clinic application",
+    "n1d": "Istanbul Hair Center is waiting for approval.",
+    "n2t": "High-priority support ticket",
+    "n2d": "Ahmed Al-Farsi: appointment confirmation never arrived.",
+    "n3t": "Monthly revenue record",
+    "n3d": "August commission reached ₺341,580."
+  },
+  "confirm": {
+    "cancel": "Go back",
+    "close": "Close",
+    "busy": "Working…",
+    "clinicRemoveTitle": "Remove clinic from the marketplace",
+    "clinicRemoveBody": "Are you sure you want to take this clinic off the marketplace? It will leave the showcase and cannot take new patient bookings. This cannot be undone; turning it back on is a separate step.",
+    "clinicRemoveAction": "Yes, remove it",
+    "rejectApplicationBody": "The reason will be emailed to the applicant. This cannot be undone; the clinic will not join the marketplace."
+  },
+  "permission": {
+    "later": "Not now",
+    "close": "Close",
+    "cameraTitle": "Camera and file access",
+    "cameraAction": "Continue",
+    "cameraId": "We need file access only if a review requires an attached image. Files stay on this admin record.",
+    "locationTitle": "Location access",
+    "locationBody": "We need location only if a map feature requires it. It is not shared outside that screen.",
+    "locationAction": "Use location",
+    "locationOk": "Location received.",
+    "locationDenied": "Location is blocked. You can turn it on in the browser site settings.",
+    "notifyTitle": "Browser notifications",
+    "notifyBody": "We would like to send browser notifications for clinic applications and support tickets. You can turn them off at any time.",
+    "notifyAction": "Allow notifications",
+    "notifyEnable": "Turn on browser notifications",
+    "notifyOn": "Notifications are on",
+    "notifyDenied": "Notifications are blocked in the browser. You can turn them on in site settings.",
+    "notifyUnsupported": "This browser does not support notifications."
+  }
+}

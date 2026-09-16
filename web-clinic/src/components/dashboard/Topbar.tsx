@@ -3,44 +3,37 @@
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { Bell, ChevronRight, Menu, Search } from "lucide-react";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
 import { getPageMeta } from "@/lib/navigation";
 import { getClinicUserSync } from "@/lib/services/clinic";
 import { getPendingRequestCountSync } from "@/lib/services/requests";
+import { useHistoryLayer } from "@/lib/history-layer";
+import { LocaleToggle, useT } from "@/lib/i18n";
+import { BrowserNotifyOptIn } from "@/components/ui/permission-gate";
 import { cn } from "@/lib/utils";
 
-const NOTIFICATIONS = [
-  {
-    id: 1,
-    title: "Yeni randevu talebi",
-    detail: "Ahmed Al-Farsi · Saç Ekimi (DHI) talebi geldi.",
-  },
-  {
-    id: 2,
-    title: "Belge doğrulaması bekleniyor",
-    detail: "JCI akreditasyon belgeniz admin onayında.",
-  },
-  {
-    id: 3,
-    title: "Profil görünürlüğü arttı",
-    detail: "Vitrininiz bu hafta %17 daha fazla görüntülendi.",
-  },
-];
-
 export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
+  const t = useT();
   const pathname = usePathname();
   const [notifOpen, setNotifOpen] = useState(false);
-  const meta = getPageMeta(pathname);
+  const closeNotif = useHistoryLayer(notifOpen, () => setNotifOpen(false));
+  const meta = getPageMeta(pathname, t);
   const user = getClinicUserSync();
   const alerts = getPendingRequestCountSync();
+  const notifications = [
+    { id: 1, title: t("notify.n1t"), detail: t("notify.n1d") },
+    { id: 2, title: t("notify.n2t"), detail: t("notify.n2d") },
+    { id: 3, title: t("notify.n3t"), detail: t("notify.n3d") },
+  ];
 
   return (
-    <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
+    <header className="safe-top sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 backdrop-blur-md">
       <div className="flex h-16 items-center gap-3 px-4 sm:gap-4 sm:px-6 lg:px-8">
         <button
           type="button"
           onClick={onMenuClick}
-          aria-label="Menüyü aç"
-          className="rounded-xl p-2 text-slate-500 transition-colors hover:bg-slate-100 lg:hidden"
+          aria-label={t("nav.openMenu")}
+          className="touch-target inline-flex items-center justify-center rounded-xl p-2 text-slate-500 transition-colors hover:bg-slate-100 lg:hidden"
         >
           <Menu className="h-5 w-5" />
         </button>
@@ -53,7 +46,7 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
 
         <div className="hidden min-w-0 flex-col lg:flex">
           <div className="flex items-center gap-1.5 text-xs text-slate-400">
-            <span>Klinik</span>
+            <span>{t("nav.crumb")}</span>
             {pathname !== "/dashboard" && (
               <>
                 <ChevronRight className="h-3 w-3" />
@@ -75,19 +68,20 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
           />
           <input
             type="search"
-            placeholder="Hasta, talep veya doktor ara..."
-            aria-label="Ara"
+            placeholder={t("nav.searchPh")}
+            aria-label={t("nav.search")}
             className="w-full rounded-xl border border-slate-200 bg-slate-50/80 py-2.5 pl-10 pr-3 text-sm text-slate-700 placeholder:text-slate-400 transition-colors focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10"
           />
         </div>
 
         <div className="ml-auto flex items-center gap-1.5 sm:ml-0 sm:gap-2">
+          <LocaleToggle className="hidden rounded-full border border-slate-200 p-0.5 sm:inline-flex" />
           <div className="relative">
             <button
               type="button"
-              onClick={() => setNotifOpen((v) => !v)}
-              className="relative flex h-10 w-10 items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100"
-              aria-label="Bildirimler"
+              onClick={() => (notifOpen ? closeNotif() : setNotifOpen(true))}
+              className="touch-target relative inline-flex items-center justify-center rounded-xl text-slate-500 transition-colors hover:bg-slate-100"
+              aria-label={t("nav.notifications")}
             >
               <Bell className="h-[18px] w-[18px]" />
               {alerts > 0 && (
@@ -101,20 +95,28 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
               <>
                 <button
                   type="button"
-                  aria-label="Bildirimleri kapat"
+                  aria-label={t("nav.closeNotifications")}
                   className="fixed inset-0 z-10"
-                  onClick={() => setNotifOpen(false)}
+                  onClick={closeNotif}
                 />
-                <div className="absolute right-0 z-20 mt-2 w-80 rounded-xl border border-slate-200 bg-white p-2 shadow-lg">
+                <div className="absolute right-0 z-20 mt-2 w-80 rounded-xl border border-border bg-surface p-2 shadow-lg">
                   <p className="px-2 py-1.5 text-xs font-semibold uppercase tracking-wide text-slate-400">
-                    Bildirimler
+                    {t("nav.notifications")}
                   </p>
-                  {NOTIFICATIONS.map((n, i) => (
+                  {notifications.length === 0 ? (
+                    <LocalizedEmpty
+                      copyKey="notifications"
+                      icon={Bell}
+                      compact
+                      className="border-0 py-6 shadow-none"
+                    />
+                  ) : (
+                    notifications.map((n, i) => (
                     <div
                       key={n.id}
                       className={cn(
                         "rounded-lg px-2 py-2 hover:bg-slate-50",
-                        i !== NOTIFICATIONS.length - 1 &&
+                        i !== notifications.length - 1 &&
                           "border-b border-slate-100"
                       )}
                     >
@@ -123,13 +125,18 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
                       </p>
                       <p className="text-xs text-slate-500">{n.detail}</p>
                     </div>
-                  ))}
+                  ))
+                  )}
+                  {/* Bell opened = notification context; dashboard load does not ask. */}
+                  <div className="mt-1 border-t border-slate-100 px-1 pt-1">
+                    <BrowserNotifyOptIn className="w-full justify-center" />
+                  </div>
                 </div>
               </>
             )}
           </div>
 
-          <div className="flex h-10 items-center gap-2 rounded-xl pl-1 pr-2 sm:pr-3">
+          <div className="touch-target flex items-center gap-2 rounded-xl pl-1 pr-2 sm:pr-3">
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-xs font-bold text-white">
               {user.initials}
             </div>
@@ -138,7 +145,7 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
                 {user.name.split(" ").slice(-1)[0]}
               </p>
               <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">
-                Klinik Yöneticisi
+                {t("nav.superRole")}
               </p>
             </div>
           </div>

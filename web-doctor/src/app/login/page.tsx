@@ -2,9 +2,16 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Lock, Sparkles, Stethoscope, X } from "lucide-react";
-import { ApiError } from "@/lib/api/client";
+import { Lock, Sparkles, X } from "lucide-react";
+import { BrandMark } from "@/components/ui/BrandMark";
+import { toUserError } from "@/lib/api/client";
 import { isAuthenticated, login } from "@/lib/auth";
+import { safeInternalPath, useHistoryLayer } from "@/lib/history-layer";
+
+function nextPath() {
+  if (typeof window === "undefined") return "/dashboard";
+  return safeInternalPath(new URLSearchParams(window.location.search).get("next"), "/dashboard");
+}
 
 export default function LoginPage() {
   const router = useRouter();
@@ -13,10 +20,11 @@ export default function LoginPage() {
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [forgotOpen, setForgotOpen] = useState(false);
+  const closeForgot = useHistoryLayer(forgotOpen, () => setForgotOpen(false));
 
   useEffect(() => {
     if (isAuthenticated()) {
-      router.replace("/dashboard");
+      router.replace(nextPath());
     }
   }, [router]);
 
@@ -26,15 +34,9 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login(email, password);
-      router.push("/dashboard");
+      router.replace(nextPath());
     } catch (err) {
-      const message =
-        err instanceof ApiError
-          ? err.detail
-          : err instanceof Error
-            ? err.message
-            : "Giriş başarısız";
-      setError(message);
+      setError(toUserError(err));
     } finally {
       setLoading(false);
     }
@@ -62,9 +64,7 @@ export default function LoginPage() {
 
           <div className="relative flex h-full min-h-[560px] flex-col justify-between p-10">
             <div className="flex items-center gap-2.5">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 text-white ring-1 ring-white/25 backdrop-blur">
-                <Stethoscope className="h-5 w-5" strokeWidth={2.25} />
-              </div>
+              <BrandMark size={40} className="h-10 w-10 ring-1 ring-white/25" />
               <div>
                 <p className="text-[15px] font-bold tracking-tight text-white">
                   MEDI<span className="text-sky-300">·</span>QUEUE
@@ -105,12 +105,10 @@ export default function LoginPage() {
           </div>
         </div>
 
-        <div className="bg-white p-8 sm:p-10">
+        <div className="bg-surface p-8 text-foreground sm:p-10">
           <div className="mb-8">
-            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white shadow-lg shadow-primary/30 lg:hidden">
-              <Stethoscope className="h-7 w-7" strokeWidth={2.5} />
-            </div>
-            <h1 className="font-display text-3xl tracking-tight text-slate-900">
+            <BrandMark size={56} className="mb-5 h-14 w-14 shadow-lg shadow-primary/30 lg:hidden" />
+            <h1 className="font-display text-3xl tracking-tight text-foreground">
               Doktor Girişi
             </h1>
             <p className="mt-2 text-sm text-slate-500">
@@ -119,7 +117,7 @@ export default function LoginPage() {
           </div>
 
           {error ? (
-            <p className="mb-4 rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700">
+            <p className="mq-feedback mb-4 rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
               {error}
             </p>
           ) : null}
@@ -184,8 +182,15 @@ export default function LoginPage() {
       </div>
 
       {forgotOpen ? (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4">
-          <div className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-xl">
+        <div
+          className="mq-overlay fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 px-4"
+          onClick={closeForgot}
+          role="presentation"
+        >
+          <div
+            className="mq-panel w-full max-w-sm rounded-2xl bg-surface p-6 text-foreground shadow-xl"
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className="mb-3 flex items-start justify-between gap-3">
               <div className="flex items-center gap-2 text-slate-900">
                 <Lock className="h-4 w-4 text-primary" />
@@ -193,8 +198,9 @@ export default function LoginPage() {
               </div>
               <button
                 type="button"
-                onClick={() => setForgotOpen(false)}
+                onClick={closeForgot}
                 aria-label="Kapat"
+                className="touch-target inline-flex items-center justify-center rounded-lg text-slate-400"
               >
                 <X className="h-4 w-4 text-slate-400" />
               </button>

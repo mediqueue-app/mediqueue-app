@@ -5,6 +5,7 @@ import { Calendar, Shield, Sparkles } from "lucide-react";
 import type { MedicalNote, Patient } from "@/types";
 import { PatientTimeline } from "@/components/patients/PatientTimeline";
 import { getTimelineProgress } from "@/lib/patient-utils";
+import { formatDateTime } from "@/lib/datetime";
 
 const DEMO_NOTES: MedicalNote[] = [
   {
@@ -120,8 +121,7 @@ export function NextTreatmentTab({ patient }: { patient: Patient }) {
               </p>
               <p className="mt-2 flex items-center gap-1.5 text-[11px] text-slate-400">
                 <Calendar className="h-3 w-3" />
-                {note.authorName} ·{" "}
-                {new Date(note.createdAt).toLocaleString("tr-TR")}
+                {note.authorName} · {formatDateTime(note.createdAt)}
               </p>
             </li>
           ))}

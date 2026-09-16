@@ -5,6 +5,7 @@ import { CalendarClock, CheckCircle2, Clock3 } from "lucide-react";
 import type { Patient, PatientAppointment } from "@/types";
 import { StatusBadge } from "@/components/shared/StatusBadge";
 import { cn } from "@/lib/utils";
+import { formatDate as formatDateMedium } from "@/lib/datetime";
 
 const DEMO_HISTORY: PatientAppointment[] = [
   {
@@ -33,11 +34,7 @@ const DEMO_HISTORY: PatientAppointment[] = [
 ];
 
 function formatDate(date: string) {
-  return new Date(`${date}T12:00:00`).toLocaleDateString("tr-TR", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
+  return formatDateMedium(date, { style: "medium" });
 }
 
 export function AppointmentHistoryTab({ patient }: { patient: Patient }) {

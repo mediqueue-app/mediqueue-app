@@ -1,6 +1,7 @@
-import { apiFetch, ApiError } from "@/lib/api/client";
+import { apiFetch, ApiError, isTimeoutOrNetwork } from "@/lib/api/client";
 import { mapAppointment } from "@/lib/api/mappers";
 import type { AppointmentRead } from "@/lib/api/types";
+import { clinicTodayKey } from "@/lib/datetime";
 import { clearSession, getToken, requireDoctorId } from "@/lib/auth";
 import {
   getCalendarAppointments,
@@ -25,10 +26,10 @@ async function fetchAllAppointments(): Promise<Appointment[]> {
     );
     return items.map(mapAppointment);
   } catch (err) {
+    if (isTimeoutOrNetwork(err)) throw err;
     if (err instanceof ApiError && err.status === 401) {
       clearSession();
     }
-    // Hybrid: API düşerse demo mock ile devam
     return getCalendarAppointments();
   }
 }
@@ -38,7 +39,7 @@ export async function fetchTodayAppointments(): Promise<Appointment[]> {
     return getTodayAppointments().sort((a, b) => a.time.localeCompare(b.time));
   }
 
-  const today = new Date().toISOString().slice(0, 10);
+  const today = clinicTodayKey();
   const all = await fetchAllAppointments();
   return all
     .filter((item) => item.date === today)

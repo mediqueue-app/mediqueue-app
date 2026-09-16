@@ -18,8 +18,8 @@ export function ClinicCard({
       className={cn(
         "group flex flex-col overflow-hidden rounded-2xl border bg-white transition-all hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/60",
         featured
-          ? "border-[#3a6ad6]/40 ring-1 ring-[#3a6ad6]/20"
-          : "border-slate-200 hover:border-[#3a6ad6]/30"
+          ? "border-primary/40 ring-1 ring-primary/20"
+          : "border-slate-200 hover:border-primary/30"
       )}
     >
       <div className="relative aspect-[4/3] overflow-hidden">
@@ -29,11 +29,11 @@ export function ClinicCard({
           className="h-full w-full transition-transform duration-500 group-hover:scale-105"
         />
         <div className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-xs font-semibold text-slate-700 shadow-sm backdrop-blur">
-          <BadgeCheck className="h-3.5 w-3.5 text-[#3a6ad6]" />
+          <BadgeCheck className="h-3.5 w-3.5 text-primary" />
           Akredite Klinik
         </div>
         {featured ? (
-          <div className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-[#3a6ad6] px-2.5 py-1 text-xs font-semibold text-white shadow-sm">
+          <div className="absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 text-xs font-semibold text-white shadow-sm">
             <Sparkles className="h-3.5 w-3.5" />
             Öne Çıkan
           </div>
@@ -42,7 +42,7 @@ export function ClinicCard({
 
       <div className="flex flex-1 flex-col p-4">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-semibold text-slate-900 group-hover:text-[#3a6ad6]">
+          <h3 className="font-semibold text-slate-900 group-hover:text-primary">
             {clinic.name}
           </h3>
           <StarRating rating={clinic.rating} showCount={false} />
@@ -57,7 +57,7 @@ export function ClinicCard({
           {clinic.specialties.map((s) => (
             <span
               key={s}
-              className="rounded-full bg-[#eaf0fc] px-2.5 py-1 text-xs font-medium text-[#3a6ad6]"
+              className="rounded-full bg-primary-light px-2.5 py-1 text-xs font-medium text-primary"
             >
               {s}
             </span>
@@ -71,7 +71,7 @@ export function ClinicCard({
               {formatPrice(clinic.priceFrom)}
             </p>
           </div>
-          <span className="text-sm font-semibold text-[#3a6ad6] group-hover:underline">
+          <span className="text-sm font-semibold text-primary group-hover:underline">
             İncele →
           </span>
         </div>

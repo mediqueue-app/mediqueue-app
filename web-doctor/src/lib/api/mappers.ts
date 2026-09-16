@@ -3,6 +3,7 @@ import type {
   AppointmentStatusApi,
   DoctorRead,
 } from "@/lib/api/types";
+import { appointmentSlotTime } from "@/lib/datetime";
 import type {
   Appointment,
   AppointmentStatus,
@@ -96,10 +97,7 @@ export function mapDoctorProfile(
 
 export function mapAppointment(item: AppointmentRead): Appointment {
   const date = item.requested_date.slice(0, 10);
-  const time =
-    item.requested_date.length > 10
-      ? item.requested_date.slice(11, 16) || "09:00"
-      : "09:00";
+  const time = appointmentSlotTime(item.requested_date, item.notes) ?? "09:00";
 
   return {
     id: String(item.id),
@@ -166,7 +164,7 @@ export function mapAppointmentsToPatients(
       appointmentHistory: items.map((item) => ({
         id: String(item.id),
         date: item.requested_date.slice(0, 10),
-        time: "09:00",
+        time: appointmentSlotTime(item.requested_date, item.notes) ?? "09:00",
         treatmentType: item.branch,
         status: STATUS_MAP[item.status] ?? "BEKLIYOR",
         outcomeNote: item.notes ?? undefined,

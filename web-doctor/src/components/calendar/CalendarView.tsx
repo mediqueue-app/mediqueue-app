@@ -29,13 +29,15 @@ import {
   groupAppointmentsByDate,
   toDateKey,
 } from "@/lib/calendar-utils";
+import { toUserError } from "@/lib/api/client";
+import { useHistoryLayer } from "@/lib/history-layer";
 import { cn } from "@/lib/utils";
 
 const STATUS_LEGEND = [
-  { label: "Onaylandı", className: "bg-emerald-500" },
-  { label: "Bekliyor", className: "bg-amber-500" },
-  { label: "Tamamlandı", className: "bg-blue-500" },
-  { label: "İptal", className: "bg-red-400" },
+  { label: "Onaylandı", className: "bg-success" },
+  { label: "Bekliyor", className: "bg-warning" },
+  { label: "Tamamlandı", className: "bg-neutral-muted" },
+  { label: "İptal", className: "bg-error" },
 ] as const;
 
 export function CalendarView({
@@ -51,6 +53,9 @@ export function CalendarView({
   const [focusDate, setFocusDate] = useState(() => new Date(today));
   const [selectedDate, setSelectedDate] = useState(todayKey);
   const [showAvailability, setShowAvailability] = useState(false);
+  const closeAvailability = useHistoryLayer(showAvailability, () =>
+    setShowAvailability(false)
+  );
   const [availability, setAvailability] =
     useState<AvailabilitySlot[]>(() => getInitialAvailabilitySlots());
   const [availabilitySource, setAvailabilitySource] =
@@ -85,16 +90,14 @@ export function CalendarView({
       const { slots, source } = await saveAvailabilitySlots(availability);
       setAvailability(slots);
       setAvailabilitySource(source);
-      setShowAvailability(false);
+      closeAvailability();
       show(
         source === "api"
           ? "Müsaitlik kalıcı olarak kaydedildi"
           : "Mock oturum — API yokken kalıcı değil"
       );
     } catch (err) {
-      setSaveError(
-        err instanceof Error ? err.message : "Müsaitlik kaydedilemedi"
-      );
+      setSaveError(toUserError(err));
     } finally {
       setSaving(false);
     }
@@ -147,7 +150,7 @@ export function CalendarView({
               type="button"
               onClick={() => navigate(-1)}
               aria-label="Önceki"
-              className="rounded-lg p-2 text-slate-500 hover:bg-white hover:text-slate-800"
+              className="touch-target rounded-lg p-2 text-slate-500 hover:bg-white hover:text-slate-800"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
@@ -155,7 +158,7 @@ export function CalendarView({
               type="button"
               onClick={() => navigate(1)}
               aria-label="Sonraki"
-              className="rounded-lg p-2 text-slate-500 hover:bg-white hover:text-slate-800"
+              className="touch-target rounded-lg p-2 text-slate-500 hover:bg-white hover:text-slate-800"
             >
               <ChevronRight className="h-4 w-4" />
             </button>
@@ -262,8 +265,8 @@ export function CalendarView({
 
       {/* Müsaitlik modal */}
       {showAvailability && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
-          <div className="flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
+        <div className="mq-overlay fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4 backdrop-blur-sm">
+          <div className="mq-panel flex max-h-[90vh] w-full max-w-2xl flex-col overflow-hidden rounded-2xl bg-surface text-foreground shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
               <div>
                 <h2 className="font-display text-xl tracking-tight text-slate-900">
@@ -278,9 +281,9 @@ export function CalendarView({
               </div>
               <button
                 type="button"
-                onClick={() => setShowAvailability(false)}
+                onClick={closeAvailability}
                 aria-label="Kapat"
-                className="rounded-lg p-2 text-slate-400 hover:bg-slate-100"
+                className="touch-target rounded-lg p-2 text-slate-400 hover:bg-slate-100"
               >
                 <X className="h-5 w-5" />
               </button>
@@ -296,7 +299,7 @@ export function CalendarView({
                 }
               />
               {saveError && (
-                <p className="mt-3 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700">
+                <p className="mq-feedback mt-3 rounded-lg border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
                   {saveError}
                 </p>
               )}

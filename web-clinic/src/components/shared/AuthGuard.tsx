@@ -3,12 +3,15 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { isAuthenticated } from "@/lib/auth";
+import { loginRedirect } from "@/lib/history-layer";
+import { useT } from "@/lib/i18n";
 import { fetchClinicProfile } from "@/lib/services/clinic";
 import { fetchAppointmentRequests } from "@/lib/services/requests";
 
 const BOOT_TIMEOUT_MS = 8_000;
 
 export function AuthGuard({ children }: { children: React.ReactNode }) {
+  const t = useT();
   const router = useRouter();
   const [ready, setReady] = useState(false);
 
@@ -18,7 +21,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
     async function boot() {
       if (!isAuthenticated()) {
-        router.replace("/login");
+        router.replace(loginRedirect("/login"));
         return;
       }
 
@@ -46,7 +49,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   if (!isAuthenticated()) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
-        <p className="text-sm text-slate-500">Giriş sayfasına yönlendiriliyor…</p>
+        <p className="text-sm text-slate-500">{t("chrome.redirecting")}</p>
       </div>
     );
   }
@@ -54,7 +57,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   if (!ready) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
-        <p className="text-sm text-slate-500">Yükleniyor…</p>
+        <p className="text-sm text-slate-500">{t("chrome.loading")}</p>
       </div>
     );
   }

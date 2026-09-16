@@ -34,15 +34,18 @@ export function ContactPage() {
     consent: false,
   });
   const [status, setStatus] = useState<"idle" | "submitting" | "success">("idle");
+  const [formError, setFormError] = useState<string | null>(null);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.email || !form.consent) return;
     setStatus("submitting");
+    setFormError(null);
     try {
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: AbortSignal.timeout(12_000),
         body: JSON.stringify({
           mode: activeTab === "patient" ? "patient" : "clinic",
           source: "İletişim Sayfası (/contact)",
@@ -56,9 +59,20 @@ export function ContactPage() {
           role: activeTab === "patient" ? "patient" : "clinic",
         }),
       });
-      if (!response.ok) throw new Error("Failed to submit contact form");
+      if (!response.ok) {
+        setFormError(
+          response.status === 422
+            ? c.error
+            : response.status >= 500
+              ? c.errorServer
+              : c.error
+        );
+        setStatus("idle");
+        return;
+      }
       setStatus("success");
     } catch {
+      setFormError(c.errorNetwork);
       setStatus("idle");
     }
   };
@@ -226,7 +240,7 @@ export function ContactPage() {
                         />
                       </div>
 
-                      <div className="flex items-start gap-3 pt-2">
+                      <div className="flex min-h-12 items-start gap-3 pt-2">
                         <input
                           type="checkbox"
                           id="consent"
@@ -239,6 +253,10 @@ export function ContactPage() {
                           {c.privacyNote}
                         </label>
                       </div>
+
+                      {formError ? (
+                        <p className="text-sm text-danger">{formError}</p>
+                      ) : null}
 
                       <div className="pt-2">
                         <Button

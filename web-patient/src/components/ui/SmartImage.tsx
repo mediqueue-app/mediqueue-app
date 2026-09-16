@@ -20,12 +20,13 @@ export function SmartImage({
     return (
       <div
         className={cn(
-          "flex items-center justify-center bg-gradient-to-br from-[#eaf0fc] to-slate-100 text-[#3a6ad6]",
+          "flex items-center justify-center bg-gradient-to-br from-primary-light to-slate-100 text-primary",
           className
         )}
         aria-hidden
       >
         <ImageIcon className="h-8 w-8 opacity-60" />
+        {/* Generic Lucide placeholder — replace with brand illustration when set exists. */}
       </div>
     );
   }

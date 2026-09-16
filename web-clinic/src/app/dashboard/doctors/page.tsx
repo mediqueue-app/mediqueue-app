@@ -12,9 +12,15 @@ import {
   X,
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { PageLoadError } from "@/components/ui/PageLoadError";
 import type { Doctor } from "@/lib/clinic-mock";
 import { addDoctorLocally, fetchDoctors } from "@/lib/services/doctors";
+import { toUserError } from "@/lib/api/client";
+import { useHistoryLayer } from "@/lib/history-layer";
+import { FilePermissionTrigger } from "@/components/ui/permission-gate";
+import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 const TONES = [
@@ -26,9 +32,13 @@ const TONES = [
 ];
 
 export default function DoctorsPage() {
+  const t = useT();
   const [doctors, setDoctors] = useState<Doctor[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
+  const closeModal = useHistoryLayer(modalOpen, () => setModalOpen(false));
 
   useEffect(() => {
     let cancelled = false;
@@ -39,13 +49,16 @@ export default function DoctorsPage() {
           setLoading(false);
         }
       })
-      .catch(() => {
-        if (!cancelled) setLoading(false);
+      .catch((err) => {
+        if (!cancelled) {
+          setError(toUserError(err));
+          setLoading(false);
+        }
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   const [form, setForm] = useState({
     name: "",
@@ -91,7 +104,7 @@ export default function DoctorsPage() {
     };
     void addDoctorLocally(newDoctor).then(setDoctors);
     resetForm();
-    setModalOpen(false);
+    closeModal();
   }
 
   const activeCount = doctors.filter((d) => d.status === "active").length;
@@ -104,6 +117,19 @@ export default function DoctorsPage() {
     );
   }
 
+  if (error) {
+    return (
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setLoading(true);
+          setReloadKey((k) => k + 1);
+        }}
+      />
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
@@ -113,7 +139,7 @@ export default function DoctorsPage() {
           <button
             type="button"
             onClick={() => setModalOpen(true)}
-            className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover"
+            className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover"
           >
             <Plus className="h-4 w-4" />
             Yeni Doktor Ekle
@@ -134,6 +160,13 @@ export default function DoctorsPage() {
       </div>
 
       {/* Yatay liste */}
+      {doctors.length === 0 ? (
+        <LocalizedEmpty
+          copyKey="doctors"
+          icon={Stethoscope}
+          onAction={() => setModalOpen(true)}
+        />
+      ) : (
       <div className="flex flex-col gap-3">
         {doctors.map((doc) => (
           <div
@@ -191,11 +224,12 @@ export default function DoctorsPage() {
           </div>
         ))}
       </div>
+      )}
 
       {/* Yeni doktor modal */}
       {modalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-slate-900/50 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-lg rounded-2xl bg-white shadow-2xl">
+        <div className="mq-overlay fixed inset-0 z-50 flex items-end justify-center overflow-y-auto bg-slate-900/50 p-4 backdrop-blur-sm sm:items-center">
+          <div className="mq-panel mb-[var(--keyboard-inset)] w-full max-w-lg rounded-2xl bg-surface text-foreground shadow-2xl">
             <div className="flex items-center justify-between border-b border-slate-100 px-6 py-4">
               <div>
                 <h2 className="text-lg font-bold text-slate-900">
@@ -207,8 +241,8 @@ export default function DoctorsPage() {
               </div>
               <button
                 type="button"
-                onClick={() => setModalOpen(false)}
-                className="rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
+                onClick={closeModal}
+                className="touch-target inline-flex items-center justify-center rounded-lg p-1.5 text-slate-400 transition-colors hover:bg-slate-100 hover:text-slate-600"
                 aria-label="Kapat"
               >
                 <X className="h-5 w-5" />
@@ -221,12 +255,14 @@ export default function DoctorsPage() {
                 <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400">
                   <Camera className="h-6 w-6" />
                 </div>
-                <button
-                  type="button"
+                <FilePermissionTrigger
+                  accept="image/*"
+                  capture="environment"
+                  description={t("permission.cameraId")}
                   className="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50"
                 >
                   Hekim Fotoğrafı Yükle
-                </button>
+                </FilePermissionTrigger>
               </div>
 
               <Field label="Ad Soyad">
@@ -290,14 +326,14 @@ export default function DoctorsPage() {
               <div className="mt-2 flex items-center justify-end gap-3">
                 <button
                   type="button"
-                  onClick={() => setModalOpen(false)}
-                  className="rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-50"
+                  onClick={closeModal}
+                  className="min-h-12 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-50"
                 >
                   Vazgeç
                 </button>
                 <button
                   type="submit"
-                  className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover"
+                  className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover"
                 >
                   <Plus className="h-4 w-4" />
                   Kadroya Ekle

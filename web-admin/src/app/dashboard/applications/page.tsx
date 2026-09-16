@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { Building2, ChevronRight, FileText, Search } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { PageLoadError } from "@/components/ui/PageLoadError";
 import { StatusBadge, type BadgeTone } from "@/components/ui/StatusBadge";
 import { fetchClinicApplications } from "@/lib/services/applications";
 import type { ApplicationStatus, ClinicApplication } from "@/types";
@@ -32,6 +33,8 @@ export default function ApplicationsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterKey>("pending");
   const [query, setQuery] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -43,12 +46,15 @@ export default function ApplicationsPage() {
         }
       })
       .catch(() => {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setError("İnternet bağlantını kontrol et ve tekrar dene.");
+          setLoading(false);
+        }
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   const counts = useMemo(() => {
     return {
@@ -71,6 +77,19 @@ export default function ApplicationsPage() {
       return matchesFilter && matchesQuery;
     });
   }, [filter, query, clinicApplications]);
+
+  if (error) {
+    return (
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setLoading(true);
+          setReloadKey((k) => k + 1);
+        }}
+      />
+    );
+  }
 
   if (loading) {
     return (

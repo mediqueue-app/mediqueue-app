@@ -66,7 +66,9 @@ export const tr: SiteContent = {
     messagePlaceholder: "İletmek istediğiniz tüm tıbbi ayrıntıları yazabilirsiniz...",
     consent: "Kişisel verilerimin işlenmesini ve gizlilik politikasını kabul ediyorum.",
     privacyLink: "Gizlilik Politikası",
-    error: "Bir hata oluştu. Lütfen tüm alanları doldurup tekrar deneyin.",
+    error: "Eksik veya hatalı alan var. Formu kontrol edip tekrar dene.",
+    errorNetwork: "İnternet bağlantını kontrol et ve tekrar dene.",
+    errorServer: "Bu bizim tarafımızdaki bir sorun, ekibimize bildirildi. Lütfen tekrar dene.",
     submitting: "Gönderiliyor...",
     submit: "Talebi Gönder",
     required: "Bu alan zorunludur.",
@@ -131,6 +133,9 @@ export const tr: SiteContent = {
     topicPlaceholderClinic: "Örn: Klinik Kaydı, Hekim Profili...",
     messagePlaceholder: "İletmek istediğiniz sorularınızı veya notlarınızı yazın...",
     responseNote: "Bıraktığınız iletişim talepleri ekibimiz tarafından mesai saatlerinde incelenir.",
+    error: "Eksik veya hatalı alan var. Formu kontrol edip tekrar dene.",
+    errorNetwork: "İnternet bağlantını kontrol et ve tekrar dene.",
+    errorServer: "Bu bizim tarafımızdaki bir sorun, ekibimize bildirildi. Lütfen tekrar dene.",
   },
   home: {
     platformEyebrow:

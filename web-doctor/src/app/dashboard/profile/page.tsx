@@ -17,7 +17,11 @@ import {
   getCurrentDoctorSync,
   updateCurrentDoctor,
 } from "@/lib/services/doctor";
+import { toUserError } from "@/lib/api/client";
 import { cn } from "@/lib/utils";
+import { AccountDeletionRequest } from "@/components/account/AccountDeletionRequest";
+import { FilePermissionTrigger } from "@/components/ui/permission-gate";
+import { useT } from "@/lib/i18n";
 
 const ALL_LANGUAGES: Language[] = ["TR", "EN", "AR", "RU", "DE", "FR"];
 
@@ -31,6 +35,7 @@ const LANGUAGE_LABELS: Record<Language, string> = {
 };
 
 export default function ProfilePage() {
+  const t = useT();
   const currentDoctor = getCurrentDoctorSync();
   const [fullName, setFullName] = useState(currentDoctor.fullName);
   const [title, setTitle] = useState(currentDoctor.title);
@@ -60,7 +65,7 @@ export default function ProfilePage() {
       setSaved(true);
       setTimeout(() => setSaved(false), 2500);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Kayıt başarısız");
+      setError(toUserError(err));
     } finally {
       setSaving(false);
     }
@@ -94,12 +99,14 @@ export default function ProfilePage() {
               </div>
               <div>
                 <p className="text-sm font-semibold text-slate-700">Profil fotoğrafı</p>
-                <button
-                  type="button"
+                <FilePermissionTrigger
+                  accept="image/*"
+                  capture="environment"
+                  description={t("permission.cameraId")}
                   className="mt-1 text-sm font-semibold text-primary hover:underline"
                 >
                   Fotoğraf değiştir
-                </button>
+                </FilePermissionTrigger>
                 <p className="mt-0.5 text-[11px] text-slate-400">JPG, PNG · maks. 5 MB</p>
               </div>
             </div>
@@ -217,19 +224,25 @@ export default function ProfilePage() {
               </div>
             </div>
 
-            <label className="flex cursor-pointer flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white py-10 transition-colors hover:border-primary/30 hover:bg-primary-light/10">
+            <FilePermissionTrigger
+              accept="image/*,.pdf,application/pdf"
+              description={t("permission.cameraId")}
+              ariaLabel="Sertifika yükle"
+              className="flex w-full cursor-pointer flex-col items-center justify-center rounded-2xl border border-slate-200 bg-white py-10 transition-colors hover:border-primary/30 hover:bg-primary-light/10"
+            >
               <Upload className="h-8 w-8 text-slate-400" />
               <span className="mt-2 text-sm font-semibold text-slate-600">
                 Dosya seç veya sürükleyin
               </span>
               <span className="mt-1 text-xs text-slate-400">PDF, JPG · maks. 10 MB</span>
-              <input type="file" className="sr-only" aria-label="Sertifika yükle" />
-            </label>
+            </FilePermissionTrigger>
           </section>
 
           <div className="flex flex-col items-end gap-2 xl:hidden">
             {error ? (
-              <span className="text-sm font-medium text-red-600">{error}</span>
+              <span className="mq-feedback text-sm font-medium text-red-600" role="alert">
+                {error}
+              </span>
             ) : null}
             {saved && <SavedBadge />}
             <SaveButton onClick={handleSave} saving={saving} />
@@ -250,7 +263,9 @@ export default function ProfilePage() {
 
           <div className="hidden rounded-[1.5rem] border border-white/80 bg-white/95 p-4 shadow-sm backdrop-blur-sm xl:block">
             {error ? (
-              <p className="mb-3 text-sm font-medium text-red-600">{error}</p>
+              <p className="mq-feedback mb-3 text-sm font-medium text-red-600" role="alert">
+                {error}
+              </p>
             ) : null}
             {saved && (
               <div className="mb-3">
@@ -265,6 +280,13 @@ export default function ProfilePage() {
               Profil bilgileriniz yalnızca eşleştirildiğiniz hastalar ve klinik
               yönetimi tarafından görüntülenir. KVKK kapsamında korunmaktadır.
             </p>
+          </div>
+
+          <div className="rounded-[1.5rem] border border-red-100 bg-red-50/50 p-4 backdrop-blur-sm">
+            <h2 className="text-sm font-semibold text-slate-900">
+              {t("confirm.accountTitle")}
+            </h2>
+            <AccountDeletionRequest />
           </div>
         </div>
       </div>

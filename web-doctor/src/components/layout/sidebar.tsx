@@ -2,23 +2,23 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Stethoscope } from "lucide-react";
+import { BrandMark } from "@/components/ui/BrandMark";
 import type { DoctorProfile } from "@/types";
 import { Avatar } from "@/components/ui/avatar";
 import { DoctorStatusBadge } from "@/components/ui/status-badge";
 import { useDoctorStatus } from "@/context/doctor-status-context";
 import { navItems } from "@/lib/nav";
+import { useT } from "@/lib/i18n";
 
 export function Sidebar({ doctor }: { doctor: DoctorProfile }) {
   const pathname = usePathname();
+  const t = useT();
   const { status } = useDoctorStatus();
 
   return (
     <aside className="hidden w-72 shrink-0 flex-col border-r border-slate-200/80 bg-white lg:flex">
       <div className="flex items-center gap-2 px-6 py-6">
-        <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white">
-          <Stethoscope className="h-5 w-5" />
-        </div>
+        <BrandMark size={36} className="h-9 w-9" />
         <span className="text-lg font-semibold tracking-tight text-slate-900">
           Medi<span className="text-primary">Queue</span>
         </span>
@@ -62,9 +62,9 @@ export function Sidebar({ doctor }: { doctor: DoctorProfile }) {
                 }`}
               />
               <span className="flex flex-col">
-                <span>{item.label}</span>
+                <span>{t(item.labelKey)}</span>
                 <span className="text-[11px] font-normal text-slate-400">
-                  {item.description}
+                  {t(item.descriptionKey)}
                 </span>
               </span>
             </Link>

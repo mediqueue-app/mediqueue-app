@@ -4,6 +4,42 @@ import type {
   LanguageCode,
   ScheduleSlotType,
 } from "@/types";
+import {
+  formatDateLong as formatDateLongDt,
+  formatDateRange,
+  formatDateShort as formatDateShortDt,
+  formatMonthYear as formatMonthYearDt,
+  formatWeekdayShort,
+  getDateUiLocale,
+  intlLocale,
+  parseDateKey,
+} from "@/lib/datetime";
+
+export function formatDateLong(isoDate: string): string {
+  return formatDateLongDt(isoDate);
+}
+
+export function formatDateShort(isoDate: string): string {
+  return formatDateShortDt(isoDate);
+}
+
+export function formatMonthYear(isoDate: string): string {
+  return formatMonthYearDt(isoDate);
+}
+
+export function formatDateRangeShort(startIso: string, endIso: string): string {
+  return formatDateRange(startIso, endIso);
+}
+
+export function getWeekday(isoDate: string): string {
+  return new Intl.DateTimeFormat(intlLocale(getDateUiLocale()), {
+    weekday: "long",
+  }).format(parseDateKey(isoDate));
+}
+
+export function getWeekdayShort(isoDate: string): string {
+  return formatWeekdayShort(isoDate);
+}
 
 export function countryCodeToFlagEmoji(countryCode: string): string {
   return countryCode
@@ -38,19 +74,19 @@ export const doctorStatusStyles: Record<
   DoctorStatus,
   { bg: string; text: string; dot: string; ring: string; border: string }
 > = {
-  "MÜSAİT": { bg: "bg-emerald-50", text: "text-emerald-700", dot: "bg-emerald-500", ring: "ring-emerald-600/20", border: "border-emerald-200/60" },
-  "AMELİYATTA": { bg: "bg-rose-50", text: "text-rose-700", dot: "bg-rose-500", ring: "ring-rose-600/20", border: "border-rose-200/60" },
-  "KONSÜLTASYONDA": { bg: "bg-amber-50", text: "text-amber-700", dot: "bg-amber-500", ring: "ring-amber-600/20", border: "border-amber-200/60" },
-  "İZİNLİ": { bg: "bg-slate-100", text: "text-slate-600", dot: "bg-slate-400", ring: "ring-slate-500/20", border: "border-slate-200/60" },
+  "MÜSAİT": { bg: "bg-success-light", text: "text-success", dot: "bg-success", ring: "ring-success/20", border: "border-success/30" },
+  "AMELİYATTA": { bg: "bg-error-light", text: "text-error", dot: "bg-error", ring: "ring-error/20", border: "border-error/30" },
+  "KONSÜLTASYONDA": { bg: "bg-warning-light", text: "text-warning", dot: "bg-warning", ring: "ring-warning/20", border: "border-warning/30" },
+  "İZİNLİ": { bg: "bg-neutral-light", text: "text-neutral", dot: "bg-neutral-muted", ring: "ring-border", border: "border-border" },
 };
 
 export const appointmentStatusStyles: Record<
   AppointmentStatus,
   { bg: string; text: string; border: string }
 > = {
-  "BEKLEMEDE": { bg: "bg-amber-50", text: "text-amber-700", border: "border-amber-200/60" },
-  "ONAYLANDI": { bg: "bg-emerald-50", text: "text-emerald-700", border: "border-emerald-200/60" },
-  "TAMAMLANDI": { bg: "bg-slate-100", text: "text-slate-600", border: "border-slate-200/60" },
+  "BEKLEMEDE": { bg: "bg-warning-light", text: "text-warning", border: "border-warning/30" },
+  "ONAYLANDI": { bg: "bg-success-light", text: "text-success", border: "border-success/30" },
+  "TAMAMLANDI": { bg: "bg-neutral-light", text: "text-neutral", border: "border-border" },
 };
 
 export const slotTypeStyles: Record<
@@ -80,46 +116,8 @@ export const slotTypeStyles: Record<
   },
 };
 
-const turkishWeekdays = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
-const turkishWeekdaysShort = ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"];
-const turkishMonths = [
-  "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
-  "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık",
-];
-
-export function formatDateLong(isoDate: string): string {
-  const d = new Date(`${isoDate}T00:00:00`);
-  return `${d.getDate()} ${turkishMonths[d.getMonth()]} ${d.getFullYear()}, ${turkishWeekdays[d.getDay()]}`;
-}
-
-export function formatDateShort(isoDate: string): string {
-  const d = new Date(`${isoDate}T00:00:00`);
-  return `${d.getDate()} ${turkishMonths[d.getMonth()]}`;
-}
-
-export function formatMonthYear(isoDate: string): string {
-  const d = new Date(`${isoDate}T00:00:00`);
-  return `${turkishMonths[d.getMonth()]} ${d.getFullYear()}`;
-}
-
-export function formatDateRangeShort(startIso: string, endIso: string): string {
-  const start = formatDateShort(startIso);
-  const end = new Date(`${endIso}T00:00:00`);
-  return `${start} – ${end.getDate()} ${turkishMonths[end.getMonth()]} ${end.getFullYear()}`;
-}
-
-export function getWeekday(isoDate: string): string {
-  const d = new Date(`${isoDate}T00:00:00`);
-  return turkishWeekdays[d.getDay()];
-}
-
-export function getWeekdayShort(isoDate: string): string {
-  const d = new Date(`${isoDate}T00:00:00`);
-  return turkishWeekdaysShort[d.getDay()];
-}
-
 export function getDayNumber(isoDate: string): number {
-  return new Date(`${isoDate}T00:00:00`).getDate();
+  return parseDateKey(isoDate).getDate();
 }
 
 export function timeToMinutes(time: string): number {

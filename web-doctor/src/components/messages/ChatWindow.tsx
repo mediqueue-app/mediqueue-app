@@ -9,6 +9,7 @@ import {
   Paperclip,
   Send,
   Smile,
+  Trash2,
 } from "lucide-react";
 import type { ChatMessage, ChatThread } from "@/types";
 import {
@@ -18,6 +19,9 @@ import {
   groupMessagesByDate,
 } from "@/lib/message-utils";
 import { countryCodeToFlagEmoji, cn } from "@/lib/utils";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { FilePermissionTrigger } from "@/components/ui/permission-gate";
+import { useT } from "@/lib/i18n";
 
 const LANG_LABEL: Record<string, string> = {
   AR: "Arapça",
@@ -44,6 +48,8 @@ export function ChatWindow({
   const [messages, setMessages] = useState(thread.messages);
   const [draft, setDraft] = useState("");
   const [autoTranslate, setAutoTranslate] = useState(true);
+  const [pendingDelete, setPendingDelete] = useState<ChatMessage | null>(null);
+  const t = useT();
   const bottomRef = useRef<HTMLDivElement>(null);
   const patientLang = thread.patientLanguage;
   const langName = LANG_LABEL[patientLang] ?? patientLang;
@@ -93,7 +99,7 @@ export function ChatWindow({
               type="button"
               onClick={onBack}
               aria-label="Sohbet listesine dön"
-              className="rounded-xl p-2 text-slate-500 hover:bg-slate-100 lg:hidden"
+              className="touch-target rounded-xl p-2 text-slate-500 hover:bg-slate-100 lg:hidden"
             >
               <ArrowLeft className="h-5 w-5" />
             </button>
@@ -169,6 +175,9 @@ export function ChatWindow({
                   msg={msg}
                   patientName={thread.patientName}
                   autoTranslate={autoTranslate}
+                  onDelete={
+                    msg.sender === "doctor" ? () => setPendingDelete(msg) : undefined
+                  }
                 />
               ))}
             </div>
@@ -179,14 +188,14 @@ export function ChatWindow({
 
       <div className="relative z-10 border-t border-white/50 bg-white/85 p-3.5 backdrop-blur-xl">
         <div className="mx-auto flex max-w-3xl items-end gap-2 rounded-2xl border border-slate-200/80 bg-white p-1.5 shadow-lg shadow-slate-900/5">
-          <button
-            type="button"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-50 hover:text-primary"
-            aria-label="Dosya ekle"
-            title="Yakında"
+          <FilePermissionTrigger
+            accept="image/*,.pdf,application/pdf"
+            ariaLabel="Dosya ekle"
+            description={t("permission.cameraChat")}
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-50 hover:text-primary"
           >
             <Paperclip className="h-4 w-4" />
-          </button>
+          </FilePermissionTrigger>
           <textarea
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
@@ -203,7 +212,7 @@ export function ChatWindow({
           />
           <button
             type="button"
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-50 hover:text-amber-500"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl text-slate-400 hover:bg-slate-50 hover:text-amber-500"
             aria-label="İfade"
             title="Yakında"
           >
@@ -213,13 +222,25 @@ export function ChatWindow({
             type="button"
             onClick={sendMessage}
             disabled={!draft.trim()}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary text-white shadow-md shadow-primary/30 hover:brightness-110 disabled:opacity-35"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-white shadow-md shadow-primary/30 hover:brightness-110 disabled:opacity-35"
             aria-label="Gönder"
           >
             <Send className="h-4 w-4" />
           </button>
         </div>
       </div>
+      <ConfirmDialog
+        open={Boolean(pendingDelete)}
+        title={t("confirm.messageTitle")}
+        description={t("confirm.messageBody")}
+        confirmLabel={t("confirm.messageAction")}
+        onClose={() => setPendingDelete(null)}
+        onConfirm={() => {
+          if (!pendingDelete) return;
+          setMessages((prev) => prev.filter((item) => item.id !== pendingDelete.id));
+          setPendingDelete(null);
+        }}
+      />
     </div>
   );
 }
@@ -228,11 +249,14 @@ function MessageBubble({
   msg,
   patientName,
   autoTranslate,
+  onDelete,
 }: {
   msg: ChatMessage;
   patientName: string;
   autoTranslate: boolean;
+  onDelete?: () => void;
 }) {
+  const t = useT();
   const mine = msg.sender === "doctor";
   const showPatientOriginal =
     autoTranslate && !mine && Boolean(msg.originalText && msg.originalLanguage);
@@ -240,12 +264,22 @@ function MessageBubble({
     autoTranslate && mine && Boolean(msg.patientSeesText && msg.patientLanguage);
 
   return (
-    <div className={cn("flex", mine ? "justify-end" : "justify-start")}>
+    <div className={cn("group flex items-end gap-1.5", mine ? "justify-end" : "justify-start")}>
       {!mine && (
         <div className="mr-2 mt-auto flex h-7 w-7 shrink-0 items-center justify-center rounded-lg bg-white text-[10px] font-bold text-primary shadow-sm ring-1 ring-slate-100">
           {getInitials(patientName)}
         </div>
       )}
+      {onDelete ? (
+        <button
+          type="button"
+          onClick={onDelete}
+          aria-label={t("confirm.messageAria")}
+          className="touch-target mb-1 rounded-lg p-1 text-slate-400 opacity-100 transition-opacity hover:bg-red-50 hover:text-red-600 sm:opacity-0 sm:group-hover:opacity-100 sm:focus:opacity-100"
+        >
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
+      ) : null}
 
       <div
         className={cn(

@@ -1,12 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ApiError } from "@/lib/api/client";
-import { login } from "@/lib/auth";
+import { toUserError } from "@/lib/api/client";
+import { isAuthenticated, login } from "@/lib/auth";
+import { safeInternalPath } from "@/lib/history-layer";
 import {
-  Stethoscope,
   Mail,
   Lock,
   Eye,
@@ -15,15 +15,27 @@ import {
   ShieldCheck,
   ArrowRight,
 } from "lucide-react";
+import { BrandMark } from "@/components/ui/BrandMark";
 import { cn } from "@/lib/utils";
+import { useT } from "@/lib/i18n";
+
+function nextPath() {
+  if (typeof window === "undefined") return "/clinics";
+  return safeInternalPath(new URLSearchParams(window.location.search).get("next"), "/clinics");
+}
 
 export default function LoginPage() {
+  const t = useT();
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (isAuthenticated()) router.replace(nextPath());
+  }, [router]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -32,41 +44,33 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login(email, password);
-      router.push("/clinics");
+      router.replace(nextPath());
     } catch (err) {
-      const message =
-        err instanceof ApiError
-          ? err.detail
-          : err instanceof Error
-            ? err.message
-            : "Giriş başarısız";
-      setError(message);
+      setError(toUserError(err));
     } finally {
       setLoading(false);
     }
   }
 
   return (
-    <div className="flex min-h-[calc(100vh-4rem)] items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100 px-4 py-12">
+    <div className="flex min-h-vv-nav items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100 px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-6 flex flex-col items-center text-center">
           <Link
             href="/"
             className="flex items-center gap-2"
-            aria-label="Ana sayfa"
+            aria-label={t("nav.homeAria")}
           >
-            <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-[#3a6ad6] text-white shadow-lg shadow-[#3a6ad6]/25">
-              <Stethoscope className="h-6 w-6" />
-            </span>
+            <BrandMark size={44} className="h-11 w-11 shadow-lg shadow-primary/20" />
             <span className="text-xl font-bold tracking-tight text-slate-900">
-              Medi<span className="text-[#3a6ad6]">Queue</span>
+              Medi<span className="text-primary">Queue</span>
             </span>
           </Link>
           <h1 className="mt-5 text-2xl font-bold tracking-tight text-slate-900">
-            Tekrar hoş geldiniz
+            {t("auth.welcomeBack")}
           </h1>
           <p className="mt-1 text-sm text-slate-500">
-            Randevularınızı yönetmek için hesabınıza giriş yapın.
+            {t("auth.loginLead")}
           </p>
         </div>
 
@@ -77,10 +81,10 @@ export default function LoginPage() {
                 htmlFor="email"
                 className="mb-1.5 block text-sm font-medium text-slate-700"
               >
-                E-posta
+                {t("auth.email")}
               </label>
               <div className="group relative">
-                <Mail className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#3a6ad6]" />
+                <Mail className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-primary" />
                 <input
                   id="email"
                   type="email"
@@ -89,8 +93,8 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
-                  placeholder="ornek@eposta.com"
-                  className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-[#3a6ad6] focus:ring-2 focus:ring-[#3a6ad6]/20 disabled:opacity-60"
+                  placeholder={t("auth.emailPh")}
+                  className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
                 />
               </div>
             </div>
@@ -101,17 +105,17 @@ export default function LoginPage() {
                   htmlFor="password"
                   className="block text-sm font-medium text-slate-700"
                 >
-                  Şifre
+                  {t("auth.password")}
                 </label>
                 <Link
                   href="/auth/login"
-                  className="text-xs font-medium text-[#3a6ad6] hover:underline"
+                  className="text-xs font-medium text-primary hover:underline"
                 >
-                  Şifremi unuttum
+                  {t("auth.forgot")}
                 </Link>
               </div>
               <div className="group relative">
-                <Lock className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-[#3a6ad6]" />
+                <Lock className="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-primary" />
                 <input
                   id="password"
                   type={showPassword ? "text" : "password"}
@@ -121,14 +125,16 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
                   placeholder="••••••••"
-                  className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-11 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-[#3a6ad6] focus:ring-2 focus:ring-[#3a6ad6]/20 disabled:opacity-60"
+                  className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-11 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
                   disabled={loading}
-                  aria-label={showPassword ? "Şifreyi gizle" : "Şifreyi göster"}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-600"
+                  aria-label={
+                    showPassword ? t("auth.hidePassword") : t("auth.showPassword")
+                  }
+                  className="touch-slop absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-600"
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />
@@ -139,17 +145,17 @@ export default function LoginPage() {
               </div>
             </div>
 
-            <label className="flex items-center gap-2 text-sm text-slate-600">
+            <label className="flex min-h-12 items-center gap-2 text-sm text-slate-600">
               <input
                 type="checkbox"
                 disabled={loading}
-                className="h-4 w-4 rounded border-slate-300 text-[#3a6ad6] accent-[#3a6ad6]"
+                className="h-4 w-4 shrink-0 rounded border-slate-300 text-primary accent-primary"
               />
-              Beni hatırla
+              {t("auth.remember")}
             </label>
 
             {error ? (
-              <p className="text-sm text-red-600" role="alert">
+              <p className="mq-feedback text-sm text-red-600" role="alert">
                 {error}
               </p>
             ) : null}
@@ -158,18 +164,18 @@ export default function LoginPage() {
               type="submit"
               disabled={loading}
               className={cn(
-                "flex w-full items-center justify-center gap-2 rounded-xl bg-[#3a6ad6] px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#2f57b3]",
+                "flex w-full items-center justify-center gap-2 rounded-xl bg-primary px-4 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover",
                 loading && "cursor-not-allowed opacity-80"
               )}
             >
               {loading ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin" />
-                  Giriş yapılıyor...
+                  {t("auth.signingIn")}
                 </>
               ) : (
                 <>
-                  Giriş Yap
+                  {t("auth.signIn")}
                   <ArrowRight className="h-4 w-4" />
                 </>
               )}
@@ -177,19 +183,19 @@ export default function LoginPage() {
           </form>
 
           <p className="mt-6 text-center text-sm text-slate-500">
-            Hesabın yok mu?{" "}
+            {t("auth.noAccount")}{" "}
             <Link
               href="/auth/register"
-              className="font-semibold text-[#3a6ad6] hover:underline"
+              className="font-semibold text-primary hover:underline"
             >
-              Kayıt Ol
+              {t("auth.register")}
             </Link>
           </p>
         </div>
 
         <p className="mt-5 flex items-center justify-center gap-1.5 text-xs text-slate-400">
           <ShieldCheck className="h-4 w-4 text-emerald-500" />
-          Bilgileriniz 256-bit SSL ile şifrelenerek korunur
+          {t("auth.ssl")}
         </p>
       </div>
     </div>

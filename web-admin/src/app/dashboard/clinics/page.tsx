@@ -11,10 +11,13 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
+import { PageLoadError } from "@/components/ui/PageLoadError";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
 import { fetchClinics } from "@/lib/services/clinics";
 import type { Clinic, EntityStatus } from "@/types";
 import { cn, formatNumber, formatTRY } from "@/lib/utils";
+import { useT } from "@/lib/i18n";
 
 export default function ClinicsPage() {
   const [seedClinics, setSeedClinics] = useState<Clinic[]>([]);
@@ -22,6 +25,10 @@ export default function ClinicsPage() {
   const [statuses, setStatuses] = useState<Record<string, EntityStatus>>({});
   const [expanded, setExpanded] = useState<string | null>(null);
   const [query, setQuery] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
+  const [pendingRemove, setPendingRemove] = useState<string | null>(null);
+  const t = useT();
 
   useEffect(() => {
     let cancelled = false;
@@ -34,18 +41,29 @@ export default function ClinicsPage() {
         }
       })
       .catch(() => {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setError("İnternet bağlantını kontrol et ve tekrar dene.");
+          setLoading(false);
+        }
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   function toggleStatus(id: string) {
     setStatuses((prev) => ({
       ...prev,
       [id]: prev[id] === "active" ? "passive" : "active",
     }));
+  }
+
+  function requestToggle(id: string) {
+    if (statuses[id] === "active") {
+      setPendingRemove(id);
+      return;
+    }
+    toggleStatus(id);
   }
 
   const rows = useMemo(() => {
@@ -67,6 +85,19 @@ export default function ClinicsPage() {
     (sum, c) => sum + c.revenueContribution,
     0
   );
+
+  if (error) {
+    return (
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setLoading(true);
+          setReloadKey((k) => k + 1);
+        }}
+      />
+    );
+  }
 
   if (loading) {
     return (
@@ -198,9 +229,9 @@ export default function ClinicsPage() {
                       type="button"
                       role="switch"
                       aria-checked={isActive}
-                      onClick={() => toggleStatus(clinic.id)}
+                      onClick={() => requestToggle(clinic.id)}
                       className={cn(
-                        "relative h-6 w-11 rounded-full transition-colors",
+                        "touch-slop relative h-6 w-11 rounded-full transition-colors",
                         isActive ? "bg-primary" : "bg-slate-300"
                       )}
                     >
@@ -269,6 +300,18 @@ export default function ClinicsPage() {
           );
         })}
       </div>
+      <ConfirmDialog
+        open={Boolean(pendingRemove)}
+        title={t("confirm.clinicRemoveTitle")}
+        description={t("confirm.clinicRemoveBody")}
+        confirmLabel={t("confirm.clinicRemoveAction")}
+        onClose={() => setPendingRemove(null)}
+        onConfirm={() => {
+          if (!pendingRemove) return;
+          toggleStatus(pendingRemove);
+          setPendingRemove(null);
+        }}
+      />
     </div>
   );
 }

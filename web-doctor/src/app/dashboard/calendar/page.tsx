@@ -3,12 +3,15 @@
 import { useEffect, useState } from "react";
 import { CalendarView } from "@/components/calendar/CalendarView";
 import { CalendarPageHeader } from "@/components/calendar/CalendarPageHeader";
+import { PageLoadError } from "@/components/ui/PageLoadError";
+import { toUserError } from "@/lib/api/client";
 import { fetchCalendarAppointments } from "@/lib/services/appointments";
 import type { Appointment } from "@/types";
 
 export default function CalendarPage() {
   const [appointments, setAppointments] = useState<Appointment[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -18,19 +21,23 @@ export default function CalendarPage() {
       })
       .catch((err) => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Takvim yüklenemedi");
+          setError(toUserError(err));
         }
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   if (error) {
     return (
-      <p className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
-        {error}
-      </p>
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setReloadKey((k) => k + 1);
+        }}
+      />
     );
   }
 

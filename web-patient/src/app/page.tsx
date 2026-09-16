@@ -1,3 +1,5 @@
+"use client";
+
 import { Hero } from "@/components/home/Hero";
 import { TreatmentGrid } from "@/components/home/TreatmentGrid";
 import { HowItWorks } from "@/components/home/HowItWorks";
@@ -5,9 +7,10 @@ import { ClinicCard } from "@/components/clinics/ClinicCard";
 import { DoctorCard } from "@/components/doctors/DoctorCard";
 import { SectionHeading } from "@/components/ui/SectionHeading";
 import { clinics, doctors } from "@/lib/mock-data";
+import { useT } from "@/lib/i18n";
 
 export default function HomePage() {
-  // Seed/demo klinik (backend ID'si 1) her zaman öne çıksın ve ilk sırada olsun.
+  const t = useT();
   const seedClinic = clinics.find((c) => c.apiId === 1) ?? clinics[0];
   const featuredClinics = [
     seedClinic,
@@ -21,11 +24,11 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Tedaviler"
-          title="Aradığınız tedaviyi seçin"
-          description="Diş hekimliğinden estetik cerrahiye, en çok tercih edilen tedavi kategorileri."
+          eyebrow={t("home.treatmentsEyebrow")}
+          title={t("home.treatmentsTitle")}
+          description={t("home.treatmentsDesc")}
           linkHref="/treatments"
-          linkLabel="Tümünü gör"
+          linkLabel={t("home.seeAll")}
         />
         <TreatmentGrid />
       </section>
@@ -33,11 +36,11 @@ export default function HomePage() {
       <section className="bg-slate-50 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
-            eyebrow="Öne çıkan klinikler"
-            title="Popüler klinikler"
-            description="Akredite, yüksek puanlı ve şeffaf fiyatlı klinikler."
+            eyebrow={t("home.clinicsEyebrow")}
+            title={t("home.clinicsTitle")}
+            description={t("home.clinicsDesc")}
             linkHref="/clinics"
-            linkLabel="Tüm klinikler"
+            linkLabel={t("home.allClinics")}
           />
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {featuredClinics.map((clinic) => (
@@ -53,11 +56,11 @@ export default function HomePage() {
 
       <section className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <SectionHeading
-          eyebrow="Uzman hekimler"
-          title="Alanında uzman doktorlar"
-          description="Deneyim, puan ve müsaitlik durumuna göre öne çıkan hekimler."
+          eyebrow={t("home.doctorsEyebrow")}
+          title={t("home.doctorsTitle")}
+          description={t("home.doctorsDesc")}
           linkHref="/doctors"
-          linkLabel="Tüm doktorlar"
+          linkLabel={t("home.allDoctors")}
         />
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {featuredDoctors.map((doctor) => (
@@ -69,8 +72,8 @@ export default function HomePage() {
       <section className="bg-slate-50 py-16">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <SectionHeading
-            eyebrow="Nasıl çalışır?"
-            title="3 basit adımda randevunuz hazır"
+            eyebrow={t("home.howEyebrow")}
+            title={t("home.howTitle")}
           />
           <HowItWorks />
         </div>

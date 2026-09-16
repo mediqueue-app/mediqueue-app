@@ -44,12 +44,14 @@ export function LeadCaptureModal() {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">(
     "idle"
   );
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [errors, setErrors] = useState<Record<string, string>>({});
 
   useEffect(() => {
     if (!open) return;
     setForm(emptyForm(role));
     setStatus("idle");
+    setSubmitError(null);
     setErrors({});
   }, [open, mode, role]);
 
@@ -94,10 +96,12 @@ export function LeadCaptureModal() {
     event.preventDefault();
     if (!validate()) return;
     setStatus("submitting");
+    setSubmitError(null);
     try {
       const response = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        signal: AbortSignal.timeout(12_000),
         body: JSON.stringify({
           mode,
           source: "Modal Formu (Lead Modal)",
@@ -106,9 +110,20 @@ export function LeadCaptureModal() {
           locale,
         }),
       });
-      if (!response.ok) throw new Error("failed");
+      if (!response.ok) {
+        const message =
+          response.status === 422
+            ? copy.error
+            : response.status >= 500
+              ? copy.errorServer
+              : copy.error;
+        setSubmitError(message);
+        setStatus("error");
+        return;
+      }
       setStatus("success");
     } catch {
+      setSubmitError(copy.errorNetwork);
       setStatus("error");
     }
   }
@@ -118,10 +133,10 @@ export function LeadCaptureModal() {
   }
 
   return (
-    <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 sm:p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-[9999] flex items-center justify-center overflow-y-auto p-4 sm:p-6">
       <button
         type="button"
-        className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
+        className="mq-overlay fixed inset-0 bg-slate-900/60 backdrop-blur-sm"
         aria-label={copy.close}
         onClick={closeLead}
       />
@@ -129,10 +144,10 @@ export function LeadCaptureModal() {
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="relative z-10 my-auto flex max-h-[calc(100vh-3rem)] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-2xl"
+        className="mq-panel relative z-10 my-auto flex max-h-[calc(100vh-3rem)] w-full max-w-lg flex-col overflow-hidden rounded-3xl border border-border bg-surface shadow-2xl"
       >
         {/* Header */}
-        <div className="flex shrink-0 items-start justify-between border-b border-slate-100 bg-white px-6 py-5">
+        <div className="flex shrink-0 items-start justify-between border-b border-border bg-surface px-6 py-5">
           <div className="pr-4">
             <div
               className="inline-flex rounded-full border border-slate-200 bg-slate-100 p-1 text-xs font-semibold"
@@ -161,7 +176,7 @@ export function LeadCaptureModal() {
           <button
             type="button"
             onClick={closeLead}
-            className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+            className="touch-target inline-flex shrink-0 items-center justify-center rounded-full text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
             aria-label={copy.close}
           >
             <X className="h-5 w-5" />
@@ -300,7 +315,7 @@ export function LeadCaptureModal() {
               />
             </label>
 
-            <label className="flex items-start gap-3 text-xs leading-relaxed text-slate-600">
+            <label className="flex min-h-12 items-start gap-3 text-xs leading-relaxed text-slate-600">
               <input
                 type="checkbox"
                 checked={form.consent}
@@ -317,8 +332,8 @@ export function LeadCaptureModal() {
             {errors.consent ? (
               <p className="text-xs text-danger">{errors.consent}</p>
             ) : null}
-            {status === "error" ? (
-              <p className="text-xs text-danger">{copy.error}</p>
+            {status === "error" && submitError ? (
+              <p className="text-xs text-danger">{submitError}</p>
             ) : null}
 
             <button
@@ -355,7 +370,7 @@ function TabButton({
       aria-selected={active}
       onClick={onClick}
       className={cn(
-        "rounded-full px-3 py-1.5 transition-colors",
+        "min-h-12 rounded-full px-3 py-1.5 transition-colors",
         active ? "bg-ink text-white" : "text-slate-600 hover:text-slate-900"
       )}
     >
@@ -401,7 +416,7 @@ function Field({
 
 function inputClass(error: boolean) {
   return cn(
-    "mt-1 w-full rounded-xl border bg-white px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20",
+    "mt-1 w-full rounded-xl border bg-surface px-3.5 py-2.5 text-sm text-foreground placeholder:text-slate-400 outline-none focus:border-primary focus:ring-2 focus:ring-primary/20",
     error ? "border-danger" : "border-slate-200"
   );
 }

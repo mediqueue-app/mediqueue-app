@@ -1,15 +1,20 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { Search, MapPin, ArrowUpDown, Map, X } from "lucide-react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Search, SearchX, MapPin, ArrowUpDown, Map, X } from "lucide-react";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
 import { cities, type Clinic } from "@/lib/mock-data";
 import type { DataSource } from "@/lib/api/types";
 import { fetchClinics } from "@/lib/services/clinics";
 import { ClinicListCard } from "@/components/clinics/ClinicListCard";
 import { ClinicMap } from "@/components/clinics/ClinicMap";
 import { HybridBadge } from "@/components/common/HybridBadge";
+import { PageLoadError } from "@/components/ui/PageLoadError";
 import { cn } from "@/lib/utils";
+import { toUserError } from "@/lib/api/client";
+import { useHistoryLayer } from "@/lib/history-layer";
+import { useT } from "@/lib/i18n";
 
 const SPECIALTIES = [
   "Tümü",
@@ -56,10 +61,16 @@ const SORTS = [
 type SortKey = (typeof SORTS)[number]["key"];
 
 export function ClinicsExplorer() {
+  const t = useT();
   const searchParams = useSearchParams();
+  const searchKey = searchParams.toString();
+  const router = useRouter();
+  const pathname = usePathname();
   const [allClinics, setAllClinics] = useState<Clinic[]>([]);
   const [source, setSource] = useState<DataSource | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [city, setCity] = useState(searchParams.get("city") ?? "");
   const [specialty, setSpecialty] = useState("Tümü");
@@ -67,13 +78,26 @@ export function ClinicsExplorer() {
   const [sortIndex, setSortIndex] = useState(0);
   const [hoverId, setHoverId] = useState<string | null>(null);
   const [mobileMap, setMobileMap] = useState(false);
+  const closeMap = useHistoryLayer(mobileMap, () => setMobileMap(false));
 
   const sort: SortKey = SORTS[sortIndex].key;
 
   useEffect(() => {
-    // `loading` zaten true olarak başlar; effect yalnızca bir kez çalışır,
-    // bu yüzden senkron setLoading(true) gerekmez (set-state-in-effect'ten kaçınır).
+    const params = new URLSearchParams();
+    const q = query.trim();
+    if (q) params.set("q", q);
+    if (city) params.set("city", city);
+    const qs = params.toString();
+    const href = qs ? `${pathname}?${qs}` : pathname;
+    const current = `${pathname}${searchKey ? `?${searchKey}` : ""}`;
+    if (href !== current) {
+      router.replace(href, { scroll: false });
+    }
+  }, [query, city, pathname, router, searchKey]);
+
+  useEffect(() => {
     let cancelled = false;
+    setError(null);
     fetchClinics()
       .then((res) => {
         if (!cancelled) {
@@ -81,13 +105,16 @@ export function ClinicsExplorer() {
           setSource(res.source);
         }
       })
+      .catch((err) => {
+        if (!cancelled) setError(toUserError(err));
+      })
       .finally(() => {
         if (!cancelled) setLoading(false);
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   function toggleFeature(key: string) {
     setFeatures((prev) => {
@@ -126,16 +153,16 @@ export function ClinicsExplorer() {
       {/* Filtre ve arama barı */}
       <div className="shrink-0 border-b border-slate-200 bg-white">
         <div className="flex flex-col gap-3 px-4 py-3 sm:px-6 lg:flex-row lg:items-center">
-          <label className="flex flex-1 items-center gap-2 rounded-full border border-slate-200 px-4 py-2.5 transition-colors focus-within:border-[#3a6ad6] focus-within:ring-2 focus-within:ring-[#3a6ad6]/25">
+          <label className="flex flex-1 items-center gap-2 rounded-full border border-slate-200 px-4 py-2.5 transition-colors focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/25">
             <Search className="h-5 w-5 shrink-0 text-slate-400" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Klinik veya tedavi ara..."
+              placeholder={t("clinic.searchPh")}
               className="w-full bg-transparent text-sm outline-none placeholder:text-slate-400"
             />
           </label>
-          <label className="flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2.5 transition-colors focus-within:border-[#3a6ad6] focus-within:ring-2 focus-within:ring-[#3a6ad6]/25 lg:w-56">
+          <label className="flex items-center gap-2 rounded-full border border-slate-200 px-4 py-2.5 transition-colors focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/25 lg:w-56">
             <MapPin className="h-5 w-5 shrink-0 text-slate-400" />
             <select
               value={city}
@@ -159,8 +186,8 @@ export function ClinicsExplorer() {
             className={cn(
               "inline-flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
               sortIndex !== 0
-                ? "border-[#3a6ad6] bg-[#3a6ad6] text-white"
-                : "border-slate-200 text-slate-600 hover:border-[#3a6ad6]/40"
+                ? "border-primary bg-primary text-white"
+                : "border-slate-200 text-slate-600 hover:border-primary/40"
             )}
           >
             <ArrowUpDown className="h-3.5 w-3.5" />
@@ -177,8 +204,8 @@ export function ClinicsExplorer() {
               className={cn(
                 "shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
                 features.has(f.key)
-                  ? "border-[#3a6ad6] bg-[#3a6ad6] text-white"
-                  : "border-slate-200 text-slate-600 hover:border-[#3a6ad6]/40 hover:text-[#3a6ad6]"
+                  ? "border-primary bg-primary text-white"
+                  : "border-slate-200 text-slate-600 hover:border-primary/40 hover:text-primary"
               )}
             >
               {f.label}
@@ -195,8 +222,8 @@ export function ClinicsExplorer() {
               className={cn(
                 "shrink-0 rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
                 specialty === s
-                  ? "border-[#3a6ad6] bg-[#3a6ad6] text-white"
-                  : "border-slate-200 text-slate-600 hover:border-[#3a6ad6]/40 hover:text-[#3a6ad6]"
+                  ? "border-primary bg-primary text-white"
+                  : "border-slate-200 text-slate-600 hover:border-primary/40 hover:text-primary"
               )}
             >
               {s}
@@ -218,7 +245,16 @@ export function ClinicsExplorer() {
             {source ? <HybridBadge source={source} /> : null}
           </div>
 
-          {loading ? (
+          {error ? (
+            <PageLoadError
+              message={error}
+              onRetry={() => {
+                setError(null);
+                setLoading(true);
+                setReloadKey((k) => k + 1);
+              }}
+            />
+          ) : loading ? (
             <div className="flex flex-col gap-4">
               {Array.from({ length: 4 }).map((_, i) => (
                 <div
@@ -239,9 +275,17 @@ export function ClinicsExplorer() {
               ))}
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-slate-300 p-12 text-center text-slate-500">
-              Aramanıza uygun klinik bulunamadı. Filtreleri değiştirmeyi deneyin.
-            </div>
+            <LocalizedEmpty
+              copyKey="clinicSearch"
+              icon={SearchX}
+              compact
+              onAction={() => {
+                setQuery("");
+                setCity("");
+                setSpecialty("Tümü");
+                setFeatures(new Set());
+              }}
+            />
           )}
         </div>
 
@@ -258,23 +302,23 @@ export function ClinicsExplorer() {
       <button
         type="button"
         onClick={() => setMobileMap(true)}
-        className="fixed bottom-6 left-1/2 z-40 inline-flex -translate-x-1/2 items-center gap-2 rounded-full bg-[#3a6ad6] px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-[#3a6ad6]/30 transition-colors hover:bg-[#2f57b3] lg:hidden"
+        className="fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] left-1/2 z-40 inline-flex -translate-x-1/2 items-center gap-2 rounded-full bg-primary px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-primary/30 transition-colors hover:bg-primary-hover lg:hidden"
       >
         <Map className="h-4 w-4" />
-        Haritada Göster
+        {t("common.showOnMap")}
       </button>
 
       {/* Mobil: tam ekran harita katmanı */}
       {mobileMap && (
-        <div className="fixed inset-0 z-50 flex flex-col bg-white lg:hidden">
+        <div className="mq-overlay fixed inset-0 z-50 flex flex-col bg-surface text-foreground lg:hidden">
           <div className="flex items-center justify-between border-b border-slate-200 px-4 py-3">
             <p className="text-sm font-semibold text-slate-900">
               {results.length} klinik — Harita
             </p>
             <button
               type="button"
-              onClick={() => setMobileMap(false)}
-              className="inline-flex items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 hover:border-[#3a6ad6]/40 hover:text-[#3a6ad6]"
+              onClick={closeMap}
+              className="inline-flex min-h-12 items-center gap-1.5 rounded-full border border-slate-200 px-3 py-1.5 text-sm font-medium text-slate-600 hover:border-primary/40 hover:text-primary"
             >
               <X className="h-4 w-4" />
               Listeye Dön

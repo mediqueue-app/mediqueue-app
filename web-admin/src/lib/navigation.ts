@@ -8,86 +8,80 @@ import {
   Users,
 } from "lucide-react";
 
+export type NavGroup = "genel" | "marketplace" | "system";
+
 export type NavItem = {
   href: string;
-  label: string;
+  labelKey: string;
   icon: LucideIcon;
-  group: "Genel" | "Pazar Yeri" | "Sistem";
+  group: NavGroup;
 };
 
 export const NAV_ITEMS: NavItem[] = [
-  { href: "/dashboard", label: "Genel Bakış", icon: LayoutGrid, group: "Genel" },
+  { href: "/dashboard", labelKey: "nav.items.overview", icon: LayoutGrid, group: "genel" },
   {
     href: "/dashboard/applications",
-    label: "Başvurular",
+    labelKey: "nav.items.applications",
     icon: ClipboardCheck,
-    group: "Pazar Yeri",
+    group: "marketplace",
   },
   {
     href: "/dashboard/clinics",
-    label: "Klinikler",
+    labelKey: "nav.items.clinics",
     icon: Building2,
-    group: "Pazar Yeri",
+    group: "marketplace",
   },
   {
     href: "/dashboard/patients",
-    label: "Hastalar",
+    labelKey: "nav.items.patients",
     icon: Users,
-    group: "Pazar Yeri",
+    group: "marketplace",
   },
   {
     href: "/dashboard/feedback",
-    label: "Destek Talepleri",
+    labelKey: "nav.items.feedback",
     icon: LifeBuoy,
-    group: "Sistem",
+    group: "system",
   },
   {
     href: "/dashboard/settings",
-    label: "Ayarlar",
+    labelKey: "nav.items.settings",
     icon: Settings,
-    group: "Sistem",
+    group: "system",
   },
 ];
 
-export function getPageMeta(pathname: string): {
+export const GROUP_ORDER: NavGroup[] = ["genel", "marketplace", "system"];
+
+export const GROUP_LABEL: Record<NavGroup, string> = {
+  genel: "nav.groups.genel",
+  marketplace: "nav.groups.marketplace",
+  system: "nav.groups.system",
+};
+
+type Translator = (key: string) => string;
+
+export function getPageMeta(pathname: string, t: Translator): {
   title: string;
   description?: string;
 } {
   if (pathname === "/dashboard") {
-    return {
-      title: "Genel Bakış",
-      description: "Platformun canlı pazar yeri özeti",
-    };
+    return { title: t("pages.dashboard.title"), description: t("pages.dashboard.desc") };
   }
   if (pathname.startsWith("/dashboard/applications")) {
-    return {
-      title: "Başvuru Yönetimi",
-      description: "Klinik onay merkezi ve evrak incelemesi",
-    };
+    return { title: t("pages.applications.title"), description: t("pages.applications.desc") };
   }
   if (pathname.startsWith("/dashboard/clinics")) {
-    return {
-      title: "Klinik Yönetimi",
-      description: "Onaylı klinikler, görünürlük ve doktor kadrosu",
-    };
+    return { title: t("pages.clinics.title"), description: t("pages.clinics.desc") };
   }
   if (pathname.startsWith("/dashboard/patients")) {
-    return {
-      title: "Hasta Yönetimi",
-      description: "Platformdaki tüm hastalar ve durumları",
-    };
+    return { title: t("pages.patients.title"), description: t("pages.patients.desc") };
   }
   if (pathname.startsWith("/dashboard/feedback")) {
-    return {
-      title: "Destek Talepleri",
-      description: "Hasta ve kliniklerden gelen geri bildirimler",
-    };
+    return { title: t("pages.feedback.title"), description: t("pages.feedback.desc") };
   }
   if (pathname.startsWith("/dashboard/settings")) {
-    return {
-      title: "Sistem Ayarları",
-      description: "Komisyon oranları, vitrin ve platform yapılandırması",
-    };
+    return { title: t("pages.settings.title"), description: t("pages.settings.desc") };
   }
-  return { title: "Yönetim Paneli" };
+  return { title: t("pages.fallback.title") };
 }

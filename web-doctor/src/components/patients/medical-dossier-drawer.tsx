@@ -37,10 +37,10 @@ export function MedicalDossierDrawer({
 
   return (
     <>
-      <div className="fixed inset-0 z-40 flex justify-end bg-slate-900/40">
+      <div className="mq-overlay fixed inset-0 z-40 flex justify-end bg-slate-900/40">
         <button aria-label="Kapat" onClick={onClose} className="absolute inset-0" />
 
-        <aside className="relative flex h-full w-full max-w-md flex-col overflow-y-auto bg-white shadow-2xl">
+        <aside className="mq-panel relative flex h-full w-full max-w-md flex-col overflow-y-auto bg-surface text-foreground shadow-2xl">
           <div className="flex items-start justify-between border-b border-slate-200/80 px-6 py-5">
             <div className="flex items-center gap-3">
               <span className="text-4xl leading-none">
@@ -58,7 +58,7 @@ export function MedicalDossierDrawer({
             <button
               type="button"
               onClick={onClose}
-              className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+              className="touch-target rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
             >
               <X className="h-5 w-5" />
             </button>

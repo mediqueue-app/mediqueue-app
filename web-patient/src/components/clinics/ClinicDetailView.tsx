@@ -9,6 +9,7 @@ import {
   ChevronRight,
   Phone,
   Stethoscope,
+  MessageSquare,
 } from "lucide-react";
 import {
   getClinic as getMockClinic,
@@ -27,9 +28,13 @@ import { ClinicTabs } from "@/components/clinics/ClinicTabs";
 import { AmenityList } from "@/components/clinics/AmenityList";
 import { DoctorCard } from "@/components/doctors/DoctorCard";
 import { ReviewCard } from "@/components/ui/ReviewCard";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
 import { StarRating } from "@/components/ui/StarRating";
 import { BookingWidget } from "@/components/booking/BookingWidget";
+import { PageLoadError } from "@/components/ui/PageLoadError";
+import { toUserError } from "@/lib/api/client";
 import { formatPriceRange } from "@/lib/utils";
+import { useT } from "@/lib/i18n";
 
 function resolveClinicApiId(clinic: Clinic, routeId: string): number | null {
   if (clinic.apiId != null) return clinic.apiId;
@@ -39,11 +44,14 @@ function resolveClinicApiId(clinic: Clinic, routeId: string): number | null {
 }
 
 export function ClinicDetailView({ id }: { id: string }) {
+  const t = useT();
   const [clinic, setClinic] = useState<Clinic | null>(null);
   const [clinicDoctors, setClinicDoctors] = useState<Doctor[]>([]);
   const [source, setSource] = useState<DataSource>("mock");
   const [loading, setLoading] = useState(true);
   const [missing, setMissing] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -51,38 +59,43 @@ export function ClinicDetailView({ id }: { id: string }) {
     async function load() {
       setLoading(true);
       setMissing(false);
+      setError(null);
 
       const numericId = /^\d+$/.test(id) ? Number(id) : null;
 
-      if (numericId !== null) {
-        const [clinicRes, fetchedDoctors] = await Promise.all([
-          fetchClinic(numericId),
-          fetchClinicDoctors(numericId),
-        ]);
+      try {
+        if (numericId !== null) {
+          const [clinicRes, fetchedDoctors] = await Promise.all([
+            fetchClinic(numericId),
+            fetchClinicDoctors(numericId),
+          ]);
 
+          if (!cancelled) {
+            if (clinicRes.data) {
+              setClinic(clinicRes.data);
+              setSource(clinicRes.source);
+              setClinicDoctors(fetchedDoctors);
+            } else {
+              setMissing(true);
+            }
+          }
+          return;
+        }
+
+        const mockClinic = getMockClinic(id);
         if (!cancelled) {
-          if (clinicRes.data) {
-            setClinic(clinicRes.data);
-            setSource(clinicRes.source);
-            setClinicDoctors(fetchedDoctors);
+          if (mockClinic) {
+            setClinic(mockClinic);
+            setSource("mock");
+            setClinicDoctors(getMockDoctorsForClinic(mockClinic.id));
           } else {
             setMissing(true);
           }
-          setLoading(false);
         }
-        return;
-      }
-
-      const mockClinic = getMockClinic(id);
-      if (!cancelled) {
-        if (mockClinic) {
-          setClinic(mockClinic);
-          setSource("mock");
-          setClinicDoctors(getMockDoctorsForClinic(mockClinic.id));
-        } else {
-          setMissing(true);
-        }
-        setLoading(false);
+      } catch (err) {
+        if (!cancelled) setError(toUserError(err));
+      } finally {
+        if (!cancelled) setLoading(false);
       }
     }
 
@@ -90,7 +103,21 @@ export function ClinicDetailView({ id }: { id: string }) {
     return () => {
       cancelled = true;
     };
-  }, [id]);
+  }, [id, reloadKey]);
+
+  if (error) {
+    return (
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
+        <PageLoadError
+          message={error}
+          onRetry={() => {
+            setError(null);
+            setReloadKey((k) => k + 1);
+          }}
+        />
+      </div>
+    );
+  }
 
   if (!loading && missing) {
     notFound();
@@ -118,11 +145,11 @@ export function ClinicDetailView({ id }: { id: string }) {
   return (
     <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <nav className="mb-4 flex items-center gap-1.5 text-sm text-slate-400">
-        <Link href="/" className="hover:text-[#3a6ad6]">
+        <Link href="/" className="hover:text-primary">
           Ana Sayfa
         </Link>
         <ChevronRight className="h-4 w-4" />
-        <Link href="/clinics" className="hover:text-[#3a6ad6]">
+        <Link href="/clinics" className="hover:text-primary">
           Klinikler
         </Link>
         <ChevronRight className="h-4 w-4" />
@@ -136,7 +163,7 @@ export function ClinicDetailView({ id }: { id: string }) {
           <div className="flex flex-wrap items-start justify-between gap-4">
             <div>
               <div className="flex flex-wrap items-center gap-2">
-                <span className="inline-flex items-center gap-1 rounded-full bg-[#eaf0fc] px-2.5 py-1 text-xs font-semibold text-[#3a6ad6]">
+                <span className="inline-flex items-center gap-1 rounded-full bg-primary-light px-2.5 py-1 text-xs font-semibold text-primary">
                   <BadgeCheck className="h-3.5 w-3.5" />
                   Akredite Klinik
                 </span>
@@ -160,18 +187,18 @@ export function ClinicDetailView({ id }: { id: string }) {
           <ClinicTabs />
 
           <section id="hakkinda" className="scroll-mt-32 pt-8">
-            <h2 className="text-xl font-bold text-slate-900">Klinik Hakkında</h2>
+            <h2 className="text-xl font-bold text-slate-900">{t("clinic.about")}</h2>
             <p className="mt-3 leading-relaxed text-slate-600">{clinic.about}</p>
 
             <h3 className="mt-6 flex items-center gap-2 text-sm font-semibold text-slate-900">
-              <Stethoscope className="h-4 w-4 text-[#3a6ad6]" />
-              Sunulan Hizmetler
+              <Stethoscope className="h-4 w-4 text-primary" />
+              {t("clinic.services")}
             </h3>
             <div className="mt-3 flex flex-wrap gap-2">
               {clinic.specialties.map((s) => (
                 <span
                   key={s}
-                  className="inline-flex items-center rounded-full bg-[#eaf0fc] px-3.5 py-1.5 text-sm font-semibold text-[#3a6ad6] ring-1 ring-[#3a6ad6]/15"
+                  className="inline-flex items-center rounded-full bg-primary-light px-3.5 py-1.5 text-sm font-semibold text-primary ring-1 ring-primary/15"
                 >
                   {s}
                 </span>
@@ -180,7 +207,7 @@ export function ClinicDetailView({ id }: { id: string }) {
           </section>
 
           <section id="olanaklar" className="scroll-mt-32 pt-10">
-            <h2 className="text-xl font-bold text-slate-900">Klinik Olanakları</h2>
+            <h2 className="text-xl font-bold text-slate-900">{t("clinic.amenities")}</h2>
             <div className="mt-4">
               <AmenityList amenities={clinic.amenities} />
             </div>
@@ -188,23 +215,43 @@ export function ClinicDetailView({ id }: { id: string }) {
 
           <section id="doktorlar" className="scroll-mt-32 pt-10">
             <h2 className="text-xl font-bold text-slate-900">
-              Klinik Doktorları
+              {t("clinic.doctors")}
             </h2>
             <div className="mt-4 grid gap-6 sm:grid-cols-2">
-              {clinicDoctors.map((doctor) => (
-                <DoctorCard key={doctor.id} doctor={doctor} />
-              ))}
+              {clinicDoctors.length === 0 ? (
+                <div className="sm:col-span-2">
+                  <LocalizedEmpty
+                    copyKey="clinicDoctors"
+                    icon={Stethoscope}
+                    compact
+                  />
+                </div>
+              ) : (
+                clinicDoctors.map((doctor) => (
+                  <DoctorCard key={doctor.id} doctor={doctor} />
+                ))
+              )}
             </div>
           </section>
 
           <section id="yorumlar" className="scroll-mt-32 pt-10 pb-4">
             <h2 className="text-xl font-bold text-slate-900">
-              Hasta Yorumları
+              {t("clinic.reviews")}
             </h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-2">
-              {clinic.reviews.map((r) => (
-                <ReviewCard key={r.id} review={r} />
-              ))}
+              {clinic.reviews.length === 0 ? (
+                <div className="sm:col-span-2">
+                  <LocalizedEmpty
+                    copyKey="clinicReviews"
+                    icon={MessageSquare}
+                    compact
+                  />
+                </div>
+              ) : (
+                clinic.reviews.map((r) => (
+                  <ReviewCard key={r.id} review={r} />
+                ))
+              )}
             </div>
           </section>
         </div>
@@ -214,25 +261,25 @@ export function ClinicDetailView({ id }: { id: string }) {
             <BookingWidget
               clinicId={clinicApiId ?? 0}
               doctorId={defaultDoctorId}
-              branch={clinic.specialties[0] ?? "Genel Muayene"}
-              title={`${clinic.name} — Randevu`}
+              branch={clinic.specialties[0] ?? t("clinic.generalExam")}
+              title={t("clinic.bookingTitle", { name: clinic.name })}
               subtitle={`${clinic.district}, ${clinic.city}`}
               price={clinic.priceFrom}
-              priceLabel="Fiyat aralığı"
+              priceLabel={t("clinic.priceRange")}
             />
             <div className="rounded-2xl border border-slate-200 bg-white p-5">
               <p className="text-sm font-semibold text-slate-900">
-                Fiyat aralığı
+                {t("clinic.priceRange")}
               </p>
-              <p className="mt-1 text-lg font-bold text-[#3a6ad6]">
+              <p className="mt-1 text-lg font-bold text-primary">
                 {formatPriceRange(clinic.priceFrom, clinic.priceTo)}
               </p>
               <a
                 href="tel:+908500000000"
-                className="mt-4 flex items-center justify-center gap-2 rounded-xl border border-[#3a6ad6] px-4 py-2.5 text-sm font-semibold text-[#3a6ad6] transition-colors hover:bg-[#eaf0fc]"
+                className="mt-4 flex items-center justify-center gap-2 rounded-xl border border-primary px-4 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary-light"
               >
                 <Phone className="h-4 w-4" />
-                Kliniği Ara
+                {t("clinic.callClinic")}
               </a>
             </div>
           </div>

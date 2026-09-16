@@ -10,40 +10,17 @@ import {
 } from "lucide-react";
 import type { Patient, PatientAppointment } from "@/types";
 import { cn } from "@/lib/utils";
+import { formatAppointmentRange, parseDateKey } from "@/lib/datetime";
 
 function formatAppointmentDate(date: string, time: string): string {
-  const d = new Date(date + "T12:00:00");
-  const days = ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cmt"];
-  const months = [
-    "Oca",
-    "Şub",
-    "Mar",
-    "Nis",
-    "May",
-    "Haz",
-    "Tem",
-    "Ağu",
-    "Eyl",
-    "Eki",
-    "Kas",
-    "Ara",
-  ];
-  const [h, m] = time.split(":");
-  const hour = parseInt(h, 10);
-  const endHour = hour + 1;
-  const ampm = hour >= 12 ? "ÖS" : "ÖÖ";
-  const fmt = (hr: number) => {
-    const h12 = hr % 12 || 12;
-    return `${h12}:${m} ${ampm}`;
-  };
-  return `${days[d.getDay()]}, ${d.getDate()} ${months[d.getMonth()]}, ${fmt(hour)}-${fmt(endHour)}`;
+  return formatAppointmentRange(date, time, 60);
 }
 
 function getUpcomingAppointment(
   history: PatientAppointment[]
 ): PatientAppointment | null {
   const sorted = [...history].sort(
-    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    (a, b) => parseDateKey(b.date).getTime() - parseDateKey(a.date).getTime()
   );
   return sorted.find((a) => a.status !== "IPTAL") ?? sorted[0] ?? null;
 }
@@ -80,7 +57,7 @@ export function ReservationInfoPanel({
         <div className="flex gap-1">
           <button
             type="button"
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-50 hover:text-slate-600"
+            className="touch-slop flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-50 hover:text-slate-600"
             aria-label="Düzenle"
           >
             <Pencil className="h-4 w-4" />
@@ -88,7 +65,7 @@ export function ReservationInfoPanel({
           <button
             type="button"
             onClick={onClose}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-50 hover:text-slate-600"
+            className="touch-slop flex h-8 w-8 items-center justify-center rounded-lg text-slate-400 hover:bg-slate-50 hover:text-slate-600"
             aria-label="Kapat"
           >
             <X className="h-4 w-4" />

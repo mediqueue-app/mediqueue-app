@@ -15,13 +15,21 @@ import {
 import { PageHeader } from "@/components/shared/PageHeader";
 import { StatusBadge, type BadgeTone } from "@/components/ui/StatusBadge";
 import { ToggleSwitch } from "@/components/ui/ToggleSwitch";
+import { PageLoadError } from "@/components/ui/PageLoadError";
+import { AccountDeletionRequest } from "@/components/account/AccountDeletionRequest";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { FilePermissionTrigger } from "@/components/ui/permission-gate";
 import {
   type Amenity,
+  type Accreditation,
   type ClinicProfile,
+  type GalleryPhoto,
   type VerificationStatus,
 } from "@/lib/clinic-mock";
 import { fetchClinicProfile } from "@/lib/services/clinic";
+import { toUserError } from "@/lib/api/client";
 import { cn } from "@/lib/utils";
+import { useT } from "@/lib/i18n";
 
 const VERIFICATION_META: Record<
   VerificationStatus,
@@ -29,13 +37,18 @@ const VERIFICATION_META: Record<
 > = {
   approved: { label: "Onaylandı", tone: "success" },
   pending: { label: "Admin onayında", tone: "warning" },
-  missing: { label: "Yüklenmedi", tone: "neutral" },
+  missing: { label: "Yüklenmedi", tone: "warning" },
 };
 
 export default function ProfilePage() {
   const [profile, setProfile] = useState<ClinicProfile | null>(null);
   const [amenities, setAmenities] = useState<Amenity[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
+  const [pendingPhoto, setPendingPhoto] = useState<GalleryPhoto | null>(null);
+  const [pendingDoc, setPendingDoc] = useState<Accreditation | null>(null);
+  const t = useT();
 
   useEffect(() => {
     let cancelled = false;
@@ -46,17 +59,33 @@ export default function ProfilePage() {
         setAmenities(data.amenities);
         setLoading(false);
       })
-      .catch(() => {
-        if (!cancelled) setLoading(false);
+      .catch((err) => {
+        if (!cancelled) {
+          setError(toUserError(err));
+          setLoading(false);
+        }
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   function toggleAmenity(id: string) {
     setAmenities((prev) =>
       prev.map((a) => (a.id === id ? { ...a, enabled: !a.enabled } : a))
+    );
+  }
+
+  if (error) {
+    return (
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setLoading(true);
+          setReloadKey((k) => k + 1);
+        }}
+      />
     );
   }
 
@@ -76,7 +105,7 @@ export default function ProfilePage() {
         action={
           <button
             type="button"
-            className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+            className="inline-flex min-h-12 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
           >
             <Eye className="h-4 w-4" />
             Vitrini Önizle
@@ -101,7 +130,7 @@ export default function ProfilePage() {
           </div>
           <StatusBadge
             label={`Profil %${profile.completion}`}
-            tone="primary"
+            tone={profile.completion >= 80 ? "success" : "warning"}
             dot={false}
           />
         </div>
@@ -148,21 +177,26 @@ export default function ProfilePage() {
               </div>
               <button
                 type="button"
-                className="absolute right-2 top-2 flex h-7 w-7 items-center justify-center rounded-lg bg-white/90 text-slate-600 opacity-0 shadow-sm transition-opacity hover:text-red-600 group-hover:opacity-100"
-                aria-label="Fotoğrafı sil"
+                onClick={() => setPendingPhoto(photo)}
+                className="absolute right-0 top-0 flex h-12 w-12 items-center justify-center text-slate-600 opacity-100 transition-opacity hover:text-red-600 sm:opacity-0 sm:group-hover:opacity-100"
+                aria-label={t("confirm.photoAction")}
               >
-                <Trash2 className="h-3.5 w-3.5" />
+                <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-white/90 shadow-sm">
+                  <Trash2 className="h-3.5 w-3.5" />
+                </span>
               </button>
             </div>
           ))}
 
-          <button
-            type="button"
+          <FilePermissionTrigger
+            accept="image/*"
+            capture="environment"
+            description={t("permission.cameraId")}
             className="flex aspect-[4/3] flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 transition-colors hover:border-primary/40 hover:bg-primary-light/40 hover:text-primary"
           >
             <ImagePlus className="h-6 w-6" />
             <span className="text-xs font-medium">Fotoğraf Ekle</span>
-          </button>
+          </FilePermissionTrigger>
         </div>
       </section>
 
@@ -222,20 +256,32 @@ export default function ProfilePage() {
                 <div className="flex items-center gap-3 sm:justify-end">
                   <StatusBadge label={meta.label} tone={meta.tone} />
                   {doc.status === "missing" ? (
-                    <button
-                      type="button"
-                      className="inline-flex items-center gap-1.5 rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover"
+                    <FilePermissionTrigger
+                      accept="image/*,.pdf,application/pdf"
+                      description={t("permission.cameraId")}
+                      className="inline-flex min-h-12 items-center gap-1.5 rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover"
                     >
                       <Upload className="h-3.5 w-3.5" />
                       Yükle
-                    </button>
+                    </FilePermissionTrigger>
                   ) : (
-                    <button
-                      type="button"
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-50"
-                    >
-                      Güncelle
-                    </button>
+                    <>
+                      <FilePermissionTrigger
+                        accept="image/*,.pdf,application/pdf"
+                        description={t("permission.cameraId")}
+                        className="inline-flex min-h-12 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-50"
+                      >
+                        Güncelle
+                      </FilePermissionTrigger>
+                      <button
+                        type="button"
+                        onClick={() => setPendingDoc(doc)}
+                        className="inline-flex min-h-12 items-center gap-1.5 rounded-xl border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50"
+                      >
+                        <Trash2 className="h-3.5 w-3.5" />
+                        {t("confirm.docAction")}
+                      </button>
+                    </>
                   )}
                 </div>
               </li>
@@ -291,6 +337,57 @@ export default function ProfilePage() {
           ))}
         </div>
       </section>
+
+      <section className="rounded-2xl border border-red-100 bg-red-50/40 p-6 shadow-sm">
+        <h2 className="text-lg font-semibold text-slate-900">
+          {t("confirm.accountTitle")}
+        </h2>
+        <p className="mt-1 text-sm text-slate-600">{t("account.retention")}</p>
+        <AccountDeletionRequest />
+      </section>
+
+      <ConfirmDialog
+        open={Boolean(pendingPhoto)}
+        title={t("confirm.photoTitle")}
+        description={t("confirm.photoBody")}
+        confirmLabel={t("confirm.photoAction")}
+        onClose={() => setPendingPhoto(null)}
+        onConfirm={() => {
+          if (!pendingPhoto) return;
+          setProfile((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  gallery: prev.gallery.filter((item) => item.id !== pendingPhoto.id),
+                }
+              : prev
+          );
+          setPendingPhoto(null);
+        }}
+      />
+      <ConfirmDialog
+        open={Boolean(pendingDoc)}
+        title={t("confirm.docTitle")}
+        description={t("confirm.docBody")}
+        confirmLabel={t("confirm.docAction")}
+        onClose={() => setPendingDoc(null)}
+        onConfirm={() => {
+          if (!pendingDoc) return;
+          setProfile((prev) =>
+            prev
+              ? {
+                  ...prev,
+                  accreditations: prev.accreditations.map((item) =>
+                    item.id === pendingDoc.id
+                      ? { ...item, status: "missing", updatedAt: undefined }
+                      : item
+                  ),
+                }
+              : prev
+          );
+          setPendingDoc(null);
+        }}
+      />
     </div>
   );
 }

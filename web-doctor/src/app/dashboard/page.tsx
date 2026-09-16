@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { OperationsBoard } from "@/components/dashboard/OperationsBoard";
+import { PageLoadError } from "@/components/ui/PageLoadError";
+import { toUserError } from "@/lib/api/client";
 import { fetchTodayAppointments } from "@/lib/services/appointments";
 import {
   fetchQuickStats,
@@ -24,6 +26,7 @@ export default function DashboardPage() {
   const [patients, setPatients] = useState<Patient[] | null>(null);
   const [activities, setActivities] = useState<ActivityItem[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -44,19 +47,23 @@ export default function DashboardPage() {
       })
       .catch((err) => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Dashboard yüklenemedi");
+          setError(toUserError(err));
         }
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   if (error) {
     return (
-      <p className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
-        {error}
-      </p>
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setReloadKey((k) => k + 1);
+        }}
+      />
     );
   }
 

@@ -15,6 +15,9 @@ import {
 import { PageHeader } from "@/components/shared/PageHeader";
 import { PatientOriginCard } from "@/components/dashboard/PatientOriginCard";
 import { KpiCard } from "@/components/ui/KpiCard";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
+import { PageLoadError } from "@/components/ui/PageLoadError";
+import { toUserError } from "@/lib/api/client";
 import type {
   AppointmentRequest,
   ClinicProfile,
@@ -27,14 +30,17 @@ import { fetchDashboardOverview } from "@/lib/services/clinic";
 import { fetchPatientOrigins } from "@/lib/services/patient-origins";
 import { fetchAppointmentRequests } from "@/lib/services/requests";
 import { formatNumber, formatTRY } from "@/lib/utils";
+import { useT } from "@/lib/i18n";
 
 export default function DashboardPage() {
+  const t = useT();
   const [summary, setSummary] = useState<DashboardSummary | null>(null);
   const [profile, setProfile] = useState<ClinicProfile | null>(null);
   const [upcoming, setUpcoming] = useState<UpcomingAppointment[]>([]);
   const [recentRequests, setRecentRequests] = useState<AppointmentRequest[]>([]);
   const [origins, setOrigins] = useState<CountryPatientData[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -56,20 +62,24 @@ export default function DashboardPage() {
       })
       .catch((err) => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Dashboard yüklenemedi");
+          setError(toUserError(err));
         }
       });
 
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   if (error) {
     return (
-      <p className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
-        {error}
-      </p>
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setReloadKey((k) => k + 1);
+        }}
+      />
     );
   }
 
@@ -150,18 +160,28 @@ export default function DashboardPage() {
         <div className="flex flex-col gap-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm xl:col-span-2">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-slate-900">
-              Bekleyen Talepler
+              {t("dashboard.pendingRequests")}
             </h2>
             <Link
               href="/dashboard/requests"
               className="flex items-center gap-1 text-xs font-semibold text-primary hover:text-primary-hover"
             >
-              Tümü
+              {t("dashboard.seeAll")}
               <ArrowRight className="h-3.5 w-3.5" />
             </Link>
           </div>
           <ul className="flex flex-col gap-2.5">
-            {recentRequests.map((req) => (
+            {recentRequests.length === 0 ? (
+              <li>
+                <LocalizedEmpty
+                  copyKey="dashboardRequests"
+                  icon={Inbox}
+                  actionHref="/dashboard/requests"
+                  compact
+                />
+              </li>
+            ) : (
+              recentRequests.map((req) => (
               <li key={req.id}>
                 <Link
                   href="/dashboard/requests"
@@ -187,7 +207,8 @@ export default function DashboardPage() {
                   </div>
                 </Link>
               </li>
-            ))}
+            ))
+            )}
           </ul>
         </div>
 
@@ -200,7 +221,16 @@ export default function DashboardPage() {
             </h2>
           </div>
           <ol className="mt-5 space-y-1">
-            {upcoming.map((appt, i) => (
+            {upcoming.length === 0 ? (
+              <li>
+                <LocalizedEmpty
+                  copyKey="dashboardAppointments"
+                  icon={CalendarClock}
+                  compact
+                />
+              </li>
+            ) : (
+              upcoming.map((appt, i) => (
               <li key={appt.id} className="relative flex gap-4 pb-5 last:pb-0">
                 <div className="flex flex-col items-center">
                   <span className="flex h-2.5 w-2.5 shrink-0 rounded-full bg-primary ring-4 ring-primary-light" />
@@ -234,7 +264,8 @@ export default function DashboardPage() {
                   </p>
                 </div>
               </li>
-            ))}
+            ))
+            )}
           </ol>
         </div>
       </div>

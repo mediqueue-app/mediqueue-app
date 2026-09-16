@@ -2,6 +2,7 @@
 
 import { FileText, IdCard, Image as ImageIcon, X } from "lucide-react";
 import type { DocumentType, PatientDocument } from "@/types";
+import { useHistoryLayer } from "@/lib/history-layer";
 import { documentTypeLabels } from "@/lib/ui";
 
 const documentIcons: Record<DocumentType, typeof FileText> = {
@@ -17,20 +18,21 @@ export function DocumentPreviewModal({
   document: PatientDocument;
   onClose: () => void;
 }) {
+  const close = useHistoryLayer(true, onClose);
   const Icon = documentIcons[document.type];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4">
+    <div className="mq-overlay fixed inset-0 z-50 flex items-center justify-center bg-slate-900/50 p-4">
       <button
         aria-label="Kapat"
-        onClick={onClose}
+        onClick={close}
         className="absolute inset-0"
       />
-      <div className="relative w-full max-w-lg rounded-2xl bg-white p-6 shadow-xl">
+      <div className="mq-panel relative w-full max-w-lg rounded-2xl bg-surface p-6 text-foreground shadow-xl">
         <button
           type="button"
-          onClick={onClose}
-          className="absolute right-4 top-4 rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
+          onClick={close}
+          className="touch-target absolute right-4 top-4 rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600"
         >
           <X className="h-4 w-4" />
         </button>

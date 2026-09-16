@@ -8,6 +8,7 @@ import {
   Users,
 } from "lucide-react";
 import type { Appointment, DoctorProfile } from "@/types";
+import { formatWeekdayLong } from "@/lib/datetime";
 
 function greetingForHour(hour: number): string {
   if (hour < 12) return "Günaydın";
@@ -31,11 +32,7 @@ export function DashboardHero({
 }) {
   const now = new Date();
   const greeting = greetingForHour(now.getHours());
-  const dateLabel = now.toLocaleDateString("tr-TR", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  });
+  const dateLabel = formatWeekdayLong(now);
 
   return (
     <div className="flex flex-col gap-5">

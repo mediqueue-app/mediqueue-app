@@ -466,7 +466,7 @@ export function OriginGlobe({
             onClick={() => applyZoom(ZOOM_STEP)}
             disabled={zoom >= MAX_ZOOM}
             aria-label={g.zoomIn}
-            className="flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary disabled:pointer-events-none disabled:text-slate-300"
+            className="touch-slop flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary disabled:pointer-events-none disabled:text-slate-300"
           >
             <Plus className="h-4 w-4" strokeWidth={2.25} />
           </button>
@@ -476,7 +476,7 @@ export function OriginGlobe({
             onClick={() => applyZoom(1 / ZOOM_STEP)}
             disabled={zoom <= MIN_ZOOM}
             aria-label={g.zoomOut}
-            className="flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary disabled:pointer-events-none disabled:text-slate-300"
+            className="touch-slop flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary disabled:pointer-events-none disabled:text-slate-300"
           >
             <Minus className="h-4 w-4" strokeWidth={2.25} />
           </button>

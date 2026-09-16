@@ -3,6 +3,8 @@
 import { Suspense, useEffect, useState } from "react";
 import { useSearchParams } from "next/navigation";
 import { PatientsBoard } from "@/components/patients/PatientsBoard";
+import { PageLoadError } from "@/components/ui/PageLoadError";
+import { toUserError } from "@/lib/api/client";
 import { fetchPatients } from "@/lib/services/patients";
 import type { Patient } from "@/types";
 
@@ -11,6 +13,7 @@ function PatientsPageContent() {
   const q = searchParams.get("q") ?? "";
   const [patients, setPatients] = useState<Patient[] | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -20,19 +23,23 @@ function PatientsPageContent() {
       })
       .catch((err) => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Hastalar yüklenemedi");
+          setError(toUserError(err));
         }
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   if (error) {
     return (
-      <p className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
-        {error}
-      </p>
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setReloadKey((k) => k + 1);
+        }}
+      />
     );
   }
 

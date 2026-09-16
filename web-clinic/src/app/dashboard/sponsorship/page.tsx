@@ -3,9 +3,12 @@
 import { useEffect, useState } from "react";
 import { Check, Eye, Sparkles } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { PageLoadError } from "@/components/ui/PageLoadError";
 import type { SponsorshipPackage } from "@/lib/growth-mock";
 import { fetchSponsorshipData } from "@/lib/services/growth";
+import { toUserError } from "@/lib/api/client";
 import { cn } from "@/lib/utils";
 
 const TIER_LABELS = {
@@ -22,6 +25,8 @@ export default function SponsorshipPage() {
     SponsorshipPackage[]
   >([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -33,13 +38,29 @@ export default function SponsorshipPage() {
           setLoading(false);
         }
       })
-      .catch(() => {
-        if (!cancelled) setLoading(false);
+      .catch((err) => {
+        if (!cancelled) {
+          setError(toUserError(err));
+          setLoading(false);
+        }
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
+
+  if (error) {
+    return (
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setLoading(true);
+          setReloadKey((k) => k + 1);
+        }}
+      />
+    );
+  }
 
   if (loading || !visibilityScore) {
     return (
@@ -141,7 +162,12 @@ export default function SponsorshipPage() {
           Sponsorluk Paketleri
         </h2>
         <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
-          {sponsorshipPackages.map((pkg) => (
+          {sponsorshipPackages.length === 0 ? (
+            <div className="lg:col-span-3">
+              <LocalizedEmpty copyKey="sponsorship" icon={Sparkles} />
+            </div>
+          ) : (
+            sponsorshipPackages.map((pkg) => (
             <article
               key={pkg.id}
               className={cn(
@@ -201,7 +227,8 @@ export default function SponsorshipPage() {
                 )}
               </button>
             </article>
-          ))}
+          ))
+          )}
         </div>
       </div>
     </div>

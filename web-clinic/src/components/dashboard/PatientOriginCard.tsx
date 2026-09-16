@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { Globe2 } from "lucide-react";
 import { CountryFlag } from "@/components/ui/CountryFlag";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
 import type { CountryPatientData } from "@/lib/patient-origins";
 import { cn, formatNumber } from "@/lib/utils";
 
@@ -64,10 +65,7 @@ export function PatientOriginCard({ data }: { data: CountryPatientData[] }) {
 
         <div className="lg:col-span-2">
           {sorted.length === 0 ? (
-            <p className="text-sm text-slate-400">
-              Ülke kırılımı, ilk uluslararası talepleriniz geldiğinde burada
-              listelenecek.
-            </p>
+            <LocalizedEmpty copyKey="origins" icon={Globe2} compact />
           ) : (
             <>
               <div className="flex items-center justify-between px-3 pb-2">

@@ -11,18 +11,26 @@ import {
   MapPin,
   AlertTriangle,
   RefreshCw,
-  ArrowRight,
   LogIn,
   MessageSquare,
 } from "lucide-react";
-import { ApiError } from "@/lib/api/client";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { toUserError } from "@/lib/api/client";
 import { isAuthenticated } from "@/lib/auth";
-import { fetchMyAppointments } from "@/lib/services/appointments";
+import { cancelAppointment, fetchMyAppointments } from "@/lib/services/appointments";
 import type { Appointment, AppointmentStatus } from "@/lib/api/types";
 import { HybridBadge } from "@/components/common/HybridBadge";
 import { AppointmentChat } from "@/components/appointments/AppointmentChat";
-import { getDemoAppointments } from "@/lib/demo/demo-script";
+import {
+  cancelDemoAppointment,
+  DEMO_APPOINTMENT_ID,
+  getDemoAppointments,
+} from "@/lib/demo/demo-script";
+import { useHistoryLayer } from "@/lib/history-layer";
 import { cn, formatDate } from "@/lib/utils";
+import { extractAppointmentTime, formatAppointmentClock } from "@/lib/datetime";
+import { useT } from "@/lib/i18n";
 
 /** Mesajlaşmanın açık olduğu (randevunun onaylandığı) durumlar. */
 const MESSAGEABLE_STATUSES: ReadonlySet<AppointmentStatus> = new Set([
@@ -31,41 +39,49 @@ const MESSAGEABLE_STATUSES: ReadonlySet<AppointmentStatus> = new Set([
   "completed",
 ]);
 
+const CANCELLABLE_STATUSES: ReadonlySet<AppointmentStatus> = new Set([
+  "pending",
+  "alternative_date",
+  "confirmed",
+]);
+
 const STATUS_META: Record<
   AppointmentStatus,
-  { label: string; className: string }
+  { labelKey: string; className: string }
 > = {
   pending: {
-    label: "Onay Bekliyor",
-    className: "bg-amber-50 text-amber-700 ring-amber-200",
+    labelKey: "appointments.status.pending",
+    className: "bg-warning-light text-warning ring-warning/20",
   },
   confirmed: {
-    label: "Onaylandı",
-    className: "bg-emerald-50 text-emerald-700 ring-emerald-200",
+    labelKey: "appointments.status.confirmed",
+    className: "bg-success-light text-success ring-success/20",
   },
   alternative_date: {
-    label: "Alternatif Tarih Önerildi",
-    className: "bg-[#eaf0fc] text-[#3a6ad6] ring-[#3a6ad6]/20",
+    labelKey: "appointments.status.alternative_date",
+    className: "bg-warning-light text-warning ring-warning/20",
   },
   cancelled: {
-    label: "İptal Edildi",
-    className: "bg-red-50 text-red-600 ring-red-200",
+    labelKey: "appointments.status.cancelled",
+    className: "bg-error-light text-error ring-error/20",
   },
   arrived: {
-    label: "Giriş Yapıldı",
-    className: "bg-sky-50 text-sky-700 ring-sky-200",
+    labelKey: "appointments.status.arrived",
+    className: "bg-secondary-light text-secondary ring-secondary/20",
   },
   completed: {
-    label: "Tamamlandı",
-    className: "bg-slate-100 text-slate-600 ring-slate-200",
+    labelKey: "appointments.status.completed",
+    className: "bg-neutral-light text-neutral ring-border",
   },
 };
 
 function StatusBadge({ status }: { status: AppointmentStatus }) {
+  const t = useT();
   const meta = STATUS_META[status] ?? {
-    label: status,
-    className: "bg-slate-100 text-slate-600 ring-slate-200",
+    labelKey: status,
+    className: "bg-neutral-light text-neutral ring-border",
   };
+  const label = STATUS_META[status] ? t(meta.labelKey) : status;
   return (
     <span
       className={cn(
@@ -73,12 +89,13 @@ function StatusBadge({ status }: { status: AppointmentStatus }) {
         meta.className
       )}
     >
-      {meta.label}
+        {label}
     </span>
   );
 }
 
 export function AppointmentsView() {
+  const t = useT();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [needAuth, setNeedAuth] = useState(false);
@@ -123,13 +140,7 @@ export function AppointmentsView() {
         if (demoAppointments.length > 0) {
           setAppointments(demoAppointments);
         } else {
-          const message =
-            err instanceof ApiError
-              ? err.detail
-              : err instanceof Error
-                ? err.message
-                : "Randevular yüklenirken bir hata oluştu";
-          setError(message);
+          setError(toUserError(err));
         }
       } finally {
         if (!ignore) setLoading(false);
@@ -146,24 +157,23 @@ export function AppointmentsView() {
     <div className="min-h-[calc(100vh-4rem)] bg-slate-50">
       <div className="mx-auto max-w-4xl px-4 py-10 sm:px-6 lg:px-8">
         <header className="mb-8">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-[#eaf0fc] px-3 py-1 text-xs font-semibold text-[#3a6ad6]">
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-primary-light px-3 py-1 text-xs font-semibold text-primary">
             <CalendarDays className="h-3.5 w-3.5" />
-            Randevu Takibi
+            {t("appointments.eyebrow")}
           </span>
           <div className="mt-3 flex flex-wrap items-center gap-3">
             <h1 className="text-3xl font-bold tracking-tight text-slate-900">
-              Randevularım
+              {t("appointments.title")}
             </h1>
             {!loading && !error && !needAuth ? (
               <HybridBadge
                 source="api"
-                description="Randevularınız canlı API'den çekilmektedir."
+                description={t("appointments.liveTip")}
               />
             ) : null}
           </div>
           <p className="mt-1 text-sm text-slate-500">
-            Oluşturduğunuz randevu taleplerini ve güncel durumlarını buradan
-            takip edebilirsiniz.
+            {t("appointments.lead")}
           </p>
         </header>
 
@@ -177,13 +187,22 @@ export function AppointmentsView() {
             onRetry={() => setReloadKey((k) => k + 1)}
           />
         ) : appointments.length === 0 ? (
-          <EmptyState />
+          <LocalizedEmpty
+            copyKey="appointments"
+            icon={CalendarX2}
+            actionHref="/clinics"
+          />
         ) : (
           <div className="flex flex-col gap-4">
             {appointments.map((appointment) => (
               <AppointmentCard
                 key={appointment.id}
                 appointment={appointment}
+                onUpdated={(updated) =>
+                  setAppointments((prev) =>
+                    prev.map((item) => (item.id === updated.id ? updated : item))
+                  )
+                }
               />
             ))}
           </div>
@@ -193,16 +212,48 @@ export function AppointmentsView() {
   );
 }
 
-function AppointmentCard({ appointment }: { appointment: Appointment }) {
+function AppointmentCard({
+  appointment,
+  onUpdated,
+}: {
+  appointment: Appointment;
+  onUpdated: (appointment: Appointment) => void;
+}) {
+  const t = useT();
   const [chatOpen, setChatOpen] = useState(false);
+  const [confirmOpen, setConfirmOpen] = useState(false);
+  const [cancelling, setCancelling] = useState(false);
+  const [cancelError, setCancelError] = useState<string | null>(null);
+  const closeChat = useHistoryLayer(chatOpen, () => setChatOpen(false));
   const canMessage = MESSAGEABLE_STATUSES.has(appointment.status);
+  const canCancel = CANCELLABLE_STATUSES.has(appointment.status);
+
+  async function runCancel() {
+    if (cancelling) return;
+    setCancelling(true);
+    setCancelError(null);
+    try {
+      if (appointment.id === DEMO_APPOINTMENT_ID) {
+        const updated = cancelDemoAppointment();
+        if (updated) onUpdated(updated);
+      } else {
+        const updated = await cancelAppointment(appointment.id);
+        onUpdated(updated);
+      }
+      setConfirmOpen(false);
+    } catch (err) {
+      setCancelError(toUserError(err));
+    } finally {
+      setCancelling(false);
+    }
+  }
 
   return (
-    <article className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+    <article className="mq-list-item rounded-2xl border border-slate-200 bg-white p-5 shadow-sm transition-shadow duration-[220ms] ease-out hover:shadow-md">
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="flex items-center gap-2 font-semibold text-slate-900">
-            <Stethoscope className="h-4 w-4 shrink-0 text-[#3a6ad6]" />
+            <Stethoscope className="h-4 w-4 shrink-0 text-primary" />
             <span className="truncate">{appointment.branch}</span>
           </h3>
           {appointment.doctor_name ? (
@@ -216,33 +267,50 @@ function AppointmentCard({ appointment }: { appointment: Appointment }) {
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-x-5 gap-y-2 border-t border-slate-100 pt-4 text-sm text-slate-600">
-        <span className="flex items-center gap-1.5">
-          <CalendarDays className="h-4 w-4 text-[#3a6ad6]" />
-          {formatDate(appointment.requested_date)}
+        <span className="flex min-w-0 items-start gap-1.5">
+          <CalendarDays className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
+          <AppointmentWhen
+            date={appointment.requested_date}
+            notes={appointment.notes}
+          />
         </span>
         {appointment.alternative_date ? (
-          <span className="flex items-center gap-1.5 text-[#3a6ad6]">
+          <span className="flex items-center gap-1.5 text-primary">
             <Clock className="h-4 w-4" />
-            Alternatif: {formatDate(appointment.alternative_date)}
+            {t("appointments.alternative", {
+              date: formatDate(appointment.alternative_date),
+            })}
           </span>
         ) : null}
-        <div className="ml-auto flex items-center gap-3">
+        <div className="ml-auto flex flex-wrap items-center gap-3">
           {canMessage ? (
             <button
               type="button"
               onClick={() => setChatOpen(true)}
-              className="inline-flex items-center gap-1.5 rounded-full bg-[#eaf0fc] px-3 py-1.5 text-xs font-semibold text-[#3a6ad6] transition-colors hover:bg-[#dbe6fb]"
+              className="inline-flex min-h-12 items-center gap-1.5 rounded-full bg-primary-light px-3 py-1.5 text-xs font-semibold text-primary transition-colors hover:bg-primary-light"
             >
               <MessageSquare className="h-4 w-4" />
-              Mesajlaş
+              {t("appointments.chat")}
+            </button>
+          ) : null}
+          {canCancel ? (
+            <button
+              type="button"
+              onClick={() => {
+                setCancelError(null);
+                setConfirmOpen(true);
+              }}
+              className="inline-flex min-h-12 items-center gap-1.5 rounded-full border border-red-200 px-3 py-1.5 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50"
+            >
+              {t("appointments.cancel")}
             </button>
           ) : null}
           <Link
             href={`/clinics/${appointment.clinic_id}`}
-            className="inline-flex items-center gap-1 text-sm font-semibold text-[#3a6ad6] hover:underline"
+            className="inline-flex min-h-12 items-center gap-1 text-sm font-semibold text-primary hover:underline"
           >
             <MapPin className="h-4 w-4" />
-            Kliniği Gör
+            {t("appointments.viewClinic")}
           </Link>
         </div>
       </div>
@@ -256,10 +324,51 @@ function AppointmentCard({ appointment }: { appointment: Appointment }) {
       {chatOpen ? (
         <AppointmentChat
           appointment={appointment}
-          onClose={() => setChatOpen(false)}
+          onClose={closeChat}
         />
       ) : null}
+
+      <ConfirmDialog
+        open={confirmOpen}
+        title={t("confirm.appointmentTitle")}
+        description={t("confirm.appointmentBody")}
+        confirmLabel={t("confirm.appointmentAction")}
+        busy={cancelling}
+        error={cancelError}
+        onClose={() => {
+          if (!cancelling) setConfirmOpen(false);
+        }}
+        onConfirm={() => void runCancel()}
+      />
     </article>
+  );
+}
+
+function AppointmentWhen({
+  date,
+  notes,
+}: {
+  date: string;
+  notes?: string | null;
+}) {
+  const t = useT();
+  const clock = formatAppointmentClock(date, extractAppointmentTime(notes));
+  return (
+    <span className="leading-snug">
+      {clock.date}
+      {clock.clinicTime ? (
+        <>
+          {" · "}
+          {clock.clinicTime} {t("datetime.istanbul")}
+          {clock.dual && clock.localTime ? (
+            <>
+              {" · "}
+              {clock.localTime} {t("datetime.yourTime")}
+            </>
+          ) : null}
+        </>
+      ) : null}
+    </span>
   );
 }
 
@@ -288,29 +397,6 @@ function LoadingState() {
   );
 }
 
-function EmptyState() {
-  return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
-      <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#eaf0fc] text-[#3a6ad6]">
-        <CalendarX2 className="h-8 w-8" />
-      </span>
-      <h2 className="mt-5 text-lg font-bold text-slate-900">
-        Henüz randevunuz bulunmuyor
-      </h2>
-      <p className="mt-1 max-w-sm text-sm text-slate-500">
-        Hemen bir klinik seçip randevu oluşturabilirsiniz.
-      </p>
-      <Link
-        href="/clinics"
-        className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#3a6ad6] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#2f57b3]"
-      >
-        Klinikleri İncele
-        <ArrowRight className="h-4 w-4" />
-      </Link>
-    </div>
-  );
-}
-
 function ErrorState({
   message,
   onRetry,
@@ -318,22 +404,23 @@ function ErrorState({
   message: string;
   onRetry: () => void;
 }) {
+  const t = useT();
   return (
     <div className="flex flex-col items-center justify-center rounded-2xl border border-red-200 bg-red-50 px-6 py-16 text-center">
       <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-red-100 text-red-600">
         <AlertTriangle className="h-8 w-8" />
       </span>
       <h2 className="mt-5 text-lg font-bold text-slate-900">
-        Randevular yüklenirken bir hata oluştu
+        {t("appointments.loadFailed")}
       </h2>
       <p className="mt-1 max-w-sm text-sm text-red-600">{message}</p>
       <button
         type="button"
         onClick={onRetry}
-        className="mt-6 inline-flex items-center gap-2 rounded-full border border-red-300 bg-white px-5 py-2.5 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
+        className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-full border border-red-300 bg-white px-5 py-2.5 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
       >
         <RefreshCw className="h-4 w-4" />
-        Tekrar Dene
+        {t("errors.retry")}
       </button>
     </div>
   );
@@ -341,24 +428,10 @@ function ErrorState({
 
 function AuthState() {
   return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center">
-      <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-[#eaf0fc] text-[#3a6ad6]">
-        <LogIn className="h-8 w-8" />
-      </span>
-      <h2 className="mt-5 text-lg font-bold text-slate-900">
-        Randevularınızı görmek için giriş yapın
-      </h2>
-      <p className="mt-1 max-w-sm text-sm text-slate-500">
-        Randevu geçmişinize ve güncel durumlarına erişmek için hesabınıza giriş
-        yapmanız gerekir.
-      </p>
-      <Link
-        href="/auth/login"
-        className="mt-6 inline-flex items-center gap-2 rounded-full bg-[#3a6ad6] px-5 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#2f57b3]"
-      >
-        Giriş Yap
-        <ArrowRight className="h-4 w-4" />
-      </Link>
-    </div>
+    <LocalizedEmpty
+      copyKey="appointmentsAuth"
+      icon={LogIn}
+      actionHref="/auth/login?next=%2Fappointments"
+    />
   );
 }

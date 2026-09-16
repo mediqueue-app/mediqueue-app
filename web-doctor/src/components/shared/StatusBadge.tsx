@@ -2,10 +2,10 @@ import type { AppointmentStatus, TreatmentStatus } from "@/types";
 import { cn } from "@/lib/utils";
 
 const appointmentStyles: Record<AppointmentStatus, string> = {
-  ONAYLANDI: "bg-emerald-50 text-emerald-700 ring-emerald-100",
-  BEKLIYOR: "bg-amber-50 text-amber-700 ring-amber-100",
-  TAMAMLANDI: "bg-blue-50 text-blue-700 ring-blue-100",
-  IPTAL: "bg-red-50 text-red-700 ring-red-100",
+  ONAYLANDI: "bg-success-light text-success ring-success/20",
+  BEKLIYOR: "bg-warning-light text-warning ring-warning/20",
+  TAMAMLANDI: "bg-neutral-light text-neutral ring-border",
+  IPTAL: "bg-error-light text-error ring-error/20",
 };
 
 const appointmentLabels: Record<AppointmentStatus, string> = {
@@ -16,9 +16,9 @@ const appointmentLabels: Record<AppointmentStatus, string> = {
 };
 
 const treatmentStyles: Record<TreatmentStatus, string> = {
-  AKTIF: "bg-primary-light text-primary ring-primary/20",
-  TAMAMLANDI: "bg-slate-100 text-slate-600 ring-slate-200",
-  BEKLEMEDE: "bg-amber-50 text-amber-700 ring-amber-100",
+  AKTIF: "bg-secondary-light text-secondary ring-secondary/20",
+  TAMAMLANDI: "bg-neutral-light text-neutral ring-border",
+  BEKLEMEDE: "bg-warning-light text-warning ring-warning/20",
 };
 
 const treatmentLabels: Record<TreatmentStatus, string> = {

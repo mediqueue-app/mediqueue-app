@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Source_Serif_4 } from "next/font/google";
+import { I18nProvider } from "@/lib/i18n";
 import "./globals.css";
 
 const jakarta = Plus_Jakarta_Sans({
@@ -21,6 +22,14 @@ export const metadata: Metadata = {
     "MediQueue Doktor Portalı — hastalarınızı yönetin, takviminizi planlayın, tedavi süreçlerini takip edin.",
 };
 
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 5,
+  viewportFit: "cover",
+  themeColor: "#3a6ad6",
+} as const;
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -32,7 +41,7 @@ export default function RootLayout({
       className={`${jakarta.variable} ${display.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col bg-background font-sans text-foreground">
-        {children}
+        <I18nProvider>{children}</I18nProvider>
       </body>
     </html>
   );

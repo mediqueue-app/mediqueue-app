@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { formatDate, formatDateTime, intlLocale, getDateUiLocale } from "@/lib/datetime";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -18,34 +19,20 @@ export function formatTRY(value: number): string {
 }
 
 export function formatDateTr(dateKey: string): string {
-  const [year, month, day] = dateKey.split("-").map(Number);
-  return new Date(year, month - 1, day).toLocaleDateString("tr-TR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  return formatDate(dateKey, { style: "long" });
 }
 
 export function formatDateTimeTr(iso: string): string {
-  const date = new Date(iso);
-  return date.toLocaleDateString("tr-TR", {
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatDateTime(iso);
 }
 
 export function formatRelativeDay(dateKey: string, todayKey: string): string {
   const toDay = (key: string) => {
     const [y, m, d] = key.split("-").map(Number);
-    return new Date(y, m - 1, d).getTime();
+    return Date.UTC(y, m - 1, d);
   };
-  const diff = Math.round(
-    (toDay(dateKey) - toDay(todayKey)) / (1000 * 60 * 60 * 24)
-  );
-  if (diff === 0) return "Bugün";
-  if (diff === 1) return "Yarın";
-  if (diff === -1) return "Dün";
-  return formatDateTr(dateKey);
+  const diff = Math.round((toDay(dateKey) - toDay(todayKey)) / 86_400_000);
+  return new Intl.RelativeTimeFormat(intlLocale(getDateUiLocale()), {
+    numeric: "auto",
+  }).format(diff, "day");
 }

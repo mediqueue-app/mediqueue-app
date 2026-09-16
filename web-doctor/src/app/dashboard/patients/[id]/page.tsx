@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { PatientDetailView } from "@/components/patients/PatientDetailDrawer";
+import { PageLoadError } from "@/components/ui/PageLoadError";
+import { toUserError } from "@/lib/api/client";
 import { fetchPatientById } from "@/lib/services/patients";
 import type { Patient } from "@/types";
 
@@ -12,6 +14,7 @@ export default function PatientDetailPage() {
   const id = params.id;
   const [patient, setPatient] = useState<Patient | null | undefined>(undefined);
   const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -21,20 +24,25 @@ export default function PatientDetailPage() {
       })
       .catch((err) => {
         if (!cancelled) {
-          setError(err instanceof Error ? err.message : "Hasta yüklenemedi");
+          setError(toUserError(err));
           setPatient(null);
         }
       });
     return () => {
       cancelled = true;
     };
-  }, [id]);
+  }, [id, reloadKey]);
 
   if (error) {
     return (
-      <p className="rounded-xl border border-red-100 bg-red-50 px-4 py-3 text-sm text-red-700">
-        {error}
-      </p>
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setPatient(undefined);
+          setReloadKey((k) => k + 1);
+        }}
+      />
     );
   }
 

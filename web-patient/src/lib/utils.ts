@@ -1,3 +1,4 @@
+import { formatDate as formatCivilDate } from "@/lib/datetime";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -14,13 +15,7 @@ export function clinicHref(clinic: { apiId?: number; id: string }): string {
 }
 
 export function formatDate(iso: string): string {
-  const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return iso;
-  return d.toLocaleDateString("tr-TR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  return formatCivilDate(iso, { style: "long" });
 }
 
 export function formatPrice(amount: number, currency = "₺"): string {

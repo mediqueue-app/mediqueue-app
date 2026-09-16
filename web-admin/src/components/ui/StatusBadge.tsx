@@ -10,11 +10,11 @@ export type BadgeTone =
 
 const TONE_STYLES: Record<BadgeTone, { bg: string; text: string; dot: string }> = {
   primary: { bg: "bg-primary-light", text: "text-primary", dot: "bg-primary" },
-  success: { bg: "bg-emerald-50", text: "text-emerald-700", dot: "bg-emerald-500" },
-  warning: { bg: "bg-amber-50", text: "text-amber-700", dot: "bg-amber-500" },
-  danger: { bg: "bg-red-50", text: "text-red-700", dot: "bg-red-500" },
-  neutral: { bg: "bg-slate-100", text: "text-slate-600", dot: "bg-slate-400" },
-  info: { bg: "bg-sky-50", text: "text-sky-700", dot: "bg-sky-500" },
+  success: { bg: "bg-success-light", text: "text-success", dot: "bg-success" },
+  warning: { bg: "bg-warning-light", text: "text-warning", dot: "bg-warning" },
+  danger: { bg: "bg-error-light", text: "text-error", dot: "bg-error" },
+  neutral: { bg: "bg-neutral-light", text: "text-neutral", dot: "bg-neutral-muted" },
+  info: { bg: "bg-secondary-light", text: "text-secondary", dot: "bg-secondary" },
 };
 
 export function StatusBadge({

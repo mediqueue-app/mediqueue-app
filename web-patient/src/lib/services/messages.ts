@@ -135,3 +135,18 @@ export function peekConversationLength(appointmentId: number): number {
 export function clearConversation(appointmentId: number): void {
   store.delete(appointmentId);
 }
+
+/**
+ * Hastanın kendi mesajını sohbetten siler. Backend bağlı değilken
+ * bellek-içi depodan düşer; API gelince DELETE çağrısı buraya yazılır.
+ */
+export async function deleteMessage(
+  appointmentId: number,
+  messageId: number
+): Promise<void> {
+  await delay(280);
+  const conversation = store.get(appointmentId);
+  if (!conversation) return;
+  const next = conversation.filter((item) => item.id !== messageId);
+  store.set(appointmentId, next);
+}

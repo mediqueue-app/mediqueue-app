@@ -11,6 +11,7 @@ import type { ChatThread } from "@/types";
 import { ChatList } from "@/components/messages/ChatList";
 import { ChatWindow } from "@/components/messages/ChatWindow";
 import { filterThreads, getUnreadCount, sortThreads } from "@/lib/message-utils";
+import { BrowserNotifyOptIn } from "@/components/ui/permission-gate";
 import { cn } from "@/lib/utils";
 
 export function MessagesClient({ threads }: { threads: ChatThread[] }) {
@@ -80,6 +81,12 @@ export function MessagesClient({ threads }: { threads: ChatThread[] }) {
               active={filter === "unread"}
               onClick={() => setFilter("unread")}
               label={`Okunmamış${unreadTotal ? ` · ${unreadTotal}` : ""}`}
+            />
+          </div>
+          <div className="mt-3">
+            <BrowserNotifyOptIn
+              hideWhenSettled
+              className="w-full justify-center border border-white/10 bg-white/5 text-sky-200 hover:bg-white/10"
             />
           </div>
         </div>

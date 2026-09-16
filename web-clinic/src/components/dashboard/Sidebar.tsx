@@ -2,9 +2,11 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight, HeartPulse, LogOut } from "lucide-react";
+import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
+import { BrandMark } from "@/components/ui/BrandMark";
 import {
   GROUP_ORDER,
+  GROUP_LABEL,
   NAV_ITEMS,
   GROWTH_ENGINE_TAGLINE,
 } from "@/lib/navigation";
@@ -13,6 +15,7 @@ import { getClinicUserSync } from "@/lib/services/clinic";
 import { getPendingRequestCountSync } from "@/lib/services/requests";
 import { useSidebar } from "@/components/shared/SidebarContext";
 import { NavPremiumBadge } from "@/components/ui/NavPremiumBadge";
+import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export function Sidebar({
@@ -23,6 +26,7 @@ export function Sidebar({
   onNavigate?: () => void;
 }) {
   const pathname = usePathname();
+  const t = useT();
   const router = useRouter();
   const { collapsed, toggleCollapsed } = useSidebar();
   const user = getClinicUserSync();
@@ -42,8 +46,8 @@ export function Sidebar({
   return (
     <aside
       className={cn(
-        "flex shrink-0 flex-col border-r border-slate-800/60 bg-slate-900 transition-all duration-200",
-        "fixed inset-y-0 left-0 z-50 shadow-xl lg:relative lg:z-auto lg:shadow-none",
+        "flex shrink-0 flex-col border-r border-slate-800/60 bg-slate-900 transition-[transform,width] duration-[220ms] ease-out",
+        "fixed inset-y-0 left-0 z-50 shadow-xl lg:relative lg:z-auto lg:shadow-none safe-top safe-bottom",
         collapsed ? "w-[76px]" : "w-[260px]",
         mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}
@@ -54,35 +58,32 @@ export function Sidebar({
           collapsed ? "justify-center px-2" : "gap-2.5 px-5"
         )}
       >
-        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary text-white shadow-sm shadow-primary/30">
-          <HeartPulse className="h-5 w-5" strokeWidth={2.25} />
-        </div>
+        <BrandMark size={36} className="h-9 w-9 shadow-sm shadow-primary/30" />
         {!collapsed && (
           <div className="min-w-0">
             <span className="text-[15px] font-bold tracking-tight text-white">
               MEDI<span className="text-primary">·</span>QUEUE
             </span>
             <p className="text-[10px] font-semibold uppercase tracking-widest text-slate-500">
-              Büyüme Motoru
+              {t("nav.brandSub")}
             </p>
           </div>
         )}
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-2 py-4" aria-label="Ana menü">
+      <nav className="flex-1 overflow-y-auto px-2 py-4" aria-label={t("nav.main")}>
         {GROUP_ORDER.map((group) => {
           const items = NAV_ITEMS.filter((item) => item.group === group);
           if (items.length === 0) return null;
 
-          const isGrowthGroup =
-            group === "Büyüme & Pazarlama" || group === "Veri & Yapay Zeka";
+          const isGrowthGroup = group === "growth" || group === "ai";
 
           return (
             <div key={group} className="mb-4 last:mb-0">
               {!collapsed && (
                 <div className="mb-2 flex items-center gap-1.5 px-3">
                   <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-500">
-                    {group}
+                    {t(GROUP_LABEL[group])}
                   </p>
                   {isGrowthGroup && (
                     <GROWTH_ENGINE_TAGLINE.icon
@@ -106,9 +107,9 @@ export function Sidebar({
                       <Link
                         href={item.href}
                         onClick={onNavigate}
-                        title={collapsed ? item.label : undefined}
+                        title={collapsed ? t(item.labelKey) : undefined}
                         className={cn(
-                          "group relative flex items-center rounded-xl text-sm font-medium transition-all duration-150",
+                          "group relative flex min-h-12 items-center rounded-xl text-sm font-medium transition-all duration-150",
                           collapsed
                             ? "justify-center px-0 py-2.5"
                             : "gap-2.5 px-3 py-2.5",
@@ -134,7 +135,7 @@ export function Sidebar({
                         />
                         {!collapsed && (
                           <span className="min-w-0 flex-1 truncate leading-snug">
-                            {item.label}
+                            {t(item.labelKey)}
                           </span>
                         )}
                         {!collapsed && item.badge && (
@@ -194,18 +195,18 @@ export function Sidebar({
             <button
               type="button"
               onClick={handleLogout}
-              className="mt-1 flex w-full items-center gap-3 rounded-xl px-2 py-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-red-500/10 hover:text-red-400"
+              className="mt-1 flex min-h-12 w-full items-center gap-3 rounded-xl px-2 py-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-red-500/10 hover:text-red-400"
             >
               <LogOut className="h-[18px] w-[18px]" />
-              Çıkış Yap
+              {t("nav.logout")}
             </button>
           </>
         ) : (
           <button
             type="button"
             onClick={handleLogout}
-            className="mx-auto flex h-10 w-10 items-center justify-center rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400"
-            aria-label="Çıkış Yap"
+            className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400"
+            aria-label={t("nav.logout")}
           >
             <LogOut className="h-[18px] w-[18px]" />
           </button>
@@ -215,17 +216,17 @@ export function Sidebar({
           type="button"
           onClick={toggleCollapsed}
           className={cn(
-            "mt-2 hidden w-full items-center justify-center rounded-xl border border-slate-800 py-2 text-slate-400 transition-colors hover:bg-slate-800/70 lg:flex",
+            "mt-2 hidden min-h-12 w-full items-center justify-center rounded-xl border border-slate-800 py-2 text-slate-400 transition-colors hover:bg-slate-800/70 lg:flex",
             collapsed && "px-0"
           )}
-          aria-label={collapsed ? "Menüyü genişlet" : "Menüyü daralt"}
+          aria-label={collapsed ? t("nav.expand") : t("nav.shrink")}
         >
           {collapsed ? (
             <ChevronRight className="h-4 w-4" />
           ) : (
             <>
               <ChevronLeft className="h-4 w-4" />
-              <span className="ml-1 text-xs font-medium">Daralt</span>
+              <span className="ml-1 text-xs font-medium">{t("nav.collapse")}</span>
             </>
           )}
         </button>

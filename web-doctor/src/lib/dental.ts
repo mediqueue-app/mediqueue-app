@@ -1,4 +1,7 @@
+import { formatCalendarParts } from "@/lib/datetime";
+
 /** FDI diş numarası → Türkçe anatomik isim (yaygın dişler). */
+
 const TOOTH_NAMES: Record<number, string> = {
   11: "Sağ Üst Orta Kesici Diş",
   12: "Sağ Üst Yan Kesici Diş",
@@ -46,29 +49,10 @@ export const ALL_FDI_TEETH = [
   ...LOWER_RIGHT_FDI,
 ];
 
-const MONTH_ABBR_TR = [
-  "Oca",
-  "Şub",
-  "Mar",
-  "Nis",
-  "May",
-  "Haz",
-  "Tem",
-  "Ağu",
-  "Eyl",
-  "Eki",
-  "Kas",
-  "Ara",
-] as const;
-
 export function getToothName(toothNumber: number): string {
   return TOOTH_NAMES[toothNumber] ?? `${toothNumber} numaralı diş`;
 }
 
 export function formatToothDateLabel(isoDate: string): { day: string; month: string } {
-  const d = new Date(isoDate + (isoDate.includes("T") ? "" : "T12:00:00"));
-  return {
-    day: String(d.getDate()).padStart(2, "0"),
-    month: MONTH_ABBR_TR[d.getMonth()] ?? "—",
-  };
+  return formatCalendarParts(isoDate);
 }

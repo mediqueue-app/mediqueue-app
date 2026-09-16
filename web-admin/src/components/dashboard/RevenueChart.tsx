@@ -48,8 +48,10 @@ export function RevenueChart({ data }: { data: RevenuePoint[] }) {
               cursor={{ fill: "#eaf0fc" }}
               contentStyle={{
                 borderRadius: 12,
-                border: "1px solid #e2e8f0",
-                boxShadow: "0 8px 24px rgba(15,23,42,0.08)",
+                border: "1px solid var(--color-border)",
+                background: "var(--color-surface)",
+                color: "var(--foreground)",
+                boxShadow: "0 8px 24px color-mix(in srgb, var(--foreground) 12%, transparent)",
               }}
               formatter={(value, name) => [
                 formatTRY(Number(value)),

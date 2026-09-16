@@ -93,7 +93,7 @@ export default function SchedulePage() {
               type="button"
               onClick={() => goToStep(-1)}
               aria-label="Önceki"
-              className="flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-900"
+              className="touch-slop flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-900"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
@@ -108,7 +108,7 @@ export default function SchedulePage() {
               type="button"
               onClick={() => goToStep(1)}
               aria-label="Sonraki"
-              className="flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-900"
+              className="touch-slop flex h-8 w-8 items-center justify-center text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-900"
             >
               <ChevronRight className="h-4 w-4" />
             </button>

@@ -36,8 +36,8 @@ export function ClinicListCard({
       className={cn(
         "group relative flex flex-col overflow-hidden rounded-2xl border bg-white transition-all sm:flex-row",
         active
-          ? "border-[#3a6ad6] shadow-lg shadow-[#3a6ad6]/10 ring-1 ring-[#3a6ad6]"
-          : "border-slate-200 hover:border-[#3a6ad6]/40 hover:shadow-lg"
+          ? "border-primary shadow-lg shadow-primary/10 ring-1 ring-primary"
+          : "border-slate-200 hover:border-primary/40 hover:shadow-lg"
       )}
     >
       <div className="relative h-48 w-full shrink-0 overflow-hidden sm:h-auto sm:w-56">
@@ -50,17 +50,19 @@ export function ClinicListCard({
           type="button"
           onClick={() => setFav((v) => !v)}
           aria-label={fav ? "Favorilerden çıkar" : "Favorilere ekle"}
-          className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-black/5 backdrop-blur transition-transform hover:scale-110"
+          className="absolute right-1 top-1 flex h-12 w-12 items-center justify-center"
         >
-          <Heart
-            className={cn(
-              "h-4 w-4 transition-colors",
-              fav ? "fill-[#3a6ad6] text-[#3a6ad6]" : "text-slate-500"
-            )}
-          />
+          <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-black/5 backdrop-blur">
+            <Heart
+              className={cn(
+                "h-4 w-4 transition-colors",
+                fav ? "fill-primary text-primary" : "text-slate-500"
+              )}
+            />
+          </span>
         </button>
         <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/95 px-2.5 py-1 text-[11px] font-semibold text-slate-700 shadow-sm backdrop-blur">
-          <BadgeCheck className="h-3.5 w-3.5 text-[#3a6ad6]" />
+          <BadgeCheck className="h-3.5 w-3.5 text-primary" />
           Akredite
         </span>
       </div>
@@ -70,7 +72,7 @@ export function ClinicListCard({
           <div className="flex items-start justify-between gap-2">
             <Link
               href={clinicHref(clinic)}
-              className="truncate font-semibold text-slate-900 hover:text-[#3a6ad6]"
+              className="truncate font-semibold text-slate-900 hover:text-primary"
             >
               {clinic.name}
             </Link>
@@ -81,11 +83,11 @@ export function ClinicListCard({
 
           <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs text-slate-500">
             <span className="flex items-center gap-1">
-              <Navigation className="h-3.5 w-3.5 text-[#3a6ad6]" />
+              <Navigation className="h-3.5 w-3.5 text-primary" />
               Merkeze {centerKm} km
             </span>
             <span className="flex items-center gap-1">
-              <Plane className="h-3.5 w-3.5 text-[#3a6ad6]" />
+              <Plane className="h-3.5 w-3.5 text-primary" />
               Havaalanına {airportKm} km
             </span>
           </div>
@@ -116,7 +118,7 @@ export function ClinicListCard({
           </div>
           <Link
             href={clinicHref(clinic)}
-            className="mt-0 inline-flex items-center gap-1.5 rounded-full bg-[#3a6ad6] px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-[#2f57b3] sm:mt-3"
+            className="mt-0 inline-flex items-center gap-1.5 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-hover sm:mt-3"
           >
             Profili İncele
             <ArrowRight className="h-4 w-4" />

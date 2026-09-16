@@ -12,6 +12,12 @@ import type {
   RequestStatus,
   UpcomingAppointment,
 } from "@/lib/clinic-mock";
+import {
+  appointmentSlotTime,
+  formatAppointmentClock,
+  formatDate,
+  formatRelativePast,
+} from "@/lib/datetime";
 
 const DOCTOR_TONES = [
   "from-sky-400 to-blue-500",
@@ -49,27 +55,6 @@ function initials(name: string): string {
     .join("");
 }
 
-function formatApiDate(iso: string): string {
-  try {
-    return new Date(iso).toLocaleDateString("tr-TR", {
-      day: "numeric",
-      month: "short",
-      year: "numeric",
-    });
-  } catch {
-    return iso;
-  }
-}
-
-function relativeTime(iso: string): string {
-  const diff = Date.now() - new Date(iso).getTime();
-  const hours = Math.floor(diff / 3_600_000);
-  if (hours < 1) return "Az önce";
-  if (hours < 24) return `${hours} saat önce`;
-  const days = Math.floor(hours / 24);
-  return `${days} gün önce`;
-}
-
 export function mapAppointmentToRequest(item: AppointmentRead): AppointmentRequest {
   return {
     id: String(item.id),
@@ -81,11 +66,11 @@ export function mapAppointmentToRequest(item: AppointmentRead): AppointmentReque
     city: "—",
     treatment: item.branch,
     symptom: item.notes ?? "—",
-    requestedDate: formatApiDate(item.requested_date),
+    requestedDate: formatDate(item.requested_date, { style: "medium" }),
     budget: "—",
     language: "—",
     status: STATUS_TO_REQUEST[item.status] ?? "pending",
-    createdAt: relativeTime(item.created_at),
+    createdAt: formatRelativePast(item.created_at),
   };
 }
 
@@ -148,17 +133,19 @@ export function mapAppointmentsToUpcoming(
   return items
     .filter((item) => item.status === "confirmed" || item.status === "arrived")
     .slice(0, 5)
-    .map((item) => ({
-      id: String(item.id),
-      time: new Date(item.requested_date).toLocaleTimeString("tr-TR", {
-        hour: "2-digit",
-        minute: "2-digit",
-      }),
-      dateLabel: formatApiDate(item.requested_date),
-      patient: item.patient_name,
-      country: "—",
-      treatment: item.branch,
-      doctor: item.doctor_name ?? "—",
-      mode: "Yüz yüze" as const,
-    }));
+    .map((item) => {
+      const dateKey = item.requested_date.slice(0, 10);
+      const slot = appointmentSlotTime(item.requested_date, item.notes);
+      const clock = formatAppointmentClock(dateKey, slot);
+      return {
+        id: String(item.id),
+        time: clock.clinicTime ?? "—",
+        dateLabel: clock.date,
+        patient: item.patient_name,
+        country: "—",
+        treatment: item.branch,
+        doctor: item.doctor_name ?? "—",
+        mode: "Yüz yüze" as const,
+      };
+    });
 }

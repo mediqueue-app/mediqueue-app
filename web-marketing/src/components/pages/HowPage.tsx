@@ -14,7 +14,7 @@ import {
   Users,
   MessageSquare,
 } from "lucide-react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Container } from "@/components/ui/Container";
 import { Button } from "@/components/ui/Button";
 import { HeroBackdrop } from "@/components/ui/HeroBackdrop";
@@ -28,6 +28,7 @@ const PIPELINE_ICONS = [Filter, Users, MessageSquare];
 
 function FaqAccordion({ items }: { items: { q: string; a: string }[] }) {
   const [openIndex, setOpenIndex] = useState<number | null>(0);
+  const reduceMotion = useReducedMotion();
 
   return (
     <div className="mx-auto max-w-3xl space-y-3.5">
@@ -37,7 +38,7 @@ function FaqAccordion({ items }: { items: { q: string; a: string }[] }) {
           <div
             key={item.q}
             className={cn(
-              "overflow-hidden rounded-2xl border transition-all duration-200",
+              "overflow-hidden rounded-2xl border transition-all duration-[220ms] ease-out",
               isOpen
                 ? "border-primary/30 bg-white shadow-md ring-1 ring-primary/10"
                 : "border-slate-200/80 bg-white hover:border-slate-300 shadow-xs"
@@ -59,7 +60,7 @@ function FaqAccordion({ items }: { items: { q: string; a: string }[] }) {
               </span>
               <ChevronDown
                 className={cn(
-                  "h-5 w-5 shrink-0 text-slate-400 transition-transform duration-300",
+                  "h-5 w-5 shrink-0 text-slate-400 transition-transform duration-[220ms] ease-out",
                   isOpen && "rotate-180 text-primary"
                 )}
               />
@@ -70,7 +71,10 @@ function FaqAccordion({ items }: { items: { q: string; a: string }[] }) {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.25, ease: [0.22, 1, 0.36, 1] }}
+                  transition={{
+                    duration: reduceMotion ? 0 : 0.22,
+                    ease: [0.16, 1, 0.3, 1],
+                  }}
                 >
                   <div className="border-t border-slate-100 px-6 pb-6 pt-4 text-sm leading-relaxed text-slate-600">
                     {item.a}

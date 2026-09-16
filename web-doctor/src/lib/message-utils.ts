@@ -1,45 +1,27 @@
 import type { ChatThread } from "@/types";
+import {
+  formatThreadStamp,
+  formatTime,
+  formatWeekdayLong,
+  parseInstant,
+} from "@/lib/datetime";
 
 export function getUnreadCount(threads: ChatThread[]): number {
   return threads.reduce((sum, t) => sum + t.unreadCount, 0);
 }
 
 export function formatMessageTime(iso: string): string {
-  return new Date(iso).toLocaleTimeString("tr-TR", {
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  const d = parseInstant(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  return formatTime(d);
 }
 
 export function formatThreadTime(iso: string): string {
-  const date = new Date(iso);
-  const now = new Date();
-  const isToday =
-    date.getDate() === now.getDate() &&
-    date.getMonth() === now.getMonth() &&
-    date.getFullYear() === now.getFullYear();
-
-  if (isToday) {
-    return formatMessageTime(iso);
-  }
-
-  const yesterday = new Date(now);
-  yesterday.setDate(now.getDate() - 1);
-  const isYesterday =
-    date.getDate() === yesterday.getDate() &&
-    date.getMonth() === yesterday.getMonth();
-
-  if (isYesterday) return "Dün";
-
-  return date.toLocaleDateString("tr-TR", { day: "numeric", month: "short" });
+  return formatThreadStamp(iso);
 }
 
 export function formatMessageDateLabel(iso: string): string {
-  return new Date(iso).toLocaleDateString("tr-TR", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  });
+  return formatWeekdayLong(parseInstant(iso));
 }
 
 export function getInitials(name: string): string {

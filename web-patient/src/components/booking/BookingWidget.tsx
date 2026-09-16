@@ -1,7 +1,8 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useHistoryLayer } from "@/lib/history-layer";
 import {
   Clock,
   ShieldCheck,
@@ -11,27 +12,18 @@ import {
   ChevronRight,
   Loader2,
 } from "lucide-react";
-import { ApiError } from "@/lib/api/client";
+import { toUserError } from "@/lib/api/client";
 import { isAuthenticated } from "@/lib/auth";
 import { createAppointment } from "@/lib/services/appointments";
+import { useI18n } from "@/lib/i18n";
+import { translateList } from "@/lib/i18n-core";
+import { BrowserNotifyOptIn } from "@/components/ui/permission-gate";
+import {
+  dateKeyFromParts,
+  formatAppointmentClock,
+  formatMonthYear,
+} from "@/lib/datetime";
 import { cn, formatPrice } from "@/lib/utils";
-
-const MONTHS = [
-  "Ocak",
-  "Şubat",
-  "Mart",
-  "Nisan",
-  "Mayıs",
-  "Haziran",
-  "Temmuz",
-  "Ağustos",
-  "Eylül",
-  "Ekim",
-  "Kasım",
-  "Aralık",
-];
-
-const WEEKDAYS = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
 
 const TIME_SLOTS = [
   "09:00",
@@ -66,9 +58,7 @@ function isBeforeToday(year: number, month: number, day: number): boolean {
 }
 
 function formatRequestedDate(year: number, month: number, day: number): string {
-  const m = String(month + 1).padStart(2, "0");
-  const d = String(day).padStart(2, "0");
-  return `${year}-${m}-${d}`;
+  return dateKeyFromParts(year, month, day);
 }
 
 export function BookingWidget({
@@ -78,7 +68,7 @@ export function BookingWidget({
   title,
   subtitle,
   price,
-  priceLabel = "Muayene ücreti",
+  priceLabel,
 }: {
   clinicId: number;
   doctorId?: number;
@@ -88,7 +78,11 @@ export function BookingWidget({
   price: number;
   priceLabel?: string;
 }) {
+  const { t, locale } = useI18n();
+  const WEEKDAYS = translateList(locale, "booking.weekdays");
+  const feeLabel = priceLabel ?? t("booking.consultFee");
   const router = useRouter();
+  const pathname = usePathname();
   const [view, setView] = useState({ year: 2026, month: 6 }); // Temmuz 2026
   const [selectedDay, setSelectedDay] = useState<number | null>(9);
   const [time, setTime] = useState<string | null>(null);
@@ -98,6 +92,20 @@ export function BookingWidget({
   );
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  // Tek history katmanı: saat seçimi → başarı ekranı geçişinde ekstra
+  // pushState birikmesin. Geri: başarıdan forma (saat kalır seçili değil),
+  // saat adımından takvime (tarih silinmez).
+  const dismissBookingStep = useHistoryLayer(Boolean(time) || confirmed, () => {
+    if (confirmed) {
+      setConfirmed(false);
+      setTime(null);
+      setAppointmentStatus(null);
+      setError(null);
+      return;
+    }
+    setTime(null);
+  });
 
   const cells = useMemo(() => {
     const offset = startOfMonthMondayOffset(view.year, view.month);
@@ -130,12 +138,12 @@ export function BookingWidget({
     if (!time || selectedDay === null || submitting) return;
 
     if (!isAuthenticated()) {
-      router.push("/auth/login");
+      router.push(`/auth/login?next=${encodeURIComponent(pathname)}`);
       return;
     }
 
     if (clinicId < 1) {
-      setError("Bu klinik için çevrimiçi randevu henüz kullanılamıyor.");
+      setError(t("booking.unavailable"));
       return;
     }
 
@@ -148,7 +156,7 @@ export function BookingWidget({
         view.month,
         selectedDay
       );
-      const notes = `Saat: ${time}`;
+      const notes = t("booking.notes", { time });
 
       const appointment = await createAppointment({
         clinicId,
@@ -161,50 +169,62 @@ export function BookingWidget({
       setAppointmentStatus(appointment.status);
       setConfirmed(true);
     } catch (err) {
-      const message =
-        err instanceof ApiError
-          ? err.detail
-          : err instanceof Error
-            ? err.message
-            : "Randevu oluşturulamadı";
-      setError(message);
+      setError(toUserError(err));
     } finally {
       setSubmitting(false);
     }
   }
 
   if (confirmed) {
+    const dateKey =
+      selectedDay != null
+        ? dateKeyFromParts(view.year, view.month, selectedDay)
+        : "";
+    const clock = formatAppointmentClock(dateKey, time);
     return (
       <div
         data-testid="booking-success"
-        className="rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center shadow-md"
+        className="mq-panel rounded-2xl border border-emerald-200 bg-emerald-50 p-6 text-center shadow-md"
       >
         <CheckCircle2 className="mx-auto h-12 w-12 text-emerald-500" />
         <h3 className="mt-3 text-lg font-bold text-slate-900">
-          Randevu Talebiniz Alındı
+          {t("booking.successTitle")}
         </h3>
         <p className="mt-1 text-sm text-slate-600">
-          {selectedDay} {MONTHS[view.month]} {view.year} — {time}
+          {clock.date}
+          {clock.clinicTime ? (
+            <>
+              {" · "}
+              {clock.clinicTime} {t("datetime.istanbul")}
+              {clock.dual && clock.localTime ? (
+                <>
+                  {" · "}
+                  {clock.localTime} {t("datetime.yourTime")}
+                </>
+              ) : null}
+            </>
+          ) : null}
         </p>
         {appointmentStatus ? (
           <p className="mt-2 text-sm font-medium text-emerald-700">
-            Talebiniz iletildi. Durum: {appointmentStatus}
+            {t("booking.statusLine", { status: appointmentStatus })}
           </p>
         ) : null}
         <p className="mt-3 text-sm text-slate-500">
-          Klinik en kısa sürede sizi arayarak randevunuzu onaylayacaktır.
+          {t("booking.clinicWillCall")}
         </p>
+        <div className="mt-4 flex justify-center">
+          <BrowserNotifyOptIn
+            hideWhenSettled
+            className="border border-emerald-200 bg-white px-3"
+          />
+        </div>
         <button
           type="button"
-          onClick={() => {
-            setConfirmed(false);
-            setTime(null);
-            setAppointmentStatus(null);
-            setError(null);
-          }}
-          className="mt-4 text-sm font-semibold text-[#3a6ad6] hover:underline"
+          onClick={dismissBookingStep}
+          className="mt-4 text-sm font-semibold text-primary hover:underline"
         >
-          Yeni randevu oluştur
+          {t("booking.newBooking")}
         </button>
       </div>
     );
@@ -215,12 +235,12 @@ export function BookingWidget({
       <div className="border-b border-slate-100 p-5">
         <div className="flex items-baseline justify-between">
           <div>
-            <p className="text-xs text-slate-400">{priceLabel}</p>
+            <p className="text-xs text-slate-400">{feeLabel}</p>
             <p className="text-2xl font-bold text-slate-900">
               {formatPrice(price)}
               <span className="text-sm font-normal text-slate-400">
                 {" "}
-                &apos;den itibaren
+                {t("booking.fromPrice")}
               </span>
             </p>
           </div>
@@ -229,7 +249,7 @@ export function BookingWidget({
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
             </span>
-            Randevuya Açık
+            {t("booking.open")}
           </span>
         </div>
         <p className="mt-3 text-sm font-semibold text-slate-900">{title}</p>
@@ -241,19 +261,19 @@ export function BookingWidget({
           <button
             type="button"
             onClick={() => changeMonth(-1)}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-[#3a6ad6]"
-            aria-label="Önceki ay"
+            className="touch-slop flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-primary"
+            aria-label={t("booking.prevMonth")}
           >
             <ChevronLeft className="h-4 w-4" />
           </button>
           <p className="text-sm font-semibold text-slate-900">
-            {MONTHS[view.month]} {view.year}
+            {formatMonthYear(new Date(view.year, view.month, 1), locale)}
           </p>
           <button
             type="button"
             onClick={() => changeMonth(1)}
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-[#3a6ad6]"
-            aria-label="Sonraki ay"
+            className="touch-slop flex h-8 w-8 items-center justify-center rounded-lg text-slate-500 transition-colors hover:bg-slate-100 hover:text-primary"
+            aria-label={t("booking.nextMonth")}
           >
             <ChevronRight className="h-4 w-4" />
           </button>
@@ -288,8 +308,8 @@ export function BookingWidget({
                   past && "cursor-not-allowed text-slate-300 line-through",
                   !past &&
                     !selected &&
-                    "text-slate-700 hover:bg-[#eaf0fc] hover:text-[#3a6ad6]",
-                  selected && "bg-[#3a6ad6] text-white shadow-sm"
+                    "text-slate-700 hover:bg-primary-light hover:text-primary",
+                  selected && "bg-primary text-white shadow-sm"
                 )}
               >
                 {day}
@@ -302,7 +322,7 @@ export function BookingWidget({
       {selectedDay !== null && (
         <div className="border-t border-slate-100 px-5 pb-2">
           <p className="mb-2 mt-3 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-500">
-            <Clock className="h-4 w-4" /> Uygun saatler
+            <Clock className="h-4 w-4" /> {t("booking.slots")}
           </p>
           <div className="grid grid-cols-4 gap-2">
             {TIME_SLOTS.map((t) => (
@@ -317,8 +337,8 @@ export function BookingWidget({
                 className={cn(
                   "rounded-lg border py-2 text-sm font-medium transition-colors",
                   time === t
-                    ? "border-[#3a6ad6] bg-[#3a6ad6] text-white"
-                    : "border-slate-200 text-slate-700 hover:border-[#3a6ad6]/50 hover:text-[#3a6ad6]"
+                    ? "border-primary bg-primary text-white"
+                    : "border-slate-200 text-slate-700 hover:border-primary/50 hover:text-primary"
                 )}
               >
                 {t}
@@ -330,7 +350,7 @@ export function BookingWidget({
 
       <div className="p-5 pt-3">
         {error ? (
-          <p className="mb-3 text-sm text-red-600" role="alert">
+          <p className="mq-feedback mb-3 text-sm text-red-600" role="alert">
             {error}
           </p>
         ) : null}
@@ -343,25 +363,25 @@ export function BookingWidget({
           className={cn(
             "flex w-full items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-semibold transition-colors",
             time && !submitting
-              ? "bg-[#3a6ad6] text-white hover:bg-[#2f57b3]"
+              ? "bg-primary text-white hover:bg-primary-hover"
               : "cursor-not-allowed bg-slate-100 text-slate-400"
           )}
         >
           {submitting ? (
             <>
               <Loader2 className="h-4 w-4 animate-spin" />
-              Gönderiliyor...
+              {t("booking.submitting")}
             </>
           ) : (
             <>
               <CreditCard className="h-4 w-4" />
-              {time ? "Randevu Talebi Oluştur" : "Tarih ve saat seçin"}
+              {time ? t("booking.submit") : t("booking.pickSlot")}
             </>
           )}
         </button>
         <p className="mt-3 flex items-center justify-center gap-1.5 text-xs text-slate-400">
           <ShieldCheck className="h-4 w-4 text-emerald-500" />
-          Ödeme klinikte alınır — ön ödeme gerekmez
+          {t("booking.noDeposit")}
         </p>
       </div>
     </div>

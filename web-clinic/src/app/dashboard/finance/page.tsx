@@ -4,15 +4,20 @@ import { useEffect, useState } from "react";
 import { Download, FileText, Receipt } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
+import { PageLoadError } from "@/components/ui/PageLoadError";
 import type { FinanceSummary, InvoiceRow } from "@/lib/growth-mock";
 import { fetchFinanceData } from "@/lib/services/growth";
+import { toUserError } from "@/lib/api/client";
 import { formatTRY } from "@/lib/utils";
 
 export default function FinancePage() {
   const [summary, setSummary] = useState<FinanceSummary | null>(null);
   const [invoices, setInvoices] = useState<InvoiceRow[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -24,13 +29,29 @@ export default function FinancePage() {
           setLoading(false);
         }
       })
-      .catch(() => {
-        if (!cancelled) setLoading(false);
+      .catch((err) => {
+        if (!cancelled) {
+          setError(toUserError(err));
+          setLoading(false);
+        }
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
+
+  if (error) {
+    return (
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setLoading(true);
+          setReloadKey((k) => k + 1);
+        }}
+      />
+    );
+  }
 
   if (loading || !summary) {
     return (
@@ -83,6 +104,11 @@ export default function FinancePage() {
           </p>
         </div>
         <div className="overflow-x-auto">
+          {invoices.length === 0 ? (
+            <div className="p-4">
+              <LocalizedEmpty copyKey="invoices" icon={Receipt} compact />
+            </div>
+          ) : (
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50/70">
@@ -133,7 +159,7 @@ export default function FinancePage() {
                   <td className="px-6 py-4 text-right">
                     <button
                       type="button"
-                      className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:border-primary/30 hover:bg-primary-light/40 hover:text-primary"
+                      className="inline-flex min-h-12 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:border-primary/30 hover:bg-primary-light/40 hover:text-primary"
                     >
                       <Download className="h-3.5 w-3.5" />
                       Faturayı İndir (PDF)
@@ -143,6 +169,7 @@ export default function FinancePage() {
               ))}
             </tbody>
           </table>
+          )}
         </div>
       </section>
     </div>

@@ -113,7 +113,7 @@ export function Navbar() {
       {/* Fixed bar — sticky + nested fixed drawer broke mobile taps after scroll */}
       <header
         className={cn(
-          "fixed inset-x-0 top-0 z-40 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-200",
+          "fixed inset-x-0 top-0 z-40 transition-[background-color,border-color,box-shadow,backdrop-filter] duration-200 safe-top",
           solid || open
             ? "border-b border-border bg-white/95 backdrop-blur-md shadow-sm"
             : "border-b border-transparent bg-white/80 backdrop-blur-sm"
@@ -240,7 +240,7 @@ export function Navbar() {
 
           <button
             type="button"
-            className="relative z-[120] inline-flex h-11 w-11 touch-manipulation items-center justify-center rounded-xl text-slate-900 lg:hidden"
+            className="relative z-[120] inline-flex h-12 w-12 touch-manipulation items-center justify-center rounded-xl text-slate-900 lg:hidden"
             aria-label={open ? t.nav.closeMenu : t.nav.openMenu}
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
@@ -251,27 +251,32 @@ export function Navbar() {
       </header>
 
       {/* Offset for fixed header */}
-      <div className="h-[3.75rem] lg:h-[4.25rem]" aria-hidden />
+      <div
+        className="h-[calc(3.75rem+env(safe-area-inset-top,0px))] lg:h-[calc(4.25rem+env(safe-area-inset-top,0px))]"
+        aria-hidden
+      />
 
       {/* Mobile menu — Industry Standard full-screen modal drawer */}
       {open && (
         <div
-          className="fixed inset-0 z-[150] flex flex-col bg-white lg:hidden"
+          className="fixed inset-0 z-[150] flex flex-col bg-surface text-foreground lg:hidden"
           role="dialog"
           aria-modal="true"
           aria-label={t.nav.menu}
         >
           {/* Industry Standard Top Header: Logo on left, X close on right */}
-          <div className="flex h-16 shrink-0 items-center justify-between border-b border-slate-100 px-5">
+          <div className="safe-top shrink-0 border-b border-slate-100">
+            <div className="flex h-16 items-center justify-between px-5">
             <Logo size="nav" />
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100/80 text-slate-700 transition-colors hover:bg-slate-200 active:scale-95"
+              className="touch-target flex items-center justify-center rounded-full bg-slate-100/80 text-slate-700 transition-colors hover:bg-slate-200 active:scale-95"
               aria-label={t.nav.closeMenu}
             >
               <X className="h-5 w-5" />
             </button>
+            </div>
           </div>
 
           {/* Scrollable Clean List Menu */}

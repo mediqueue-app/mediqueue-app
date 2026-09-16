@@ -9,40 +9,42 @@ import {
 
 export type NavItem = {
   href: string;
-  label: string;
+  labelKey: string;
   icon: LucideIcon;
   badge?: number;
 };
 
 export const NAV_ITEMS: NavItem[] = [
-  { href: "/dashboard", label: "Özet", icon: LayoutGrid },
-  { href: "/dashboard/patients", label: "Hastalarım", icon: Users },
-  { href: "/dashboard/calendar", label: "Takvim", icon: Calendar },
-  { href: "/dashboard/messages", label: "Mesajlar", icon: MessageSquare },
-  { href: "/dashboard/profile", label: "Profil", icon: UserCircle },
+  { href: "/dashboard", labelKey: "nav.items.overview", icon: LayoutGrid },
+  { href: "/dashboard/patients", labelKey: "nav.items.patients", icon: Users },
+  { href: "/dashboard/calendar", labelKey: "nav.items.calendar", icon: Calendar },
+  { href: "/dashboard/messages", labelKey: "nav.items.messages", icon: MessageSquare },
+  { href: "/dashboard/profile", labelKey: "nav.items.profile", icon: UserCircle },
 ];
 
-export function getPageMeta(pathname: string): {
+type Translator = (key: string) => string;
+
+export function getPageMeta(pathname: string, t: Translator): {
   title: string;
   description?: string;
 } {
   if (pathname === "/dashboard") {
-    return { title: "Özet", description: "Günlük program ve hasta özeti" };
+    return { title: t("pages.dashboard.title"), description: t("pages.dashboard.desc") };
   }
   if (pathname.startsWith("/dashboard/patients/")) {
-    return { title: "Hasta Detayı", description: "Tedavi süreci ve kayıtlar" };
+    return { title: t("pages.patientDetail.title"), description: t("pages.patientDetail.desc") };
   }
   if (pathname.startsWith("/dashboard/patients")) {
-    return { title: "Hastalarım", description: "Hasta listesi ve tedavi takibi" };
+    return { title: t("pages.patients.title"), description: t("pages.patients.desc") };
   }
   if (pathname.startsWith("/dashboard/calendar")) {
-    return { title: "Takvim", description: "Randevu programı ve müsaitlik" };
+    return { title: t("pages.calendar.title"), description: t("pages.calendar.desc") };
   }
   if (pathname.startsWith("/dashboard/messages")) {
-    return { title: "Mesajlar", description: "Hasta iletişimi" };
+    return { title: t("pages.messages.title"), description: t("pages.messages.desc") };
   }
   if (pathname.startsWith("/dashboard/profile")) {
-    return { title: "Profil", description: "Doktor profil ayarları" };
+    return { title: t("pages.profile.title"), description: t("pages.profile.desc") };
   }
-  return { title: "Dashboard" };
+  return { title: t("pages.fallback.title") };
 }

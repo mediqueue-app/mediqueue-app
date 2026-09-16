@@ -1,4 +1,5 @@
 import type { Patient, PatientBranch, TreatmentStatus } from "@/types";
+import { formatDate } from "@/lib/datetime";
 
 export const BRANCH_LABELS: Record<PatientBranch, string> = {
   dentistry: "Diş Tedavisi",
@@ -34,11 +35,7 @@ export function countByTreatmentStatus(
 }
 
 export function formatLastVisit(dateStr: string): string {
-  return new Date(`${dateStr}T12:00:00`).toLocaleDateString("tr-TR", {
-    day: "numeric",
-    month: "short",
-    year: "numeric",
-  });
+  return formatDate(dateStr, { style: "medium" });
 }
 
 export type PatientSortKey = "name" | "lastVisit" | "status";

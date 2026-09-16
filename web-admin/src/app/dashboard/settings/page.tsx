@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Check, Percent, Settings2, Sparkles, Store } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { PageLoadError } from "@/components/ui/PageLoadError";
 import { fetchSettingsClinics } from "@/lib/services/settings";
 import type { Clinic } from "@/types";
 import { cn } from "@/lib/utils";
@@ -46,6 +47,8 @@ export default function SettingsPage() {
     Object.fromEntries(PLATFORM_TOGGLES.map((t) => [t.key, t.on]))
   );
   const [saved, setSaved] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -58,16 +61,32 @@ export default function SettingsPage() {
         }
       })
       .catch(() => {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setError("İnternet bağlantını kontrol et ve tekrar dene.");
+          setLoading(false);
+        }
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   function save() {
     setSaved(true);
     setTimeout(() => setSaved(false), 2200);
+  }
+
+  if (error) {
+    return (
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setLoading(true);
+          setReloadKey((k) => k + 1);
+        }}
+      />
+    );
   }
 
   if (loading) {

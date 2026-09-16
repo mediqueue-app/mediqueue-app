@@ -5,6 +5,7 @@ import {
   HeartPulse,
   Stethoscope,
 } from "lucide-react";
+import { formatCalendarParts } from "@/lib/datetime";
 
 type DemoEntry = {
   date: string;
@@ -201,13 +202,6 @@ const TYPE_META = {
   },
 } as const;
 
-function formatDate(date: string) {
-  return new Date(`${date}T12:00:00`).toLocaleDateString("tr-TR", {
-    day: "numeric",
-    month: "short",
-  });
-}
-
 /** Branşa özel tıbbi kayıt — diş dışında odontogram yerine demo timeline */
 export function MedicalRecordPlaceholder({
   branchLabel,
@@ -259,6 +253,7 @@ export function MedicalRecordPlaceholder({
         {entries.map((entry) => {
           const meta = TYPE_META[entry.type];
           const Icon = meta.icon;
+          const stamp = formatCalendarParts(entry.date);
           return (
             <li
               key={`${entry.date}-${entry.title}`}
@@ -266,10 +261,10 @@ export function MedicalRecordPlaceholder({
             >
               <div className="w-12 shrink-0 text-center">
                 <p className="text-lg font-bold leading-none text-slate-900">
-                  {formatDate(entry.date).split(" ")[0]}
+                  {stamp.day}
                 </p>
                 <p className="mt-0.5 text-[10px] font-semibold uppercase text-slate-400">
-                  {formatDate(entry.date).split(" ").slice(1).join(" ")}
+                  {stamp.month}
                 </p>
               </div>
               <div className="min-w-0 flex-1">

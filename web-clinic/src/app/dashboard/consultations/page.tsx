@@ -1,42 +1,44 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   CheckCheck,
   FileText,
   ImageIcon,
+  Inbox,
   MapPin,
   Package,
   Send,
   Stethoscope,
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
 import { StatusBadge, type BadgeTone } from "@/components/ui/StatusBadge";
+import { PageLoadError } from "@/components/ui/PageLoadError";
 import type { ConsultationRequest, ConsultationStatus } from "@/lib/clinic-mock";
 import { fetchConsultationRequests } from "@/lib/services/consultations";
+import { toUserError } from "@/lib/api/client";
 import { cn } from "@/lib/utils";
+import { useT } from "@/lib/i18n";
 
 type FilterKey = "all" | ConsultationStatus;
 
-const FILTERS: { key: FilterKey; label: string }[] = [
-  { key: "all", label: "Tümü" },
-  { key: "new", label: "Yeni" },
-  { key: "quoted", label: "Teklif Verildi" },
-  { key: "accepted", label: "Kabul Edildi" },
-  { key: "expired", label: "Süresi Doldu" },
-];
+const FILTERS: FilterKey[] = ["all", "new", "quoted", "accepted", "expired"];
 
-const STATUS_META: Record<
-  ConsultationStatus,
-  { label: string; tone: BadgeTone }
-> = {
-  new: { label: "Yeni", tone: "warning" },
-  quoted: { label: "Teklif Verildi", tone: "info" },
-  accepted: { label: "Kabul Edildi", tone: "success" },
-  expired: { label: "Süresi Doldu", tone: "neutral" },
+const STATUS_TONE: Record<ConsultationStatus, BadgeTone> = {
+  new: "warning",
+  quoted: "info",
+  accepted: "success",
+  expired: "neutral",
 };
 
 export default function ConsultationsPage() {
+  const t = useT();
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const deepLinkId = useRef(searchParams.get("id"));
   const [items, setItems] = useState<ConsultationRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterKey>("all");
@@ -45,6 +47,8 @@ export default function ConsultationsPage() {
   const [price, setPrice] = useState("");
   const [note, setNote] = useState("");
   const [sent, setSent] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -52,16 +56,21 @@ export default function ConsultationsPage() {
       .then((data) => {
         if (cancelled) return;
         setItems(data);
-        setSelectedId(data[0]?.id ?? "");
+        const fromUrl = deepLinkId.current;
+        const match = fromUrl && data.some((r) => r.id === fromUrl) ? fromUrl : null;
+        setSelectedId(match ?? data[0]?.id ?? "");
         setLoading(false);
       })
-      .catch(() => {
-        if (!cancelled) setLoading(false);
+      .catch((err) => {
+        if (!cancelled) {
+          setError(toUserError(err));
+          setLoading(false);
+        }
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   const filtered = useMemo(
     () =>
@@ -86,6 +95,9 @@ export default function ConsultationsPage() {
   function selectItem(id: string) {
     setSelectedId(id);
     setSent(false);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("id", id);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
     const item = items.find((r) => r.id === id);
     if (item?.status === "quoted" || item?.status === "accepted") {
       setPackageName(item.packageName ?? "");
@@ -122,36 +134,57 @@ export default function ConsultationsPage() {
     );
   }
 
+  if (error) {
+    return (
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setLoading(true);
+          setReloadKey((k) => k + 1);
+        }}
+      />
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Ön Konsültasyon & Teklifler"
-        description="Hastaların gönderdiği fotoğraf ve belgelere hızlıca fiyat teklifi verin."
+        title={t("pages.consultations.title")}
+        description={t("pages.consultations.desc")}
       />
 
+      {items.length === 0 ? (
+        <LocalizedEmpty
+          copyKey="consultations"
+          icon={Inbox}
+          actionHref="/dashboard/profile"
+        />
+      ) : (
+      <>
       <div className="flex flex-wrap gap-2">
-        {FILTERS.map((f) => {
-          const active = filter === f.key;
+        {FILTERS.map((key) => {
+          const active = filter === key;
           return (
             <button
-              key={f.key}
+              key={key}
               type="button"
-              onClick={() => setFilter(f.key)}
+              onClick={() => setFilter(key)}
               className={cn(
-                "inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition-colors",
+                    "inline-flex min-h-12 items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition-colors",
                 active
                   ? "bg-primary text-white shadow-sm shadow-primary/25"
                   : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50"
               )}
             >
-              {f.label}
+              {t(`filters.${key}`)}
               <span
                 className={cn(
                   "flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold",
                   active ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"
                 )}
               >
-                {counts[f.key]}
+                {counts[key]}
               </span>
             </button>
           );
@@ -162,13 +195,16 @@ export default function ConsultationsPage() {
         {/* Sol liste */}
         <div className="flex flex-col gap-3 lg:col-span-2">
           {filtered.length === 0 && (
-            <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-10 text-center text-sm text-slate-500">
-              Bu filtrede konsültasyon bulunmuyor.
-            </div>
+            <LocalizedEmpty
+              copyKey="consultationsFilter"
+              icon={Inbox}
+              compact
+              onAction={() => setFilter("all")}
+            />
           )}
           {filtered.map((item) => {
             const active = selected?.id === item.id;
-            const meta = STATUS_META[item.status];
+            const tone = STATUS_TONE[item.status];
             return (
               <button
                 key={item.id}
@@ -190,7 +226,7 @@ export default function ConsultationsPage() {
                       <p className="truncate text-sm font-semibold text-slate-900">
                         {item.patient}
                       </p>
-                      <StatusBadge label={meta.label} tone={meta.tone} />
+                      <StatusBadge label={t(`status.${item.status}`)} tone={tone} />
                     </div>
                     <p className="mt-0.5 flex items-center gap-1 truncate text-xs text-slate-500">
                       <MapPin className="h-3 w-3" />
@@ -231,8 +267,8 @@ export default function ConsultationsPage() {
                   </div>
                 </div>
                 <StatusBadge
-                  label={STATUS_META[selected.status].label}
-                  tone={STATUS_META[selected.status].tone}
+                  label={t(`status.${selected.status}`)}
+                  tone={STATUS_TONE[selected.status]}
                 />
               </div>
 
@@ -363,7 +399,7 @@ export default function ConsultationsPage() {
                       type="button"
                       onClick={handleSendQuote}
                       disabled={!price.trim() || selected.status === "quoted"}
-                      className="mt-4 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
+                      className="mt-4 inline-flex min-h-12 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <Send className="h-4 w-4" />
                       {selected.status === "quoted"
@@ -375,12 +411,17 @@ export default function ConsultationsPage() {
               </div>
             </div>
           ) : (
-            <div className="flex h-full min-h-[300px] items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white text-sm text-slate-500">
-              Detayları görüntülemek için bir konsültasyon seçin.
-            </div>
+            <LocalizedEmpty
+              copyKey="consultationsSelect"
+              icon={Inbox}
+              compact
+              className="h-full min-h-[300px]"
+            />
           )}
         </div>
       </div>
+      </>
+      )}
     </div>
   );
 }

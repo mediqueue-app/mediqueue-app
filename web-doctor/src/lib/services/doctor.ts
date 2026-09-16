@@ -1,4 +1,4 @@
-import { apiFetch, ApiError } from "@/lib/api/client";
+import { apiFetch, ApiError, isTimeoutOrNetwork } from "@/lib/api/client";
 import { mapUserToDoctorProfile } from "@/lib/api/profile";
 import type { UserRead } from "@/lib/api/types";
 import { clearSession, getStoredUser, getToken, setSession } from "@/lib/auth";
@@ -37,6 +37,7 @@ export async function fetchCurrentDoctor(): Promise<DoctorProfile> {
     user = await apiFetch<UserRead>("/auth/me", { token });
     if (user) setSession(token!, user);
   } catch (err) {
+    if (isTimeoutOrNetwork(err)) throw err;
     if (err instanceof ApiError && err.status === 401) {
       clearSession();
       throw new Error("Oturum süresi doldu. Tekrar giriş yapın.");

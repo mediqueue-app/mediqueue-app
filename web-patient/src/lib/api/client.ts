@@ -1,45 +1,21 @@
+import { ApiError, errorFromResponseBody } from "@/lib/user-error";
+
+export { ApiError, toUserError, isRetryableError, isTimeoutOrNetwork } from "@/lib/user-error";
+
 const BASE_URL =
   process.env.NEXT_PUBLIC_API_BASE_URL || "http://127.0.0.1:8000/v1";
 
-export class ApiError extends Error {
-  status: number;
-  detail: string;
-
-  constructor(status: number, detail: string) {
-    super(detail);
-    this.name = "ApiError";
-    this.status = status;
-    this.detail = detail;
-  }
-}
+const DEFAULT_TIMEOUT_MS = 12_000;
 
 export function getApiBaseUrl(): string {
   return BASE_URL.replace(/\/$/, "");
-}
-
-function extractDetail(body: unknown, fallback: string): string {
-  if (body && typeof body === "object" && "detail" in body) {
-    const detail = (body as { detail: unknown }).detail;
-    if (typeof detail === "string") return detail;
-    if (Array.isArray(detail)) {
-      return detail
-        .map((item) =>
-          item && typeof item === "object" && "msg" in item
-            ? String((item as { msg: unknown }).msg)
-            : JSON.stringify(item)
-        )
-        .join("; ");
-    }
-    return JSON.stringify(detail);
-  }
-  return fallback;
 }
 
 export async function apiFetch<T>(
   path: string,
   options: RequestInit & { token?: string | null; form?: boolean } = {}
 ): Promise<T> {
-  const { token, form, headers: initHeaders, ...rest } = options;
+  const { token, form, headers: initHeaders, signal, ...rest } = options;
   const headers = new Headers(initHeaders);
 
   if (token) {
@@ -52,10 +28,28 @@ export async function apiFetch<T>(
     headers.set("Content-Type", "application/json");
   }
 
-  const response = await fetch(`${getApiBaseUrl()}${path}`, {
-    ...rest,
-    headers,
-  });
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), DEFAULT_TIMEOUT_MS);
+  if (signal) {
+    if (signal.aborted) controller.abort();
+    else signal.addEventListener("abort", () => controller.abort(), { once: true });
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(`${getApiBaseUrl()}${path}`, {
+      ...rest,
+      headers,
+      signal: controller.signal,
+    });
+  } catch (err) {
+    if (typeof DOMException !== "undefined" && err instanceof DOMException && err.name === "AbortError") {
+      throw new ApiError(408, "TIMEOUT", [], path);
+    }
+    throw new ApiError(0, "NETWORK_ERROR", [], path);
+  } finally {
+    clearTimeout(timer);
+  }
 
   if (response.status === 204) {
     return undefined as T;
@@ -67,15 +61,12 @@ export async function apiFetch<T>(
     try {
       body = JSON.parse(text);
     } catch {
-      body = text;
+      body = null;
     }
   }
 
   if (!response.ok) {
-    throw new ApiError(
-      response.status,
-      extractDetail(body, response.statusText || `HTTP ${response.status}`)
-    );
+    throw errorFromResponseBody(response.status, body, path);
   }
 
   return body as T;

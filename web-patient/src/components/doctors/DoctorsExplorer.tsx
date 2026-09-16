@@ -1,12 +1,14 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
-import { Search, MapPin } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Search, SearchX, MapPin } from "lucide-react";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
 import { doctors, cities } from "@/lib/mock-data";
 import { DoctorCard } from "@/components/doctors/DoctorCard";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { cn } from "@/lib/utils";
+import { useT } from "@/lib/i18n";
 
 const SPECIALTIES = [
   "Tümü",
@@ -21,10 +23,28 @@ const SPECIALTIES = [
 ];
 
 export function DoctorsExplorer() {
+  const t = useT();
   const searchParams = useSearchParams();
+  const searchKey = searchParams.toString();
+  const router = useRouter();
+  const pathname = usePathname();
   const [query, setQuery] = useState(searchParams.get("q") ?? "");
   const [city, setCity] = useState(searchParams.get("city") ?? "");
-  const [specialty, setSpecialty] = useState("Tümü");
+  const [specialty, setSpecialty] = useState(searchParams.get("spec") ?? "Tümü");
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    const q = query.trim();
+    if (q) params.set("q", q);
+    if (city) params.set("city", city);
+    if (specialty && specialty !== "Tümü") params.set("spec", specialty);
+    const qs = params.toString();
+    const href = qs ? `${pathname}?${qs}` : pathname;
+    const current = `${pathname}${searchKey ? `?${searchKey}` : ""}`;
+    if (href !== current) {
+      router.replace(href, { scroll: false });
+    }
+  }, [query, city, specialty, pathname, router, searchKey]);
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -46,7 +66,7 @@ export function DoctorsExplorer() {
         <div className="absolute inset-0 -z-10">
           <SmartImage
             src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?auto=format&fit=crop&w=2000&q=80"
-            alt="Hastane ve uzman hekim ortamı"
+            alt={t("doctorsPage.heroAlt")}
             className="h-full w-full"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-900/80 via-slate-900/70 to-slate-900/80" />
@@ -67,20 +87,20 @@ export function DoctorsExplorer() {
 
           <div className="mx-auto mt-9 max-w-3xl">
             <div className="flex flex-col gap-2 rounded-2xl bg-white p-2 shadow-2xl ring-1 ring-black/5 md:flex-row md:items-center md:gap-0 md:rounded-full">
-              <label className="flex flex-1 items-center gap-3 rounded-xl px-4 py-2.5 transition-colors focus-within:bg-slate-50 focus-within:ring-2 focus-within:ring-[#3a6ad6]/25 md:rounded-full">
-                <Search className="h-5 w-5 shrink-0 text-[#3a6ad6]" />
+              <label className="flex flex-1 items-center gap-3 rounded-xl px-4 py-2.5 transition-colors focus-within:bg-slate-50 focus-within:ring-2 focus-within:ring-primary/25 md:rounded-full">
+                <Search className="h-5 w-5 shrink-0 text-primary" />
                 <input
                   value={query}
                   onChange={(e) => setQuery(e.target.value)}
-                  placeholder="Doktor, uzmanlık veya tedavi ara..."
+                  placeholder={t("doctorsPage.searchPh")}
                   className="w-full bg-transparent text-sm font-medium text-slate-900 outline-none placeholder:font-normal placeholder:text-slate-400"
                 />
               </label>
 
               <span className="mx-1 hidden w-px self-center bg-slate-200 md:block md:h-8" />
 
-              <label className="flex items-center gap-3 rounded-xl px-4 py-2.5 transition-colors focus-within:bg-slate-50 focus-within:ring-2 focus-within:ring-[#3a6ad6]/25 md:w-56 md:rounded-full">
-                <MapPin className="h-5 w-5 shrink-0 text-[#3a6ad6]" />
+              <label className="flex items-center gap-3 rounded-xl px-4 py-2.5 transition-colors focus-within:bg-slate-50 focus-within:ring-2 focus-within:ring-primary/25 md:w-56 md:rounded-full">
+                <MapPin className="h-5 w-5 shrink-0 text-primary" />
                 <input
                   list="doctor-city-options"
                   value={city}
@@ -97,7 +117,7 @@ export function DoctorsExplorer() {
 
               <button
                 type="button"
-                className="flex items-center justify-center gap-2 rounded-full bg-[#3a6ad6] px-7 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-[#2f57b3] md:my-0.5 md:mr-0.5"
+                className="flex items-center justify-center gap-2 rounded-full bg-primary px-7 py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover md:my-0.5 md:mr-0.5"
               >
                 <Search className="h-5 w-5" />
                 <span>Ara</span>
@@ -117,8 +137,8 @@ export function DoctorsExplorer() {
               className={cn(
                 "rounded-full border px-3.5 py-1.5 text-xs font-medium transition-colors",
                 specialty === s
-                  ? "border-[#3a6ad6] bg-[#3a6ad6] text-white"
-                  : "border-slate-200 text-slate-600 hover:border-[#3a6ad6]/40 hover:text-[#3a6ad6]"
+                  ? "border-primary bg-primary text-white"
+                  : "border-slate-200 text-slate-600 hover:border-primary/40 hover:text-primary"
               )}
             >
               {s}
@@ -138,9 +158,16 @@ export function DoctorsExplorer() {
             ))}
           </div>
         ) : (
-          <div className="mt-5 rounded-2xl border border-dashed border-slate-300 p-12 text-center text-slate-500">
-            Aramanıza uygun doktor bulunamadı. Filtreleri değiştirmeyi deneyin.
-          </div>
+          <LocalizedEmpty
+            className="mt-5"
+            copyKey="doctorSearch"
+            icon={SearchX}
+            onAction={() => {
+              setQuery("");
+              setCity("");
+              setSpecialty("Tümü");
+            }}
+          />
         )}
       </div>
     </div>

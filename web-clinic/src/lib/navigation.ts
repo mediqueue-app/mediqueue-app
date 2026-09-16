@@ -14,188 +14,150 @@ import {
   Zap,
 } from "lucide-react";
 
-export type NavGroup =
-  | "Genel Bakış"
-  | "Hasta Yönetimi & CRM"
-  | "Büyüme & Pazarlama"
-  | "Veri & Yapay Zeka"
-  | "Ayarlar";
+export type NavGroup = "overview" | "crm" | "growth" | "ai" | "settings";
 
 export type NavBadge = "pro" | "premium" | "ai";
 
 export type NavItem = {
   href: string;
-  label: string;
+  labelKey: string;
   icon: LucideIcon;
   group: NavGroup;
   badge?: NavBadge;
 };
 
 export const NAV_ITEMS: NavItem[] = [
-  // 1. Genel Bakış
   {
     href: "/dashboard",
-    label: "Dashboard",
+    labelKey: "nav.items.dashboard",
     icon: LayoutGrid,
-    group: "Genel Bakış",
+    group: "overview",
   },
   {
     href: "/dashboard/requests",
-    label: "Randevu Talepleri",
+    labelKey: "nav.items.requests",
     icon: Inbox,
-    group: "Genel Bakış",
+    group: "overview",
   },
-
-  // 2. Hasta Yönetimi & CRM
   {
     href: "/dashboard/consultations",
-    label: "Ön Konsültasyon & Teklifler",
+    labelKey: "nav.items.consultations",
     icon: FileText,
-    group: "Hasta Yönetimi & CRM",
+    group: "crm",
   },
   {
     href: "/dashboard/messages",
-    label: "Hasta Mesajları",
+    labelKey: "nav.items.messages",
     icon: MessageCircle,
-    group: "Hasta Yönetimi & CRM",
+    group: "crm",
   },
-
-  // 3. Büyüme & Pazarlama
   {
     href: "/dashboard/sponsorship",
-    label: "Vitrin & Sponsorluk",
+    labelKey: "nav.items.sponsorship",
     icon: TrendingUp,
-    group: "Büyüme & Pazarlama",
+    group: "growth",
     badge: "premium",
   },
   {
     href: "/dashboard/campaigns",
-    label: "Kampanya Yönetimi",
+    labelKey: "nav.items.campaigns",
     icon: Megaphone,
-    group: "Büyüme & Pazarlama",
+    group: "growth",
     badge: "pro",
   },
-
-  // 4. Veri & Yapay Zeka
   {
     href: "/dashboard/forecasts",
-    label: "Talep Öngörüleri",
+    labelKey: "nav.items.forecasts",
     icon: LineChart,
-    group: "Veri & Yapay Zeka",
+    group: "ai",
     badge: "ai",
   },
   {
     href: "/dashboard/market-analysis",
-    label: "Rakip & Pazar Analizi",
+    labelKey: "nav.items.market",
     icon: BarChart3,
-    group: "Veri & Yapay Zeka",
+    group: "ai",
     badge: "ai",
   },
-
-  // 5. Ayarlar
   {
     href: "/dashboard/profile",
-    label: "Klinik Profili & Belgeler",
+    labelKey: "nav.items.profile",
     icon: Building2,
-    group: "Ayarlar",
+    group: "settings",
   },
   {
     href: "/dashboard/doctors",
-    label: "Doktor Kadrosu",
+    labelKey: "nav.items.doctors",
     icon: Stethoscope,
-    group: "Ayarlar",
+    group: "settings",
   },
   {
     href: "/dashboard/finance",
-    label: "Finans & Komisyonlar",
+    labelKey: "nav.items.finance",
     icon: Receipt,
-    group: "Ayarlar",
+    group: "settings",
   },
 ];
 
 export const GROUP_ORDER: NavGroup[] = [
-  "Genel Bakış",
-  "Hasta Yönetimi & CRM",
-  "Büyüme & Pazarlama",
-  "Veri & Yapay Zeka",
-  "Ayarlar",
+  "overview",
+  "crm",
+  "growth",
+  "ai",
+  "settings",
 ];
 
-export function getPageMeta(pathname: string): {
+export const GROUP_LABEL: Record<NavGroup, string> = {
+  overview: "nav.groups.overview",
+  crm: "nav.groups.crm",
+  growth: "nav.groups.growth",
+  ai: "nav.groups.ai",
+  settings: "nav.groups.settings",
+};
+
+type Translator = (key: string) => string;
+
+export function getPageMeta(pathname: string, t: Translator): {
   title: string;
   description?: string;
 } {
   if (pathname === "/dashboard") {
-    return {
-      title: "Dashboard",
-      description: "Kliniğinizin platform üzerindeki canlı performansı",
-    };
+    return { title: t("pages.dashboard.title"), description: t("pages.dashboard.desc") };
   }
   if (pathname.startsWith("/dashboard/requests")) {
-    return {
-      title: "Randevu Talepleri",
-      description: "Platformdan gelen hasta taleplerini yönetin",
-    };
+    return { title: t("pages.requests.title"), description: t("pages.requests.desc") };
   }
   if (pathname.startsWith("/dashboard/consultations")) {
-    return {
-      title: "Ön Konsültasyon & Teklifler",
-      description: "Fotoğraf ve belgelere fiyat teklifi verin",
-    };
+    return { title: t("pages.consultations.title"), description: t("pages.consultations.desc") };
   }
   if (pathname.startsWith("/dashboard/messages")) {
-    return {
-      title: "Hasta Mesajları",
-      description: "Otomatik çeviri destekli hasta iletişimi",
-    };
+    return { title: t("pages.messages.title"), description: t("pages.messages.desc") };
   }
   if (pathname.startsWith("/dashboard/sponsorship")) {
-    return {
-      title: "Vitrin & Sponsorluk",
-      description: "Arama sonuçlarında üst sıralara çıkın",
-    };
+    return { title: t("pages.sponsorship.title"), description: t("pages.sponsorship.desc") };
   }
   if (pathname.startsWith("/dashboard/campaigns")) {
-    return {
-      title: "Kampanya Yönetimi",
-      description: "Sezonsal indirim ve promosyon kampanyaları",
-    };
+    return { title: t("pages.campaigns.title"), description: t("pages.campaigns.desc") };
   }
   if (pathname.startsWith("/dashboard/forecasts")) {
-    return {
-      title: "Talep Öngörüleri",
-      description: "Gelecek ayların talep trend analizi",
-    };
+    return { title: t("pages.forecasts.title"), description: t("pages.forecasts.desc") };
   }
   if (pathname.startsWith("/dashboard/market-analysis")) {
-    return {
-      title: "Rakip & Pazar Analizi",
-      description: "Pazardaki ortalamalarla kıyaslama",
-    };
+    return { title: t("pages.market.title"), description: t("pages.market.desc") };
   }
   if (pathname.startsWith("/dashboard/profile")) {
-    return {
-      title: "Klinik Profili & Belgeler",
-      description: "JCI ve diğer akreditasyon belgeleri",
-    };
+    return { title: t("pages.profile.title"), description: t("pages.profile.desc") };
   }
   if (pathname.startsWith("/dashboard/doctors")) {
-    return {
-      title: "Doktor Kadrosu",
-      description: "Platformda listelenen hekimlerinizi yönetin",
-    };
+    return { title: t("pages.doctors.title"), description: t("pages.doctors.desc") };
   }
   if (pathname.startsWith("/dashboard/finance")) {
-    return {
-      title: "Finans & Komisyonlar",
-      description: "Platform komisyonları ve gelir özeti",
-    };
+    return { title: t("pages.finance.title"), description: t("pages.finance.desc") };
   }
-  return { title: "Klinik Paneli" };
+  return { title: t("pages.fallback.title") };
 }
 
-/** Growth engine upsell hint for premium sidebar sections */
 export const GROWTH_ENGINE_TAGLINE = {
   icon: Zap,
-  label: "Büyüme Motoru",
+  labelKey: "nav.growthEngine",
 };

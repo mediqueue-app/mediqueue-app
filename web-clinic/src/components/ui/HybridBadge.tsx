@@ -13,25 +13,25 @@ const CONFIG: Record<DataSource, SourceConfig> = {
   api: {
     label: "Canlı API",
     tip: "Bu veriler canlı API sunucusundan alınmaktadır.",
-    badge: "bg-emerald-50 text-emerald-700 ring-emerald-200",
+    badge: "bg-success-light text-success ring-success/20",
     dot: (
       <span className="relative flex h-2 w-2">
-        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
-        <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
+        <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-success opacity-75" />
+        <span className="relative inline-flex h-2 w-2 rounded-full bg-success" />
       </span>
     ),
   },
   mock: {
     label: "Demo Veri",
     tip: "Bu veriler demo amaçlı örnek (mock) verilerdir.",
-    badge: "bg-amber-50 text-amber-700 ring-amber-200",
-    dot: <span className="h-2 w-2 rounded-full bg-amber-400" />,
+    badge: "bg-warning-light text-warning ring-warning/20",
+    dot: <span className="h-2 w-2 rounded-full bg-warning" />,
   },
   hybrid: {
     label: "Hibrit Veri",
     tip: "Canlı API verisi demo içerikle zenginleştirilmiştir.",
-    badge: "bg-primary-light text-primary ring-primary/20",
-    dot: <span className="h-2 w-2 rounded-full bg-primary" />,
+    badge: "bg-secondary-light text-secondary ring-secondary/20",
+    dot: <span className="h-2 w-2 rounded-full bg-secondary" />,
   },
 };
 
@@ -70,10 +70,10 @@ export function HybridBadge({
           bu yüzden mizanpajı/scroll'u bozmaz. Mobilde title fallback devreye girer. */}
       <span
         role="tooltip"
-        className="pointer-events-none absolute bottom-full left-1/2 z-40 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-slate-900 px-2.5 py-1.5 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 sm:block"
+        className="pointer-events-none absolute bottom-full left-1/2 z-40 mb-2 hidden -translate-x-1/2 whitespace-nowrap rounded-lg bg-foreground px-2.5 py-1.5 text-xs font-medium text-background opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 sm:block"
       >
         {tip}
-        <span className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-4 border-transparent border-t-slate-900" />
+        <span className="absolute left-1/2 top-full h-0 w-0 -translate-x-1/2 border-4 border-transparent border-t-foreground" />
       </span>
     </span>
   );

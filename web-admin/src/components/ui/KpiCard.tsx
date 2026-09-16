@@ -6,10 +6,10 @@ type IconTone = "primary" | "emerald" | "amber" | "violet" | "rose";
 
 const ICON_TONES: Record<IconTone, string> = {
   primary: "bg-primary-light text-primary",
-  emerald: "bg-emerald-50 text-emerald-600",
-  amber: "bg-amber-50 text-amber-600",
-  violet: "bg-violet-50 text-violet-600",
-  rose: "bg-rose-50 text-rose-600",
+  emerald: "bg-success-light text-success",
+  amber: "bg-warning-light text-warning",
+  violet: "bg-secondary-light text-secondary",
+  rose: "bg-error-light text-error",
 };
 
 export function KpiCard({
@@ -66,8 +66,8 @@ export function KpiCard({
               className={cn(
                 "inline-flex items-center gap-0.5 rounded-full px-2 py-0.5 text-xs font-semibold",
                 positive
-                  ? "bg-emerald-50 text-emerald-700"
-                  : "bg-red-50 text-red-600"
+                  ? "bg-success-light text-success"
+                  : "bg-error-light text-error"
               )}
             >
               {positive ? (

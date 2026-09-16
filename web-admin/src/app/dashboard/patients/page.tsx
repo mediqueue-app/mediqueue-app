@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Search, UserRound } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { KpiCard } from "@/components/ui/KpiCard";
+import { PageLoadError } from "@/components/ui/PageLoadError";
 import { StatusBadge, type BadgeTone } from "@/components/ui/StatusBadge";
 import { fetchPatients } from "@/lib/services/patients";
 import type { Patient, PatientStatus } from "@/types";
@@ -36,6 +37,8 @@ export default function PatientsPage() {
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<FilterKey>("all");
   const [query, setQuery] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -47,12 +50,15 @@ export default function PatientsPage() {
         }
       })
       .catch(() => {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setError("İnternet bağlantını kontrol et ve tekrar dene.");
+          setLoading(false);
+        }
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   const rows = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -70,6 +76,19 @@ export default function PatientsPage() {
   const activeCount = patients.filter((p) => p.status === "active").length;
   const totalSpend = patients.reduce((sum, p) => sum + p.totalSpend, 0);
   const totalAppointments = patients.reduce((sum, p) => sum + p.appointments, 0);
+
+  if (error) {
+    return (
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setLoading(true);
+          setReloadKey((k) => k + 1);
+        }}
+      />
+    );
+  }
 
   if (loading) {
     return (

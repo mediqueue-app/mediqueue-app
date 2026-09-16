@@ -3,14 +3,19 @@
 import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
+import { PageLoadError } from "@/components/ui/PageLoadError";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { ToggleSwitch } from "@/components/ui/ToggleSwitch";
 import type { Campaign } from "@/lib/growth-mock";
 import { fetchCampaigns } from "@/lib/services/growth";
+import { toUserError } from "@/lib/api/client";
 
 export default function CampaignsPage() {
   const [items, setItems] = useState<Campaign[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -21,13 +26,16 @@ export default function CampaignsPage() {
           setLoading(false);
         }
       })
-      .catch(() => {
-        if (!cancelled) setLoading(false);
+      .catch((err) => {
+        if (!cancelled) {
+          setError(toUserError(err));
+          setLoading(false);
+        }
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   function toggleActive(id: string) {
     setItems((prev) =>
@@ -45,6 +53,19 @@ export default function CampaignsPage() {
     );
   }
 
+  if (error) {
+    return (
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setLoading(true);
+          setReloadKey((k) => k + 1);
+        }}
+      />
+    );
+  }
+
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
@@ -53,7 +74,7 @@ export default function CampaignsPage() {
         action={
           <button
             type="button"
-            className="inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover"
+            className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover"
           >
             <Plus className="h-4 w-4" />
             Yeni Kampanya Oluştur
@@ -74,6 +95,11 @@ export default function CampaignsPage() {
       </div>
 
       <div className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+        {items.length === 0 ? (
+          <div className="p-4">
+            <LocalizedEmpty copyKey="campaigns" icon={Plus} compact />
+          </div>
+        ) : (
         <div className="overflow-x-auto">
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead>
@@ -140,6 +166,7 @@ export default function CampaignsPage() {
             </tbody>
           </table>
         </div>
+        )}
       </div>
     </div>
   );

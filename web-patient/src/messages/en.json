@@ -1,0 +1,352 @@
+{
+  "meta": {
+    "brand": "MediQueue",
+    "documentTitle": "MediQueue | Find your clinic and doctor",
+    "documentDescription": "MediQueue — discover the right clinics and doctors by symptom, city and date, and book with transparent prices."
+  },
+  "nav": {
+    "homeAria": "Home",
+    "treatments": "Treatments",
+    "clinics": "Clinics",
+    "doctors": "Doctors",
+    "appointments": "My appointments",
+    "howItWorks": "How it works",
+    "account": "Account",
+    "signIn": "Sign in",
+    "book": "Book now",
+    "menu": "Menu",
+    "language": "Language",
+    "languageEn": "English",
+    "languageTr": "Türkçe"
+  },
+  "footer": {
+    "tagline": "Turkey’s accredited clinic and doctor marketplace. Book with transparent prices.",
+    "services": "Services",
+    "company": "Company",
+    "legal": "Legal",
+    "about": "About us",
+    "addClinic": "Add your clinic",
+    "careers": "Careers",
+    "contact": "Contact",
+    "privacy": "Privacy policy",
+    "terms": "Terms of use",
+    "kvkk": "KVKK",
+    "copyright": "© {year} MediQueue. All rights reserved.",
+    "deleteAccount": "Delete my account"
+  },
+  "account": {
+    "title": "Account settings",
+    "lead": "You can delete your account yourself under the KVKK right to be forgotten. You do not need to give a reason.",
+    "retention": "Deletion cannot be undone. Name, email, phone and health history are erased. Appointment dates and statuses are kept in anonymised form for legal retention. When payment records exist they are kept for accounting duties.",
+    "loading": "Loading…",
+    "authTitle": "Sign in for account settings",
+    "authLead": "You need to sign in to manage or delete your account."
+  },
+  "hero": {
+    "badge": "Turkey’s accredited health marketplace",
+    "imageAlt": "Modern clinic setting",
+    "title": "Find the right clinic and doctor in seconds",
+    "subtitle": "Discover specialists by symptom, city and date. Transparent prices, real reviews and instant booking.",
+    "patients": "500,000+ patients treated",
+    "rating": "4.9 / 5 average rating",
+    "jci": "JCI-accredited clinics"
+  },
+  "search": {
+    "symptom": "Symptom / treatment",
+    "symptomPh": "e.g. dental implant, eye laser",
+    "city": "City",
+    "cityPh": "Choose or type a city",
+    "date": "Date",
+    "submit": "Search"
+  },
+  "home": {
+    "treatmentsEyebrow": "Treatments",
+    "treatmentsTitle": "Choose the treatment you need",
+    "treatmentsDesc": "The most requested categories — from dentistry to aesthetic surgery.",
+    "seeAll": "See all",
+    "clinicsEyebrow": "Featured clinics",
+    "clinicsTitle": "Popular clinics",
+    "clinicsDesc": "Accredited clinics with strong ratings and transparent prices.",
+    "allClinics": "All clinics",
+    "doctorsEyebrow": "Specialists",
+    "doctorsTitle": "Experts in their field",
+    "doctorsDesc": "Physicians highlighted by experience, rating and availability.",
+    "allDoctors": "All doctors",
+    "howEyebrow": "How it works",
+    "howTitle": "Your appointment in three simple steps",
+    "from": "from"
+  },
+  "how": {
+    "step1Title": "Search & compare",
+    "step1Desc": "Filter clinics and doctors by symptom, city and date — and see prices in the open.",
+    "step2Title": "Book",
+    "step2Desc": "Pick a slot and send a request in seconds. No deposit on MediQueue.",
+    "step3Title": "Get treated",
+    "step3Desc": "Attend the clinic, meet your specialist and pay on site.",
+    "pageTitle": "How it works | MediQueue",
+    "eyebrow": "How it works",
+    "headline": "The simplest path to your treatment",
+    "lead": "MediQueue simplifies everything from finding the right clinic to booking the visit.",
+    "v1Title": "Accredited clinics",
+    "v1Desc": "Every clinic on the platform goes through a careful review.",
+    "v2Title": "Transparent prices",
+    "v2Desc": "No hidden fees. You see the full price before you book.",
+    "v3Title": "Real reviews",
+    "v3Desc": "Only verified reviews from patients who completed treatment.",
+    "v4Title": "No deposit to book",
+    "v4Desc": "Create a request for free and pay at the clinic.",
+    "ctaTitle": "Book your appointment today",
+    "ctaBody": "Thousands of accredited clinics and specialists are ready for you.",
+    "ctaClinics": "Browse clinics",
+    "ctaDoctors": "See doctors"
+  },
+  "treatmentsPage": {
+    "title": "Treatments",
+    "metaTitle": "Treatments | MediQueue",
+    "lead": "Choose a treatment to see matching clinics and doctors.",
+    "starting": "From",
+    "findClinic": "Find a clinic"
+  },
+  "auth": {
+    "welcomeBack": "Welcome back",
+    "loginLead": "Sign in to manage your appointments.",
+    "email": "Email",
+    "emailPh": "name@email.com",
+    "password": "Password",
+    "passwordPh": "At least 8 characters",
+    "showPassword": "Show password",
+    "hidePassword": "Hide password",
+    "remember": "Remember me",
+    "signingIn": "Signing in…",
+    "signIn": "Sign in",
+    "noAccount": "Don’t have an account?",
+    "register": "Create account",
+    "ssl": "Your details are protected with 256-bit SSL encryption",
+    "createTitle": "Create your account",
+    "createLead": "Start booking in minutes.",
+    "fullName": "Full name",
+    "fullNamePh": "Your full name",
+    "creating": "Creating account…",
+    "registerCta": "Register",
+    "hasAccount": "Already have an account?",
+    "terms": "By registering you accept the Terms of use",
+    "forgot": "Forgot password?"
+  },
+  "errors": {
+    "retry": "Try again",
+    "network": "Check your internet connection and try again.",
+    "loginBad": "Email or password is incorrect. Check your details and try again.",
+    "session": "Your session has ended. Please sign in again.",
+    "forbidden": "You don’t have permission for this action. Sign in with the right account.",
+    "notFound": "We couldn’t find that record. Refresh the list or try another option.",
+    "emailTaken": "An account already exists for this email. Try signing in.",
+    "dupAppt": "You already have a request for this date. Check My appointments.",
+    "doctorConflict": "The physician is not available on that date. Try another day.",
+    "conflict": "This action conflicts with an existing record. Change the details and try again.",
+    "validationEmpty": "Something in the form is missing or invalid. Check and try again.",
+    "validationOne": "Check the {field} field and try again.",
+    "validationMany": "Check {rest} and {last}.",
+    "rateLimit": "Too many attempts. Please wait a few minutes and try again.",
+    "server": "That’s on our side — the team has been notified. Please try again.",
+    "generic": "The request could not be completed. Please try again."
+  },
+  "fields": {
+    "email": "Email",
+    "password": "Password",
+    "full_name": "Full name",
+    "username": "Email",
+    "phone": "Phone",
+    "requested_date": "Appointment date",
+    "alternative_date": "Alternative date",
+    "clinic_id": "Clinic",
+    "doctor_id": "Doctor",
+    "patient_id": "Patient",
+    "specialty": "Specialty",
+    "language": "Language",
+    "budget": "Budget",
+    "notes": "Note",
+    "branch": "Treatment / specialty",
+    "status": "Status"
+  },
+  "common": {
+    "retry": "Try again",
+    "loading": "Loading…",
+    "accredited": "Accredited",
+    "favouriteAdd": "Add to favourites",
+    "favouriteRemove": "Remove from favourites",
+    "from": "from",
+    "backToList": "Back to list",
+    "showOnMap": "Show on map"
+  },
+  "source": {
+    "api": "Live API",
+    "apiTip": "This data comes from the live API.",
+    "mock": "Demo data",
+    "mockTip": "This is sample data for the demo.",
+    "hybrid": "Hybrid data",
+    "hybridTip": "Live API data enriched with demo content."
+  },
+  "clinic": {
+    "tabAbout": "About",
+    "tabAmenities": "Amenities",
+    "tabDoctors": "Doctors",
+    "tabReviews": "Reviews",
+    "searchPh": "Search clinics or treatments…",
+    "about": "About the clinic",
+    "services": "Treatments offered",
+    "amenities": "Clinic amenities",
+    "doctors": "Clinic doctors",
+    "reviews": "Patient reviews",
+    "bookingTitle": "{name} — Book",
+    "generalExam": "General consultation",
+    "priceRange": "Price range",
+    "callClinic": "Call the clinic",
+    "metaTitle": "Clinic | MediQueue",
+    "listTitle": "Clinics | MediQueue"
+  },
+  "empty": {
+    "appointments": {
+      "title": "You don’t have any appointments yet",
+      "description": "Once you book your first clinic visit, you’ll follow every step here — confirmation, transfer and treatment day.",
+      "action": "Browse clinics"
+    },
+    "appointmentsAuth": {
+      "title": "Sign in to see your appointments",
+      "description": "Your requests, confirmations and clinic messages are waiting behind a secure sign-in.",
+      "action": "Sign in"
+    },
+    "clinicSearch": {
+      "title": "No clinics match this search",
+      "description": "Try another city, treatment or amenity. Accredited clinics in Istanbul and Antalya are ready for you.",
+      "action": "Clear filters"
+    },
+    "doctorSearch": {
+      "title": "No doctors match this search",
+      "description": "Widen the specialty or city filter. Verified physicians will shape your treatment plan with you.",
+      "action": "Clear filters"
+    },
+    "chat": {
+      "title": "Start a conversation with the clinic",
+      "description": "Ask about timing, airport transfer or documents here. Send the first message — the team replies on this secure channel."
+    },
+    "clinicReviews": {
+      "title": "No reviews for this clinic yet",
+      "description": "After your treatment you can share how it went. The first honest review helps the next patient choose with confidence."
+    },
+    "doctorReviews": {
+      "title": "No reviews for this doctor yet",
+      "description": "You could be the first patient to share your experience. Reviews help other international patients choose with confidence."
+    },
+    "clinicDoctors": {
+      "title": "No physicians listed for this clinic yet",
+      "description": "You can still request an appointment with the clinic; the physician is confirmed during approval.",
+      "action": "Book appointment"
+    },
+    "treatments": {
+      "title": "No treatments to show",
+      "description": "The catalogue looks empty right now. You can still find the specialty you need by browsing clinics.",
+      "action": "Find a clinic"
+    }
+  },
+  "doctorsPage": {
+    "metaTitle": "Doctors | MediQueue",
+    "reviews": "Patient reviews",
+    "searchPh": "Search doctors, specialties or treatments…",
+    "heroAlt": "Hospital and specialist setting",
+    "languages": "Languages spoken",
+    "worksAt": "Clinic"
+  },
+  "appointments": {
+    "metaTitle": "My appointments | MediQueue",
+    "eyebrow": "Appointment tracker",
+    "title": "My appointments",
+    "lead": "Track the requests you have submitted and their latest status here.",
+    "liveTip": "Your appointments are loaded from the live API.",
+    "loadFailed": "Appointments could not be loaded",
+    "alternative": "Alternative: {date}",
+    "chat": "Message",
+    "cancel": "Cancel appointment",
+    "viewClinic": "View clinic",
+    "status": {
+      "pending": "Awaiting confirmation",
+      "confirmed": "Confirmed",
+      "alternative_date": "Alternative date suggested",
+      "cancelled": "Cancelled",
+      "arrived": "Checked in",
+      "completed": "Completed"
+    }
+  },
+  "booking": {
+    "consultFee": "Consultation fee",
+    "fromPrice": "from",
+    "open": "Open for booking",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "slots": "Available times",
+    "submitting": "Sending…",
+    "submit": "Request appointment",
+    "pickSlot": "Choose a date and time",
+    "noDeposit": "Pay at the clinic — no deposit required",
+    "unavailable": "Online booking is not yet available for this clinic.",
+    "successTitle": "Your request has been received",
+    "statusLine": "Your request was sent. Status: {status}",
+    "clinicWillCall": "The clinic will call shortly to confirm your appointment.",
+    "newBooking": "Book another appointment",
+    "notes": "Time: {time}",
+    "months": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
+    "weekdays": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+  },
+  "chat": {
+    "aria": "Message the clinic",
+    "withClinic": "Clinic chat",
+    "demoTip": "Messaging is running on demo data.",
+    "close": "Close chat",
+    "placeholder": "Write a message…",
+    "send": "Send",
+    "loadFailed": "Messages could not be loaded",
+    "deleteAria": "Delete message",
+    "attachAria": "Attach ID or document"
+  },
+  "confirm": {
+    "cancel": "Go back",
+    "close": "Close",
+    "busy": "Working…",
+    "appointmentTitle": "Cancel appointment",
+    "appointmentBody": "Are you sure you want to cancel this appointment? This cannot be undone. The clinic will be notified and the slot may be offered to someone else.",
+    "appointmentAction": "Yes, cancel it",
+    "accountTitle": "Delete your account",
+    "accountBody": "Are you sure you want to delete your account? We will not ask why. This cannot be undone. Personal data is erased or anonymised under KVKK, open appointments are cancelled, and sign-in is closed.",
+    "accountAction": "Continue",
+    "accountSecondTitle": "Final confirmation",
+    "accountSecondBody": "This cannot be undone. Your account will close for good. Appointment history is kept in anonymised form for legal retention; name, email, health history and message content are erased.",
+    "accountSecondAction": "Yes, permanently delete my account",
+    "accountTrigger": "Delete my account",
+    "messageTitle": "Delete message",
+    "messageBody": "Are you sure you want to delete this message? The other party will no longer see it. This cannot be undone.",
+    "messageAction": "Delete message"
+  },
+  "datetime": {
+    "istanbul": "Istanbul time",
+    "yourTime": "Your time"
+  },
+  "permission": {
+    "later": "Not now",
+    "close": "Close",
+    "cameraTitle": "Camera and file access",
+    "cameraAction": "Continue",
+    "cameraId": "We need camera or gallery access to verify your ID or medical photos. The image is attached only to this appointment.",
+    "cameraChat": "We need file access to attach an image or document to this conversation.",
+    "locationTitle": "Location access",
+    "locationBody": "We need your location to show nearby clinics. It is not shared outside the map.",
+    "locationAction": "Use location",
+    "locationOk": "Location received — nearby clinics are highlighted.",
+    "locationDenied": "Location is blocked. You can turn it on in the browser site settings.",
+    "notifyTitle": "Browser notifications",
+    "notifyBody": "We would like to send browser notifications for appointment updates and new messages. You can turn them off at any time.",
+    "notifyAction": "Allow notifications",
+    "notifyEnable": "Turn on browser notifications",
+    "notifyOn": "Notifications are on",
+    "notifyDenied": "Notifications are blocked in the browser. You can turn them on in site settings.",
+    "notifyUnsupported": "This browser does not support notifications."
+  }
+}

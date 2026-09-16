@@ -20,7 +20,7 @@ export function Avatar({
     return (
       <div
         className={cn(
-          "flex items-center justify-center bg-gradient-to-br from-[#eaf0fc] to-[#d3e0f8] font-semibold text-[#3a6ad6]",
+          "flex items-center justify-center bg-gradient-to-br from-primary-light to-slate-200 font-semibold text-primary",
           className
         )}
         aria-hidden

@@ -2,8 +2,15 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ShieldCheck, Sparkles } from "lucide-react";
+import { Sparkles } from "lucide-react";
+import { BrandMark } from "@/components/ui/BrandMark";
 import { DEMO_ADMIN, isAuthenticated, login } from "@/lib/auth";
+import { safeInternalPath } from "@/lib/history-layer";
+
+function nextPath() {
+  if (typeof window === "undefined") return "/dashboard";
+  return safeInternalPath(new URLSearchParams(window.location.search).get("next"), "/dashboard");
+}
 
 export default function LoginPage() {
   const router = useRouter();
@@ -14,7 +21,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (isAuthenticated()) {
-      router.replace("/dashboard");
+      router.replace(nextPath());
     }
   }, [router]);
 
@@ -24,7 +31,7 @@ export default function LoginPage() {
     setLoading(true);
     try {
       await login(email, password);
-      router.push("/dashboard");
+      router.replace(nextPath());
     } catch (err) {
       setError(err instanceof Error ? err.message : "Giriş başarısız");
     } finally {
@@ -48,9 +55,7 @@ export default function LoginPage() {
       <div className="relative grid w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-xl lg:grid-cols-2">
         <div className="hidden flex-col justify-between border-r border-white/10 bg-gradient-to-br from-primary to-primary-hover p-10 lg:flex">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/15 text-white ring-1 ring-white/20">
-              <ShieldCheck className="h-5 w-5" strokeWidth={2.25} />
-            </div>
+            <BrandMark size={40} className="h-10 w-10 ring-1 ring-white/20" />
             <div>
               <p className="text-[15px] font-bold tracking-tight text-white">
                 MEDI<span className="text-white/70">·</span>QUEUE
@@ -90,9 +95,7 @@ export default function LoginPage() {
 
         <div className="bg-white p-8 sm:p-10">
           <div className="mb-8">
-            <div className="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-white shadow-lg shadow-primary/30 lg:hidden">
-              <ShieldCheck className="h-7 w-7" strokeWidth={2.5} />
-            </div>
+            <BrandMark size={56} className="mb-5 h-14 w-14 shadow-lg shadow-primary/30 lg:hidden" />
             <h1 className="text-xl font-bold tracking-tight text-slate-900">
               Yönetici Girişi
             </h1>
@@ -102,7 +105,7 @@ export default function LoginPage() {
           </div>
 
           {error ? (
-            <p className="mb-4 rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700">
+            <p className="mq-feedback mb-4 rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
               {error}
             </p>
           ) : null}

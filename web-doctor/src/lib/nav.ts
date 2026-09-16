@@ -8,26 +8,26 @@ import {
 export const navItems = [
   {
     href: "/dashboard",
-    label: "Operasyon Paneli",
-    description: "Bugün",
+    labelKey: "nav.alt.ops",
+    descriptionKey: "nav.alt.opsDesc",
     icon: LayoutDashboard,
   },
   {
     href: "/dashboard/schedule",
-    label: "Randevu Takvimi",
-    description: "Slot Yönetimi",
+    labelKey: "nav.alt.schedule",
+    descriptionKey: "nav.alt.scheduleDesc",
     icon: CalendarDays,
   },
   {
     href: "/dashboard/patients",
-    label: "Hasta Tıbbi Dosyaları",
-    description: "Uluslararası Hastalar",
+    labelKey: "nav.alt.files",
+    descriptionKey: "nav.alt.filesDesc",
     icon: FolderHeart,
   },
   {
     href: "/dashboard/profile",
-    label: "Vitrin Profilim",
-    description: "Küresel Görünürlük",
+    labelKey: "nav.alt.showcase",
+    descriptionKey: "nav.alt.showcaseDesc",
     icon: UserCog,
   },
 ] as const;

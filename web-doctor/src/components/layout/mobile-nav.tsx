@@ -3,9 +3,11 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { navItems } from "@/lib/nav";
+import { useT } from "@/lib/i18n";
 
 export function MobileNav() {
   const pathname = usePathname();
+  const t = useT();
 
   return (
     <nav className="flex items-center justify-around border-t border-slate-200/80 bg-white/95 px-2 py-2 backdrop-blur-sm lg:hidden">
@@ -24,7 +26,7 @@ export function MobileNav() {
             }`}
           >
             <Icon className="h-5 w-5" />
-            {item.label}
+            {t(item.labelKey)}
           </Link>
         );
       })}

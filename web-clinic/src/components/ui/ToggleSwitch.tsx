@@ -22,7 +22,7 @@ export function ToggleSwitch({
       disabled={disabled}
       onClick={() => onChange(!checked)}
       className={cn(
-        "relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200 focus-visible:outline-none",
+        "touch-slop relative h-6 w-11 shrink-0 rounded-full transition-colors duration-200 focus-visible:outline-none",
         checked ? "bg-primary" : "bg-slate-300",
         disabled && "cursor-not-allowed opacity-50"
       )}

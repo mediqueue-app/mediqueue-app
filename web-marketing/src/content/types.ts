@@ -47,6 +47,8 @@ export type LeadCopy = {
   consent: string;
   privacyLink: string;
   error: string;
+  errorNetwork: string;
+  errorServer: string;
   submitting: string;
   submit: string;
   required: string;
@@ -104,6 +106,9 @@ export type SiteContent = {
     topicPlaceholderClinic: string;
     messagePlaceholder: string;
     responseNote: string;
+    error: string;
+    errorNetwork: string;
+    errorServer: string;
   };
   home: {
     platformEyebrow: string;

@@ -1,14 +1,14 @@
 import type { Appointment, AppointmentStatus } from "@/types";
+import {
+  clinicTodayKey,
+  formatDayLong as formatDayLongDt,
+  formatMonthYear as formatMonthYearDt,
+  formatWeekdayShort as formatWeekdayShortDt,
+} from "@/lib/datetime";
 
 export const CALENDAR_START_HOUR = 8;
 export const CALENDAR_END_HOUR = 19;
 export const HOUR_ROW_PX = 60;
-
-const TR_DAY_NAMES = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"] as const;
-const TR_MONTH_NAMES = [
-  "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
-  "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık",
-] as const;
 
 export function toDateKey(date: Date): string {
   const y = date.getFullYear();
@@ -64,25 +64,20 @@ export function isSameDay(a: Date, b: Date): boolean {
   return toDateKey(a) === toDateKey(b);
 }
 
-export function isToday(date: Date, today = new Date()): boolean {
-  return isSameDay(date, today);
+export function isToday(date: Date): boolean {
+  return toDateKey(date) === clinicTodayKey();
 }
 
 export function formatWeekdayShort(date: Date): string {
-  const day = date.getDay();
-  return TR_DAY_NAMES[day === 0 ? 6 : day - 1];
+  return formatWeekdayShortDt(date);
 }
 
 export function formatMonthYear(date: Date): string {
-  return `${TR_MONTH_NAMES[date.getMonth()]} ${date.getFullYear()}`;
+  return formatMonthYearDt(date);
 }
 
 export function formatDayLong(date: Date): string {
-  return date.toLocaleDateString("tr-TR", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-  });
+  return formatDayLongDt(date);
 }
 
 /** Ay takvim ızgarası — haftalar satır, pazartesi ile başlar. */

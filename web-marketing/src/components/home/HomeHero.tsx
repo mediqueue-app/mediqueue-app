@@ -62,7 +62,7 @@ export function HomeHero() {
                 aria-selected={mode === key}
                 onClick={() => select(key)}
                 className={cn(
-                  "relative min-h-11 rounded-full px-6 py-2.5 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
+                  "relative min-h-12 rounded-full px-6 py-2.5 text-sm font-semibold transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary",
                   mode === key ? "text-white" : "text-slate-600 hover:text-slate-900"
                 )}
               >
@@ -93,9 +93,6 @@ export function HomeHero() {
               transition={{ duration: reduced ? 0 : 0.25, ease: [0.22, 1, 0.36, 1] }}
               className="max-w-xl pb-2 lg:py-4"
             >
-              <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.18em] text-primary">
-                {h.platformEyebrow}
-              </p>
               <div className="min-h-[160px] sm:min-h-[175px]">
                 <h1 className="font-display text-[2.35rem] leading-[1.06] tracking-[-0.03em] text-ink sm:text-5xl lg:text-[3.2rem]">
                   {copy.headline}

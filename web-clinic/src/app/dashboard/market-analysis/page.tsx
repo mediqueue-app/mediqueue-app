@@ -2,6 +2,7 @@ import { Clock, Eye, Star } from "lucide-react";
 import { MarketComparisonChart } from "@/components/dashboard/growth/MarketComparisonChart";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { ComingSoonOverlay } from "@/components/ui/ComingSoon";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { fetchMarketAnalysis } from "@/lib/services/growth";
 import { cn } from "@/lib/utils";
@@ -32,6 +33,11 @@ export default async function MarketAnalysisPage() {
           </p>
         </div>
         <div className="overflow-x-auto">
+          {competitorTable.length === 0 ? (
+            <div className="p-4">
+              <LocalizedEmpty copyKey="competitors" icon={Eye} compact />
+            </div>
+          ) : (
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50/70">
@@ -122,6 +128,7 @@ export default async function MarketAnalysisPage() {
               ))}
             </tbody>
           </table>
+          )}
         </div>
       </section>
     </div>

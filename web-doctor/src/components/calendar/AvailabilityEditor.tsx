@@ -108,7 +108,7 @@ export function AvailabilityEditor({
                           onClick={() => toggleSlot(dayIndex, hourIndex)}
                           aria-label={`${day.label} ${hour} ${slot.available ? "müsait" : "kapalı"}`}
                           className={cn(
-                            "inline-flex h-8 w-8 items-center justify-center rounded-lg border transition-all",
+                            "touch-slop inline-flex h-8 w-8 items-center justify-center rounded-lg border transition-all",
                             slot.available
                               ? "border-primary/30 bg-primary text-white shadow-sm hover:bg-primary-hover"
                               : "border-slate-200 bg-slate-50 text-slate-300 hover:border-slate-300"

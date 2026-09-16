@@ -20,10 +20,12 @@ import {
   X,
   XCircle,
 } from "lucide-react";
+import { PageLoadError } from "@/components/ui/PageLoadError";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { fetchApplicationById } from "@/lib/services/applications";
 import type { ClinicApplication, ClinicDocument } from "@/types";
 import { formatDateTr } from "@/lib/utils";
+import { useT } from "@/lib/i18n";
 
 type Decision = "pending" | "approved" | "rejected";
 
@@ -40,6 +42,9 @@ export default function ApplicationDetailPage({
   const [preview, setPreview] = useState<ClinicDocument | null>(null);
   const [modal, setModal] = useState<"approve" | "reject" | null>(null);
   const [rejectReason, setRejectReason] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
+  const t = useT();
 
   useEffect(() => {
     let cancelled = false;
@@ -50,12 +55,28 @@ export default function ApplicationDetailPage({
         if (app) setDecision(app.status);
       })
       .catch(() => {
-        if (!cancelled) setApplication(null);
+        if (!cancelled) {
+          setError("İnternet bağlantını kontrol et ve tekrar dene.");
+          setApplication(null);
+        }
       });
     return () => {
       cancelled = true;
     };
-  }, [id]);
+  }, [id, reloadKey]);
+
+  if (error) {
+    return (
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setApplication(undefined);
+          setReloadKey((k) => k + 1);
+        }}
+      />
+    );
+  }
 
   if (application === undefined) {
     return (
@@ -209,7 +230,7 @@ export default function ApplicationDetailPage({
                   <button
                     type="button"
                     onClick={() => setPreview(doc)}
-                    className="inline-flex items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition-colors hover:border-primary/40 hover:text-primary"
+                    className="inline-flex min-h-12 items-center gap-1.5 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-semibold text-slate-600 transition-colors hover:border-primary/40 hover:text-primary"
                   >
                     <Eye className="h-3.5 w-3.5" />
                     İncele
@@ -287,7 +308,12 @@ export default function ApplicationDetailPage({
               <FileText className="h-5 w-5 text-primary" />
               <h3 className="font-semibold text-slate-900">{preview.label}</h3>
             </div>
-            <button type="button" onClick={() => setPreview(null)} aria-label="Kapat">
+            <button
+              type="button"
+              onClick={() => setPreview(null)}
+              aria-label="Kapat"
+              className="touch-target inline-flex items-center justify-center rounded-lg"
+            >
               <X className="h-5 w-5 text-slate-400 hover:text-slate-600" />
             </button>
           </div>
@@ -300,7 +326,7 @@ export default function ApplicationDetailPage({
             <button
               type="button"
               onClick={() => setPreview(null)}
-              className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+              className="min-h-12 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
             >
               Kapat
             </button>
@@ -328,7 +354,7 @@ export default function ApplicationDetailPage({
             <button
               type="button"
               onClick={() => setModal(null)}
-              className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+              className="min-h-12 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
             >
               Vazgeç
             </button>
@@ -354,7 +380,7 @@ export default function ApplicationDetailPage({
               Başvuruyu reddet
             </h3>
             <p className="mt-2 text-sm leading-relaxed text-slate-600">
-              Ret gerekçesi başvuru sahibine e-posta ile iletilecektir.
+              {t("confirm.rejectApplicationBody")}
             </p>
             <textarea
               value={rejectReason}
@@ -368,7 +394,7 @@ export default function ApplicationDetailPage({
             <button
               type="button"
               onClick={() => setModal(null)}
-              className="rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+              className="min-h-12 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
             >
               Vazgeç
             </button>
@@ -415,14 +441,14 @@ function Modal({
   onClose: () => void;
 }) {
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+    <div className="mq-overlay fixed inset-0 z-50 flex items-center justify-center px-4">
       <button
         type="button"
         aria-label="Kapat"
         className="absolute inset-0 bg-slate-900/50 backdrop-blur-sm"
         onClick={onClose}
       />
-      <div className="relative w-full max-w-md overflow-hidden rounded-2xl bg-white shadow-2xl">
+      <div className="mq-panel relative w-full max-w-md overflow-hidden rounded-2xl bg-surface text-foreground shadow-2xl">
         {children}
       </div>
     </div>

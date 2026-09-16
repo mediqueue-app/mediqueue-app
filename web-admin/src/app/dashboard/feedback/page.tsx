@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { Building2, Send, UserRound } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
+import { PageLoadError } from "@/components/ui/PageLoadError";
 import { StatusBadge, type BadgeTone } from "@/components/ui/StatusBadge";
 import { fetchTickets } from "@/lib/services/feedback";
 import type { Ticket, TicketPriority, TicketStatus } from "@/types";
@@ -35,6 +36,8 @@ export default function FeedbackPage() {
   const [filter, setFilter] = useState<FilterKey>("all");
   const [selectedId, setSelectedId] = useState<string>("");
   const [reply, setReply] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [reloadKey, setReloadKey] = useState(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -47,12 +50,15 @@ export default function FeedbackPage() {
         }
       })
       .catch(() => {
-        if (!cancelled) setLoading(false);
+        if (!cancelled) {
+          setError("İnternet bağlantını kontrol et ve tekrar dene.");
+          setLoading(false);
+        }
       });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [reloadKey]);
 
   const filtered = useMemo(
     () => items.filter((t) => filter === "all" || t.status === filter),
@@ -71,6 +77,19 @@ export default function FeedbackPage() {
     if (!selected || !reply.trim()) return;
     setStatus(selected.id, "resolved");
     setReply("");
+  }
+
+  if (error) {
+    return (
+      <PageLoadError
+        message={error}
+        onRetry={() => {
+          setError(null);
+          setLoading(true);
+          setReloadKey((k) => k + 1);
+        }}
+      />
+    );
   }
 
   if (loading) {
@@ -233,7 +252,7 @@ export default function FeedbackPage() {
                     type="button"
                     onClick={() => setStatus(selected.id, st)}
                     className={cn(
-                      "rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors",
+                      "min-h-12 rounded-lg px-2.5 py-1 text-xs font-semibold transition-colors",
                       selected.status === st
                         ? "bg-primary text-white"
                         : "bg-slate-100 text-slate-500 hover:bg-slate-200"

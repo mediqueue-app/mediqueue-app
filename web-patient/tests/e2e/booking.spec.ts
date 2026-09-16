@@ -9,7 +9,8 @@ import { test, expect, type Page } from "@playwright/test";
  * Kararlılık (anti-flaky) ilkeleri:
  *  - Ağ çağrıları intercept edilir; gerçek backend'e gidilmez.
  *  - Klinik verisi projenin yerel mock'undan gelir (deterministik): klinik
- *    uçları abort edilir → servisler mock fallback'e düşer. Yalnızca
+ *    uçları 404 döner → servisler mock fallback'e düşer. Abort edilmez
+ *    (ağ hatası artık kullanıcıya error ekranı olarak yansır). Yalnızca
  *    booking'in gerçekten ihtiyaç duyduğu iki uç (`/patients/me`,
  *    `/appointments`) sahte yanıtla karşılanır.
  *  - Elementler `data-testid` ve erişilebilir rol/ad (ARIA) ile seçilir.
@@ -101,8 +102,16 @@ async function setupSessionAndMocks(page: Page) {
       return;
     }
 
-    // Klinik uçları vb. — abort et; servisler yerel mock verisine düşer.
-    await route.abort();
+    // Klinik ve diğer uçlar — 404; servisler yerel mock'a düşer.
+    // Abort ağ hatası sayılır ve PageLoadError gösterir.
+    await route.fulfill({
+      status: 404,
+      contentType: "application/json",
+      body: JSON.stringify({
+        success: false,
+        error: { code: "NOT_FOUND", message: "not found" },
+      }),
+    });
   });
 }
 
@@ -141,6 +150,40 @@ test.describe("Booking (randevu oluşturma) akışı", () => {
     await expect(success).toBeVisible();
     await expect(success).toContainText("Randevu Talebiniz Alındı");
     await expect(success).toContainText("Durum: pending");
-    await expect(success).toContainText("15 Temmuz 2026");
+    await expect(success).toContainText("15.07.2026");
+  });
+
+  test("saat seçiliyken geri tuşu sayfadan çıkmaz, saati temizler", async ({
+    page,
+  }) => {
+    await setupSessionAndMocks(page);
+    await page.goto("/clinics/1");
+    await page.getByTestId("booking-day-15").click();
+    await page.getByTestId("booking-time-10:00").click();
+    const submit = page.getByTestId("booking-submit");
+    await expect(submit).toContainText("Randevu Talebi Oluştur");
+
+    await page.goBack();
+
+    await expect(page).toHaveURL(/\/clinics\/1$/);
+    await expect(submit).toContainText("Tarih ve saat seçin");
+    await expect(page.getByTestId("booking-success")).toHaveCount(0);
+  });
+
+  test("başarı ekranında geri tuşu forma döner, beyaz ekran yok", async ({
+    page,
+  }) => {
+    await setupSessionAndMocks(page);
+    await page.goto("/clinics/1");
+    await page.getByTestId("booking-day-15").click();
+    await page.getByTestId("booking-time-10:00").click();
+    await page.getByTestId("booking-submit").click();
+    await expect(page.getByTestId("booking-success")).toBeVisible();
+
+    await page.goBack();
+
+    await expect(page).toHaveURL(/\/clinics\/1$/);
+    await expect(page.getByTestId("booking-submit")).toBeVisible();
+    await expect(page.getByTestId("booking-success")).toHaveCount(0);
   });
 });

@@ -1,7 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { Languages, MessageSquareWarning, Search } from "lucide-react";
 import type { Appointment, AppointmentStatus } from "@/types";
 import { appointments } from "@/lib/mock-doctor";
@@ -13,6 +13,7 @@ import {
   languageNames,
 } from "@/lib/ui";
 import { MedicalDossierDrawer } from "@/components/patients/medical-dossier-drawer";
+import { useHistoryLayer } from "@/lib/history-layer";
 
 const statusFilters: (AppointmentStatus | "TÜMÜ")[] = [
   "TÜMÜ",
@@ -23,11 +24,27 @@ const statusFilters: (AppointmentStatus | "TÜMÜ")[] = [
 
 export function PatientsClient() {
   const searchParams = useSearchParams();
+  const searchKey = searchParams.toString();
+  const router = useRouter();
+  const pathname = usePathname();
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<AppointmentStatus | "TÜMÜ">("TÜMÜ");
   const [selectedId, setSelectedId] = useState<string | null>(
     searchParams.get("patient")
   );
+  const closeDrawer = useHistoryLayer(Boolean(selectedId), () => setSelectedId(null));
+
+  useEffect(() => {
+    const params = new URLSearchParams(searchKey);
+    if (selectedId) params.set("patient", selectedId);
+    else params.delete("patient");
+    const qs = params.toString();
+    const href = qs ? `${pathname}?${qs}` : pathname;
+    const current = `${pathname}${searchKey ? `?${searchKey}` : ""}`;
+    if (href !== current) {
+      router.replace(href, { scroll: false });
+    }
+  }, [selectedId, pathname, router, searchKey]);
 
   const filtered = useMemo(() => {
     return appointments
@@ -131,7 +148,7 @@ export function PatientsClient() {
       {selectedAppointment && (
         <MedicalDossierDrawer
           appointment={selectedAppointment}
-          onClose={() => setSelectedId(null)}
+          onClose={closeDrawer}
         />
       )}
     </div>

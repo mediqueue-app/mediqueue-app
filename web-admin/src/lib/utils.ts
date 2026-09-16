@@ -1,41 +1,21 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { formatDate, formatDateTime, formatRelativePast } from "@/lib/datetime";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
 export function formatDateTr(iso: string): string {
-  const date = new Date(iso);
-  return date.toLocaleDateString("tr-TR", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  });
+  return formatDate(iso, { style: "long" });
 }
 
 export function formatDateTimeTr(iso: string): string {
-  const date = new Date(iso);
-  return date.toLocaleDateString("tr-TR", {
-    day: "numeric",
-    month: "short",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
+  return formatDateTime(iso);
 }
 
 export function formatRelative(iso: string): string {
-  const then = new Date(iso).getTime();
-  const now = Date.now();
-  const diffMs = now - then;
-  const min = Math.round(diffMs / 60000);
-  if (min < 1) return "az önce";
-  if (min < 60) return `${min} dk önce`;
-  const hours = Math.round(min / 60);
-  if (hours < 24) return `${hours} saat önce`;
-  const days = Math.round(hours / 24);
-  if (days < 30) return `${days} gün önce`;
-  return formatDateTr(iso);
+  return formatRelativePast(iso);
 }
 
 const tryFormatter = new Intl.NumberFormat("tr-TR", {

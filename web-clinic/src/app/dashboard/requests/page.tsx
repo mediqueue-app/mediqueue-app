@@ -1,6 +1,7 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import {
   AlertTriangle,
   CalendarDays,
@@ -18,8 +19,11 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { HybridBadge } from "@/components/ui/HybridBadge";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
 import { StatusBadge, type BadgeTone } from "@/components/ui/StatusBadge";
 import { Toast, type ToastMessage } from "@/components/ui/Toast";
+import { ConfirmDialog } from "@/components/ui/ConfirmDialog";
+import { toUserError } from "@/lib/api/client";
 import type { DataSource } from "@/lib/api/types";
 import type { AppointmentRequest, RequestStatus } from "@/lib/clinic-mock";
 import {
@@ -28,23 +32,23 @@ import {
 } from "@/lib/services/requests";
 import { useApi } from "@/lib/services/shared";
 import { cn } from "@/lib/utils";
+import { useT } from "@/lib/i18n";
 
 type FilterKey = "all" | RequestStatus;
 
-const FILTERS: { key: FilterKey; label: string }[] = [
-  { key: "pending", label: "Bekleyen" },
-  { key: "approved", label: "Onaylanan" },
-  { key: "rejected", label: "Reddedilen" },
-  { key: "all", label: "Tümü" },
-];
+const FILTERS: FilterKey[] = ["pending", "approved", "rejected", "all"];
 
-const STATUS_META: Record<RequestStatus, { label: string; tone: BadgeTone }> = {
-  pending: { label: "Bekliyor", tone: "warning" },
-  approved: { label: "Onaylandı", tone: "success" },
-  rejected: { label: "Reddedildi", tone: "danger" },
+const STATUS_TONE: Record<RequestStatus, BadgeTone> = {
+  pending: "warning",
+  approved: "success",
+  rejected: "danger",
 };
 
 export default function RequestsPage() {
+  const router = useRouter();
+  const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const deepLinkId = useRef(searchParams.get("id"));
   const [requests, setRequests] = useState<AppointmentRequest[]>([]);
   const [source, setSource] = useState<DataSource | null>(null);
   const [loading, setLoading] = useState(true);
@@ -56,6 +60,13 @@ export default function RequestsPage() {
   const [actionId, setActionId] = useState<string | null>(null);
   const [actionType, setActionType] = useState<RequestStatus | null>(null);
   const [toast, setToast] = useState<ToastMessage | null>(null);
+  const [pendingReject, setPendingReject] = useState<AppointmentRequest | null>(
+    null
+  );
+  const [pendingCancel, setPendingCancel] = useState<AppointmentRequest | null>(
+    null
+  );
+  const t = useT();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -64,15 +75,16 @@ export default function RequestsPage() {
       const data = await fetchAppointmentRequests();
       setRequests(data);
       setSource(useApi() ? "api" : "mock");
+      const fromUrl = deepLinkId.current;
+      const match = fromUrl && data.some((r) => r.id === fromUrl) ? fromUrl : null;
       setSelectedId(
-        data.find((r) => r.status === "pending")?.id ?? data[0]?.id ?? ""
+        match ??
+          data.find((r) => r.status === "pending")?.id ??
+          data[0]?.id ??
+          ""
       );
     } catch (err) {
-      setError(
-        err instanceof Error
-          ? err.message
-          : "Talepler yüklenirken bir hata oluştu."
-      );
+      setError(toUserError(err));
     } finally {
       setLoading(false);
     }
@@ -91,13 +103,24 @@ export default function RequestsPage() {
   const selected =
     requests.find((r) => r.id === selectedId) ?? filtered[0] ?? null;
 
+  function selectRequest(id: string) {
+    setSelectedId(id);
+    setMessage("");
+    const params = new URLSearchParams(searchParams.toString());
+    params.set("id", id);
+    router.replace(`${pathname}?${params.toString()}`, { scroll: false });
+  }
+
   function showToast(text: string, tone: ToastMessage["tone"]) {
     setToast({ id: Date.now(), message: text, tone });
   }
 
-  async function handleAction(req: AppointmentRequest, status: RequestStatus) {
+  async function handleAction(
+    req: AppointmentRequest,
+    status: RequestStatus
+  ): Promise<boolean> {
     // Zaten bir işlem sürüyorsa yeni tıklamaları yoksay.
-    if (actionId) return;
+    if (actionId) return false;
 
     setActionId(req.id);
     setActionType(status);
@@ -123,11 +146,10 @@ export default function RequestsPage() {
           : "Randevu reddedildi.",
         status === "approved" ? "success" : "info"
       );
-    } catch {
-      showToast(
-        "İşlem gerçekleştirilemedi. Lütfen tekrar deneyin.",
-        "danger"
-      );
+      return true;
+    } catch (err) {
+      showToast(toUserError(err), "danger");
+      return false;
     } finally {
       setActionId(null);
       setActionType(null);
@@ -147,8 +169,8 @@ export default function RequestsPage() {
   return (
     <div className="flex flex-col gap-6">
       <PageHeader
-        title="Randevu Talepleri"
-        description="MediQueue pazar yerinden gelen hasta taleplerini değerlendirin, onaylayın veya reddedin."
+        title={t("pages.requests.title")}
+        description={t("pages.requests.desc")}
         action={source ? <HybridBadge source={source} /> : undefined}
       />
 
@@ -157,26 +179,30 @@ export default function RequestsPage() {
       ) : error ? (
         <ErrorState message={error} onRetry={() => void load()} />
       ) : requests.length === 0 ? (
-        <EmptyState />
+        <LocalizedEmpty
+          copyKey="requests"
+          icon={Inbox}
+          actionHref="/dashboard/profile"
+        />
       ) : (
         <>
           {/* Filtreler */}
           <div className="flex flex-wrap gap-2">
-            {FILTERS.map((f) => {
-              const active = filter === f.key;
+            {FILTERS.map((key) => {
+              const active = filter === key;
               return (
                 <button
-                  key={f.key}
+                  key={key}
                   type="button"
-                  onClick={() => setFilter(f.key)}
+                  onClick={() => setFilter(key)}
                   className={cn(
-                    "inline-flex items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition-colors",
+                    "inline-flex min-h-12 items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition-colors",
                     active
                       ? "bg-primary text-white shadow-sm shadow-primary/25"
                       : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50"
                   )}
                 >
-                  {f.label}
+                  {t(`filters.${key}`)}
                   <span
                     className={cn(
                       "flex h-5 min-w-5 items-center justify-center rounded-full px-1.5 text-[11px] font-bold",
@@ -185,7 +211,7 @@ export default function RequestsPage() {
                         : "bg-slate-100 text-slate-500"
                     )}
                   >
-                    {counts[f.key]}
+                    {counts[key]}
                   </span>
                 </button>
               );
@@ -196,24 +222,24 @@ export default function RequestsPage() {
             {/* Gelen kutusu listesi */}
             <div className="flex flex-col gap-3 lg:col-span-2">
               {filtered.length === 0 && (
-                <div className="rounded-2xl border border-dashed border-slate-200 bg-white p-10 text-center text-sm text-slate-500">
-                  Bu filtrede talep bulunmuyor.
-                </div>
+                <LocalizedEmpty
+                  copyKey="requestsFilter"
+                  icon={Inbox}
+                  compact
+                  onAction={() => setFilter("all")}
+                />
               )}
               {filtered.map((req) => {
                 const active = selected?.id === req.id;
-                const meta = STATUS_META[req.status];
+                const tone = STATUS_TONE[req.status];
                 const busy = actionId === req.id;
                 return (
                   <button
                     key={req.id}
                     type="button"
-                    onClick={() => {
-                      setSelectedId(req.id);
-                      setMessage("");
-                    }}
+                    onClick={() => selectRequest(req.id)}
                     className={cn(
-                      "w-full rounded-2xl border bg-white p-4 text-left shadow-sm transition-all",
+                      "mq-list-item w-full rounded-2xl border bg-white p-4 text-left shadow-sm transition-[box-shadow,border-color] duration-[220ms] ease-out",
                       active
                         ? "border-primary/40 ring-1 ring-primary/20"
                         : "border-slate-100 hover:border-slate-200 hover:shadow-md"
@@ -231,7 +257,7 @@ export default function RequestsPage() {
                           {busy ? (
                             <Loader2 className="h-4 w-4 shrink-0 animate-spin text-primary" />
                           ) : (
-                            <StatusBadge label={meta.label} tone={meta.tone} />
+                            <StatusBadge label={t(`status.${req.status}`)} tone={tone} />
                           )}
                         </div>
                         <p className="mt-0.5 flex items-center gap-1 truncate text-xs text-slate-500">
@@ -270,8 +296,8 @@ export default function RequestsPage() {
                       </div>
                     </div>
                     <StatusBadge
-                      label={STATUS_META[selected.status].label}
-                      tone={STATUS_META[selected.status].tone}
+                      label={t(`status.${selected.status}`)}
+                      tone={STATUS_TONE[selected.status]}
                     />
                   </div>
 
@@ -323,9 +349,20 @@ export default function RequestsPage() {
                         Bu talep reddedildi.
                       </div>
                     ) : selected.status === "approved" ? (
-                      <div className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
-                        <CheckCheck className="h-4 w-4" />
-                        Bu talep onaylandı.
+                      <div className="flex flex-wrap items-center justify-between gap-3">
+                        <div className="flex items-center gap-2 rounded-xl bg-emerald-50 px-4 py-3 text-sm font-medium text-emerald-700">
+                          <CheckCheck className="h-4 w-4" />
+                          Bu talep onaylandı.
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => setPendingCancel(selected)}
+                          disabled={actionId === selected.id}
+                          className="inline-flex min-h-12 items-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-60"
+                        >
+                          <X className="h-4 w-4" />
+                          {t("confirm.appointmentAction")}
+                        </button>
                       </div>
                     ) : (
                       <>
@@ -356,7 +393,7 @@ export default function RequestsPage() {
                               actionType === "rejected"
                             }
                             disabled={actionId === selected.id}
-                            onClick={() => handleAction(selected, "rejected")}
+                            onClick={() => setPendingReject(selected)}
                           />
                         </div>
                       </>
@@ -364,9 +401,12 @@ export default function RequestsPage() {
                   </div>
                 </div>
               ) : (
-                <div className="flex h-full min-h-[300px] items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white text-sm text-slate-500">
-                  Detayları görüntülemek için bir talep seçin.
-                </div>
+                <LocalizedEmpty
+                  copyKey="requestsSelect"
+                  icon={Inbox}
+                  compact
+                  className="h-full min-h-[300px]"
+                />
               )}
             </div>
           </div>
@@ -374,6 +414,34 @@ export default function RequestsPage() {
       )}
 
       <Toast toast={toast} onDismiss={() => setToast(null)} />
+      <ConfirmDialog
+        open={Boolean(pendingReject)}
+        title={t("confirm.rejectTitle")}
+        description={t("confirm.rejectBody")}
+        confirmLabel={t("confirm.rejectAction")}
+        busy={Boolean(pendingReject && actionId === pendingReject.id)}
+        onClose={() => setPendingReject(null)}
+        onConfirm={() => {
+          if (!pendingReject) return;
+          void handleAction(pendingReject, "rejected").then((ok) => {
+            if (ok) setPendingReject(null);
+          });
+        }}
+      />
+      <ConfirmDialog
+        open={Boolean(pendingCancel)}
+        title={t("confirm.appointmentTitle")}
+        description={t("confirm.appointmentBody")}
+        confirmLabel={t("confirm.appointmentAction")}
+        busy={Boolean(pendingCancel && actionId === pendingCancel.id)}
+        onClose={() => setPendingCancel(null)}
+        onConfirm={() => {
+          if (!pendingCancel) return;
+          void handleAction(pendingCancel, "rejected").then((ok) => {
+            if (ok) setPendingCancel(null);
+          });
+        }}
+      />
     </div>
   );
 }
@@ -396,7 +464,7 @@ function ActionButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "inline-flex items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60",
+        "inline-flex min-h-12 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60",
         isApprove
           ? "bg-primary text-white shadow-sm shadow-primary/25 hover:bg-primary-hover"
           : "border border-red-200 bg-white text-red-600 hover:bg-red-50"
@@ -442,23 +510,6 @@ function DetailRow({
   );
 }
 
-function EmptyState() {
-  return (
-    <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white px-6 py-20 text-center">
-      <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-primary-light text-primary">
-        <Inbox className="h-8 w-8" />
-      </span>
-      <h2 className="mt-5 text-lg font-bold text-slate-900">
-        Şu an bekleyen randevu talebiniz bulunmuyor.
-      </h2>
-      <p className="mt-1 max-w-sm text-sm text-slate-500">
-        Pazar yerinden yeni bir hasta talebi geldiğinde burada görünecek ve
-        anında değerlendirebileceksiniz.
-      </p>
-    </div>
-  );
-}
-
 function ErrorState({
   message,
   onRetry,
@@ -472,13 +523,13 @@ function ErrorState({
         <AlertTriangle className="h-8 w-8" />
       </span>
       <h2 className="mt-5 text-lg font-bold text-slate-900">
-        Talepler yüklenirken bir hata oluştu
+        Talepler yüklenemedi
       </h2>
       <p className="mt-1 max-w-sm text-sm text-red-600">{message}</p>
       <button
         type="button"
         onClick={onRetry}
-        className="mt-6 inline-flex items-center gap-2 rounded-xl border border-red-300 bg-white px-4 py-2.5 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
+        className="mt-6 inline-flex min-h-12 items-center gap-2 rounded-xl border border-red-300 bg-white px-4 py-2.5 text-sm font-semibold text-red-600 transition-colors hover:bg-red-50"
       >
         <RefreshCw className="h-4 w-4" />
         Tekrar Dene

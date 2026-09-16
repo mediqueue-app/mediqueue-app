@@ -24,6 +24,18 @@ export async function fetchMyAppointments(): Promise<Appointment[]> {
   return apiFetch<Appointment[]>("/patients/me/appointments", { token });
 }
 
+export async function cancelAppointment(id: number): Promise<Appointment> {
+  const token = getToken();
+  if (!token) {
+    throw new Error("Oturum gerekli. Lütfen giriş yapın.");
+  }
+
+  return apiFetch<Appointment>(`/appointments/${id}/cancel`, {
+    method: "POST",
+    token,
+  });
+}
+
 export async function createAppointment(
   input: CreateAppointmentInput
 ): Promise<Appointment> {

@@ -1,0 +1,95 @@
+{
+  "nav": {
+    "language": "Dil",
+    "main": "Ana menü",
+    "logout": "Çıkış Yap",
+    "collapse": "Daralt",
+    "expand": "Menüyü genişlet",
+    "shrink": "Menüyü daralt",
+    "openMenu": "Menüyü aç",
+    "closeMenu": "Menüyü kapat",
+    "notifications": "Bildirimler",
+    "closeNotifications": "Bildirimleri kapat",
+    "search": "Ara",
+    "searchPh": "Klinik, hasta veya başvuru ara...",
+    "crumb": "Yönetim",
+    "role": "Süperadmin",
+    "groups": { "genel": "Genel", "marketplace": "Pazar Yeri", "system": "Sistem" },
+    "items": {
+      "overview": "Genel Bakış",
+      "applications": "Başvurular",
+      "clinics": "Klinikler",
+      "patients": "Hastalar",
+      "feedback": "Destek Talepleri",
+      "settings": "Ayarlar"
+    }
+  },
+  "pages": {
+    "dashboard": { "title": "Genel Bakış", "desc": "Platformun canlı pazar yeri özeti" },
+    "applications": { "title": "Başvuru Yönetimi", "desc": "Klinik onay merkezi ve evrak incelemesi" },
+    "clinics": { "title": "Klinik Yönetimi", "desc": "Onaylı klinikler, görünürlük ve doktor kadrosu" },
+    "patients": { "title": "Hasta Yönetimi", "desc": "Platformdaki tüm hastalar ve durumları" },
+    "feedback": { "title": "Destek Talepleri", "desc": "Hasta ve kliniklerden gelen geri bildirimler" },
+    "settings": { "title": "Sistem Ayarları", "desc": "Komisyon oranları, vitrin ve platform yapılandırması" },
+    "fallback": { "title": "Yönetim Paneli" }
+  },
+  "login": {
+    "panel": "Admin",
+    "headline1": "Marketplace",
+    "headline2": "Kontrol Merkezi",
+    "lead": "Klinik başvurularını onaylayın, kalite standartlarını denetleyin, hastaları ve platform gelirini tek panelden yönetin.",
+    "b1": "Klinik onay merkezi",
+    "b2": "Gerçek zamanlı gelir analizi",
+    "b3": "Destek talep yönetimi",
+    "copyright": "© 2026 MediQueue · Yalnızca yetkili platform yöneticileri",
+    "title": "Yönetici Girişi",
+    "subtitle": "Süperadmin hesabınızla oturum açın.",
+    "email": "E-posta",
+    "password": "Şifre",
+    "signingIn": "Giriş yapılıyor…",
+    "submit": "Panele Giriş Yap",
+    "demo": "Demo erişimi:",
+    "demoHint": "Ön tanımlı bilgiler dolu — doğrudan panele giriş yapabilirsiniz.",
+    "failed": "Giriş başarısız"
+  },
+  "chrome": {
+    "redirecting": "Giriş sayfasına yönlendiriliyor…",
+    "loading": "Yükleniyor…"
+  },
+  "notify": {
+    "n1t": "Yeni klinik başvurusu",
+    "n1d": "Istanbul Hair Center onay bekliyor.",
+    "n2t": "Yüksek öncelikli destek talebi",
+    "n2d": "Ahmed Al-Farsi: Randevu onayı gelmedi.",
+    "n3t": "Aylık gelir rekoru",
+    "n3d": "Ağustos komisyon geliri ₺341.580'e ulaştı."
+  },
+  "confirm": {
+    "cancel": "Vazgeç",
+    "close": "Kapat",
+    "busy": "İşleniyor…",
+    "clinicRemoveTitle": "Kliniği vitrinden kaldır",
+    "clinicRemoveBody": "Bu kliniği pazaryerinden kaldırmak istediğine emin misin? Klinik vitrinde görünmez ve yeni hasta randevusu alamaz. Bu işlem geri alınamaz; yeniden açmak ayrı bir adımdır.",
+    "clinicRemoveAction": "Evet, kaldır",
+    "rejectApplicationBody": "Ret gerekçesi başvuru sahibine e-posta ile iletilecektir. Bu işlem geri alınamaz; klinik pazaryerine alınmaz."
+  },
+  "permission": {
+    "later": "Şimdi değil",
+    "close": "Kapat",
+    "cameraTitle": "Kamera ve dosya erişimi",
+    "cameraAction": "Devam et",
+    "cameraId": "İnceleme için görüntü eklenmesi gerekirse dosya erişimine ihtiyacımız var. Dosyalar yalnızca bu kayıtta tutulur.",
+    "locationTitle": "Konum erişimi",
+    "locationBody": "Harita özelliği konum isterse yalnızca o ekranda kullanılır; başka yerde paylaşılmaz.",
+    "locationAction": "Konumu kullan",
+    "locationOk": "Konum alındı.",
+    "locationDenied": "Konum izni kapalı. Tarayıcı site ayarlarından açabilirsin.",
+    "notifyTitle": "Tarayıcı bildirimleri",
+    "notifyBody": "Klinik başvuruları ve destek talepleri için tarayıcı bildirimi göndermek istiyoruz. İstediğin zaman kapatabilirsin.",
+    "notifyAction": "Bildirimlere izin ver",
+    "notifyEnable": "Tarayıcı bildirimlerini aç",
+    "notifyOn": "Bildirimler açık",
+    "notifyDenied": "Bildirim izni tarayıcıda kapalı. Site ayarlarından açabilirsin.",
+    "notifyUnsupported": "Bu tarayıcı bildirim desteklemiyor."
+  }
+}

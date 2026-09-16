@@ -16,8 +16,8 @@ export function useDemoToast() {
     <div
       role="status"
       className={cn(
-        "fixed bottom-6 left-1/2 z-[100] flex max-w-sm -translate-x-1/2 items-center gap-2.5",
-        "rounded-xl border border-slate-200 bg-white px-4 py-3 text-sm font-medium text-slate-700 shadow-lg"
+        "mq-feedback fixed bottom-[calc(1.5rem+env(safe-area-inset-bottom,0px))] left-1/2 z-[100] flex max-w-sm -translate-x-1/2 items-center gap-2.5",
+        "rounded-xl border border-border bg-surface px-4 py-3 text-sm font-medium text-foreground shadow-lg"
       )}
     >
       <Info className="h-4 w-4 shrink-0 text-primary" aria-hidden />

@@ -1,4 +1,4 @@
-import { apiFetch, ApiError } from "@/lib/api/client";
+import { apiFetch, ApiError, isTimeoutOrNetwork } from "@/lib/api/client";
 import { mapAppointmentsToPatients } from "@/lib/api/mappers";
 import type { AppointmentRead } from "@/lib/api/types";
 import { clearSession, getToken, requireDoctorId } from "@/lib/auth";
@@ -29,6 +29,7 @@ export async function fetchPatients(
         result = getPatients();
       }
     } catch (err) {
+      if (isTimeoutOrNetwork(err)) throw err;
       if (err instanceof ApiError && err.status === 401) {
         clearSession();
       }

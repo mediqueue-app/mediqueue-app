@@ -1,4 +1,4 @@
-import { apiFetch } from "@/lib/api/client";
+import { apiFetch, isTimeoutOrNetwork } from "@/lib/api/client";
 import type { ClinicRead, DataSource, DoctorRead } from "@/lib/api/types";
 import { getToken } from "@/lib/auth";
 import { mapClinicReadToUi, mapDoctorReadToUi } from "@/lib/mappers";
@@ -40,7 +40,8 @@ export async function fetchClinics(): Promise<Sourced<Clinic[]>> {
       return mapClinicReadToUi(row, fallback);
     });
     return { data, source: "api" };
-  } catch {
+  } catch (err) {
+    if (isTimeoutOrNetwork(err)) throw err;
     return { data: mockClinics, source: "mock" };
   }
 }
@@ -53,7 +54,8 @@ export async function fetchClinic(id: number): Promise<Sourced<Clinic | null>> {
     const row = await apiFetch<ClinicRead>(`/clinics/${id}`, { token });
     const fallback = mockClinicByNumericId(id);
     return { data: mapClinicReadToUi(row, fallback), source: "api" };
-  } catch {
+  } catch (err) {
+    if (isTimeoutOrNetwork(err)) throw err;
     return { data: mockClinicByNumericId(id) ?? null, source: "mock" };
   }
 }
@@ -67,7 +69,8 @@ export async function fetchClinicDoctors(id: number): Promise<Doctor[]> {
       token,
     });
     return rows.map((row, index) => mapDoctorReadToUi(row, id, index));
-  } catch {
+  } catch (err) {
+    if (isTimeoutOrNetwork(err)) throw err;
     return mockDoctorsByNumericClinicId(id);
   }
 }

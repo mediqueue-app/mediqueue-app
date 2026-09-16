@@ -1,6 +1,7 @@
 import type { TimelineStep } from "@/types";
 import { cn } from "@/lib/utils";
 import { Check } from "lucide-react";
+import { formatDate } from "@/lib/datetime";
 
 export function PatientTimeline({ steps }: { steps: TimelineStep[] }) {
   return (
@@ -49,8 +50,7 @@ export function PatientTimeline({ steps }: { steps: TimelineStep[] }) {
               <p className="mt-0.5 text-xs text-slate-500">{step.description}</p>
               {step.completedAt && (
                 <p className="mt-1 text-xs text-emerald-600">
-                  Tamamlandı:{" "}
-                  {new Date(step.completedAt).toLocaleDateString("tr-TR")}
+                  Tamamlandı: {formatDate(step.completedAt, { style: "medium" })}
                 </p>
               )}
             </div>

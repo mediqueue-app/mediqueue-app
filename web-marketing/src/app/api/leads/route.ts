@@ -81,13 +81,18 @@ export async function POST(request: Request) {
 
   const webhook = process.env.LEADS_WEBHOOK_URL;
   if (webhook) {
-    const forwarded = await fetch(webhook, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(lead),
-    });
-    if (!forwarded.ok) {
-      return NextResponse.json({ error: "Webhook failed" }, { status: 502 });
+    try {
+      const forwarded = await fetch(webhook, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        signal: AbortSignal.timeout(12_000),
+        body: JSON.stringify(lead),
+      });
+      if (!forwarded.ok) {
+        return NextResponse.json({ error: "Webhook failed" }, { status: 502 });
+      }
+    } catch {
+      return NextResponse.json({ error: "Webhook failed" }, { status: 504 });
     }
   } else {
     console.info("[mediqueue-lead]", JSON.stringify(lead));

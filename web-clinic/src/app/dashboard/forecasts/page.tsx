@@ -2,6 +2,7 @@ import { Sparkles } from "lucide-react";
 import { DemandForecastChart } from "@/components/dashboard/growth/DemandForecastChart";
 import { PageHeader } from "@/components/shared/PageHeader";
 import { ComingSoonOverlay } from "@/components/ui/ComingSoon";
+import { LocalizedEmpty } from "@/components/ui/EmptyState";
 import { StatusBadge } from "@/components/ui/StatusBadge";
 import { fetchAiInsights, fetchForecastData } from "@/lib/services/growth";
 import { cn } from "@/lib/utils";
@@ -34,7 +35,10 @@ export default async function ForecastsPage() {
               Yapay Zeka İçgörüleri
             </h2>
           </div>
-          {aiInsights.map((insight) => (
+          {aiInsights.length === 0 ? (
+            <LocalizedEmpty copyKey="insights" icon={Sparkles} compact />
+          ) : (
+            aiInsights.map((insight) => (
             <article
               key={insight.id}
               className={cn(
@@ -50,7 +54,7 @@ export default async function ForecastsPage() {
                 </h3>
                 <StatusBadge
                   label={insight.impact === "high" ? "Yüksek" : "Orta"}
-                  tone={insight.impact === "high" ? "primary" : "info"}
+                  tone={insight.impact === "high" ? "warning" : "info"}
                   dot={false}
                 />
               </div>
@@ -58,7 +62,8 @@ export default async function ForecastsPage() {
                 {insight.detail}
               </p>
             </article>
-          ))}
+          ))
+          )}
         </div>
       </div>
     </div>
