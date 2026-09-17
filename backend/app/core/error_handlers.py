@@ -44,6 +44,7 @@ def build_error_response(
     code: str,
     message: str,
     details: Any | None = None,
+    headers: dict[str, str] | None = None,
 ) -> JSONResponse:
     error_body: dict[str, Any] = {
         "code": code,
@@ -58,6 +59,7 @@ def build_error_response(
             "success": False,
             "error": error_body,
         },
+        headers=headers,
     )
 
 
@@ -143,6 +145,7 @@ def register_exception_handlers(app: FastAPI) -> None:
             status_code=exc.status_code,
             code=_http_error_code(exc.status_code, exc.detail),
             message=_safe_http_message(exc.status_code),
+            headers=exc.headers,
         )
 
     @app.exception_handler(SQLAlchemyError)
