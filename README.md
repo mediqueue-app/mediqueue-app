@@ -11,7 +11,7 @@ Yalnızca stack’i ayağa kaldırmak, geliştirmek ve CI çalıştırmak için 
 | `backend/`, `ai/`, `web-*`, `mobile/` (placeholder) | Milestone promptları, kapanış raporları |
 | `docker-compose.yml`, `docker/`, `Dockerfile` / `.dockerignore` | LinkedIn lansman PNG/HTML |
 | `.env.example`, testler, `.github/workflows` | Kurucu iş modeli PDF/MD |
-| Paket README’leri, `ai/docs/` | Flutter backlog, tema audit notları |
+| Paket README’leri, `ai/docs/API.md` | Flutter backlog, tema/audit, lansman, milestone |
 
 `.env` commit edilmez. Kökte `copy .env.example .env`.
 
