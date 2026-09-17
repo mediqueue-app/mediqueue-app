@@ -15,6 +15,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   const t = useT();
   const router = useRouter();
   const [ready, setReady] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -22,6 +23,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
     async function boot() {
       if (!isAuthenticated()) {
+        setRedirecting(true);
         router.replace(loginRedirect("/login"));
         return;
       }
@@ -36,7 +38,10 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
       } catch (err) {
         if (err instanceof ApiError && err.status === 401) {
           clearSession();
-          if (!cancelled) router.replace(loginRedirect("/login"));
+          if (!cancelled) {
+            setRedirecting(true);
+            router.replace(loginRedirect("/login"));
+          }
           return;
         }
         // Shell can render; pages show their own empty/error states.
@@ -52,18 +57,12 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     };
   }, [router]);
 
-  if (!isAuthenticated()) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <p className="text-sm text-slate-500">{t("chrome.redirecting")}</p>
-      </div>
-    );
-  }
-
   if (!ready) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
-        <p className="text-sm text-slate-500">{t("chrome.loading")}</p>
+        <p className="text-sm text-slate-500">
+          {redirecting ? t("chrome.redirecting") : t("chrome.loading")}
+        </p>
       </div>
     );
   }

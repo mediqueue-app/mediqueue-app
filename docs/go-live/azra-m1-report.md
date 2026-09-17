@@ -21,86 +21,85 @@
 
 ## Kabul soruları
 
-1. Klinik sahte token ile dashboard’da kalır mı? **Hayır** (hedef). Boot’ta `fetchAppointmentRequests` `ApiError` 401 → `clearSession` + `/login`; `ready` true iken children yok. HTTP 500 / network → session silinmez, shell. 8 sn timeout durur.
-2. Doktor demo-auth sızıntısı? **Hayır.** `DemoAuthGuard` / `demo-auth.ts` silindi; dashboard gerçek `AuthGuard`.
-3. Avukat iddiası üretildi mi? **Hayır.** `docs/go-live/kasim-frankfurt-data-path.md` yok; tablo uydurulmadı.
+1. Klinik sahte token ile dashboard’da kalır mı? **Hayır.** Tarayıcı: geçerli oturum → `mq-clinic-token=fake-expired-jwt` → `/dashboard` ve `/dashboard/requests` → `/login?next=…`; `sessionStorage` token ve user `null`.
+2. Doktor demo-auth sızıntısı? **Hayır.** Dosyalar silindi; `localhost:3001/dashboard` gerçek AuthGuard ile `/login?next=/dashboard`.
+3. Avukat iddiası üretildi mi? **Hayır.** `kasim-frankfurt-data-path.md` yok.
 4. M2’ye smoke/k6/takvim? **Evet.** `REQUIRES SEPARATE MILESTONE (AZRA M2)`.
 5. Production HttpOnly şimdi? **Hayır.**
 
 ## A3 — Klinik AuthGuard 401
 
-`web-clinic/src/components/shared/AuthGuard.tsx` doktor HEAD kalıbı: `ApiError` `status === 401` → `clearSession` (`mq-clinic-token`) → `loginRedirect("/login")` → return.
+`web-clinic/src/components/shared/AuthGuard.tsx`: `ApiError` `status === 401` → `clearSession` (`mq-clinic-token`) → `loginRedirect("/login")` → return. SSR’de `isAuthenticated()` okunmaz (`ready`/`redirecting`); 8 sn timeout durur; 500/network shell.
 
-Sahte JWT ile API kanıtı (2026-09-17):
+`fetchClinicProfile` artık `/auth/me` **önce** çağırır ve 401’i **yutmaz**. `requireClinicId` başarısızsa `ApiError` 401. Appointments aynı.
+
+Sahte JWT API (2026-09-17):
 
 | Path | Sonuç |
 |------|--------|
-| `GET /v1/auth/me` + `Bearer fake` | 401 |
-| `GET /v1/clinics/1/appointments` + `Bearer fake` | 401 |
-| `GET /v1/clinics/1` + `Bearer fake` | 200 (backend; Kasım dosyasına dokunulmadı) |
+| `GET /v1/auth/me` + fake Bearer | 401 |
+| `GET /v1/clinics/1/appointments` + fake Bearer | 401 |
+| `GET /v1/clinics/1` + fake Bearer | 200 (backend; Kasım’a dokunulmadı) |
 
-`fetchClinicProfile` `/auth/me` 401’i yutuyor; `Promise.all` yine appointments 401 ile düşer. Klinik `auth.ts` zaten `clearSession` içeriyor; değiştirilmedi.
+Tarayıcı (localhost:3000, 17 Eyl 2026):
 
-Tarayıcı E2E bu oturumda tamamlanmadı (`localhost:3000/login` curl `000`; IDE tarayıcı `chrome-error`). Semantik kod review + API 401.
+| Adım | Sonuç |
+|------|--------|
+| `clinic@mediqueue.com` login | `/dashboard` açık (Genel Bakış) |
+| Token → `fake-expired-jwt`, user duruyor, `/dashboard` | `/login?next=%2Fdashboard`; token+user `null` |
+| Aynı sahte oturum `/dashboard/requests` | `/login?next=%2Fdashboard%2Frequests`; token+user `null` |
+| HTTP `EN` locale | `mq-ui-locale=en`; `protocol=http:`; Secure uygulanmaz |
 
 ## A4 — Ölü demo-auth
 
-Silindi:
+Silindi: `DemoAuthGuard.tsx`, `demo-auth.ts`. Diskte yok. `web-doctor` dashboard layout gerçek `AuthGuard`. Token yokken `:3001/dashboard` → login.
 
-- `web-doctor/src/components/shared/DemoAuthGuard.tsx`
-- `web-doctor/src/lib/demo-auth.ts`
-
-`web-doctor/src/app/dashboard/layout.tsx` gerçek `AuthGuard` kullanıyor. `*.{ts,tsx}` grep: `DemoAuthGuard`, `demo-auth`, `mq-demo-auth`, `isDemoAuthenticated` = 0. (docs/go-live metinleri kasıtlı duruyor.)
+`rg DemoAuthGuard -g '*.ts' -g '*.tsx' -g '*.js' -g '*.jsx'` = 0. Kalan metin yalnız untracked go-live spec + bu raporun kapanış satırı.
 
 ## A5 — Secure locale
 
-Yalnız `web-clinic/src/lib/ui-locale.ts` ve `web-doctor/src/lib/ui-locale.ts`.
+Yalnız clinic + doctor `ui-locale.ts`. HTTPS’de `; Secure`. HTTP’de yok (tarayıcı kanıtı). Furkan path PR diffsiz. `useUiLocale` `useSyncExternalStore` (eslint `set-state-in-effect` kapandı).
 
-`typeof window !== "undefined" && location.protocol === "https:"` → `; Secure`. HTTP localhost’ta Secure yok. `web-patient` / `web-admin` / `web-marketing` diffsiz.
+Lint (M1 dosyaları): `AuthGuard.tsx` + her iki `ui-locale.ts` eslint 0. `clinic.ts` / `requests.ts` `useApi` adı pre-existing `react-hooks/rules-of-hooks` (fonksiyon hook değil).
 
 ## A1 — Avukat
 
-`BLOCKED ON KASIM K4`. `azra-avukat-teknik.md` yazılmadı.
+`BLOCKED ON KASIM K4`. `azra-avukat-teknik.md` yok.
 
 ## A2 — AI teyidi
 
-Kod rewrite yok.
-
-| Soru | Kanıt |
-|------|--------|
-| Kural tabanlı mı? | Evet. `ai/app/main.py`: LLM/NLP yok. `ai/` içinde openai/anthropic yok. |
-| `/health` var mı? | Evet. `GET /health` `ai/app/api/routes.py`. |
-| Tarayıcı `:8001`? | Hayır. `web-doctor` `*.{ts,tsx}` içinde `8001` yok. |
-| Compose? | **AI COMPOSE NOT VERIFIED — LOCAL README ONLY.** HEAD `backend/docker-compose.yml` `ai` servisi yok. `http://localhost:8001/health` timeout. Root compose bu PR’de yok / dokunulmadı. |
+Kod rewrite yok. Kural tabanlı; `GET /health` var; `web-doctor` `:8001` yok. **AI COMPOSE NOT VERIFIED — LOCAL README ONLY.**
 
 ## Bilinçli dışarıda
 
-HttpOnly, public `doctor.` DNS, doktor mesaj API, k6/ZAP/smoke, ComingSoon yayma, Furkan/Kasım path, `ai/` rewrite, docker AWS.
+HttpOnly, public `doctor.` DNS, doktor mesaj API, k6/ZAP/smoke, ComingSoon, Furkan/Kasım/backend, `ai/` rewrite, docker AWS.
 
-M2: A6 takvim dilimi; A7 smoke; A8 k6; A9 ZAP; A10 Sinem overlay. `REQUIRES SEPARATE MILESTONE (AZRA M2)`.
+M2: A6–A10. `REQUIRES SEPARATE MILESTONE (AZRA M2)`.
 
 ```
-CLINIC 401 LOGOUT: DONE
-DOCTOR DEAD DEMO AUTH: DONE (ts/tsx grep 0)
-SECURE COOKIES DOCTOR+CLINIC: DONE (HTTPS only)
+CLINIC 401 LOGOUT: DONE (API + browser)
+DOCTOR DEAD DEMO AUTH: DONE (ts/tsx/js/jsx grep 0; :3001/dashboard → login)
+SECURE COOKIES DOCTOR+CLINIC: DONE (HTTPS only; HTTP cookie observed without Secure)
 AVUKAT NOTE: BLOCKED ON KASIM K4
 AI LLM CALLS FROM BROWSER: NO
 PRODUCTION TARGET CHANGED: NO
 READY FOR AZRA M2: YES (A3–A5 kapalı; A1 K4 bekler)
-RECOMMENDED NEXT STEP: Kasım K4 → A1 avukat 1-pager; ayrı PR’de Azra M2 (smoke/k6/ZAP/takvim)
+RECOMMENDED NEXT STEP: Kasım K4 → A1; ayrı PR Azra M2 (smoke/k6/ZAP/takvim)
 
 REPOSITORY: mediqueue-app
 BRANCH: azra/m1-clinic-auth-locale
 STARTING HEAD: b8ee388844181cb23783fc201e0845244a1aff09
-FINAL COMMIT: 803e411
-PUSH PERFORMED: YES (origin/azra/m1-clinic-auth-locale, PR #5)
+FINAL COMMIT: (this push)
+PUSH PERFORMED: YES (PR #5)
 FILES TOUCHED:
   web-clinic/src/components/shared/AuthGuard.tsx
+  web-clinic/src/lib/services/clinic.ts
+  web-clinic/src/lib/services/requests.ts
   web-clinic/src/lib/ui-locale.ts
   web-doctor/src/lib/ui-locale.ts
   web-doctor/src/components/shared/DemoAuthGuard.tsx (deleted)
   web-doctor/src/lib/demo-auth.ts (deleted)
   docs/go-live/azra-m1-report.md
-GREP DemoAuthGuard: 0 in *.{ts,tsx}
-FINAL GIT STATUS: M1 files committed; unrelated local WIP left unstaged (Furkan/Kasım/Sinem paths not in this PR)
+GREP DemoAuthGuard: 0 in *.{ts,tsx,js,jsx}
+FINAL GIT STATUS: M1 committed; unrelated WIP unstaged
 ```
