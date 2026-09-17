@@ -92,8 +92,8 @@ RECOMMENDED NEXT STEP: Kasım K4 → A1 avukat 1-pager; ayrı PR’de Azra M2 (s
 REPOSITORY: mediqueue-app
 BRANCH: azra/m1-clinic-auth-locale
 STARTING HEAD: b8ee388844181cb23783fc201e0845244a1aff09
-FINAL COMMIT: 1cce0ab (report SHA follow-up on same branch)
-PUSH PERFORMED: pending
+FINAL COMMIT: 803e411
+PUSH PERFORMED: YES (origin/azra/m1-clinic-auth-locale, PR #5)
 FILES TOUCHED:
   web-clinic/src/components/shared/AuthGuard.tsx
   web-clinic/src/lib/ui-locale.ts
