@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { isAuthenticated } from "@/lib/auth";
+import { clearSession, isAuthenticated } from "@/lib/auth";
+import { ApiError } from "@/lib/api/client";
 import { loginRedirect } from "@/lib/history-layer";
 import { useT } from "@/lib/i18n";
 import { fetchClinicProfile } from "@/lib/services/clinic";
@@ -32,7 +33,12 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
             timer = setTimeout(resolve, BOOT_TIMEOUT_MS);
           }),
         ]);
-      } catch {
+      } catch (err) {
+        if (err instanceof ApiError && err.status === 401) {
+          clearSession();
+          if (!cancelled) router.replace(loginRedirect("/login"));
+          return;
+        }
         // Shell can render; pages show their own empty/error states.
       }
 

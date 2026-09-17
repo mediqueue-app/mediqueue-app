@@ -13,7 +13,11 @@ export function persistUiLocale(locale: UiLocale) {
   } catch {
     /* private mode */
   }
-  document.cookie = `${STORAGE_KEY}=${locale};path=/;max-age=31536000;SameSite=Lax`;
+  const secure =
+    typeof window !== "undefined" && location.protocol === "https:"
+      ? "; Secure"
+      : "";
+  document.cookie = `${STORAGE_KEY}=${locale};path=/;max-age=31536000;SameSite=Lax${secure}`;
 }
 
 export function getUiLocale(): UiLocale {
