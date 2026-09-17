@@ -92,8 +92,8 @@ RECOMMENDED NEXT STEP: Kasım K4 → A1 avukat 1-pager; ayrı PR’de Azra M2 (s
 REPOSITORY: mediqueue-app
 BRANCH: azra/m1-clinic-auth-locale
 STARTING HEAD: b8ee388844181cb23783fc201e0845244a1aff09
-FINAL COMMIT: (push sonrası bu satır PR’de)
-PUSH PERFORMED: (push sonrası)
+FINAL COMMIT: 1cce0ab (report SHA follow-up on same branch)
+PUSH PERFORMED: pending
 FILES TOUCHED:
   web-clinic/src/components/shared/AuthGuard.tsx
   web-clinic/src/lib/ui-locale.ts
@@ -102,5 +102,5 @@ FILES TOUCHED:
   web-doctor/src/lib/demo-auth.ts (deleted)
   docs/go-live/azra-m1-report.md
 GREP DemoAuthGuard: 0 in *.{ts,tsx}
-FINAL GIT STATUS: (commit sonrası)
+FINAL GIT STATUS: M1 files committed; unrelated local WIP left unstaged (Furkan/Kasım/Sinem paths not in this PR)
 ```
