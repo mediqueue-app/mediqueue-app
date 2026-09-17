@@ -1,11 +1,23 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { emptyCopyFor, type EmptyCopy, type EmptyCopyKey } from "@/lib/empty-copy";
 
 export type UiLocale = "tr" | "en";
 
 const STORAGE_KEY = "mq-ui-locale";
+const listeners = new Set<() => void>();
+
+function subscribeUiLocale(onStoreChange: () => void) {
+  listeners.add(onStoreChange);
+  return () => {
+    listeners.delete(onStoreChange);
+  };
+}
+
+function emitUiLocale() {
+  listeners.forEach((listener) => listener());
+}
 
 export function persistUiLocale(locale: UiLocale) {
   try {
@@ -13,7 +25,12 @@ export function persistUiLocale(locale: UiLocale) {
   } catch {
     /* private mode */
   }
-  document.cookie = `${STORAGE_KEY}=${locale};path=/;max-age=31536000;SameSite=Lax`;
+  const secure =
+    typeof window !== "undefined" && location.protocol === "https:"
+      ? "; Secure"
+      : "";
+  document.cookie = `${STORAGE_KEY}=${locale};path=/;max-age=31536000;SameSite=Lax${secure}`;
+  emitUiLocale();
 }
 
 export function getUiLocale(): UiLocale {
@@ -33,11 +50,7 @@ export function getUiLocale(): UiLocale {
 }
 
 export function useUiLocale(): UiLocale {
-  const [locale, setLocale] = useState<UiLocale>("tr");
-  useEffect(() => {
-    setLocale(getUiLocale());
-  }, []);
-  return locale;
+  return useSyncExternalStore(subscribeUiLocale, getUiLocale, () => "tr");
 }
 
 export function useEmptyCopy(key: EmptyCopyKey): EmptyCopy {

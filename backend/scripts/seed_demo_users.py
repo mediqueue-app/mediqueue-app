@@ -177,7 +177,7 @@ def _upsert_demo_user(
 def seed_demo_users(db: Session) -> dict[str, list[str] | dict[str, int | str | None]]:
     demo_clinic_id = _resolve_demo_clinic_id(db)
     demo_doctor_id = _resolve_demo_doctor_id(db, clinic_id=demo_clinic_id)
-    # Clinic/doctor JSON seeds may not link the selected pair; smoke_ay1 requires it.
+    # Clinic/doctor JSON seeds may not link the selected pair; demo login needs the join.
     link_action = _ensure_demo_doctor_clinic_link(
         db,
         doctor_id=demo_doctor_id,

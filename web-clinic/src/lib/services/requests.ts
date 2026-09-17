@@ -1,7 +1,7 @@
 /**
  * Appointment requests — hybrid: GET/PATCH /clinics/.../appointments when JWT present.
  */
-import { apiFetch } from "@/lib/api/client";
+import { apiFetch, ApiError } from "@/lib/api/client";
 import {
   mapAppointmentToRequest,
   requestStatusToApi,
@@ -32,7 +32,12 @@ export async function fetchAppointmentRequests(): Promise<AppointmentRequest[]> 
     return mockRequests;
   }
 
-  const clinicId = requireClinicId();
+  let clinicId: number;
+  try {
+    clinicId = requireClinicId();
+  } catch {
+    throw new ApiError(401, "UNAUTHORIZED", [], "/clinics/appointments");
+  }
   const appointments = await apiFetch<AppointmentRead[]>(
     `/clinics/${clinicId}/appointments`,
     { token: getToken() }

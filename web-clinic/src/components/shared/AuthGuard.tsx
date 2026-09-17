@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { isAuthenticated } from "@/lib/auth";
+import { clearSession, isAuthenticated } from "@/lib/auth";
+import { ApiError } from "@/lib/api/client";
 import { loginRedirect } from "@/lib/history-layer";
 import { useT } from "@/lib/i18n";
 import { fetchClinicProfile } from "@/lib/services/clinic";
@@ -14,6 +15,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   const t = useT();
   const router = useRouter();
   const [ready, setReady] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -21,6 +23,7 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
 
     async function boot() {
       if (!isAuthenticated()) {
+        setRedirecting(true);
         router.replace(loginRedirect("/login"));
         return;
       }
@@ -32,7 +35,15 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
             timer = setTimeout(resolve, BOOT_TIMEOUT_MS);
           }),
         ]);
-      } catch {
+      } catch (err) {
+        if (err instanceof ApiError && err.status === 401) {
+          clearSession();
+          if (!cancelled) {
+            setRedirecting(true);
+            router.replace(loginRedirect("/login"));
+          }
+          return;
+        }
         // Shell can render; pages show their own empty/error states.
       }
 
@@ -46,18 +57,12 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
     };
   }, [router]);
 
-  if (!isAuthenticated()) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <p className="text-sm text-slate-500">{t("chrome.redirecting")}</p>
-      </div>
-    );
-  }
-
   if (!ready) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
-        <p className="text-sm text-slate-500">{t("chrome.loading")}</p>
+        <p className="text-sm text-slate-500">
+          {redirecting ? t("chrome.redirecting") : t("chrome.loading")}
+        </p>
       </div>
     );
   }

@@ -19,13 +19,15 @@ COPY alembic.ini .
 COPY alembic ./alembic
 COPY app ./app
 COPY scripts ./scripts
+COPY docker_entrypoint.py ./docker_entrypoint.py
 
 USER appuser
 
 EXPOSE 8000
 
-HEALTHCHECK --interval=30s --timeout=5s --start-period=20s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=5s --start-period=40s --retries=5 \
     CMD curl -fsS http://127.0.0.1:8000/health || exit 1
 
-# Production-style: no --reload. Run migrations before start (see docker-compose).
+# Production-style: no --reload. Entrypoint runs migrations (and optional seed).
+ENTRYPOINT ["python", "docker_entrypoint.py"]
 CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]

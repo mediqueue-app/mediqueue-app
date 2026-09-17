@@ -1,59 +1,72 @@
 # MediQueue
 
-Sağlık turizmi odaklı klinik yönetim ve hasta–doktor eşleştirme platformu. Monorepo yapısında backend, AI servisi ve web arayüzlerini barındırır.
+Sağlık turizmi için klinik, doktor ve hasta panelleri. Monorepo: FastAPI, kural tabanlı AI eşleştirme, beş Next.js uygulaması.
 
-## Monorepo Yapısı
+## GitHub’da ne var
 
-| Klasör | Durum | Açıklama | Port |
-|--------|-------|----------|------|
-| [`backend/`](backend/) | Aktif | FastAPI — auth, klinikler, hastalar, randevular, match proxy | 8000 |
-| [`ai/`](ai/) | Aktif | Kural tabanlı doktor/klinik eşleştirme microservice | 8001 |
-| [`web-marketing/`](web-marketing/) | Aktif | Next.js 16 (Turbopack) Pazarlama & Müşteri Edinme (Lead Capture) Sitesi | 3004 |
-| [`web-admin/`](web-admin/) | Prototip (mock) | Süperadmin paneli — applications API yok | 3003 |
-| [`web-clinic/`](web-clinic/) | Hybrid | JWT + operasyonel API; büyüme modülleri mock | 3000 |
-| [`web-doctor/`](web-doctor/) | Hybrid (kısmi) | JWT + randevu/hasta API; mesajlar mock | 3001 |
-| [`web-patient/`](web-patient/) | Hybrid | JWT auth + klinikler + booking API; fallback mock | 3002 |
-| `mobile/` | Planlanmış | Flutter — başlanmadı | — |
+Yalnızca stack’i ayağa kaldırmak, geliştirmek ve CI çalıştırmak için gerekenler.
 
-## Mimari Özet
+| Var | Yok (yerel `.local/`, gitignored) |
+|-----|-------------------------------------|
+| `backend/`, `ai/`, `web-*`, `mobile/` (placeholder) | Milestone promptları, kapanış raporları |
+| `docker-compose.yml`, `docker/`, `Dockerfile` / `.dockerignore` | LinkedIn lansman PNG/HTML |
+| `.env.example`, çekirdek CI testleri, `.github/workflows` | Kurucu iş modeli PDF/MD |
+| Paket README’leri, `ai/docs/API.md` | Flutter backlog, tema/audit, lansman, milestone |
+
+`.env` commit edilmez. Kökte `copy .env.example .env`.
+
+## Yapı
 
 ```
-┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│ web-clinic  │     │ web-doctor  │     │ web-patient │
-│ JWT + API   │     │ JWT + API   │     │ JWT + API   │
-└──────┬──────┘     └──────┬──────┘     └──────┬──────┘
-       │                   │                   │
-       └───────────────────┼───────────────────┘
-                           │
-                    ┌──────▼──────┐
-                    │   backend   │  JWT, RBAC, REST
-                    │  (FastAPI)  │
-                    └──────┬──────┘
-                           │
-              ┌────────────┼────────────┐
-              │            │            │
-       ┌──────▼──────┐ ┌───▼───┐ ┌─────▼─────┐
-       │ PostgreSQL  │ │  ai/  │ │  mobile   │
-       │  (ortak)    │ │ match │ │  (yok)    │
-       └─────────────┘ └───────┘ └───────────┘
+backend/          FastAPI + Postgres  :8000
+ai/               Eşleştirme (kural)  :8001
+web-clinic/       Klinik paneli       :3000
+web-doctor/       Doktor paneli       :3001
+web-patient/      Hasta               :3002
+web-admin/        Süperadmin (mock)   :3003
+web-marketing/    Pazarlama sitesi    :3004
+docker/           Ortak Next image
+docs/             Bu indeksten paket README’lerine
+.local/           İç notlar — git yok
 ```
 
-**Ay 1 E2E (doğrulandı):** patient randevu oluşturur → clinic onaylar → doctor görür.
+```
+web-clinic / web-doctor / web-patient / web-admin / web-marketing
+                         │
+                    backend (JWT, REST)
+                         │
+              PostgreSQL + ai (match)
+```
+
+## Hızlı başlangıç
+
+### Docker (tüm siteler)
 
 ```powershell
-cd backend
-python -m scripts.smoke_ay1_e2e
+copy .env.example .env
+docker compose up --build
 ```
 
-Demo notu: `clinic@` yalnızca seed `clinic_id` (genelde **Istanbul Hair Center**, id=1) taleplerini görür. Patient demoda bu kliniği seçmeli.
+| Adres | Uygulama |
+|-------|----------|
+| http://localhost:3000 | Klinik |
+| http://localhost:3001 | Doktor |
+| http://localhost:3002 | Hasta |
+| http://localhost:3003 | Admin |
+| http://localhost:3004 | Pazarlama |
+| http://localhost:8000/docs | API |
+| http://localhost:8001/docs | AI |
 
-## Hızlı Başlangıç
+İlk boot: Alembic + demo seed. Şifre: `Demo1234!`  
+Hesaplar: `patient@`, `clinic@`, `doctor@`, `admin@mediqueue.com`.
 
-### 1. Veritabanı
+Yalnız API + DB: [`backend/docker-compose.yml`](backend/docker-compose.yml). Staging notları: [`backend/STAGING.md`](backend/STAGING.md).
 
-PostgreSQL (DB: `mediqueue`).
+Demo: `clinic@` genelde seed `clinic_id=1` (**Istanbul Hair Center**) taleplerini görür.
 
-### 2. Backend
+### Docker olmadan
+
+PostgreSQL (`mediqueue`), sonra:
 
 ```powershell
 cd backend
@@ -68,17 +81,6 @@ python -m scripts.seed_demo_users
 uvicorn app.main:app --port 8000 --reload
 ```
 
-Demo hesaplar (şifre: `Demo1234!`):
-
-| Email | Rol | Portal |
-|-------|-----|--------|
-| `patient@mediqueue.com` | patient | `:3002` |
-| `clinic@mediqueue.com` | clinic | `:3000` |
-| `doctor@mediqueue.com` | doctor | `:3001` |
-| `admin@mediqueue.com` | admin | `:3003` |
-
-### 3. AI Servisi
-
 ```powershell
 cd ai
 python -m venv .venv
@@ -88,51 +90,25 @@ copy .env.example .env
 uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
 ```
 
-### 4. Web
-
 ```powershell
 cd web-clinic   # :3000 — copy .env.example .env.local
-cd web-doctor   # :3001
-cd web-patient  # :3002
-cd web-admin    # :3003 mock
+# web-doctor :3001  web-patient :3002  web-admin :3003  web-marketing :3004
 npm install
 npm run dev
 ```
 
-`NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/v1` (clinic/doctor/patient).
+`NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/v1`
 
-## Tamamlanma Durumu (kabaca)
+CI: `.github/workflows/backend-tests.yml` (auth + randevu), `ai-tests.yml` (health + matcher). Seed: `backend/scripts/seed_*.py`.
 
-| Bileşen | Olgunluk | Not |
-|---------|----------|-----|
-| Backend API | ~80% | Auth, patients, appointments, match, seed, CI |
-| AI Matching | ~85% | Rule-based + CI |
-| Web Clinic | ~55% | Hybrid; growth mock |
-| Web Doctor | ~40% | Hybrid; mesajlar mock |
-| Web Patient | ~50% | Hybrid auth + clinics + booking |
-| Web Admin | ~40% | Mock |
-| Mobile | 0% | Yok |
-| Frontend ↔ Backend | ~55% | patient→clinic→doctor E2E yeşil |
+## Durum
 
-## Test ve CI
+| Bileşen | Kabaca | Not |
+|---------|--------|-----|
+| Backend | ~80% | Auth, randevu, match proxy |
+| AI | ~85% | Kural tabanlı; tarayıcı `:8001` çağırmaz |
+| Clinic / doctor / patient | Hybrid | JWT + API; bazı modüller mock |
+| Admin | Mock | |
+| Mobile | 0% | `mobile/` boş |
 
-| Bileşen | Test | CI |
-|---------|------|-----|
-| AI | pytest | `ai-tests.yml` |
-| Backend | pytest (~110) | `backend-tests.yml` |
-| Web | Yok | Yok |
-
-```powershell
-cd backend
-pytest
-python -m scripts.smoke_ay1_doctor_match
-python -m scripts.smoke_ay1_e2e
-```
-
-## Yol Haritası
-
-**Ay 1:** Backend + AI + clinic/doctor/patient hybrid + demo seed + E2E smoke.
-
-**Ay 2:** Admin API, growth/mesaj modülleri, mobil, staging/FCM/S3.
-
-**Faz 2:** AI feedback kalıcılığı, ML eşleştirme.
+Ay 1 E2E: patient randevu açar → clinic onaylar → doctor görür.

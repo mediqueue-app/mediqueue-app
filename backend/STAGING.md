@@ -33,6 +33,8 @@ cd backend
 docker compose up --build -d
 ```
 
+The API container runs `alembic upgrade head` on boot. For the full portal stack (clinic/doctor/patient/admin/marketing + AI), use the compose file at the repository root instead.
+
 ## Migrate and seed
 
 Compose mounts `../ai` at `/ai` so seed scripts can read `ai/app/data/*.json`.
@@ -48,14 +50,6 @@ docker compose run --rm api python -m scripts.seed_demo_users
 
 - `GET http://localhost:8000/health` → `{"status":"ok",...}`
 - `GET http://localhost:8000/` → same shape
-
-## Smoke scripts (host against published port)
-
-```powershell
-$env:MEDIQUEUE_API_BASE = "http://127.0.0.1:8000/v1"
-python -m scripts.smoke_ay1_e2e
-python -m scripts.smoke_ay2_messaging
-```
 
 ## Notes
 

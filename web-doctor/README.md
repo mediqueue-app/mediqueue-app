@@ -55,15 +55,6 @@ NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/v1
 
 Randevu listesi, patient henüz `POST /appointments` yazmadıysa boş olabilir — beklenen davranış.
 
-## Smoke (backend)
-
-```powershell
-cd backend
-python -m scripts.smoke_ay1_doctor_match
-python -m scripts.smoke_ay1_e2e
-python -m scripts.smoke_ay2_doctor_negatives
-```
-
 ## Ay 2’ye / sonraya ertelenenler
 
 Doktor mesaj API (bonus), odontogram kalıcılığı, doktor self-PATCH / `GET /doctors/{id}`, cookie auth, AI feedback DB persist (P2).
