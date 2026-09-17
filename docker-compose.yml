@@ -1,0 +1,173 @@
+# MediQueue full stack: PostgreSQL, API, AI matcher, and all Next.js sites.
+#
+#   copy .env.example .env
+#   docker compose up --build
+#
+# Portals (host):
+#   clinic     http://localhost:3000
+#   doctor     http://localhost:3001
+#   patient    http://localhost:3002
+#   admin      http://localhost:3003
+#   marketing  http://localhost:3004
+#   API        http://localhost:8000/docs
+#   AI         http://localhost:8001/docs
+#
+# First boot runs Alembic + demo seed (SEED_ON_START). Demo password: Demo1234!
+
+name: mediqueue
+
+x-web-build-api: &web-build-api
+  NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL:-http://localhost:8000/v1}
+
+services:
+  db:
+    image: postgres:16
+    container_name: mediqueue-db
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-postgres}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-postgres}
+      POSTGRES_DB: ${POSTGRES_DB:-mediqueue}
+    ports:
+      - "${POSTGRES_PORT:-5432}:5432"
+    volumes:
+      - mediqueue_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mediqueue-api
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "${API_PORT:-8000}:8000"
+    volumes:
+      - ./ai:/ai:ro
+    environment:
+      APP_ENV: ${APP_ENV:-development}
+      PROJECT_NAME: ${PROJECT_NAME:-MediQueue API}
+      API_V1_PREFIX: ${API_V1_PREFIX:-/v1}
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://postgres:postgres@db:5432/mediqueue}
+      SECRET_KEY: ${SECRET_KEY:-UNSAFE-LOCAL-DEV-ONLY-do-not-use-in-production}
+      ENCRYPTION_KEY: ${ENCRYPTION_KEY:-AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=}
+      ALGORITHM: ${ALGORITHM:-HS256}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+      MEDIQUEUE_AI_BASE_URL: ${MEDIQUEUE_AI_BASE_URL:-http://ai:8001}
+      MEDIQUEUE_AI_TIMEOUT_SECONDS: ${MEDIQUEUE_AI_TIMEOUT_SECONDS:-5}
+      BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS:-http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:3003,http://localhost:3004,http://127.0.0.1:3000,http://127.0.0.1:3001,http://127.0.0.1:3002,http://127.0.0.1:3003,http://127.0.0.1:3004}
+      SKIP_MIGRATIONS: ${SKIP_MIGRATIONS:-false}
+      SEED_ON_START: ${SEED_ON_START:-true}
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+  ai:
+    build:
+      context: ./ai
+      dockerfile: Dockerfile
+    container_name: mediqueue-ai
+    depends_on:
+      db:
+        condition: service_healthy
+      api:
+        condition: service_healthy
+    ports:
+      - "${AI_PORT:-8001}:8001"
+    environment:
+      APP_NAME: ${APP_NAME:-MediQueue AI Service}
+      HOST: 0.0.0.0
+      PORT: 8001
+      DEBUG: "false"
+      DATABASE_URL: ${DATABASE_URL:-postgresql+psycopg2://postgres:postgres@db:5432/mediqueue}
+      ALLOWED_ORIGINS: ${AI_ALLOWED_ORIGINS:-http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:3003,http://localhost:3004,http://127.0.0.1:3000,http://127.0.0.1:3001,http://127.0.0.1:3002,http://127.0.0.1:3003,http://127.0.0.1:3004}
+
+  web-clinic:
+    build:
+      context: ./web-clinic
+      dockerfile: ../docker/web.Dockerfile
+      args:
+        <<: *web-build-api
+    container_name: mediqueue-web-clinic
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${CLINIC_PORT:-3000}:3000"
+    environment:
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+
+  web-doctor:
+    build:
+      context: ./web-doctor
+      dockerfile: ../docker/web.Dockerfile
+      args:
+        <<: *web-build-api
+    container_name: mediqueue-web-doctor
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${DOCTOR_PORT:-3001}:3000"
+    environment:
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+
+  web-patient:
+    build:
+      context: ./web-patient
+      dockerfile: ../docker/web.Dockerfile
+      args:
+        <<: *web-build-api
+    container_name: mediqueue-web-patient
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${PATIENT_PORT:-3002}:3000"
+    environment:
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+
+  web-admin:
+    build:
+      context: ./web-admin
+      dockerfile: ../docker/web.Dockerfile
+      args:
+        <<: *web-build-api
+    container_name: mediqueue-web-admin
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "${ADMIN_PORT:-3003}:3000"
+    environment:
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+
+  web-marketing:
+    build:
+      context: ./web-marketing
+      dockerfile: ../docker/web.Dockerfile
+      args:
+        NEXT_PUBLIC_SITE_URL: ${NEXT_PUBLIC_SITE_URL:-http://localhost:3004}
+        NEXT_PUBLIC_GA_ID: ${NEXT_PUBLIC_GA_ID:-}
+    container_name: mediqueue-web-marketing
+    ports:
+      - "${MARKETING_PORT:-3004}:3000"
+    environment:
+      PORT: 3000
+      HOSTNAME: 0.0.0.0
+      LEADS_WEBHOOK_URL: ${LEADS_WEBHOOK_URL:-}
+
+volumes:
+  mediqueue_pgdata:

@@ -1,4 +1,4 @@
-# Python (ai/)
+# Python
 __pycache__/
 *.py[cod]
 *$py.class
@@ -7,8 +7,10 @@ __pycache__/
 venv/
 .venv/
 **/.venv/
-**/__pycache__/
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
 .coverage
 coverage.xml
 **/coverage.xml
@@ -21,51 +23,68 @@ build/
 .env
 .env.*
 !.env.example
+!.env*.example
+*.pem
+*.p12
+*.key
 
-# .NET (backend/)
-**/bin/
-**/obj/
-.vs/
-*.user
-*.suo
-appsettings.Development.json
-appsettings.*.json
-!**/appsettings.json
-
-# Node (web/)
+# Node
 node_modules/
 .npm
-dist/
+.pnpm-store/
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
 .next/
+out/
 .nuxt/
 .vite/
+.turbo/
+.vercel/
 
-# Flutter (mobile/)
+# Flutter (when mobile/ exists)
 .dart_tool/
 .flutter-plugins
 .flutter-plugins-dependencies
-build/
 
-# IDE
+# IDE / OS
 .idea/
 .vscode/*
 !.vscode/extensions.json
 !.vscode/settings.json
-
-# Logs & Build artifacts
-*.log
-logs/
-build-*.log
-*.tsbuildinfo
-
-# Temporary & Local Scripts
-*.ps1
-scripts/
-**/scripts/
-tsconfig.scripts.json
-**/tsconfig.scripts.json
-
-# OS
+.cursor/
 .DS_Store
 Thumbs.db
 desktop.ini
+
+# Logs & caches
+*.log
+logs/
+*.tsbuildinfo
+next-env.d.ts
+
+# Test artifacts
+coverage/
+playwright-report/
+playwright/.cache/
+test-results/
+blob-report/
+
+# Local-only workspace (ops notes, campaign assets, founder docs).
+# Not required to run the stack. See README.
+.local/
+
+# Ad-hoc root helpers (backend/scripts is tracked and must stay)
+/scripts/
+/*.ps1
+tsconfig.scripts.json
+**/tsconfig.scripts.json
+
+# One-off audits / exports that used to live at repo root
+eslint-theme-tokens.mjs
+_pdf_extract/
+*.orig
+*.tmp
+*.bak
