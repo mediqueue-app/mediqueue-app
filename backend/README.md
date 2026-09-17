@@ -4,10 +4,12 @@ FastAPI backend for authentication, clinics, and AI match proxying.
 
 ## Prerequisites
 
-- PostgreSQL running locally (default database: `mediqueue`)
-- Python 3.11+ recommended
+- PostgreSQL running locally (default database: `mediqueue`), or Docker
+- Python 3.11+ recommended (not needed if you use Docker)
 
 Current Alembic head revision: **`202608030002`**
+
+Full stack (all web apps + AI + API + Postgres): from the **repository root**, `copy .env.example .env` then `docker compose up --build`. This folder's compose file is API + Postgres only — see [STAGING.md](STAGING.md).
 
 ## Setup
 
@@ -68,39 +70,6 @@ Demo logins (password `Demo1234!`):
 `scripts.seed_demo_users` is idempotent — safe to run again before demos.
 
 **Doctor profile (Ay 1):** `GET /v1/doctors/{id}` is not required. Portals use `GET /v1/auth/me` (`doctor_id` / `clinic_id` on the user). Dedicated doctor GET can wait for Ay 2.
-
-Verify login and relationships:
-
-```powershell
-$login = Invoke-RestMethod -Method Post `
-  -Uri "http://127.0.0.1:8000/v1/auth/login" `
-  -ContentType "application/x-www-form-urlencoded" `
-  -Body "username=doctor@mediqueue.com&password=Demo1234!"
-
-Invoke-RestMethod -Method Get `
-  -Uri "http://127.0.0.1:8000/v1/auth/me" `
-  -Headers @{ Authorization = "Bearer $($login.access_token)" }
-```
-
-Doctor login + appointments + `/v1/match` hit/empty (AI `:8001` ayaktayken):
-
-```powershell
-python -m scripts.smoke_ay1_doctor_match
-```
-
-Full Ay 1 E2E (patient book → clinic confirm → doctor sees):
-
-```powershell
-python -m scripts.smoke_ay1_e2e
-```
-
-Ay 2 doctor negatives + availability persist (AI optional):
-
-```powershell
-python -m scripts.smoke_ay2_doctor_negatives
-```
-
-Book against the seeded demo clinic (`clinic@` → `clinic_id`), not necessarily `GET /clinics` first item (list is name-ordered).
 
 ## Run services
 
@@ -230,40 +199,12 @@ Body rules: non-empty after trim, max 2000 characters.
 
 ## Tests
 
+CI runs auth + appointments only:
+
 ```powershell
 cd backend
 pytest -q
 ```
-
-Focused suites:
-
-```powershell
-pytest -q tests/test_appointment_transitions.py tests/test_appointments_api.py
-pytest -q tests/test_appointment_messages_api.py
-```
-
-Automated coverage includes auth, clinics, doctors, reviews, match, appointments (transitions/edge cases), messaging RBAC, clinic seed sync, admin RBAC, and config security checks.
-Most unit/API tests mock DB engine interactions; real schema verification is covered by Alembic migration execution and optional CI smoke tests (`BACKEND_DB_SMOKE=1`).
-
-## Smoke scripts
-
-Prerequisites: Postgres migrated + seeded, backend on `:8000`.
-
-```powershell
-cd backend
-python -m scripts.smoke_ay1_e2e
-python -m scripts.smoke_ay2_messaging
-```
-
-Optional env overrides for messaging smoke:
-
-| Variable | Default |
-|----------|---------|
-| `MEDIQUEUE_API_BASE` | `http://127.0.0.1:8000/v1` |
-| `MEDIQUEUE_PASSWORD` | `Demo1234!` (local seed users) |
-| `MEDIQUEUE_PATIENT_EMAIL` | `patient@mediqueue.com` |
-| `MEDIQUEUE_CLINIC_EMAIL` | `clinic@mediqueue.com` |
-| `MEDIQUEUE_DOCTOR_EMAIL` | `doctor@mediqueue.com` |
 
 ## Staging (Docker)
 

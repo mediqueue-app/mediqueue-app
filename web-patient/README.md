@@ -41,13 +41,6 @@ npm run dev
 `clinic@mediqueue.com` yalnızca seed kliniğini görür (genelde **Istanbul Hair Center**, `clinic_id=1`).  
 Clinic onay demosu için patient bu kliniğe randevu açmalı.
 
-Uçtan uca API smoke:
-
-```powershell
-cd backend
-python -m scripts.smoke_ay1_e2e
-```
-
 ## Sayfalar
 
 | Rota | Not |

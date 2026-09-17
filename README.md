@@ -10,7 +10,7 @@ Yalnızca stack’i ayağa kaldırmak, geliştirmek ve CI çalıştırmak için 
 |-----|-------------------------------------|
 | `backend/`, `ai/`, `web-*`, `mobile/` (placeholder) | Milestone promptları, kapanış raporları |
 | `docker-compose.yml`, `docker/`, `Dockerfile` / `.dockerignore` | LinkedIn lansman PNG/HTML |
-| `.env.example`, testler, `.github/workflows` | Kurucu iş modeli PDF/MD |
+| `.env.example`, çekirdek CI testleri, `.github/workflows` | Kurucu iş modeli PDF/MD |
 | Paket README’leri, `ai/docs/API.md` | Flutter backlog, tema/audit, lansman, milestone |
 
 `.env` commit edilmez. Kökte `copy .env.example .env`.
@@ -99,16 +99,7 @@ npm run dev
 
 `NEXT_PUBLIC_API_BASE_URL=http://localhost:8000/v1`
 
-## Test
-
-```powershell
-cd backend
-pytest
-python -m scripts.smoke_ay1_e2e
-python -m scripts.smoke_ay1_doctor_match
-```
-
-CI: `.github/workflows/backend-tests.yml`, `ai-tests.yml`.
+CI: `.github/workflows/backend-tests.yml` (auth + randevu), `ai-tests.yml` (health + matcher). Seed: `backend/scripts/seed_*.py`.
 
 ## Durum
 

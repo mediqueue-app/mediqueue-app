@@ -44,10 +44,7 @@ ai/
 ├── tests/
 │   ├── conftest.py
 │   ├── test_api.py
-│   ├── test_matcher.py
-│   ├── test_clinic_matcher.py
-│   ├── test_clinic_loading.py
-│   └── test_feedback.py
+│   └── test_matcher.py
 ├── .env.example
 ├── requirements.txt
 └── requirements-dev.txt
@@ -141,8 +138,6 @@ Detaylı dokümantasyon: [`docs/API.md`](docs/API.md)
 ## API
 
 Sözleşme ve örnek JSON: [`docs/API.md`](docs/API.md), [`docs/examples/`](docs/examples/).
-
-Backend doctor+match smoke: `cd backend && python -m scripts.smoke_ay1_doctor_match` (AI `:8001` + seed).
 
 ## Test
 

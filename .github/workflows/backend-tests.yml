@@ -43,7 +43,6 @@ jobs:
       APP_ENV: test
       ENVIRONMENT: test
       ENCRYPTION_KEY: 8sWf7I4vjns6NixJl16x2qxGn8UKA0fFAL0s8GF95VQ=
-      BACKEND_DB_SMOKE: "1"
 
     steps:
       - name: Checkout repository
@@ -70,5 +69,4 @@ jobs:
           test "$(python -m alembic heads | wc -l)" -eq 1
 
       - name: Run backend tests
-        # Includes appointment transitions, messaging RBAC, and existing suites.
         run: pytest -q
