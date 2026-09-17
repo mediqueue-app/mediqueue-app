@@ -89,7 +89,7 @@ RECOMMENDED NEXT STEP: Kasım K4 → A1; ayrı PR Azra M2 (smoke/k6/ZAP/takvim)
 REPOSITORY: mediqueue-app
 BRANCH: azra/m1-clinic-auth-locale
 STARTING HEAD: b8ee388844181cb23783fc201e0845244a1aff09
-FINAL COMMIT: (this push)
+FINAL COMMIT: 4de614a
 PUSH PERFORMED: YES (PR #5)
 FILES TOUCHED:
   web-clinic/src/components/shared/AuthGuard.tsx
