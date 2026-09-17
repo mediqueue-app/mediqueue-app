@@ -48,8 +48,21 @@ docker compose run --rm api python -m scripts.seed_demo_users
 
 ## Health checks
 
-- `GET http://localhost:8000/health` → `{"status":"ok",...}`
-- `GET http://localhost:8000/` → same shape
+- `GET http://localhost:8000/` → process liveness, no DB dependency: `{"status":"ok",...}`
+- `GET http://localhost:8000/health` → DB-aware readiness (runs `SELECT 1`):
+  `{"status":"ok","database":"ok",...}` on success (200), or
+  `{"status":"error","database":"error",...}` on DB failure (503).
+
+## Seed safety
+
+- `APP_ENV=production` with `SEED_ON_START=true` is a **hard error**: the
+  entrypoint exits before `uvicorn` starts. Production must never silently
+  seed.
+- `APP_ENV=staging` with `SEED_ON_START=true` is allowed for the **initial**
+  staging boot only, and prints a warning to stderr on every boot while set.
+  After the first intended staging seed, set `SEED_ON_START=false` in the
+  staging environment and redeploy/restart the API container.
+- Local development may keep `SEED_ON_START=true` as the Compose default.
 
 ## Notes
 
