@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Script from "next/script";
 import { LocaleLink } from "@/components/ui/LocaleLink";
 import { useLocale } from "@/lib/locale";
+import { secureCookieSuffix } from "@/lib/cookie-secure";
 import { ANALYTICS_CONSENT_COOKIE } from "@/lib/site";
 
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID;
@@ -20,7 +21,7 @@ function readConsent(): "granted" | "denied" | null {
 }
 
 function writeConsent(value: "granted" | "denied") {
-  document.cookie = `${ANALYTICS_CONSENT_COOKIE}=${value}; path=/; max-age=${MAX_AGE}; SameSite=Lax`;
+  document.cookie = `${ANALYTICS_CONSENT_COOKIE}=${value}; path=/; max-age=${MAX_AGE}; SameSite=Lax${secureCookieSuffix()}`;
 }
 
 export function AnalyticsConsent() {

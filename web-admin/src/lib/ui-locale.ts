@@ -6,13 +6,20 @@ export type UiLocale = "tr" | "en";
 
 const STORAGE_KEY = "mq-ui-locale";
 
+// `Secure` would make the browser drop the cookie on http://localhost, and
+// there is no `window` to inspect during SSR.
+function secureCookieSuffix(): string {
+  if (typeof window === "undefined") return "";
+  return window.location.protocol === "https:" ? ";Secure" : "";
+}
+
 export function persistUiLocale(locale: UiLocale) {
   try {
     window.localStorage.setItem(STORAGE_KEY, locale);
   } catch {
     /* private mode */
   }
-  document.cookie = `${STORAGE_KEY}=${locale};path=/;max-age=31536000;SameSite=Lax`;
+  document.cookie = `${STORAGE_KEY}=${locale};path=/;max-age=31536000;SameSite=Lax${secureCookieSuffix()}`;
 }
 
 export function getUiLocale(): UiLocale {

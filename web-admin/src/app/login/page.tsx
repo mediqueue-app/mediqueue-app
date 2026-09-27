@@ -67,29 +67,34 @@ export default function LoginPage() {
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold leading-snug text-white">
+            <span className="inline-flex rounded-full border border-white/25 bg-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-widest text-white">
+              Mock prototip
+            </span>
+            <h2 className="mt-4 text-2xl font-bold leading-snug text-white">
               Marketplace
               <br />
               Kontrol Merkezi
             </h2>
             <p className="mt-3 text-sm leading-relaxed text-white/70">
-              Klinik başvurularını onaylayın, kalite standartlarını denetleyin,
-              hastaları ve platform gelirini tek panelden yönetin.
+              Klinik onayı, kalite denetimi ve gelir takibi için tasarlanan arayüz
+              taslağı. Ekranlar sahte veriyle çalışır, canlı sisteme bağlı değildir.
             </p>
             <ul className="mt-6 space-y-2.5 text-sm text-white/80">
-              {["Klinik onay merkezi", "Gerçek zamanlı gelir analizi", "Destek talep yönetimi"].map(
-                (item) => (
-                  <li key={item} className="flex items-center gap-2.5">
-                    <Sparkles className="h-4 w-4 text-white/70" />
-                    {item}
-                  </li>
-                )
-              )}
+              {[
+                "Klinik onay merkezi (demo)",
+                "Gelir analizi ekranı (sahte veri)",
+                "Destek talep yönetimi (demo)",
+              ].map((item) => (
+                <li key={item} className="flex items-center gap-2.5">
+                  <Sparkles className="h-4 w-4 text-white/70" />
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>
 
           <p className="text-xs text-white/50">
-            © 2026 MediQueue · Yalnızca yetkili platform yöneticileri
+            © 2026 MediQueue · Dahili prototip, üretim ortamı değil
           </p>
         </div>
 
@@ -103,6 +108,15 @@ export default function LoginPage() {
               Süperadmin hesabınızla oturum açın.
             </p>
           </div>
+
+          <p
+            role="status"
+            className="mb-6 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm font-semibold leading-relaxed text-amber-900"
+          >
+            Bu panel bir mock prototiptir — üretim paneli değildir. Kimlik
+            doğrulama yapılmaz, tüm veriler sahtedir ve hiçbir işlem gerçek
+            hastaları, klinikleri veya ödemeleri etkilemez.
+          </p>
 
           {error ? (
             <p className="mq-feedback mb-4 rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-sm text-red-700" role="alert">
@@ -152,6 +166,7 @@ export default function LoginPage() {
           <div className="mt-6 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-xs text-slate-500">
             <span className="font-semibold text-slate-600">Demo erişimi:</span> Ön
             tanımlı bilgiler dolu — doğrudan “Panele Giriş Yap” diyebilirsiniz.
+            Boş olmayan her e-posta/şifre kabul edilir; oturum jetonu sahtedir.
           </div>
         </div>
       </div>
