@@ -1,10 +1,15 @@
 import { ImageResponse } from "next/og";
+import { readFile } from "node:fs/promises";
+import { join } from "node:path";
 
 export const alt = "MEDIQUEUE";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 
-export default function OpenGraphImage() {
+export default async function OpenGraphImage() {
+  const icon = await readFile(join(process.cwd(), "public/mediqueue-icon.png"));
+  const iconSrc = `data:image/png;base64,${icon.toString("base64")}`;
+
   return new ImageResponse(
     (
       <div
@@ -13,55 +18,27 @@ export default function OpenGraphImage() {
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          justifyContent: "space-between",
-          background: "#ffffff",
-          padding: "72px 80px",
-          fontFamily: "Georgia, serif",
+          alignItems: "center",
+          justifyContent: "center",
+          background: "#f0f4fa",
         }}
       >
-        <div style={{ display: "flex", alignItems: "center" }}>
-          <div
-            style={{
-              display: "flex",
-              fontSize: 36,
-              fontFamily: "sans-serif",
-              fontWeight: 800,
-              letterSpacing: "0.06em",
-              color: "#3a6ad6",
-              background: "#eaf0fc",
-              padding: "14px 22px",
-              borderRadius: 12,
-            }}
-          >
-            MEDI·QUEUE
-          </div>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column" }}>
-          <div
-            style={{
-              fontSize: 58,
-              lineHeight: 1.1,
-              letterSpacing: "-0.04em",
-              color: "#0f172a",
-              maxWidth: 940,
-            }}
-          >
-            MEDIQUEUE
-          </div>
-          <div
-            style={{
-              marginTop: 24,
-              fontSize: 22,
-              fontFamily: "sans-serif",
-              color: "#475569",
-              maxWidth: 720,
-            }}
-          >
-            getmediqueue.com
-          </div>
+        <img src={iconSrc} width={280} height={280} alt="" />
+        <div
+          style={{
+            marginTop: 28,
+            display: "flex",
+            fontSize: 48,
+            fontFamily: "sans-serif",
+            fontWeight: 800,
+            letterSpacing: "0.08em",
+            color: "#3a6ad6",
+          }}
+        >
+          MEDI·QUEUE
         </div>
       </div>
     ),
-    { ...size }
+    { ...size },
   );
 }

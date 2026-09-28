@@ -23,7 +23,7 @@ export default async function MarketAnalysisPage() {
         <MarketComparisonChart data={priceComparison} />
       </ComingSoonOverlay>
 
-      <section className="rounded-2xl border border-slate-100 bg-white shadow-sm">
+      <section className="rounded-2xl border border-slate-200/80 bg-white shadow-sm">
         <div className="border-b border-slate-100 px-6 py-5">
           <h2 className="text-lg font-semibold text-slate-900">
             Anonim Rakip Karşılaştırması
@@ -40,7 +40,7 @@ export default async function MarketAnalysisPage() {
           ) : (
           <table className="w-full min-w-[640px] text-left text-sm">
             <thead>
-              <tr className="border-b border-slate-100 bg-slate-50/70">
+              <tr className="border-b border-slate-100 bg-mist">
                 <th className="px-6 py-3.5 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
                   Klinik
                 </th>
@@ -72,7 +72,7 @@ export default async function MarketAnalysisPage() {
                     "transition-colors",
                     row.isYou
                       ? "bg-primary-light/30 hover:bg-primary-light/40"
-                      : "hover:bg-slate-50/70"
+                      : "hover:bg-mist"
                   )}
                 >
                   <td className="px-6 py-4">

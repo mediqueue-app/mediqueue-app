@@ -4,12 +4,7 @@ export function resolveSiteUrl(raw?: string): string {
   const value = (raw ?? "http://localhost:3004").replace(/\/$/, "");
   try {
     const host = new URL(value).hostname;
-    if (
-      host === "getmediqueue.com" ||
-      host === "www.getmediqueue.com" ||
-      host === "mediqueue.co" ||
-      host === "www.mediqueue.co"
-    ) {
+    if (host === "getmediqueue.com" || host === "www.getmediqueue.com") {
       return PRODUCTION_SITE_URL;
     }
   } catch {

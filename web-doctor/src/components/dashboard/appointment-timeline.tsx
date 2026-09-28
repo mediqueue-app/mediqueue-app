@@ -39,7 +39,7 @@ export function AppointmentTimeline({
                   {appointment.timeSlot}
                 </span>
                 <span className="text-xl leading-none">
-                  {countryCodeToFlagEmoji(appointment.countryCode)}
+                  {countryCodeToFlagEmoji(appointment.countryCode ?? "")}
                 </span>
                 <div>
                   <p className="text-sm font-medium text-slate-800">

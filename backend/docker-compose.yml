@@ -1,12 +1,11 @@
-# Staging / local Docker stack: API + PostgreSQL.
-# Secrets come from environment or a local .env file — never commit secrets.
+# Staging / local Docker stack: API + PostgreSQL only.
+# Full stack (all sites + AI): use the compose file at the repo root.
 #
 #   cd backend
 #   copy .env.example .env   # set SECRET_KEY, ENCRYPTION_KEY, APP_ENV=staging
 #   docker compose up --build
 #
-# After DB is healthy, migrate + seed (one-shot):
-#   docker compose run --rm api alembic upgrade head
+# API entrypoint runs `alembic upgrade head` on start. Seed still one-shot:
 #   docker compose run --rm api python -m scripts.seed_doctors_from_ai_json
 #   docker compose run --rm api python -m scripts.seed_clinics_from_ai_json
 #   docker compose run --rm api python -m scripts.seed_demo_users
@@ -51,13 +50,13 @@ services:
       ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
       MEDIQUEUE_AI_BASE_URL: ${MEDIQUEUE_AI_BASE_URL:-http://host.docker.internal:8001}
       MEDIQUEUE_AI_TIMEOUT_SECONDS: ${MEDIQUEUE_AI_TIMEOUT_SECONDS:-5}
-      BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS:-http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:3003,http://127.0.0.1:3000,http://127.0.0.1:3001,http://127.0.0.1:3002,http://127.0.0.1:3003}
+      BACKEND_CORS_ORIGINS: ${BACKEND_CORS_ORIGINS:-http://localhost:3000,http://localhost:3001,http://localhost:3002,http://localhost:3003,http://localhost:3004,http://127.0.0.1:3000,http://127.0.0.1:3001,http://127.0.0.1:3002,http://127.0.0.1:3003,http://127.0.0.1:3004}
     healthcheck:
       test: ["CMD", "curl", "-fsS", "http://127.0.0.1:8000/health"]
       interval: 30s
       timeout: 5s
-      retries: 3
-      start_period: 20s
+      retries: 5
+      start_period: 60s
 
 volumes:
   mediqueue_pgdata:

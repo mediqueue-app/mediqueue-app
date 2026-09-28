@@ -232,6 +232,7 @@ export function countByStatus(
 export const STATUS_DOT: Record<AppointmentStatus, string> = {
   ONAYLANDI: "bg-emerald-500",
   BEKLIYOR: "bg-amber-500",
+  BEKLEMEDE: "bg-amber-500",
   TAMAMLANDI: "bg-blue-500",
   IPTAL: "bg-red-400",
 };

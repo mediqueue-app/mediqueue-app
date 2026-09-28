@@ -62,7 +62,7 @@ Hesaplar: `patient@`, `clinic@`, `doctor@`, `admin@mediqueue.com`.
 
 Yalnız API + DB: [`backend/docker-compose.yml`](backend/docker-compose.yml). Staging notları: [`backend/STAGING.md`](backend/STAGING.md).
 
-Demo: `clinic@` genelde seed `clinic_id=1` (**Istanbul Hair Center**) taleplerini görür.
+Demo: `clinic@` genelde seed `clinic_id=1` (**Feriköy Greft Kliniği**) taleplerini görür.
 
 ### Docker olmadan
 

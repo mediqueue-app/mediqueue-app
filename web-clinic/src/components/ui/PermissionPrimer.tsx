@@ -93,14 +93,14 @@ export function PermissionPrimer({
           <button
             type="button"
             onClick={close}
-            className="min-h-12 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50"
+            className="min-h-12 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-mist"
           >
             {t("permission.later")}
           </button>
           <button
             type="button"
             onClick={onContinue}
-            className="min-h-12 rounded-xl bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-primary/25 hover:bg-primary-hover"
+            className="min-h-12 rounded-full bg-primary px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-primary-hover"
           >
             {confirmLabel}
           </button>

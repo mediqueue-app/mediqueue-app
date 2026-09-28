@@ -76,7 +76,7 @@ Login (clinic@) → Dashboard → Randevu Talepleri → (Patient E2E sonrası) o
 
 Patient tarafı API’ye bağlanınca requests kutusu gerçek `pending` randevularla dolar.
 
-Patient demoda `clinic@` inbox’u için seed kliniğine (`clinic_id`, genelde Istanbul Hair Center) randevu açılmalı.
+Patient demoda `clinic@` inbox’u için seed kliniğine (`clinic_id`, genelde Feriköy Greft Kliniği) randevu açılmalı.
 
 ## İlgili dokümantasyon
 

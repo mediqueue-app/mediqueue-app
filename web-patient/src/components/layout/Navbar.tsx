@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Menu, X, UserRound } from "lucide-react";
-import { BrandMark } from "@/components/ui/BrandMark";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 import { useHistoryLayer } from "@/lib/history-layer";
 import { isAuthenticated } from "@/lib/auth";
 import { useI18n } from "@/lib/i18n";
@@ -36,11 +36,8 @@ export function Navbar() {
   return (
     <header className="safe-top sticky top-0 z-50 w-full border-b border-border bg-surface/90 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:gap-3 sm:px-6 lg:px-8">
-        <Link href="/" className="flex items-center gap-2" aria-label={t("nav.homeAria")}>
-          <BrandMark size={36} className="h-9 w-9 shadow-sm" />
-          <span className="text-lg font-bold tracking-tight text-foreground">
-            Medi<span className="text-primary">Queue</span>
-          </span>
+        <Link href="/" className="inline-flex items-center" aria-label={t("nav.homeAria")}>
+          <BrandLogo className="h-8 w-auto sm:h-9" />
         </Link>
 
         <nav className="hidden items-center gap-8 md:flex">

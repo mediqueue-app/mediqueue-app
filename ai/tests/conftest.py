@@ -216,7 +216,7 @@ def message_behavior_session_factory() -> Callable[[], Session]:
     clinics = [
         ClinicDB(
             id=10,
-            name="Istanbul Hair Center",
+            name="Feriköy Greft Kliniği",
             description="Hair transplant clinic",
             address="Beşiktaş, İstanbul",
             phone="+90 212 555 1010",

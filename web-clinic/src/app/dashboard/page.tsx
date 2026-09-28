@@ -85,7 +85,7 @@ export default function DashboardPage() {
 
   if (!summary || !profile) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-400">
+      <div className="rounded-2xl border border-slate-200/80 bg-white p-8 text-center text-sm text-slate-400">
         Yükleniyor…
       </div>
     );
@@ -111,7 +111,7 @@ export default function DashboardPage() {
         title="Genel Bakış"
         description="Kliniğinizin MediQueue pazar yerindeki canlı performansı — talepler, hastalar, görünürlük ve beklenen gelir."
         action={
-          <div className="hidden items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm shadow-sm sm:flex">
+          <div className="hidden items-center gap-2 rounded-full border border-slate-200/80 bg-white px-4 py-2.5 text-sm shadow-sm sm:flex">
             <span className="flex h-2 w-2 rounded-full bg-emerald-500" />
             <span className="font-medium text-slate-700">Vitrin yayında</span>
           </div>
@@ -157,7 +157,7 @@ export default function DashboardPage() {
 
       {/* Talepler + Zaman çizelgesi */}
       <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
-        <div className="flex flex-col gap-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm xl:col-span-2">
+        <div className="flex flex-col gap-4 rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm xl:col-span-2">
           <div className="flex items-center justify-between">
             <h2 className="text-lg font-semibold text-slate-900">
               {t("dashboard.pendingRequests")}
@@ -213,7 +213,7 @@ export default function DashboardPage() {
         </div>
 
         {/* Timeline */}
-        <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+        <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
           <div className="flex items-center gap-2">
             <CalendarClock className="h-5 w-5 text-primary" />
             <h2 className="text-lg font-semibold text-slate-900">

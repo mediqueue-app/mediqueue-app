@@ -14,7 +14,7 @@ import {
   ShieldCheck,
   ArrowRight,
 } from "lucide-react";
-import { BrandMark } from "@/components/ui/BrandMark";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 import { cn } from "@/lib/utils";
 import { useT } from "@/lib/i18n";
 
@@ -54,11 +54,8 @@ export default function RegisterPage() {
     <div className="flex min-h-vv-nav items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100 px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-6 flex flex-col items-center text-center">
-          <Link href="/" className="flex items-center gap-2" aria-label={t("nav.homeAria")}>
-            <BrandMark size={44} className="h-11 w-11 shadow-lg shadow-primary/20" />
-            <span className="text-xl font-bold tracking-tight text-slate-900">
-              Medi<span className="text-primary">Queue</span>
-            </span>
+          <Link href="/" className="inline-flex items-center" aria-label={t("nav.homeAria")}>
+            <BrandLogo className="h-10 w-auto" />
           </Link>
           <h1 className="mt-5 text-2xl font-bold tracking-tight text-slate-900">
             {t("auth.createTitle")}

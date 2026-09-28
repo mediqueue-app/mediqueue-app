@@ -14,6 +14,10 @@ const statusStyles: Record<
     card: "bg-amber-50 hover:bg-amber-100/80",
     accent: "border-l-amber-500",
   },
+  BEKLEMEDE: {
+    card: "bg-amber-50 hover:bg-amber-100/80",
+    accent: "border-l-amber-500",
+  },
   TAMAMLANDI: {
     card: "bg-blue-50 hover:bg-blue-100/80",
     accent: "border-l-blue-500",

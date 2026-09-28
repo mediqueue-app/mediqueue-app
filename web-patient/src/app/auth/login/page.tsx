@@ -15,7 +15,7 @@ import {
   ShieldCheck,
   ArrowRight,
 } from "lucide-react";
-import { BrandMark } from "@/components/ui/BrandMark";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 import { cn } from "@/lib/utils";
 import { useT } from "@/lib/i18n";
 
@@ -56,15 +56,8 @@ export default function LoginPage() {
     <div className="flex min-h-vv-nav items-center justify-center bg-gradient-to-b from-slate-50 to-slate-100 px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-6 flex flex-col items-center text-center">
-          <Link
-            href="/"
-            className="flex items-center gap-2"
-            aria-label={t("nav.homeAria")}
-          >
-            <BrandMark size={44} className="h-11 w-11 shadow-lg shadow-primary/20" />
-            <span className="text-xl font-bold tracking-tight text-slate-900">
-              Medi<span className="text-primary">Queue</span>
-            </span>
+          <Link href="/" className="inline-flex items-center" aria-label={t("nav.homeAria")}>
+            <BrandLogo className="h-10 w-auto" />
           </Link>
           <h1 className="mt-5 text-2xl font-bold tracking-tight text-slate-900">
             {t("auth.welcomeBack")}
@@ -94,7 +87,7 @@ export default function LoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading}
                   placeholder={t("auth.emailPh")}
-                  className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
+                  className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-3 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus-visible:outline-none disabled:opacity-60"
                 />
               </div>
             </div>
@@ -125,7 +118,7 @@ export default function LoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading}
                   placeholder="••••••••"
-                  className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-11 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-primary focus:ring-2 focus:ring-primary/20 disabled:opacity-60"
+                  className="w-full rounded-xl border border-slate-200 bg-white py-2.5 pl-10 pr-11 text-sm text-slate-900 outline-none transition-colors placeholder:text-slate-400 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20 focus-visible:outline-none disabled:opacity-60 [&::-ms-clear]:hidden [&::-ms-reveal]:hidden"
                 />
                 <button
                   type="button"
@@ -134,7 +127,7 @@ export default function LoginPage() {
                   aria-label={
                     showPassword ? t("auth.hidePassword") : t("auth.showPassword")
                   }
-                  className="touch-slop absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 transition-colors hover:text-slate-600"
+                  className="absolute right-1 top-1/2 flex h-10 w-10 -translate-y-1/2 items-center justify-center rounded-lg text-slate-400 transition-colors hover:text-slate-600 disabled:opacity-60"
                 >
                   {showPassword ? (
                     <EyeOff className="h-5 w-5" />

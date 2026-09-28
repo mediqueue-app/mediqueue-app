@@ -105,7 +105,7 @@ export default function ProfilePage() {
         action={
           <button
             type="button"
-            className="inline-flex min-h-12 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-slate-50"
+            className="inline-flex min-h-12 items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-colors hover:bg-mist"
           >
             <Eye className="h-4 w-4" />
             Vitrini Önizle
@@ -113,7 +113,7 @@ export default function ProfilePage() {
         }
       />
 
-      <section className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center">
           <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl bg-primary-light text-xl font-bold text-primary">
             {profile.name.slice(0, 2).toUpperCase()}
@@ -146,7 +146,7 @@ export default function ProfilePage() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold text-slate-900">
@@ -192,7 +192,7 @@ export default function ProfilePage() {
             accept="image/*"
             capture="environment"
             description={t("permission.cameraId")}
-            className="flex aspect-[4/3] flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400 transition-colors hover:border-primary/40 hover:bg-primary-light/40 hover:text-primary"
+            className="flex aspect-[4/3] flex-col items-center justify-center gap-2 rounded-xl border-2 border-dashed border-slate-200 bg-mist text-slate-400 transition-colors hover:border-primary/40 hover:bg-primary-light/40 hover:text-primary"
           >
             <ImagePlus className="h-6 w-6" />
             <span className="text-xs font-medium">Fotoğraf Ekle</span>
@@ -200,7 +200,7 @@ export default function ProfilePage() {
         </div>
       </section>
 
-      <section className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
         <div className="flex items-center gap-2">
           <ShieldCheck className="h-5 w-5 text-primary" />
           <h2 className="text-lg font-semibold text-slate-900">
@@ -259,7 +259,7 @@ export default function ProfilePage() {
                     <FilePermissionTrigger
                       accept="image/*,.pdf,application/pdf"
                       description={t("permission.cameraId")}
-                      className="inline-flex min-h-12 items-center gap-1.5 rounded-xl bg-primary px-3 py-2 text-xs font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover"
+                      className="inline-flex min-h-12 items-center gap-1.5 rounded-full bg-primary px-3 py-2 text-xs font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover"
                     >
                       <Upload className="h-3.5 w-3.5" />
                       Yükle
@@ -269,14 +269,14 @@ export default function ProfilePage() {
                       <FilePermissionTrigger
                         accept="image/*,.pdf,application/pdf"
                         description={t("permission.cameraId")}
-                        className="inline-flex min-h-12 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-slate-50"
+                        className="inline-flex min-h-12 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:bg-mist"
                       >
                         Güncelle
                       </FilePermissionTrigger>
                       <button
                         type="button"
                         onClick={() => setPendingDoc(doc)}
-                        className="inline-flex min-h-12 items-center gap-1.5 rounded-xl border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50"
+                        className="inline-flex min-h-12 items-center gap-1.5 rounded-full border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-red-600 transition-colors hover:bg-red-50"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                         {t("confirm.docAction")}
@@ -290,7 +290,7 @@ export default function ProfilePage() {
         </ul>
       </section>
 
-      <section className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+      <section className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-semibold text-slate-900">

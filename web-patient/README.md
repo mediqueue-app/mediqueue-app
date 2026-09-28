@@ -38,7 +38,7 @@ npm run dev
 
 ## Demo notu (E2E)
 
-`clinic@mediqueue.com` yalnızca seed kliniğini görür (genelde **Istanbul Hair Center**, `clinic_id=1`).  
+`clinic@mediqueue.com` yalnızca seed kliniğini görür (genelde **Feriköy Greft Kliniği**, `clinic_id=1`).  
 Clinic onay demosu için patient bu kliniğe randevu açmalı.
 
 ## Sayfalar

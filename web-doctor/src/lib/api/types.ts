@@ -61,3 +61,13 @@ export interface DoctorUpdate {
   bio?: string | null;
   languages?: string[] | null;
 }
+
+export interface ReviewRead {
+  id: number;
+  patient_id: number;
+  clinic_id: number | null;
+  doctor_id: number | null;
+  rating: number;
+  comment: string;
+  created_at: string;
+}

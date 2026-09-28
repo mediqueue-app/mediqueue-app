@@ -171,10 +171,10 @@ export default function ConsultationsPage() {
               type="button"
               onClick={() => setFilter(key)}
               className={cn(
-                    "inline-flex min-h-12 items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition-colors",
+                    "inline-flex min-h-12 items-center gap-2 rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
                 active
-                  ? "bg-primary text-white shadow-sm shadow-primary/25"
-                  : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50"
+                  ? "bg-primary text-white shadow-sm"
+                  : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-mist"
               )}
             >
               {t(`filters.${key}`)}
@@ -249,7 +249,7 @@ export default function ConsultationsPage() {
         {/* Sağ detay */}
         <div className="lg:col-span-3">
           {selected ? (
-            <div className="rounded-2xl border border-slate-100 bg-white shadow-sm">
+            <div className="rounded-2xl border border-slate-200/80 bg-white shadow-sm">
               <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-100 p-6">
                 <div className="flex items-center gap-4">
                   <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary-light text-lg font-bold text-primary">
@@ -399,7 +399,7 @@ export default function ConsultationsPage() {
                       type="button"
                       onClick={handleSendQuote}
                       disabled={!price.trim() || selected.status === "quoted"}
-                      className="mt-4 inline-flex min-h-12 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
+                      className="mt-4 inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       <Send className="h-4 w-4" />
                       {selected.status === "quoted"

@@ -54,8 +54,8 @@ export function PatientsClient() {
         if (!q) return true;
         return (
           a.patientName.toLowerCase().includes(q) ||
-          getCountryName(a.countryCode).toLowerCase().includes(q) ||
-          a.branch.toLowerCase().includes(q)
+          getCountryName(a.countryCode ?? "").toLowerCase().includes(q) ||
+          (a.branch ?? "").toLowerCase().includes(q)
         );
       })
       .sort((a, b) => `${a.date}${a.timeSlot}`.localeCompare(`${b.date}${b.timeSlot}`));
@@ -113,7 +113,7 @@ export function PatientsClient() {
           >
             <div className="flex items-center gap-4">
               <span className="text-3xl leading-none">
-                {countryCodeToFlagEmoji(appointment.countryCode)}
+                {countryCodeToFlagEmoji(appointment.countryCode ?? "")}
               </span>
               <div>
                 <p className="text-sm font-semibold text-slate-900">
@@ -123,7 +123,7 @@ export function PatientsClient() {
                   </span>
                 </p>
                 <p className="text-xs text-slate-500">
-                  {getCountryName(appointment.countryCode)} · {appointment.branch}
+                  {getCountryName(appointment.countryCode ?? "")} · {appointment.branch}
                 </p>
               </div>
             </div>
@@ -131,7 +131,9 @@ export function PatientsClient() {
             <div className="flex flex-wrap items-center gap-2 sm:justify-end">
               <span className="inline-flex items-center gap-1 text-xs text-slate-400">
                 <Languages className="h-3.5 w-3.5" />
-                {languageNames[appointment.spokenLanguage]}
+                {appointment.spokenLanguage
+                  ? languageNames[appointment.spokenLanguage]
+                  : "—"}
               </span>
               {appointment.translatorNeeded && (
                 <MessageSquareWarning className="h-3.5 w-3.5 text-amber-500" />

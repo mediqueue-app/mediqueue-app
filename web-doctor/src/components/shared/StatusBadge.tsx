@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 const appointmentStyles: Record<AppointmentStatus, string> = {
   ONAYLANDI: "bg-success-light text-success ring-success/20",
   BEKLIYOR: "bg-warning-light text-warning ring-warning/20",
+  BEKLEMEDE: "bg-warning-light text-warning ring-warning/20",
   TAMAMLANDI: "bg-neutral-light text-neutral ring-border",
   IPTAL: "bg-error-light text-error ring-error/20",
 };
@@ -11,6 +12,7 @@ const appointmentStyles: Record<AppointmentStatus, string> = {
 const appointmentLabels: Record<AppointmentStatus, string> = {
   ONAYLANDI: "Onaylandı",
   BEKLIYOR: "Bekliyor",
+  BEKLEMEDE: "Beklemede",
   TAMAMLANDI: "Tamamlandı",
   IPTAL: "İptal",
 };

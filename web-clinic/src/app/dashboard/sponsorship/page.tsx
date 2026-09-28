@@ -81,7 +81,7 @@ export default function SponsorshipPage() {
       />
 
       {/* Görünürlük skoru */}
-      <section className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm sm:p-8">
+      <section className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm sm:p-8">
         <div className="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex-1">
             <div className="flex items-center gap-2">
@@ -100,7 +100,7 @@ export default function SponsorshipPage() {
 
             <div className="mt-6">
               <div className="mb-2 flex items-end justify-between">
-                <span className="text-4xl font-bold tracking-tight text-slate-900">
+                <span className="text-4xl font-bold tracking-tight text-ink">
                   {visibilityScore.score}
                   <span className="text-lg font-semibold text-slate-400">
                     /{visibilityScore.max}
@@ -112,7 +112,7 @@ export default function SponsorshipPage() {
               </div>
               <div className="h-3 w-full overflow-hidden rounded-full bg-slate-100">
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-primary to-primary-hover transition-all"
+                  className="h-full rounded-full bg-primary transition-all"
                   style={{ width: `${pct}%` }}
                 />
               </div>
@@ -174,11 +174,11 @@ export default function SponsorshipPage() {
                 "relative flex flex-col rounded-2xl border bg-white p-6 shadow-sm transition-all hover:shadow-md",
                 pkg.highlighted
                   ? "border-primary/40 ring-1 ring-primary/20"
-                  : "border-slate-100"
+                  : "border-slate-200/80"
               )}
             >
               {pkg.highlighted && (
-                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-amber-400 to-amber-600 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm">
+                <span className="absolute -top-3 left-1/2 -translate-x-1/2 rounded-full bg-amber-500 px-3 py-1 text-[10px] font-bold uppercase tracking-wide text-white shadow-sm">
                   En Popüler
                 </span>
               )}
@@ -192,7 +192,7 @@ export default function SponsorshipPage() {
                 <p className="mt-1 text-sm text-slate-500">{pkg.description}</p>
               </div>
               <p className="mb-5">
-                <span className="text-3xl font-bold text-slate-900">
+                <span className="text-3xl font-bold text-ink">
                   €{pkg.price.toLocaleString("tr-TR")}
                 </span>
                 <span className="text-sm text-slate-400">/{pkg.period}</span>
@@ -211,10 +211,10 @@ export default function SponsorshipPage() {
               <button
                 type="button"
                 className={cn(
-                  "w-full rounded-xl py-3 text-sm font-semibold transition-colors",
+                  "w-full rounded-full py-3 text-sm font-semibold transition-colors",
                   pkg.highlighted
-                    ? "bg-primary text-white shadow-sm shadow-primary/25 hover:bg-primary-hover"
-                    : "border border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    ? "bg-primary text-white shadow-sm hover:bg-primary-hover"
+                    : "border border-slate-200 bg-white text-slate-700 hover:bg-mist"
                 )}
               >
                 {pkg.tier === "elite" ? (

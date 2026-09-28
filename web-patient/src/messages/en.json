@@ -200,6 +200,13 @@
     "bookingTitle": "{name} — Book",
     "generalExam": "General consultation",
     "priceRange": "Price range",
+    "compareLead": "See the price before you request. The request is free; you pay at the clinic.",
+    "promisePrice": "Clear pricing",
+    "promisePriceDesc": "The range is on the card before you book.",
+    "promiseBook": "No prepayment",
+    "promiseBookDesc": "You send the request for free.",
+    "promiseTrust": "Accredited clinics",
+    "promiseTrustDesc": "Every listing passes a review.",
     "callClinic": "Call the clinic",
     "metaTitle": "Clinic | MediQueue",
     "listTitle": "Clinics | MediQueue"

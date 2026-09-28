@@ -39,7 +39,7 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
         </button>
 
         <div className="min-w-0 lg:hidden">
-          <p className="truncate text-sm font-semibold text-slate-900">
+          <p className="truncate text-sm font-semibold text-ink">
             {meta.title}
           </p>
         </div>
@@ -70,12 +70,12 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
             type="search"
             placeholder={t("nav.searchPh")}
             aria-label={t("nav.search")}
-            className="w-full rounded-xl border border-slate-200 bg-slate-50/80 py-2.5 pl-10 pr-3 text-sm text-slate-700 placeholder:text-slate-400 transition-colors focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10"
+            className="w-full rounded-full border border-slate-200 bg-mist py-2.5 pl-10 pr-3 text-sm text-slate-700 placeholder:text-slate-400 transition-colors focus:border-primary focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary/10"
           />
         </div>
 
         <div className="ml-auto flex items-center gap-1.5 sm:ml-0 sm:gap-2">
-          <LocaleToggle className="hidden rounded-full border border-slate-200 p-0.5 sm:inline-flex" />
+          <LocaleToggle className="hidden rounded-full border border-slate-200 bg-mist p-0.5 sm:inline-flex" />
           <div className="relative">
             <button
               type="button"
@@ -141,7 +141,7 @@ export function TopBar({ onMenuClick }: { onMenuClick?: () => void }) {
               {user.initials}
             </div>
             <div className="hidden leading-tight md:block">
-              <p className="text-sm font-medium text-slate-700">
+              <p className="text-sm font-medium text-ink">
                 {user.name.split(" ").slice(-1)[0]}
               </p>
               <p className="text-[10px] font-medium uppercase tracking-wide text-slate-400">

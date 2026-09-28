@@ -32,6 +32,8 @@ const LANGUAGE_LABELS: Record<Language, string> = {
   RU: "Русский",
   DE: "Deutsch",
   FR: "Français",
+  NL: "Nederlands",
+  ES: "Español",
 };
 
 export default function ProfilePage() {

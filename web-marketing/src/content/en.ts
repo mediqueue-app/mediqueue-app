@@ -563,7 +563,7 @@ export const en: SiteContent = {
       {
         id: "patients",
         title: "My Patients",
-        body: "All your patients, treatment stages, and history notes in one list. Instantly see where international patients like Ahmed, Sophie, and James stand.",
+        body: "All your patients, treatment stages, and history notes in one list. Instantly see where international patients stand.",
       },
       {
         id: "calendar",

@@ -14,7 +14,7 @@ const NOTIFICATIONS = [
   {
     id: 1,
     title: "Yeni klinik başvurusu",
-    detail: "Istanbul Hair Center onay bekliyor.",
+    detail: "Feriköy Greft Kliniği onay bekliyor.",
   },
   {
     id: 2,

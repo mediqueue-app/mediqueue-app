@@ -13,7 +13,7 @@ import type { ForecastPoint } from "@/lib/growth-mock";
 
 export function DemandForecastChart({ data }: { data: ForecastPoint[] }) {
   return (
-    <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+    <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
       <div className="mb-6">
         <h2 className="text-lg font-semibold text-slate-900">
           6 Aylık Talep Öngörüsü

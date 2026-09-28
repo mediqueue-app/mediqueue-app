@@ -12,7 +12,7 @@ export function DashboardShell({ children }: { children: React.ReactNode }) {
 
   return (
     <SidebarProvider>
-      <div className="flex min-h-vv w-full bg-background">
+      <div className="flex min-h-vv w-full bg-band">
         {mobileNavOpen && (
           <button
             type="button"

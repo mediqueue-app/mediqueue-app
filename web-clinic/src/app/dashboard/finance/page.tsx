@@ -94,7 +94,7 @@ export default function FinancePage() {
         />
       </div>
 
-      <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm">
+      <section className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm">
         <div className="border-b border-slate-100 px-6 py-5">
           <h2 className="text-lg font-semibold text-slate-900">
             Fatura & Komisyon Dökümü
@@ -111,7 +111,7 @@ export default function FinancePage() {
           ) : (
           <table className="w-full min-w-[720px] text-left text-sm">
             <thead>
-              <tr className="border-b border-slate-100 bg-slate-50/70">
+              <tr className="border-b border-slate-100 bg-mist">
                 <th className="px-6 py-3.5 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
                   Dönem
                 </th>
@@ -136,7 +136,7 @@ export default function FinancePage() {
               {invoices.map((inv) => (
                 <tr
                   key={inv.id}
-                  className="transition-colors hover:bg-slate-50/70"
+                  className="transition-colors hover:bg-mist"
                 >
                   <td className="px-6 py-4 font-semibold text-slate-900">
                     {inv.period}
@@ -159,7 +159,7 @@ export default function FinancePage() {
                   <td className="px-6 py-4 text-right">
                     <button
                       type="button"
-                      className="inline-flex min-h-12 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:border-primary/30 hover:bg-primary-light/40 hover:text-primary"
+                      className="inline-flex min-h-12 items-center gap-1.5 rounded-full border border-slate-200 bg-white px-3 py-2 text-xs font-semibold text-slate-600 transition-colors hover:border-primary/30 hover:bg-primary-light/40 hover:text-primary"
                     >
                       <Download className="h-3.5 w-3.5" />
                       Faturayı İndir (PDF)

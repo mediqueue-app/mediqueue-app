@@ -200,6 +200,13 @@
     "bookingTitle": "{name} — Randevu",
     "generalExam": "Genel Muayene",
     "priceRange": "Fiyat aralığı",
+    "compareLead": "Fiyatı randevudan önce gör. Talebi ücretsiz bırak, ödemeyi klinikte yap.",
+    "promisePrice": "Şeffaf fiyat",
+    "promisePriceDesc": "Aralık, talep etmeden kartta durur.",
+    "promiseBook": "Ön ödemesiz talep",
+    "promiseBookDesc": "Randevuyu ücretsiz oluşturursun.",
+    "promiseTrust": "Akredite klinik",
+    "promiseTrustDesc": "Listedekiler değerlendirmeden geçer.",
     "callClinic": "Kliniği Ara",
     "metaTitle": "Klinik Detayı | MediQueue",
     "listTitle": "Klinikler | MediQueue"

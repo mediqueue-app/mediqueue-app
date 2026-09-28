@@ -121,7 +121,7 @@ export default function MessagesPage() {
         />
       ) : (
 
-      <div className="grid h-[calc(100vh-220px)] min-h-[560px] grid-cols-1 overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm lg:grid-cols-5">
+      <div className="grid h-[calc(100vh-220px)] min-h-[560px] grid-cols-1 overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm lg:grid-cols-5">
         {/* Sol — konuşma listesi */}
         <div className="flex flex-col border-b border-slate-100 lg:col-span-2 lg:border-b-0 lg:border-r">
           <div className="border-b border-slate-100 px-4 py-3">
@@ -282,7 +282,7 @@ export default function MessagesPage() {
                 accept="image/*,.pdf,application/pdf"
                 ariaLabel="Dosya ekle"
                 description={t("permission.cameraChat")}
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-slate-200 text-slate-500 transition-colors hover:bg-slate-50 hover:text-primary"
+                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full border border-slate-200 text-slate-500 transition-colors hover:bg-mist hover:text-primary"
               >
                 <Paperclip className="h-5 w-5" />
               </FilePermissionTrigger>
@@ -303,7 +303,7 @@ export default function MessagesPage() {
                 type="button"
                 onClick={handleSend}
                 disabled={!draft.trim()}
-                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-primary text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover disabled:opacity-50"
+                className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-primary text-white shadow-sm transition-colors hover:bg-primary-hover disabled:opacity-50"
                 aria-label="Gönder"
               >
                 <Send className="h-4 w-4" />

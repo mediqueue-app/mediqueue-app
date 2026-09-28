@@ -3,7 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Sparkles } from "lucide-react";
-import { BrandMark } from "@/components/ui/BrandMark";
+import { BrandLogo } from "@/components/ui/BrandLogo";
+import { HeroBackdrop } from "@/components/ui/HeroBackdrop";
 import { toUserError } from "@/lib/api/client";
 import { isAuthenticated, login } from "@/lib/auth";
 import { safeInternalPath } from "@/lib/history-layer";
@@ -43,60 +44,46 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="relative flex min-h-vv items-center justify-center overflow-hidden bg-slate-950 px-4 py-12">
-      <div className="pointer-events-none absolute -left-40 -top-40 h-[28rem] w-[28rem] rounded-full bg-primary/25 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-40 -right-40 h-[28rem] w-[28rem] rounded-full bg-primary/15 blur-3xl" />
-      <div
-        className="pointer-events-none absolute inset-0 opacity-[0.04]"
-        style={{
-          backgroundImage:
-            "linear-gradient(#fff 1px, transparent 1px), linear-gradient(90deg, #fff 1px, transparent 1px)",
-          backgroundSize: "48px 48px",
-        }}
-      />
+    <div className="relative flex min-h-vv items-center justify-center overflow-hidden px-4 py-12">
+      <HeroBackdrop withGrid />
 
-      <div className="relative grid w-full max-w-4xl overflow-hidden rounded-3xl border border-white/10 bg-white/5 shadow-2xl backdrop-blur-xl lg:grid-cols-2">
-        <div className="hidden flex-col justify-between border-r border-white/10 bg-gradient-to-br from-primary to-primary-hover p-10 lg:flex">
-          <div className="flex items-center gap-2.5">
-            <BrandMark size={40} className="h-10 w-10 ring-1 ring-white/20" />
-            <div>
-              <p className="text-[15px] font-bold tracking-tight text-white">
-                MEDI<span className="text-white/70">·</span>QUEUE
-              </p>
-              <p className="text-[10px] font-semibold uppercase tracking-widest text-white/60">
-                {t("login.panel")}
-              </p>
-            </div>
+      <div className="relative grid w-full max-w-4xl overflow-hidden rounded-3xl border border-slate-200/80 bg-white shadow-sm lg:grid-cols-2">
+        <div className="hidden flex-col justify-between border-r border-slate-200/80 bg-mist p-10 lg:flex">
+          <div>
+            <BrandLogo className="h-8 w-auto" />
+            <p className="mt-1 text-[10px] font-semibold uppercase tracking-widest text-slate-400">
+              {t("login.panel")}
+            </p>
           </div>
 
           <div>
-            <h2 className="text-2xl font-bold leading-snug text-white">
+            <h2 className="font-display text-2xl font-semibold leading-snug text-ink">
               {t("login.headline1")}
               <br />
               {t("login.headline2")}
             </h2>
-            <p className="mt-3 text-sm leading-relaxed text-white/70">
+            <p className="mt-3 text-sm leading-relaxed text-slate-500">
               {t("login.lead")}
             </p>
-            <ul className="mt-6 space-y-2.5 text-sm text-white/80">
+            <ul className="mt-6 space-y-2.5 text-sm text-slate-600">
               {[t("login.b1"), t("login.b2"), t("login.b3")].map((item) => (
                 <li key={item} className="flex items-center gap-2.5">
-                  <Sparkles className="h-4 w-4 text-white/70" />
+                  <Sparkles className="h-4 w-4 text-primary" />
                   {item}
                 </li>
               ))}
             </ul>
           </div>
 
-          <p className="text-xs text-white/50">
+          <p className="text-xs text-slate-400">
             {t("login.copyright")}
           </p>
         </div>
 
         <div className="bg-white p-8 sm:p-10">
           <div className="mb-8">
-            <BrandMark size={56} className="mb-5 h-14 w-14 shadow-lg shadow-primary/30 lg:hidden" />
-            <h1 className="text-xl font-bold tracking-tight text-slate-900">
+            <BrandLogo className="mb-5 h-9 w-auto lg:hidden" />
+            <h1 className="font-display text-xl font-semibold tracking-tight text-ink">
               {t("login.title")}
             </h1>
             <p className="mt-1 text-sm text-slate-500">
@@ -143,13 +130,13 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="mt-2 w-full rounded-xl bg-primary py-3 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover disabled:opacity-60"
+              className="mt-2 min-h-11 w-full rounded-full bg-primary py-3 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover disabled:opacity-60"
             >
               {loading ? t("login.signingIn") : t("login.submit")}
             </button>
           </form>
 
-          <div className="mt-6 rounded-xl border border-slate-100 bg-slate-50 px-4 py-3 text-xs text-slate-500">
+          <div className="mt-6 rounded-xl border border-slate-200/80 bg-mist px-4 py-3 text-xs text-slate-500">
             <span className="font-semibold text-slate-600">{t("login.backend")}</span>{" "}
             {t("login.backendHint")}
           </div>
