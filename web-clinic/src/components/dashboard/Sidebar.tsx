@@ -1,8 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { ChevronLeft, ChevronRight, LogOut } from "lucide-react";
+import { usePathname } from "next/navigation";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { BrandMark } from "@/components/ui/BrandMark";
 import {
   GROUP_ORDER,
@@ -10,8 +10,6 @@ import {
   NAV_ITEMS,
   GROWTH_ENGINE_TAGLINE,
 } from "@/lib/navigation";
-import { logout } from "@/lib/auth";
-import { getClinicUserSync } from "@/lib/services/clinic";
 import { getPendingRequestCountSync } from "@/lib/services/requests";
 import { useSidebar } from "@/components/shared/SidebarContext";
 import { NavPremiumBadge } from "@/components/ui/NavPremiumBadge";
@@ -27,15 +25,8 @@ export function Sidebar({
 }) {
   const pathname = usePathname();
   const t = useT();
-  const router = useRouter();
   const { collapsed, toggleCollapsed } = useSidebar();
-  const user = getClinicUserSync();
   const pendingRequests = getPendingRequestCountSync();
-
-  function handleLogout() {
-    logout();
-    router.replace("/login");
-  }
 
   function inboxBadgeFor(href: string): number | undefined {
     if (href === "/dashboard/requests" && pendingRequests > 0)
@@ -46,16 +37,16 @@ export function Sidebar({
   return (
     <aside
       className={cn(
-        "flex shrink-0 flex-col border-r border-slate-800/60 bg-slate-900 transition-[transform,width] duration-[220ms] ease-out",
-        "fixed inset-y-0 left-0 z-50 shadow-xl lg:relative lg:z-auto lg:shadow-none safe-top safe-bottom",
-        collapsed ? "w-[76px]" : "w-[260px]",
+        "flex h-full shrink-0 flex-col overflow-hidden border-r border-slate-800/60 bg-slate-900 transition-[transform,width] duration-[220ms] ease-out",
+        "fixed inset-y-0 left-0 z-50 shadow-xl lg:static lg:z-auto lg:shadow-none safe-top safe-bottom",
+        collapsed ? "w-[92px]" : "w-[260px]",
         mobileOpen ? "translate-x-0" : "-translate-x-full lg:translate-x-0"
       )}
     >
       <div
         className={cn(
           "flex h-16 items-center border-b border-slate-800/60",
-          collapsed ? "justify-center px-2" : "gap-2.5 px-5"
+          collapsed ? "justify-center gap-1 px-2" : "gap-2.5 px-4"
         )}
       >
         <BrandMark size={36} className="h-9 w-9 shadow-sm shadow-primary/30" />
@@ -69,6 +60,21 @@ export function Sidebar({
             </p>
           </div>
         )}
+        <button
+          type="button"
+          onClick={toggleCollapsed}
+          className={cn(
+            "hidden h-8 w-8 shrink-0 items-center justify-center rounded-lg text-slate-400 transition-colors hover:bg-slate-800/70 hover:text-white lg:flex",
+            !collapsed && "ml-auto"
+          )}
+          aria-label={collapsed ? t("nav.expand") : t("nav.shrink")}
+        >
+          {collapsed ? (
+            <ChevronRight className="h-4 w-4" />
+          ) : (
+            <ChevronLeft className="h-4 w-4" />
+          )}
+        </button>
       </div>
 
       <nav className="flex-1 overflow-y-auto px-2 py-4" aria-label={t("nav.main")}>
@@ -175,62 +181,6 @@ export function Sidebar({
           );
         })}
       </nav>
-
-      <div className="border-t border-slate-800/60 p-3">
-        {!collapsed ? (
-          <>
-            <div className="flex items-center gap-3 rounded-xl p-2">
-              <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-primary/15 text-sm font-bold text-primary ring-1 ring-primary/20">
-                {user.initials}
-              </div>
-              <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold text-white">
-                  {user.name}
-                </p>
-                <p className="truncate text-xs text-slate-500">
-                  {user.clinicName}
-                </p>
-              </div>
-            </div>
-            <button
-              type="button"
-              onClick={handleLogout}
-              className="mt-1 flex min-h-12 w-full items-center gap-3 rounded-xl px-2 py-2.5 text-sm font-medium text-slate-400 transition-colors hover:bg-red-500/10 hover:text-red-400"
-            >
-              <LogOut className="h-[18px] w-[18px]" />
-              {t("nav.logout")}
-            </button>
-          </>
-        ) : (
-          <button
-            type="button"
-            onClick={handleLogout}
-            className="mx-auto flex h-12 w-12 items-center justify-center rounded-xl text-slate-400 hover:bg-red-500/10 hover:text-red-400"
-            aria-label={t("nav.logout")}
-          >
-            <LogOut className="h-[18px] w-[18px]" />
-          </button>
-        )}
-
-        <button
-          type="button"
-          onClick={toggleCollapsed}
-          className={cn(
-            "mt-2 hidden min-h-12 w-full items-center justify-center rounded-xl border border-slate-800 py-2 text-slate-400 transition-colors hover:bg-slate-800/70 lg:flex",
-            collapsed && "px-0"
-          )}
-          aria-label={collapsed ? t("nav.expand") : t("nav.shrink")}
-        >
-          {collapsed ? (
-            <ChevronRight className="h-4 w-4" />
-          ) : (
-            <>
-              <ChevronLeft className="h-4 w-4" />
-              <span className="ml-1 text-xs font-medium">{t("nav.collapse")}</span>
-            </>
-          )}
-        </button>
-      </div>
     </aside>
   );
 }
