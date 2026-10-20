@@ -1,14 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { CalendarView } from "@/components/calendar/CalendarView";
 import { CalendarPageHeader } from "@/components/calendar/CalendarPageHeader";
 import { PageLoadError } from "@/components/ui/PageLoadError";
 import { toUserError } from "@/lib/api/client";
+import { isAuthenticated } from "@/lib/auth";
+import { loginRedirect } from "@/lib/history-layer";
 import { fetchCalendarAppointments } from "@/lib/services/appointments";
 import type { Appointment } from "@/types";
 
 export default function CalendarPage() {
+  const router = useRouter();
   const [appointments, setAppointments] = useState<Appointment[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [reloadKey, setReloadKey] = useState(0);
@@ -20,14 +24,17 @@ export default function CalendarPage() {
         if (!cancelled) setAppointments(result);
       })
       .catch((err) => {
-        if (!cancelled) {
-          setError(toUserError(err));
+        if (cancelled) return;
+        if (!isAuthenticated()) {
+          router.replace(loginRedirect("/login"));
+          return;
         }
+        setError(toUserError(err));
       });
     return () => {
       cancelled = true;
     };
-  }, [reloadKey]);
+  }, [reloadKey, router]);
 
   if (error) {
     return (

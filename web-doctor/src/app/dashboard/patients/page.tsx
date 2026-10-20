@@ -1,14 +1,17 @@
 "use client";
 
 import { Suspense, useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { PatientsBoard } from "@/components/patients/PatientsBoard";
 import { PageLoadError } from "@/components/ui/PageLoadError";
 import { toUserError } from "@/lib/api/client";
+import { isAuthenticated } from "@/lib/auth";
+import { loginRedirect } from "@/lib/history-layer";
 import { fetchPatients } from "@/lib/services/patients";
 import type { Patient } from "@/types";
 
 function PatientsPageContent() {
+  const router = useRouter();
   const searchParams = useSearchParams();
   const q = searchParams.get("q") ?? "";
   const [patients, setPatients] = useState<Patient[] | null>(null);
@@ -22,14 +25,17 @@ function PatientsPageContent() {
         if (!cancelled) setPatients(result);
       })
       .catch((err) => {
-        if (!cancelled) {
-          setError(toUserError(err));
+        if (cancelled) return;
+        if (!isAuthenticated()) {
+          router.replace(loginRedirect("/login"));
+          return;
         }
+        setError(toUserError(err));
       });
     return () => {
       cancelled = true;
     };
-  }, [reloadKey]);
+  }, [reloadKey, router]);
 
   if (error) {
     return (
