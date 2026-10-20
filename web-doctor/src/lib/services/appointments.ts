@@ -1,4 +1,4 @@
-import { apiFetch, ApiError, isTimeoutOrNetwork } from "@/lib/api/client";
+import { apiFetch, ApiError } from "@/lib/api/client";
 import { mapAppointment } from "@/lib/api/mappers";
 import type { AppointmentRead } from "@/lib/api/types";
 import { clinicTodayKey } from "@/lib/datetime";
@@ -26,11 +26,10 @@ async function fetchAllAppointments(): Promise<Appointment[]> {
     );
     return items.map(mapAppointment);
   } catch (err) {
-    if (isTimeoutOrNetwork(err)) throw err;
     if (err instanceof ApiError && err.status === 401) {
       clearSession();
     }
-    return getCalendarAppointments();
+    throw err;
   }
 }
 

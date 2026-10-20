@@ -40,7 +40,7 @@ export async function fetchCurrentDoctor(): Promise<DoctorProfile> {
     if (isTimeoutOrNetwork(err)) throw err;
     if (err instanceof ApiError && err.status === 401) {
       clearSession();
-      throw new Error("Oturum süresi doldu. Tekrar giriş yapın.");
+      throw err;
     }
     // saklı user ile devam
   }

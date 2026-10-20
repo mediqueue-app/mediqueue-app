@@ -21,6 +21,7 @@ import {
 } from "@/lib/schedule-grid";
 import { SlotBlock } from "@/components/schedule/slot-block";
 import { MonthView } from "@/components/schedule/month-view";
+import { ComingSoonOverlay } from "@/components/ui/ComingSoon";
 
 const GRID_HEIGHT_PX = 960;
 
@@ -77,6 +78,7 @@ export default function SchedulePage() {
   }, [slots, viewMode, anchorDate, weekDates]);
 
   return (
+    <ComingSoonOverlay description="Çalışma programı onaylı randevulardan üretilecek. Şu anki ızgara örnek saattir; tıklayarak randevu oluşturulmaz.">
     <div className="flex flex-col gap-6">
       {/* Üst navigasyon ve kontrol bar */}
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -207,6 +209,7 @@ export default function SchedulePage() {
         bloklayabilir, tekrar tıklayarak müsait hale getirebilirsiniz.
       </p>
     </div>
+    </ComingSoonOverlay>
   );
 }
 

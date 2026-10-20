@@ -1,9 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { OperationsBoard } from "@/components/dashboard/OperationsBoard";
 import { PageLoadError } from "@/components/ui/PageLoadError";
 import { toUserError } from "@/lib/api/client";
+import { isAuthenticated } from "@/lib/auth";
+import { loginRedirect } from "@/lib/history-layer";
 import { fetchTodayAppointments } from "@/lib/services/appointments";
 import {
   fetchQuickStats,
@@ -20,6 +23,7 @@ import type {
 } from "@/types";
 
 export default function DashboardPage() {
+  const router = useRouter();
   const [appointments, setAppointments] = useState<Appointment[] | null>(null);
   const [doctor, setDoctor] = useState<DoctorProfile | null>(null);
   const [stats, setStats] = useState<QuickStats | null>(null);
@@ -46,14 +50,17 @@ export default function DashboardPage() {
         setActivities(nextActivities);
       })
       .catch((err) => {
-        if (!cancelled) {
-          setError(toUserError(err));
+        if (cancelled) return;
+        if (!isAuthenticated()) {
+          router.replace(loginRedirect("/login"));
+          return;
         }
+        setError(toUserError(err));
       });
     return () => {
       cancelled = true;
     };
-  }, [reloadKey]);
+  }, [reloadKey, router]);
 
   if (error) {
     return (
