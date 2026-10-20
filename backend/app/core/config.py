@@ -33,6 +33,15 @@ class Settings(BaseSettings):
     MEDIQUEUE_AI_BASE_URL: str = "http://localhost:8001"
     MEDIQUEUE_AI_TIMEOUT_SECONDS: float = 5.0
 
+    ENABLE_API_DOCS: bool = Field(
+        default=False,
+        description=(
+            "Explicit operational override to expose /docs, /redoc, and "
+            "/openapi.json when APP_ENV is staging or production. Ignored "
+            "(docs are always on) in development."
+        ),
+    )
+
     # Comma-separated origins. For staging, set BACKEND_CORS_ORIGINS via env
     # (do not use wildcard origins with credentials).
     BACKEND_CORS_ORIGINS: str = (

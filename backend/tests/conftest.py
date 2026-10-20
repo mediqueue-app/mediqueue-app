@@ -9,8 +9,20 @@ import pytest
 from fastapi.testclient import TestClient
 
 from app.api.deps import get_current_user
+from app.api.v1.auth import LOGIN_RATE_LIMIT, REGISTER_RATE_LIMIT
 from app.main import app
 from app.models.user import User
+
+
+@pytest.fixture(autouse=True)
+def _reset_auth_rate_limits() -> Generator[None, None, None]:
+    """Deterministic isolation: auth rate limiters are process-local module
+    singletons, so every test starts and ends with a clean window."""
+    LOGIN_RATE_LIMIT.reset()
+    REGISTER_RATE_LIMIT.reset()
+    yield
+    LOGIN_RATE_LIMIT.reset()
+    REGISTER_RATE_LIMIT.reset()
 
 
 @pytest.fixture
