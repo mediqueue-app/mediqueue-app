@@ -1,16 +1,23 @@
 const PRODUCTION_SITE_URL = "https://www.getmediqueue.com";
+const DEVELOPMENT_SITE_URL = "http://localhost:3004";
 
-export function resolveSiteUrl(raw?: string): string {
-  const value = (raw ?? "http://localhost:3004").replace(/\/$/, "");
+const PRODUCTION_HOSTS = ["getmediqueue.com", "www.getmediqueue.com"];
+
+export function resolveSiteUrl(
+  raw?: string,
+  isProduction = process.env.NODE_ENV === "production"
+): string {
+  const fallback = isProduction ? PRODUCTION_SITE_URL : DEVELOPMENT_SITE_URL;
+  const value = (raw ?? fallback).replace(/\/$/, "");
   try {
     const host = new URL(value).hostname;
-    if (host === "getmediqueue.com" || host === "www.getmediqueue.com") {
-      return PRODUCTION_SITE_URL;
-    }
+    if (PRODUCTION_HOSTS.includes(host)) return PRODUCTION_SITE_URL;
   } catch {
-    /* keep fallback */
+    return fallback;
   }
-  return value;
+  // A production build never publishes a canonical for an unapproved host, so a
+  // missing or misconfigured NEXT_PUBLIC_SITE_URL still resolves to www.
+  return isProduction ? PRODUCTION_SITE_URL : value;
 }
 
 export const SITE_URL = resolveSiteUrl(process.env.NEXT_PUBLIC_SITE_URL);
