@@ -14,13 +14,6 @@ import {
 } from "lucide-react";
 import { useLocale } from "@/lib/locale";
 
-const NAMES = [
-  "Ahmed Al-Farsi",
-  "Sophie Laurent",
-  "James Whitfield",
-  "Elena Rostova",
-] as const;
-
 function PreviewShell({
   label,
   title,
@@ -59,6 +52,7 @@ export function DoctorOverviewPreview() {
   const { t } = useLocale();
   const d = t.previews.doctor;
   const x = t.screens.doctorDemo;
+  const names = t.previews.schedule.items.map((item) => item.name);
   const stats = [
     { n: "4", l: d.statAppointments },
     { n: "3", l: d.statMessages },
@@ -84,7 +78,7 @@ export function DoctorOverviewPreview() {
           {x.todayPatients}
         </p>
         <ul className="space-y-2">
-          {NAMES.slice(0, 3).map((name, i) => (
+          {names.map((name, i) => (
             <li
               key={name}
               className="flex items-center justify-between rounded-xl border border-slate-100 bg-slate-50/40 px-3.5 py-2.5 text-sm"
@@ -118,6 +112,7 @@ export function DoctorPatientsPreview() {
   const { t } = useLocale();
   const d = t.previews.doctor;
   const x = t.screens.doctorDemo;
+  const names = t.previews.schedule.items.map((item) => item.name);
 
   return (
     <PreviewShell label={d.patientsKicker} title={d.patientsTitle}>
@@ -132,7 +127,7 @@ export function DoctorPatientsPreview() {
       </div>
 
       <ul className="divide-y divide-slate-100">
-        {NAMES.map((name, i) => (
+        {names.map((name, i) => (
           <li key={name} className="flex items-center gap-3 py-2.5 first:pt-0 last:pb-0">
             <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-light text-xs font-bold text-primary">
               {name
@@ -164,6 +159,7 @@ export function DoctorCalendarPreview() {
   const { t } = useLocale();
   const d = t.previews.doctor;
   const x = t.screens.doctorDemo;
+  const [amira, lea, james] = t.previews.schedule.items;
 
   return (
     <PreviewShell label={d.calendarKicker} title={d.calendarTitle}>
@@ -197,7 +193,7 @@ export function DoctorCalendarPreview() {
             <span className="text-xs font-bold text-primary">09:00 - 10:30</span>
           </div>
           <span className="text-xs font-semibold text-slate-900">
-            Ahmed Al-Farsi ({x.hair})
+            {amira.name} ({x.hair})
           </span>
         </div>
 
@@ -207,7 +203,7 @@ export function DoctorCalendarPreview() {
             <span className="text-xs font-bold text-slate-600">11:00 - 12:00</span>
           </div>
           <span className="text-xs font-medium text-slate-700">
-            Sophie Laurent ({x.consult})
+            {lea.name} ({x.consult})
           </span>
         </div>
 
@@ -217,7 +213,7 @@ export function DoctorCalendarPreview() {
             <span className="text-xs font-bold text-emerald-700">14:00 - 15:30</span>
           </div>
           <span className="text-xs font-semibold text-slate-900">
-            James Whitfield ({x.rhino})
+            {james.name} ({x.rhino})
           </span>
         </div>
       </div>
@@ -237,6 +233,7 @@ export function DoctorMessagesPreview() {
   const { t } = useLocale();
   const d = t.previews.doctor;
   const x = t.screens.doctorDemo;
+  const [amira, lea] = t.previews.schedule.items;
 
   return (
     <PreviewShell label={d.messagesKicker} title={d.messagesTitle}>
@@ -251,7 +248,7 @@ export function DoctorMessagesPreview() {
       <div className="space-y-2.5">
         <div className="rounded-xl bg-slate-100/90 p-3">
           <p className="text-[10px] font-bold text-slate-600">
-            Ahmed Al-Farsi ({x.arDe})
+            {amira.name} ({x.arDe})
           </p>
           <p className="mt-1 text-xs text-slate-800">{d.patientMsg1}</p>
         </div>
@@ -265,7 +262,7 @@ export function DoctorMessagesPreview() {
 
         <div className="rounded-xl bg-slate-100/90 p-3">
           <p className="text-[10px] font-bold text-slate-600">
-            Sophie Laurent ({x.french})
+            {lea.name} ({x.french})
           </p>
           <p className="mt-1 text-xs text-slate-800">{d.patientMsg2}</p>
         </div>
@@ -310,11 +307,11 @@ export function DoctorProfilePreview() {
       <div className="flex items-center gap-2">
         <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg">
           <Building2 className="h-3.5 w-3.5 text-slate-500" />
-          Sample Clinic C
+          {t.previews.compareClinics[1].code}
         </span>
         <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg">
           <Building2 className="h-3.5 w-3.5 text-slate-500" />
-          XYZ Clinic
+          {t.previews.compareClinics[2].code}
         </span>
       </div>
 

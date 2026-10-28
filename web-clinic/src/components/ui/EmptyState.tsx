@@ -26,7 +26,7 @@ export function EmptyState({
   className?: string;
 }) {
   const actionClass = cn(
-    "inline-flex min-h-12 items-center justify-center rounded-xl bg-primary text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover",
+    "inline-flex min-h-12 items-center justify-center rounded-full bg-primary text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover",
     compact ? "mt-4 px-3.5 py-2" : "mt-6 px-4 py-2.5"
   );
 
@@ -45,7 +45,7 @@ export function EmptyState({
     <div
       role="status"
       className={cn(
-        "flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200 bg-white text-center",
+        "flex flex-col items-center justify-center rounded-2xl border border-dashed border-slate-200/80 bg-white text-center",
         compact ? "px-4 py-8" : "px-6 py-16",
         className
       )}
@@ -60,7 +60,7 @@ export function EmptyState({
       </span>
       <h2
         className={cn(
-          "font-bold text-slate-900",
+          "font-bold text-ink",
           compact ? "mt-3 text-sm" : "mt-5 text-lg"
         )}
       >

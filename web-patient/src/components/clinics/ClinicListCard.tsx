@@ -7,7 +7,7 @@ import type { Clinic } from "@/lib/mock-data";
 import { SmartImage } from "@/components/ui/SmartImage";
 import { StarRating } from "@/components/ui/StarRating";
 import { amenityIcon } from "@/components/clinics/amenity-icons";
-import { clinicHref, cn, formatPrice } from "@/lib/utils";
+import { clinicHref, cn, formatPrice, formatPriceRange } from "@/lib/utils";
 
 function stableInt(seed: string, min: number, max: number): number {
   let h = 0;
@@ -19,15 +19,107 @@ export function ClinicListCard({
   clinic,
   active,
   onHover,
+  layout = "row",
 }: {
   clinic: Clinic;
   active?: boolean;
   onHover?: (id: string | null) => void;
+  layout?: "row" | "grid";
 }) {
   const [fav, setFav] = useState(false);
   const centerKm = stableInt(clinic.id + "c", 2, 9);
   const airportKm = stableInt(clinic.id + "a", 8, 34);
   const highlights = clinic.amenities.slice(0, 3);
+  const specialties = clinic.specialties.slice(0, 2);
+
+  if (layout === "grid") {
+    return (
+      <article
+        onMouseEnter={() => onHover?.(clinic.id)}
+        onMouseLeave={() => onHover?.(null)}
+        className={cn(
+          "group flex h-full flex-col overflow-hidden rounded-2xl border bg-white transition-all",
+          active
+            ? "border-primary shadow-lg shadow-primary/10 ring-1 ring-primary"
+            : "border-slate-200 hover:border-primary/40 hover:shadow-lg"
+        )}
+      >
+        <div className="relative h-44 overflow-hidden">
+          <SmartImage
+            src={clinic.coverImage}
+            alt={clinic.name}
+            className="h-full w-full transition-transform duration-500 group-hover:scale-105"
+          />
+          <button
+            type="button"
+            onClick={() => setFav((v) => !v)}
+            aria-label={fav ? "Favorilerden çıkar" : "Favorilere ekle"}
+            className="absolute right-1 top-1 flex h-12 w-12 items-center justify-center"
+          >
+            <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white/90 shadow-sm ring-1 ring-black/5 backdrop-blur">
+              <Heart
+                className={cn(
+                  "h-4 w-4 transition-colors",
+                  fav ? "fill-primary text-primary" : "text-slate-500"
+                )}
+              />
+            </span>
+          </button>
+        </div>
+
+        <div className="flex flex-1 flex-col p-4">
+          <Link
+            href={clinicHref(clinic)}
+            className="line-clamp-2 font-semibold text-slate-900 hover:text-primary"
+          >
+            {clinic.name}
+          </Link>
+          <p className="mt-1 text-sm text-slate-500">
+            {clinic.district}, {clinic.city}
+          </p>
+          <div className="mt-2">
+            <StarRating rating={clinic.rating} reviewCount={clinic.reviewCount} />
+          </div>
+          <div className="mt-3 flex flex-wrap gap-1.5">
+            {specialties.map((s) => (
+              <span
+                key={s}
+                className="rounded-full bg-primary-light px-2.5 py-1 text-xs font-medium text-primary"
+              >
+                {s}
+              </span>
+            ))}
+          </div>
+          <div className="mt-3 flex shrink-0 flex-wrap gap-x-3 gap-y-1">
+            {highlights.slice(0, 2).map((a) => {
+              const Icon = amenityIcon(a);
+              return (
+                <span key={a} className="flex items-center gap-1.5 text-xs text-slate-600">
+                  <Icon className="h-3.5 w-3.5 text-slate-400" />
+                  {a}
+                </span>
+              );
+            })}
+          </div>
+          <div className="mt-4 flex shrink-0 items-end justify-between gap-3">
+            <div>
+              <p className="text-[11px] text-slate-400">Fiyat aralığı</p>
+              <p className="text-sm font-bold text-slate-900">
+                {formatPriceRange(clinic.priceFrom, clinic.priceTo)}
+              </p>
+            </div>
+            <Link
+              href={clinicHref(clinic)}
+              className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-primary px-3.5 py-2 text-sm font-semibold text-white transition-colors hover:bg-primary-hover"
+            >
+              Profili İncele
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </div>
+      </article>
+    );
+  }
 
   return (
     <article

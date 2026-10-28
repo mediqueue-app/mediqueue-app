@@ -196,10 +196,10 @@ export default function RequestsPage() {
                   type="button"
                   onClick={() => setFilter(key)}
                   className={cn(
-                    "inline-flex min-h-12 items-center gap-2 rounded-xl px-3.5 py-2 text-sm font-medium transition-colors",
+                    "inline-flex min-h-12 items-center gap-2 rounded-full px-3.5 py-2 text-sm font-medium transition-colors",
                     active
-                      ? "bg-primary text-white shadow-sm shadow-primary/25"
-                      : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-slate-50"
+                      ? "bg-primary text-white shadow-sm"
+                      : "bg-white text-slate-600 ring-1 ring-slate-200 hover:bg-mist"
                   )}
                 >
                   {t(`filters.${key}`)}
@@ -277,7 +277,7 @@ export default function RequestsPage() {
             {/* Detay paneli */}
             <div className="lg:col-span-3">
               {selected ? (
-                <div className="rounded-2xl border border-slate-100 bg-white shadow-sm">
+                <div className="rounded-2xl border border-slate-200/80 bg-white shadow-sm">
                   <div className="flex flex-wrap items-start justify-between gap-4 border-b border-slate-100 p-6">
                     <div className="flex items-center gap-4">
                       <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-primary-light text-lg font-bold text-primary">
@@ -330,7 +330,7 @@ export default function RequestsPage() {
                   </div>
 
                   <div className="px-6 pb-6">
-                    <div className="rounded-xl border border-slate-100 bg-slate-50/70 p-4">
+                    <div className="rounded-xl border border-slate-200/80 bg-mist p-4">
                       <p className="mb-1 flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-slate-400">
                         <MessageSquare className="h-3.5 w-3.5" />
                         Semptom / Not
@@ -358,7 +358,7 @@ export default function RequestsPage() {
                           type="button"
                           onClick={() => setPendingCancel(selected)}
                           disabled={actionId === selected.id}
-                          className="inline-flex min-h-12 items-center gap-2 rounded-xl border border-red-200 bg-white px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-60"
+                          className="inline-flex min-h-12 items-center gap-2 rounded-full border border-red-200 bg-white px-4 py-2.5 text-sm font-semibold text-red-600 hover:bg-red-50 disabled:opacity-60"
                         >
                           <X className="h-4 w-4" />
                           {t("confirm.appointmentAction")}
@@ -464,9 +464,9 @@ function ActionButton({
       onClick={onClick}
       disabled={disabled}
       className={cn(
-        "inline-flex min-h-12 items-center gap-2 rounded-xl px-4 py-2.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60",
+        "inline-flex min-h-12 items-center gap-2 rounded-full px-4 py-2.5 text-sm font-semibold transition-colors disabled:cursor-not-allowed disabled:opacity-60",
         isApprove
-          ? "bg-primary text-white shadow-sm shadow-primary/25 hover:bg-primary-hover"
+          ? "bg-primary text-white shadow-sm hover:bg-primary-hover"
           : "border border-red-200 bg-white text-red-600 hover:bg-red-50"
       )}
     >
@@ -551,7 +551,7 @@ function RequestsSkeleton() {
           {Array.from({ length: 4 }).map((_, i) => (
             <div
               key={i}
-              className="rounded-2xl border border-slate-100 bg-white p-4 shadow-sm"
+              className="rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm"
             >
               <div className="flex items-start gap-3">
                 <div className="skeleton h-11 w-11 shrink-0 rounded-xl" />
@@ -565,7 +565,7 @@ function RequestsSkeleton() {
           ))}
         </div>
         <div className="lg:col-span-3">
-          <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+          <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm">
             <div className="flex items-center gap-4">
               <div className="skeleton h-14 w-14 shrink-0 rounded-2xl" />
               <div className="flex-1 space-y-2">

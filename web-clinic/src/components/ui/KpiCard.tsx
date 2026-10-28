@@ -37,11 +37,11 @@ export function KpiCard({
   const positive = delta !== undefined ? delta >= 0 : true;
 
   return (
-    <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm transition-all duration-200 hover:border-slate-200 hover:shadow-md">
+    <div className="rounded-2xl border border-slate-200/80 bg-white p-6 shadow-sm transition-all duration-200 hover:border-slate-200 hover:shadow-md">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0">
           <p className="text-sm font-medium text-slate-500">{label}</p>
-          <p className="mt-3 text-3xl font-bold tracking-tight text-slate-900">
+          <p className="mt-3 text-3xl font-bold tracking-tight text-ink">
             {value}
             {suffix && (
               <span className="ml-1 text-lg font-semibold text-slate-400">

@@ -10,6 +10,8 @@ export function IncomingRequestCard() {
   const { t } = useLocale();
   const c = t.clinics;
   const reduced = useReducedMotion();
+  const primary = t.previews.requests.items[0];
+  const secondary = t.previews.requests.items[1];
 
   return (
     <div className="relative mx-auto w-full max-w-[26rem]">
@@ -32,10 +34,10 @@ export function IncomingRequestCard() {
       >
         <div className="flex items-center gap-3 opacity-60">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-slate-200 text-xs font-bold text-slate-600">
-            SL
+            {secondary.initials}
           </div>
           <div>
-            <p className="text-xs font-semibold text-slate-700">Sophie Laurent</p>
+            <p className="text-xs font-semibold text-slate-700">{secondary.patient}</p>
           </div>
         </div>
       </motion.div>
@@ -65,11 +67,11 @@ export function IncomingRequestCard() {
 
           <div className="mt-5 flex items-start gap-3">
             <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-light text-sm font-bold text-primary">
-              AA
+              {primary.initials}
             </div>
             <div>
               <p className="text-base font-semibold tracking-tight text-slate-900">
-                Ahmed Al-Farsi
+                {primary.patient}
               </p>
               <p className="mt-0.5 flex items-center gap-1 text-sm text-slate-500">
                 <MapPin className="h-3.5 w-3.5" aria-hidden />

@@ -105,15 +105,15 @@ export type PreviewsContent = {
 export const trPreviews: PreviewsContent = {
   reviews: "değerlendirme",
   matchPatientDemo: "Thomas M. · Münih, Almanya",
-  clinicCode: "Örnek Klinik A",
+  clinicCode: "Helion Clinic",
   incomingCityAge: "Doha, Katar · 34",
   incomingTreatment: "Saç Ekimi (DHI)",
   incomingLanguages: "Arapça, İngilizce",
   incomingRhinoplasty: "Lyon · Rinoplasti",
   clinicCard: {
-    alt: "Örnek Klinik B — hasta uygulaması kapak görseli",
+    alt: "Vesper Aesthetics — hasta uygulaması kapak görseli",
     badge: "Akredite",
-    name: "Örnek Klinik B",
+    name: "Vesper Aesthetics",
     location: "Şişli, İstanbul",
     specialty: "Estetik & Plastik Cerrahi · Saç Ekimi",
     price: "₺12.000 – ₺45.000",
@@ -139,8 +139,8 @@ export const trPreviews: PreviewsContent = {
     items: [
       {
         id: "r1",
-        patient: "Ahmed Al-Farsi",
-        initials: "AA",
+        patient: "Amira K.",
+        initials: "AK",
         age: 34,
         gender: "Erkek",
         country: "Katar",
@@ -155,8 +155,8 @@ export const trPreviews: PreviewsContent = {
       },
       {
         id: "r2",
-        patient: "Sophie Laurent",
-        initials: "SL",
+        patient: "Lea M.",
+        initials: "LM",
         age: 29,
         gender: "Kadın",
         country: "Fransa",
@@ -172,9 +172,9 @@ export const trPreviews: PreviewsContent = {
     ],
   },
   compareClinics: [
-    { code: "Örnek Klinik B", specialty: "Saç Ekimi (DHI)", rating: 4.9, reviews: 128, region: "İstanbul" },
-    { code: "Örnek Klinik C", specialty: "Saç Ekimi (FUE)", rating: 4.8, reviews: 94, region: "İstanbul" },
-    { code: "XYZ Klinik", specialty: "Saç Ekimi (Sapphire)", rating: 4.9, reviews: 211, region: "Ankara" },
+    { code: "Helion Clinic", specialty: "Saç Ekimi (DHI)", rating: 4.9, reviews: 128, region: "İstanbul" },
+    { code: "Vesper Aesthetics", specialty: "Saç Ekimi (FUE)", rating: 4.8, reviews: 94, region: "İstanbul" },
+    { code: "Arcadia Medical", specialty: "Saç Ekimi (Sapphire)", rating: 4.9, reviews: 211, region: "Ankara" },
   ],
   schedule: {
     kicker: "Günlük akış",
@@ -182,9 +182,9 @@ export const trPreviews: PreviewsContent = {
     summary: "3 randevu · 0 tamamlandı",
     fullCalendar: "Tam takvim",
     items: [
-      { time: "09:30", name: "Ahmed Al-Farsi", treatment: "Saç Ekimi (DHI)" },
-      { time: "11:00", name: "Sophie Laurent", treatment: "Rinoplasti" },
-      { time: "14:15", name: "James Whitfield", treatment: "Diş İmplantı" },
+      { time: "09:30", name: "Amira K.", treatment: "Saç Ekimi (DHI)" },
+      { time: "11:00", name: "Lea M.", treatment: "Rinoplasti" },
+      { time: "14:15", name: "James W.", treatment: "Diş İmplantı" },
     ],
   },
   compareChromeLabel: "patient · Klinik Kıyaslama",
@@ -216,7 +216,7 @@ export const trPreviews: PreviewsContent = {
     you: "Siz",
     profileKicker: "Hasta görünümü",
     profileTitle: "Profil",
-    profileName: "Dr. Ayşe Yılmaz",
+    profileName: "Dr. Selin Aran",
     profileMeta: "Plastik Cerrahi · 12 yıl deneyim",
     profileBio:
       "Saç ekimi, rinoplasti ve estetik cerrahi alanlarında uluslararası hasta deneyimi.",
@@ -227,7 +227,7 @@ export const trPreviews: PreviewsContent = {
     stages: ["Randevu onaylandı", "Teklif gönderildi", "Yeni talep"],
     treatments: ["Saç Ekimi (DHI)", "Rinoplasti", "Diş İmplantı"],
     patientMsg1: "Merhaba doktor, DHI saç ekimi için uygun tarihleriniz neler?",
-    doctorMsg1: "Hello Ahmed — I have slots on Tuesday and Thursday next week.",
+    doctorMsg1: "Hello Amira — I have slots on Tuesday and Thursday next week.",
     patientMsg2: "Could you share the rhinoplasty recovery timeline?",
   },
 };
@@ -235,15 +235,15 @@ export const trPreviews: PreviewsContent = {
 export const enPreviews: PreviewsContent = {
   reviews: "reviews",
   matchPatientDemo: "Demo patient · #P-4821",
-  clinicCode: "Clinic #A1B2",
+  clinicCode: "Helion Clinic",
   incomingCityAge: "Doha, Qatar · 34",
   incomingTreatment: "Hair transplant (DHI)",
   incomingLanguages: "Arabic, English",
   incomingRhinoplasty: "Lyon · Rhinoplasty",
   clinicCard: {
-    alt: "Sample Clinic B — clinic cover from the patient app mock",
+    alt: "Vesper Aesthetics — clinic cover from the patient app mock",
     badge: "Accredited",
-    name: "Sample Clinic B",
+    name: "Vesper Aesthetics",
     location: "Şişli, Istanbul",
     specialty: "Aesthetic & plastic surgery · Hair transplant",
     price: "₺12,000 – ₺45,000",
@@ -268,8 +268,8 @@ export const enPreviews: PreviewsContent = {
     items: [
       {
         id: "r1",
-        patient: "Ahmed Al-Farsi",
-        initials: "AA",
+        patient: "Amira K.",
+        initials: "AK",
         age: 34,
         gender: "Male",
         country: "Qatar",
@@ -284,8 +284,8 @@ export const enPreviews: PreviewsContent = {
       },
       {
         id: "r2",
-        patient: "Sophie Laurent",
-        initials: "SL",
+        patient: "Lea M.",
+        initials: "LM",
         age: 29,
         gender: "Female",
         country: "France",
@@ -301,9 +301,9 @@ export const enPreviews: PreviewsContent = {
     ],
   },
   compareClinics: [
-    { code: "Sample Clinic B", specialty: "Hair Transplant (DHI)", rating: 4.9, reviews: 128, region: "Istanbul" },
-    { code: "Sample Clinic C", specialty: "Hair Transplant (FUE)", rating: 4.8, reviews: 94, region: "Istanbul" },
-    { code: "XYZ Clinic", specialty: "Hair Transplant (Sapphire)", rating: 4.9, reviews: 211, region: "Ankara" },
+    { code: "Helion Clinic", specialty: "Hair Transplant (DHI)", rating: 4.9, reviews: 128, region: "Istanbul" },
+    { code: "Vesper Aesthetics", specialty: "Hair Transplant (FUE)", rating: 4.8, reviews: 94, region: "Istanbul" },
+    { code: "Arcadia Medical", specialty: "Hair Transplant (Sapphire)", rating: 4.9, reviews: 211, region: "Ankara" },
   ],
   schedule: {
     kicker: "Daily flow",
@@ -311,9 +311,9 @@ export const enPreviews: PreviewsContent = {
     summary: "3 appointments · 0 completed",
     fullCalendar: "Full calendar",
     items: [
-      { time: "09:30", name: "Ahmed Al-Farsi", treatment: "Hair transplant (DHI)" },
-      { time: "11:00", name: "Sophie Laurent", treatment: "Rhinoplasty" },
-      { time: "14:15", name: "James Whitfield", treatment: "Dental implant" },
+      { time: "09:30", name: "Amira K.", treatment: "Hair transplant (DHI)" },
+      { time: "11:00", name: "Lea M.", treatment: "Rhinoplasty" },
+      { time: "14:15", name: "James W.", treatment: "Dental implant" },
     ],
   },
   compareChromeLabel: "patient · Clinic comparison",
@@ -345,7 +345,7 @@ export const enPreviews: PreviewsContent = {
     you: "You",
     profileKicker: "Patient view",
     profileTitle: "Profile",
-    profileName: "Dr. Ayşe Yılmaz",
+    profileName: "Dr. Selin Aran",
     profileMeta: "Plastic surgery · 12 years experience",
     profileBio:
       "International patient experience in hair transplant, rhinoplasty, and aesthetic surgery.",
@@ -356,7 +356,7 @@ export const enPreviews: PreviewsContent = {
     stages: ["Appointment confirmed", "Quote sent", "New request"],
     treatments: ["Hair transplant (DHI)", "Rhinoplasty", "Dental implant"],
     patientMsg1: "Hello doctor, which dates work for a DHI hair transplant?",
-    doctorMsg1: "Hello Ahmed — I have slots on Tuesday and Thursday next week.",
+    doctorMsg1: "Hello Amira — I have slots on Tuesday and Thursday next week.",
     patientMsg2: "Could you share the rhinoplasty recovery timeline?",
   },
 };

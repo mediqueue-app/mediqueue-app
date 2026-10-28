@@ -2,6 +2,7 @@ import type { Appointment, DoctorProfile, ScheduleSlot } from "@/types";
 
 export const currentDoctor: DoctorProfile = {
   id: "doc-001",
+  email: "doctor@mediqueue.com",
   clinicId: "clinic-istanbul-est-01",
   fullName: "Emre Yalçın",
   title: "Op. Dr.",
@@ -17,6 +18,9 @@ export const currentDoctor: DoctorProfile = {
   roomNumber: "Kat 3 · Oda 312",
   bio: "15 yıllık klinik deneyimiyle uluslararası hastalara saç ekimi, rinoplasti ve vücut konturlama alanlarında doğal sonuç odaklı, kişiye özel cerrahi planlar sunuyor. Avrupa Estetik, Plastik ve Rekonstrüktif Cerrahi Derneği (EBOPRAS) üyesi.",
   avatarUrl: "/doctors/emre-yalcin.jpg",
+  avatarInitials: "EY",
+  rating: 4.9,
+  reviewCount: 0,
   yearsOfExperience: 15,
   education: [
     "İstanbul Üniversitesi Tıp Fakültesi",
@@ -36,7 +40,25 @@ export const currentDoctor: DoctorProfile = {
 // "Bugün" bu mock veri seti için 2026-07-05 (Pazar) olarak sabitlenmiştir.
 export const TODAY_ISO = "2026-07-05";
 
-export const appointments: Appointment[] = [
+type DossierAppointment = Omit<
+  Appointment,
+  "patientId" | "time" | "treatmentType" | "durationMinutes"
+> & {
+  timeSlot: string;
+  branch: string;
+};
+
+function toAppointment(row: DossierAppointment): Appointment {
+  return {
+    ...row,
+    patientId: row.id,
+    time: row.timeSlot,
+    treatmentType: row.branch,
+    durationMinutes: 30,
+  };
+}
+
+const dossierAppointments: DossierAppointment[] = [
   {
     id: "apt-000a",
     patientName: "Marco Weber",
@@ -303,6 +325,8 @@ export const scheduleSlots: ScheduleSlot[] = [
   { id: "slot-11-1", doctorId: "doc-001", date: "2026-07-11", startTime: "10:00", endTime: "14:00", type: "MÜSAİT" },
 ];
 
+export const appointments: Appointment[] = dossierAppointments.map(toAppointment);
+
 export function getAppointmentById(id: string): Appointment | undefined {
   return appointments.find((a) => a.id === id);
 }
@@ -310,7 +334,7 @@ export function getAppointmentById(id: string): Appointment | undefined {
 export function getTodayAppointments(): Appointment[] {
   return appointments
     .filter((a) => a.date === TODAY_ISO)
-    .sort((a, b) => a.timeSlot.localeCompare(b.timeSlot));
+    .sort((a, b) => (a.timeSlot ?? a.time).localeCompare(b.timeSlot ?? b.time));
 }
 
 export function getUpcomingQueueAppointment(): Appointment | undefined {

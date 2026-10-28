@@ -96,7 +96,7 @@ export function LocaleToggle({ className }: { className?: string }) {
         className={
           locale === "en"
             ? "rounded-full bg-primary px-2.5 py-1 text-xs font-semibold text-white"
-            : "rounded-full px-2.5 py-1 text-xs font-semibold text-slate-500"
+            : "rounded-full px-2.5 py-1 text-xs font-semibold text-ink/50"
         }
       >
         EN
@@ -107,7 +107,7 @@ export function LocaleToggle({ className }: { className?: string }) {
         className={
           locale === "tr"
             ? "rounded-full bg-primary px-2.5 py-1 text-xs font-semibold text-white"
-            : "rounded-full px-2.5 py-1 text-xs font-semibold text-slate-500"
+            : "rounded-full px-2.5 py-1 text-xs font-semibold text-ink/50"
         }
       >
         TR

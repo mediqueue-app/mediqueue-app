@@ -124,6 +124,23 @@ body {
   outline-offset: 2px;
 }
 
+.mq-search-bar input,
+.mq-search-bar button {
+  border: 0;
+  box-shadow: none;
+  appearance: none;
+}
+
+.mq-search-bar input:focus,
+.mq-search-bar input:focus-visible,
+.mq-search-bar button:focus,
+.mq-search-bar button:focus-visible {
+  outline: none;
+  outline-offset: 0;
+  box-shadow: none;
+  border: 0;
+}
+
 * {
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 transparent;

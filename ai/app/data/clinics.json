@@ -1,7 +1,9 @@
 [
   {
     "id": 1,
-    "name": "Istanbul Hair Center",
+    "name": "Feriköy Greft Kliniği",
+    "description": "Şişli Feriköy’de saç ekimi. Safir FUE ve DHI. Başlangıç aralığı greft planına göre değişir.",
+    "address": "Feriköy Mah. Ergenekon Cad. No: 41, Şişli / İstanbul",
     "specialty": ["Hair Transplant"],
     "city": "İstanbul",
     "languages": ["Turkish", "English", "Arabic"],
@@ -174,5 +176,57 @@
     "max_price": 11000,
     "rating": 4.6,
     "doctor_count": 5
+  },
+  {
+    "id": 17,
+    "name": "Dr. Ege Nar Saç Kliniği",
+    "description": "Nişantaşı’nda saç ekimi. Safir FUE ve DHI. Başlangıç aralığı greft planına göre değişir.",
+    "specialty": ["Hair Transplant"],
+    "city": "İstanbul",
+    "address": "Valikonağı Cad. No: 64, Nişantaşı / Şişli",
+    "languages": ["Turkish", "English"],
+    "min_price": 48000,
+    "max_price": 72000,
+    "rating": 4.7,
+    "doctor_count": 3
+  },
+  {
+    "id": 18,
+    "name": "Çamlık Saç Cerrahisi",
+    "description": "Levent’te DHI ve sakal ekimi. Liste fiyatı başlangıçtır.",
+    "specialty": ["Hair Transplant"],
+    "city": "İstanbul",
+    "address": "Çamlık Sok. No: 11, Levent / Beşiktaş",
+    "languages": ["Turkish", "English", "Arabic"],
+    "min_price": 55000,
+    "max_price": 90000,
+    "rating": 4.6,
+    "doctor_count": 2
+  },
+  {
+    "id": 19,
+    "name": "İçerenköy Saç Merkezi",
+    "description": "Ataşehir’de Safir FUE. İngilizce ve Almanca koordinasyon vardır.",
+    "specialty": ["Hair Transplant"],
+    "city": "İstanbul",
+    "address": "Kayışdağı Cad. No: 58, İçerenköy / Ataşehir",
+    "languages": ["Turkish", "English", "German"],
+    "min_price": 42000,
+    "max_price": 68000,
+    "rating": 4.5,
+    "doctor_count": 4
+  },
+  {
+    "id": 20,
+    "name": "Zeytinlik Greft Kliniği",
+    "description": "Bakırköy’de FUE saç, kaş ve sakal ekimi. Başlangıç fiyatı tek seans içindir.",
+    "specialty": ["Hair Transplant"],
+    "city": "İstanbul",
+    "address": "İncirli Cad. No: 33, Zeytinlik / Bakırköy",
+    "languages": ["Turkish", "English"],
+    "min_price": 39000,
+    "max_price": 64000,
+    "rating": 4.6,
+    "doctor_count": 3
   }
 ]

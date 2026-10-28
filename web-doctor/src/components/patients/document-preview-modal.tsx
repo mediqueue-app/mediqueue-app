@@ -9,6 +9,8 @@ const documentIcons: Record<DocumentType, typeof FileText> = {
   TIBBI_RAPOR: FileText,
   "FOTOĞRAF": ImageIcon,
   PASAPORT: IdCard,
+  RONTGEN: FileText,
+  VIZE: IdCard,
 };
 
 export function DocumentPreviewModal({
@@ -46,10 +48,10 @@ export function DocumentPreviewModal({
               {documentTypeLabels[document.type]}
             </p>
             <h3 className="mt-1 text-lg font-semibold text-slate-900">
-              {document.title}
+              {document.title ?? document.fileName}
             </h3>
             <p className="mt-1 text-sm text-slate-400">
-              Yüklenme tarihi: {document.date}
+              Yüklenme tarihi: {document.date ?? document.uploadedAt}
             </p>
           </div>
           <p className="max-w-sm text-xs text-slate-400">

@@ -567,7 +567,7 @@ export const tr: SiteContent = {
       {
         id: "patients",
         title: "Hastalarım",
-        body: "Tüm hastalarınız, tedavi aşamaları ve geçmiş notlar tek listede. Ahmed, Sophie ve James gibi uluslararası hastaların durumunu anında görün.",
+        body: "Tüm hastalarınız, tedavi aşamaları ve geçmiş notlar tek listede. Uluslararası hastaların durumunu anında görün.",
       },
       {
         id: "calendar",

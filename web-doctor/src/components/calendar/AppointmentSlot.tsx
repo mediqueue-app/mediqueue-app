@@ -18,6 +18,11 @@ const statusStyles: Record<
     dot: "bg-amber-500",
     label: "Bekliyor",
   },
+  BEKLEMEDE: {
+    card: "border-amber-200 bg-amber-50/90 hover:bg-amber-50",
+    dot: "bg-amber-500",
+    label: "Beklemede",
+  },
   TAMAMLANDI: {
     card: "border-blue-200 bg-blue-50/90 hover:bg-blue-50",
     dot: "bg-blue-500",

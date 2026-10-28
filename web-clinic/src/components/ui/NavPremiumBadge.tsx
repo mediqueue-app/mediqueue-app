@@ -8,18 +8,15 @@ const BADGE_STYLES: Record<
 > = {
   pro: {
     label: "Pro",
-    className:
-      "bg-gradient-to-r from-amber-500/90 to-amber-600/90 text-white shadow-sm shadow-amber-500/20",
+    className: "bg-amber-500 text-white",
   },
   premium: {
     label: "Premium",
-    className:
-      "bg-gradient-to-r from-amber-400/90 via-amber-500/90 to-orange-500/90 text-white shadow-sm shadow-amber-400/25",
+    className: "bg-amber-500 text-white",
   },
   ai: {
     label: "AI",
-    className:
-      "bg-gradient-to-r from-violet-500/90 to-primary/90 text-white shadow-sm shadow-violet-500/25",
+    className: "bg-primary text-white",
     sparkle: true,
   },
 };
@@ -39,10 +36,8 @@ export function NavPremiumBadge({
     return (
       <span
         className={cn(
-          "absolute -right-0.5 -top-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full ring-2 ring-slate-900",
-          type === "ai"
-            ? "bg-gradient-to-br from-violet-500 to-primary"
-            : "bg-gradient-to-br from-amber-400 to-amber-600"
+          "absolute -right-0.5 -top-0.5 flex h-3.5 w-3.5 items-center justify-center rounded-full ring-2 ring-white",
+          type === "ai" ? "bg-primary" : "bg-amber-500"
         )}
         aria-hidden
       >

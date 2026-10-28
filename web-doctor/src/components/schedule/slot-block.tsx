@@ -67,7 +67,7 @@ export function SlotBlock({
             </span>
             {!dense && (
               <span className="shrink-0 text-sm leading-none">
-                {countryCodeToFlagEmoji(appointment.countryCode)}
+                {countryCodeToFlagEmoji(appointment.countryCode ?? "")}
               </span>
             )}
           </div>

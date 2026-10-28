@@ -76,7 +76,7 @@ export function ConfirmDialog({
           <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-red-50 text-red-600">
             <AlertTriangle className="h-6 w-6" />
           </div>
-          <h2 id="mq-confirm-title" className="text-lg font-semibold text-slate-900">
+          <h2 id="mq-confirm-title" className="text-lg font-semibold text-ink">
             {title}
           </h2>
           <p
@@ -96,7 +96,7 @@ export function ConfirmDialog({
             type="button"
             onClick={close}
             disabled={busy}
-            className="min-h-12 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-60"
+            className="min-h-12 rounded-full border border-slate-200 bg-white px-4 py-2 text-sm font-semibold text-slate-600 hover:bg-mist disabled:opacity-60"
           >
             {cancelLabel ?? t("confirm.cancel")}
           </button>
@@ -105,7 +105,7 @@ export function ConfirmDialog({
             onClick={onConfirm}
             disabled={busy}
             className={cn(
-              "inline-flex min-h-12 items-center gap-2 rounded-xl bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm shadow-red-600/25 hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
+              "inline-flex min-h-12 items-center gap-2 rounded-full bg-red-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-60"
             )}
           >
             {busy ? <Loader2 className="h-4 w-4 animate-spin" /> : null}

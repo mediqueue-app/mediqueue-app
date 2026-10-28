@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Mail, MapPin } from "lucide-react";
-import { BrandMark } from "@/components/ui/BrandMark";
+import { BrandLogo } from "@/components/ui/BrandLogo";
 import { useT } from "@/lib/i18n";
 
 export function Footer() {
@@ -42,11 +42,8 @@ export function Footer() {
       <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
         <div className="grid gap-10 md:grid-cols-2 lg:grid-cols-5">
           <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-2" aria-label={t("nav.homeAria")}>
-              <BrandMark size={36} className="h-9 w-9" />
-              <span className="text-lg font-bold tracking-tight text-slate-900">
-                Medi<span className="text-primary">Queue</span>
-              </span>
+            <Link href="/" className="inline-flex items-center" aria-label={t("nav.homeAria")}>
+              <BrandLogo className="h-8 w-auto" />
             </Link>
             <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-500">
               {t("footer.tagline")}

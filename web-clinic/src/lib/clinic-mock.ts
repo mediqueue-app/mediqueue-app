@@ -39,7 +39,7 @@ export type ClinicProfile = {
 };
 
 export const clinicProfile: ClinicProfile = {
-  name: "Istanbul Hair Center",
+  name: "Feriköy Greft Kliniği",
   tagline: "FUE ve DHI saç ekiminde uluslararası hasta merkezi",
   city: "İstanbul",
   country: "Türkiye",

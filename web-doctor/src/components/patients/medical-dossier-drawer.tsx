@@ -24,6 +24,8 @@ const documentIcons: Record<DocumentType, typeof FileText> = {
   TIBBI_RAPOR: FileText,
   "FOTOĞRAF": ImageIcon,
   PASAPORT: IdCard,
+  RONTGEN: FileText,
+  VIZE: IdCard,
 };
 
 export function MedicalDossierDrawer({
@@ -44,14 +46,14 @@ export function MedicalDossierDrawer({
           <div className="flex items-start justify-between border-b border-slate-200/80 px-6 py-5">
             <div className="flex items-center gap-3">
               <span className="text-4xl leading-none">
-                {countryCodeToFlagEmoji(appointment.countryCode)}
+                {countryCodeToFlagEmoji(appointment.countryCode ?? "")}
               </span>
               <div>
                 <h2 className="text-lg font-semibold text-slate-900">
                   {appointment.patientName}
                 </h2>
                 <p className="text-sm text-slate-500">
-                  {appointment.patientAge} yaş · {getCountryName(appointment.countryCode)}
+                  {appointment.patientAge} yaş · {getCountryName(appointment.countryCode ?? "")}
                 </p>
               </div>
             </div>
@@ -69,7 +71,9 @@ export function MedicalDossierDrawer({
               <AppointmentStatusBadge status={appointment.status} />
               <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
                 <Languages className="h-3.5 w-3.5" />
-                {languageNames[appointment.spokenLanguage]}
+                {appointment.spokenLanguage
+                  ? languageNames[appointment.spokenLanguage]
+                  : "—"}
               </span>
               {appointment.translatorNeeded && (
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200/60 bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">
@@ -103,10 +107,10 @@ export function MedicalDossierDrawer({
 
             <div>
               <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-slate-400">
-                Tıbbi Raporlar ve Fotoğraflar ({appointment.documents.length})
+                Tıbbi Raporlar ve Fotoğraflar ({appointment.documents?.length ?? 0})
               </p>
               <div className="flex flex-col gap-2">
-                {appointment.documents.map((doc) => {
+                {(appointment.documents ?? []).map((doc) => {
                   const Icon = documentIcons[doc.type];
                   return (
                     <button

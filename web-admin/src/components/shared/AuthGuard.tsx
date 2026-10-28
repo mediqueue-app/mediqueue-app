@@ -10,27 +10,23 @@ export function AuthGuard({ children }: { children: React.ReactNode }) {
   const t = useT();
   const router = useRouter();
   const [ready, setReady] = useState(false);
+  const [redirecting, setRedirecting] = useState(false);
 
   useEffect(() => {
     if (!isAuthenticated()) {
+      setRedirecting(true);
       router.replace(loginRedirect("/login"));
       return;
     }
     setReady(true);
   }, [router]);
 
-  if (!isAuthenticated()) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <p className="text-sm text-slate-500">{t("chrome.redirecting")}</p>
-      </div>
-    );
-  }
-
   if (!ready) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
-        <p className="text-sm text-slate-500">{t("chrome.loading")}</p>
+        <p className="text-sm text-slate-500">
+          {redirecting ? t("chrome.redirecting") : t("chrome.loading")}
+        </p>
       </div>
     );
   }

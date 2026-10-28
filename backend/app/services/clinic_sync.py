@@ -42,7 +42,7 @@ class ClinicSyncSummary:
 FALLBACK_CLINICS: list[dict[str, Any]] = [
     {
         "id": 1,
-        "name": "Istanbul Hair Center",
+        "name": "Feriköy Greft Kliniği",
         "description": "FUE ve DHI saç ekiminde uluslararası hasta merkezi. Danışmanlık Türkçe, İngilizce ve Arapça.",
         "address": "İstanbul, Türkiye",
         "phone": None,

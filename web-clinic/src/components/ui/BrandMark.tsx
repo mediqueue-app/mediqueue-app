@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-/** Official MediQueue M tile. Use for chrome (nav, login, PWA). Not a Lucide stand-in. */
+/** Square M mark for the browser tab, app icon, and collapsed sidebar. */
 export function BrandMark({
   size = 36,
   className,

@@ -39,7 +39,7 @@ export function PatientOriginCard({ data }: { data: CountryPatientData[] }) {
   const maxCount = sorted[0]?.patientCount ?? 0;
 
   return (
-    <section className="rounded-2xl border border-slate-100 bg-white shadow-sm">
+    <section className="rounded-2xl border border-slate-200/80 bg-white shadow-sm">
       <div className="flex flex-wrap items-center gap-2 border-b border-slate-100 px-6 py-5">
         <Globe2 className="h-5 w-5 shrink-0 text-primary" />
         <div className="min-w-0">

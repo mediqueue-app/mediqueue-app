@@ -1,6 +1,7 @@
 export type AppointmentStatus =
   | "ONAYLANDI"
   | "BEKLIYOR"
+  | "BEKLEMEDE"
   | "TAMAMLANDI"
   | "IPTAL";
 
@@ -12,9 +13,37 @@ export type TimelineStepStatus = "TAMAMLANDI" | "AKTIF" | "BEKLIYOR";
 
 export type CalendarViewMode = "HAFTA" | "AY";
 
-export type DocumentType = "PASAPORT" | "TIBBI_RAPOR" | "RONTGEN" | "VIZE";
+export type DocumentType =
+  | "PASAPORT"
+  | "TIBBI_RAPOR"
+  | "RONTGEN"
+  | "VIZE"
+  | "FOTOĞRAF";
 
-export type Language = "TR" | "EN" | "AR" | "RU" | "DE" | "FR";
+export type Language = "TR" | "EN" | "AR" | "RU" | "DE" | "FR" | "NL" | "ES";
+export type LanguageCode = Language;
+
+export type DoctorStatus = "MÜSAİT" | "KONSÜLTASYONDA" | "AMELİYATTA" | "İZİNLİ";
+
+export type ScheduleSlotType = "MÜSAİT" | "DOLU" | "AMELİYAT" | "KONSÜLTASYON";
+
+export interface ScheduleSlot {
+  id: string;
+  doctorId: string;
+  date: string;
+  startTime: string;
+  endTime: string;
+  type: ScheduleSlotType;
+  label?: string;
+  appointmentId?: string;
+}
+
+export interface WorkingHoursRange {
+  day: string;
+  startTime: string;
+  endTime: string;
+  isActive: boolean;
+}
 
 export type PatientBranch =
   | "dentistry"
@@ -73,14 +102,25 @@ export interface DoctorProfile {
   avatarInitials: string;
   rating: number;
   reviewCount: number;
+  clinicId?: string;
+  specialties?: string[];
+  status?: DoctorStatus;
+  roomNumber?: string;
+  avatarUrl?: string;
+  yearsOfExperience?: number;
+  education?: string[];
+  workingHours?: WorkingHoursRange[];
 }
 
 export interface PatientDocument {
   id: string;
   type: DocumentType;
-  fileName: string;
-  uploadedAt: string;
-  fileSizeKb: number;
+  fileName?: string;
+  uploadedAt?: string;
+  fileSizeKb?: number;
+  title?: string;
+  date?: string;
+  thumbnailUrl?: string;
 }
 
 export interface MedicalNote {
@@ -140,6 +180,14 @@ export interface Appointment {
   treatmentType: string;
   status: AppointmentStatus;
   durationMinutes: number;
+  timeSlot?: string;
+  patientAge?: number;
+  countryCode?: string;
+  spokenLanguage?: LanguageCode;
+  branch?: string;
+  chiefComplaint?: string;
+  translatorNeeded?: boolean;
+  documents?: PatientDocument[];
 }
 
 export interface QueuePatient {

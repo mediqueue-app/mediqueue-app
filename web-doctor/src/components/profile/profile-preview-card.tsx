@@ -4,7 +4,7 @@ import { Avatar } from "@/components/ui/avatar";
 import { languageNames } from "@/lib/ui";
 
 export function ProfilePreviewCard({ doctor }: { doctor: DoctorProfile }) {
-  const activeDays = doctor.workingHours.filter((wh) => wh.isActive);
+  const activeDays = (doctor.workingHours ?? []).filter((wh) => wh.isActive);
 
   return (
     <div className="card-surface sticky top-6 flex flex-col gap-5 p-6">
@@ -28,7 +28,7 @@ export function ProfilePreviewCard({ doctor }: { doctor: DoctorProfile }) {
       </div>
 
       <div className="flex flex-wrap justify-center gap-1.5">
-        {doctor.specialties.map((s) => (
+        {doctor.specialties?.map((s) => (
           <span
             key={s}
             className="rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-medium text-slate-600"
@@ -62,7 +62,7 @@ export function ProfilePreviewCard({ doctor }: { doctor: DoctorProfile }) {
           Eğitim
         </p>
         <ul className="space-y-1 text-xs text-slate-500">
-          {doctor.education.map((edu) => (
+          {doctor.education?.map((edu) => (
             <li key={edu}>{edu}</li>
           ))}
         </ul>

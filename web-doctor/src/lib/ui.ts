@@ -85,8 +85,10 @@ export const appointmentStatusStyles: Record<
   { bg: string; text: string; border: string }
 > = {
   "BEKLEMEDE": { bg: "bg-warning-light", text: "text-warning", border: "border-warning/30" },
+  "BEKLIYOR": { bg: "bg-warning-light", text: "text-warning", border: "border-warning/30" },
   "ONAYLANDI": { bg: "bg-success-light", text: "text-success", border: "border-success/30" },
   "TAMAMLANDI": { bg: "bg-neutral-light", text: "text-neutral", border: "border-border" },
+  "IPTAL": { bg: "bg-error-light", text: "text-error", border: "border-error/30" },
 };
 
 export const slotTypeStyles: Record<

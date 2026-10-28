@@ -40,7 +40,7 @@ export function ComingSoonCard({
   return (
     <div
       className={cn(
-        "flex flex-col rounded-2xl border border-dashed border-slate-200 bg-slate-50/60 p-6 transition-colors hover:border-primary/30",
+        "flex flex-col rounded-2xl border border-dashed border-slate-200/80 bg-mist/60 p-6 transition-colors hover:border-primary/30",
         className
       )}
     >
@@ -98,11 +98,11 @@ export function ComingSoonOverlay({
 
       {/* Cam efektli örtü + mesaj. */}
       <div className="absolute inset-0 flex items-center justify-center rounded-2xl bg-white/40 p-6 backdrop-blur-[1px]">
-        <div className="flex max-w-sm flex-col items-center rounded-2xl border border-slate-100 bg-white/90 px-6 py-6 text-center shadow-lg shadow-slate-900/5">
+        <div className="flex max-w-sm flex-col items-center rounded-2xl border border-slate-200/80 bg-white/90 px-6 py-6 text-center shadow-sm">
           <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-primary-light text-primary">
             <Sparkles className="h-6 w-6" />
           </span>
-          <h3 className="mt-4 text-base font-bold text-slate-900">{title}</h3>
+          <h3 className="mt-4 text-base font-bold text-ink">{title}</h3>
           <p className="mt-1 text-sm text-slate-500">{description}</p>
           <SoonPill className="mt-4" />
         </div>

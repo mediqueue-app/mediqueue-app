@@ -25,7 +25,7 @@ export function FocusPatientCard({ appointment }: { appointment: Appointment | u
       <div className="relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-start gap-4">
           <span className="text-5xl leading-none">
-            {countryCodeToFlagEmoji(appointment.countryCode)}
+            {countryCodeToFlagEmoji(appointment.countryCode ?? "")}
           </span>
           <div>
             <p className="text-xs font-semibold uppercase tracking-wide text-primary">
@@ -42,7 +42,9 @@ export function FocusPatientCard({ appointment }: { appointment: Appointment | u
               <AppointmentStatusBadge status={appointment.status} />
               <span className="inline-flex items-center gap-1.5 rounded-full bg-slate-100 px-2.5 py-1 text-xs font-medium text-slate-600">
                 <Languages className="h-3.5 w-3.5" />
-                {languageNames[appointment.spokenLanguage]}
+                {appointment.spokenLanguage
+                  ? languageNames[appointment.spokenLanguage]
+                  : "—"}
               </span>
               {appointment.translatorNeeded && (
                 <span className="inline-flex items-center gap-1.5 rounded-full border border-amber-200/60 bg-amber-50 px-2.5 py-1 text-xs font-medium text-amber-700">

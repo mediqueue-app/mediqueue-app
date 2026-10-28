@@ -70,6 +70,12 @@ export async function localizedMetadata(page: SeoPage = "home"): Promise<Metadat
   const altLocale = locale === "en" ? "tr_TR" : "en_US";
 
   const displayTitle = page === "home" ? title : `${title} · MEDIQUEUE`;
+  const socialTitle =
+    page === "home"
+      ? locale === "en"
+        ? "MEDIQUEUE — Health tourism platform"
+        : "MEDIQUEUE — Sağlık turizmi platformu"
+      : displayTitle;
   const path = PAGE_PATHS[page];
   const canonical = canonicalFor(locale, path);
   const keywords = content[locale].seo.keywords;
@@ -94,12 +100,12 @@ export async function localizedMetadata(page: SeoPage = "home"): Promise<Metadat
       siteName: "MEDIQUEUE",
       locale: ogLocale,
       alternateLocale: altLocale,
-      title: displayTitle,
+      title: socialTitle,
       description,
     },
     twitter: {
       card: "summary_large_image",
-      title: displayTitle,
+      title: socialTitle,
       description,
     },
     robots: {

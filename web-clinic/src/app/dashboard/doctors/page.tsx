@@ -139,7 +139,7 @@ export default function DoctorsPage() {
           <button
             type="button"
             onClick={() => setModalOpen(true)}
-            className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover"
+            className="inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover"
           >
             <Plus className="h-4 w-4" />
             Yeni Doktor Ekle
@@ -171,7 +171,7 @@ export default function DoctorsPage() {
         {doctors.map((doc) => (
           <div
             key={doc.id}
-            className="flex flex-col gap-4 rounded-2xl border border-slate-100 bg-white p-4 shadow-sm transition-all hover:border-slate-200 hover:shadow-md sm:flex-row sm:items-center"
+            className="flex flex-col gap-4 rounded-2xl border border-slate-200/80 bg-white p-4 shadow-sm transition-all hover:border-slate-200 hover:shadow-md sm:flex-row sm:items-center"
           >
             <div className="flex min-w-0 flex-1 items-center gap-4">
               <div
@@ -252,14 +252,14 @@ export default function DoctorsPage() {
             <form onSubmit={handleSubmit} className="flex flex-col gap-4 p-6">
               {/* Fotoğraf yükleme */}
               <div className="flex items-center gap-4">
-                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-slate-50 text-slate-400">
+                <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-mist text-slate-400">
                   <Camera className="h-6 w-6" />
                 </div>
                 <FilePermissionTrigger
                   accept="image/*"
                   capture="environment"
                   description={t("permission.cameraId")}
-                  className="rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-slate-50"
+                  className="rounded-full border border-slate-200 bg-white px-3.5 py-2 text-sm font-medium text-slate-600 transition-colors hover:bg-mist"
                 >
                   Hekim Fotoğrafı Yükle
                 </FilePermissionTrigger>
@@ -327,13 +327,13 @@ export default function DoctorsPage() {
                 <button
                   type="button"
                   onClick={closeModal}
-                  className="min-h-12 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-slate-50"
+                  className="min-h-12 rounded-full border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-600 transition-colors hover:bg-mist"
                 >
                   Vazgeç
                 </button>
                 <button
                   type="submit"
-                  className="inline-flex min-h-12 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm shadow-primary/25 transition-colors hover:bg-primary-hover"
+                  className="inline-flex min-h-12 items-center gap-2 rounded-full bg-primary px-4 py-2.5 text-sm font-semibold text-white shadow-sm transition-colors hover:bg-primary-hover"
                 >
                   <Plus className="h-4 w-4" />
                   Kadroya Ekle
