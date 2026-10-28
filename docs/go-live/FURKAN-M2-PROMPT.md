@@ -1,70 +1,72 @@
-Furkan,
+# FURKAN M2 — Hasta paneli dürüstlük
 
-Azra — CTO. Milestone 1 kapandı (PR #7 `main`’de). Bu senin sonraki tek turun. Metnin tamamını Cursor’a yapıştırıp uygula. Kapsamı büyütme.
+Kod görevi. Avukat metni, KVKK paragrafı, index kararı, DNS, FastAPI, klinik/doktor dosyası bu sohbette yok. Kapsam genişletilmez. Belirsizlikte dur; rapora `BLOCKED — CTO` yaz. PR merge edilmez.
 
-Bu bir **kod** görevidir. Avukat metni, KVKK paragrafı, index kararı, DNS, FastAPI ve klinik/doktor dosyası bu sohbette yok. Belirsizlikte dur. Rapora `BLOCKED — CTO` yaz. PR merge etme.
+Hesap: `patient@mediqueue.com` / `Demo1234!`. Panel: `web-patient` :3002. API local (`backend/README.md`).
 
 ---
 
-## Senden istediğim sonuç
+## Hedef
 
-Hasta tarafında, oturum yokken sahte klinik listesi gerçek katalog gibi durmasın. Mesaj penceresi sahte sohbeti gerçek operasyon gibi bırakmasın.
-
-Hesap: `patient@mediqueue.com` / `Demo1234!`. Panel: `web-patient` `:3002`.
+Oturum yokken sahte klinik listesi gerçek katalog gibi durmasın. Mesaj penceresi sahte sohbeti gerçek operasyon gibi bırakmasın.
 
 1. `web-patient/src/lib/services/clinics.ts`
-   - Token yokken `mockClinics` dönme. Boş liste + kaynak `api` değil, yeni bir kaynak uydurma: mevcut `DataSource` tipi neyse ona uy, uymuyorsa çağıran tarafta boş listeyi “giriş yap” durumu olarak ele al.
-   - `ClinicsExplorer` (`web-patient/src/components/clinics/ClinicsExplorer.tsx`): liste boş ve token yokken İstanbul’daki sahte klinik adları görünmesin. Görünen metin: giriş yap. `web-patient/src/lib/mock-data.ts` içindeki klinik adları (ör. Anadolu Estetik) logout `/clinics` ekranında yok.
-   - Token varken `GET /clinics` (mevcut `apiFetch`). Hata olunca `mockClinics`’e düşme. Timeout/network fırlat. 401 mevcut oturum temizleme varsa onu koru, sonra mock yok. Diğer 4xx/5xx: hata yüzeyi veya boş liste; sahte katalog yok.
-   - `fetchClinic` ve `fetchClinicDoctors` aynı kural. Token yokken mock doktor/klinik detayı gerçek kayıt gibi açılmasın: boş veya girişe yönlendir.
-2. Mesajlar: `web-patient/src/lib/services/messages.ts` bellek-içi mock. API’ye bağlama. `web-patient/src/components/appointments/AppointmentChat.tsx` sahte balonu gerçek kanal gibi bırakma. `web-clinic` dosyasını import etme. `web-doctor/src/components/ui/ComingSoon.tsx` kalıbını `web-patient` içine kopyala ve sohbet gövdesinin üstüne ört. Gönder / sil tıklanmasın. Mock store silinmez.
-3. Token yokken birim test veya login öncesi kod yolu, dosyadaki mock dizisini import etmeye devam edebilir. Ekranda gösterme.
+   - Token yokken `mockClinics` dönme: boş liste. `DataSource` (`"api" | "mock" | "hybrid"`, `lib/api/types.ts`) genişletilmez; çağıran taraf "liste boş + token yok" durumunu giriş çağrısı olarak gösterir.
+   - Token varken `GET /clinics` (`apiFetch`). `catch`: timeout/network fırlat (mevcut); 401 → mevcut `clearSession`, mock yok; diğer 4xx/5xx → hata yüzeyi veya boş liste. Sahte katalog yok.
+   - `fetchClinic` ve `fetchClinicDoctors` aynı kural. Token yokken `/clinics/[id]` mock detayı gerçek kayıt gibi açılmaz: boş veya girişe yönlendir (`/auth/login`).
+2. `web-patient/src/components/clinics/ClinicsExplorer.tsx` ve `ClinicDetailView.tsx`: token yok ve liste boşken `lib/mock-data.ts` klinik adları (ör. "Anadolu Estetik & Cerrahi Merkezi") ekranda yok; görünen metin giriş çağrısı. Yalnız boş/giriş dalı değişir; sayfa yeniden tasarlanmaz.
+3. Mesajlar: `web-patient/src/lib/services/messages.ts` bellek-içi mock; API'ye bağlanmaz. `web-patient/src/components/appointments/AppointmentChat.tsx` sahte balonu gerçek kanal gibi bırakmaz. `web-clinic/src/components/ui/ComingSoon.tsx` kalıbı `web-patient/src/components/ui/ComingSoon.tsx` olarak kopyalanır (`web-clinic` import edilmez); sohbet gövdesi `ComingSoonOverlay` ile örtülür. Gönder / sil tıklanmaz. Mock store silinmez.
+4. Login öncesi kod yolu ve `mappers.ts` mock diziyi import etmeye devam edebilir; ekranda gösterilmez. Ana sayfa (`app/page.tsx`) vitrin kartları bu PR'de değişmez.
 
-Bitti: logout `/clinics` sahte klinik göstermiyor. Login sonrası liste API’den geliyor ya da dürüst boş/hata. Sohbet penceresi “Yakında”; sahte mesaj gönderilmiyor.
+Bitti: logout `/clinics` sahte klinik göstermiyor, giriş çağrısı var. Login sonrası liste API'den geliyor ya da dürüst boş/hata. Sohbet penceresi "Yakında"; sahte mesaj gönderilmiyor.
 
 ---
 
 ## Kilitler
 
-- `web-clinic`, `web-doctor`, `web-admin`, `web-marketing`, `backend/` yok. `site.ts` ve `robots.ts` yok.
-- `main`’den silinmiş `web-patient/playwright.config.ts` ve `tests/e2e/booking.spec.ts` geri gelmez. Yeni Playwright paketi, CI job’u ve e2e bu PR’de yok. Rapora `PLAYWRIGHT: NOT ON MAIN` yaz.
-- KVKK / aydınlatma / hesap silme metni uydurma. `POST /v1/account/erasure` arayüzü bu PR’de yok. Metin avukatta. `REQUIRES SEPARATE MILESTONE (FURKAN COPY)`.
+- `web-clinic`, `web-doctor`, `web-admin`, `web-marketing`, `backend/`, `ai/` yok. `site.ts`, `robots.ts` yok.
+- `main`'den silinmiş `web-patient/playwright.config.ts` ve `tests/e2e/booking.spec.ts` geri gelmez. Yeni Playwright paketi, CI job'u, e2e yok. Rapora `PLAYWRIGHT: NOT ON MAIN`.
+- KVKK / aydınlatma / hesap silme metni uydurulmaz. Erasure UI bu PR'de yok. `REQUIRES SEPARATE MILESTONE (FURKAN COPY)`.
 - Public `portal.` DNS yok. Admin JWT yok.
+- `furkan/brand-icon-and-clinic-nav` üzerine commit yok; başka branch'ten commit alınmaz.
 - Force push, `reset --hard`, `.env` commit yok.
 
 ---
 
-## Nasıl çalışırsın
+## Çalışma
 
 ```
 git fetch origin
 git checkout main
 git pull --ff-only origin main
 git checkout -b furkan/m2-patient-honesty
+git remote -v
+git branch --show-current
+git status
+git rev-parse HEAD
 ```
 
-`furkan/brand-icon-and-clinic-nav` üzerine commit atma. O branch klinik `Sidebar.tsx` değiştiriyor.
+Oku: `clinics.ts`, `ClinicsExplorer.tsx`, `ClinicDetailView.tsx`, `HybridBadge.tsx`, `messages.ts`, `AppointmentChat.tsx`, `lib/auth.ts` (`getToken`, `clearSession`), klinik `ComingSoon.tsx` (kopya için). Next için `web-patient/node_modules/next/dist/docs/`.
 
-Oku: `clinics.ts`, `ClinicsExplorer.tsx`, `messages.ts`, `AppointmentChat.tsx`, doktor panelindeki `ComingSoon.tsx` (kopya için). Next için `web-patient/node_modules/next/dist/docs/`.
-
-Lint yalnız dokunduğun `web-patient` dosyaları.
+Stage: dokunulan `web-patient` dosyaları + `docs/go-live/furkan-m2-report.md`. Lint yalnız dokunulan dosyalar.
 
 Doğrulama:
 
-1. API ayakta, logout `http://localhost:3002/clinics` — mock klinik adı yok, giriş çağrısı var.
-2. `patient@mediqueue.com` login — liste API kaydı veya dürüst boş. Ağ kesilince sahte katalog yok.
-3. Randevu sohbeti açılırsa Yakında; gönder kapalı.
+1. Logout, API ayakta: `http://localhost:3002/clinics` — mock klinik adı yok, giriş çağrısı var. `/clinics/1` aynı.
+2. `patient@mediqueue.com` login — liste API kaydı veya dürüst boş. API kapatılınca sahte katalog yok; hata görünür.
+3. Randevu sohbeti açılınca Yakında; gönder ve sil kapalı.
 
 ---
 
 ## Senaryolar
 
-| Durum | Yapacağın |
-|--------|-----------|
-| Token yok | Boş + giriş. Mock katalog yok |
+| Durum | Yap |
+|---|---|
+| Token yok | Boş + giriş çağrısı. Mock katalog yok |
 | API hata, token var | Mock katalog yok |
 | Daha güzel mock | Hayır |
-| Playwright’ı geri kurayım | Hayır |
+| ClinicsExplorer'ı yeniden tasarlayayım | Hayır; yalnız boş/giriş dalı |
+| Playwright'ı geri kurayım | Hayır |
 | KVKK metni | Hayır |
 | Klinik ComingSoon dosyasına yazayım | Hayır; kopya |
 | Spesifikasyon suskun | `BLOCKED — CTO` |
@@ -79,6 +81,7 @@ git branch --show-current
 git rev-parse HEAD
 
 F4 LOGGED OUT CLINICS MOCK: CLOSED
+F4 CLINIC DETAIL LOGGED OUT MOCK: CLOSED
 F4 API ERROR FALLBACK MOCK: CLOSED
 F4 MESSAGES HONEST: YES
 F4 NEW ENDPOINT: NO
